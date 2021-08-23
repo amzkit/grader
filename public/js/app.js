@@ -5138,9 +5138,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -5152,7 +5149,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return this.$store.state.top_bar.drawer;
       },
       set: function set(value) {
-        this.$store.commit('top_bar/SET_DRAWER', value);
+        this.$store.commit("top_bar/SET_DRAWER", value);
       }
     }
   }, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapState)({
@@ -41996,9 +41993,9 @@ var render = function() {
                               item.heading
                                 ? _c("v-subheader", [
                                     _vm._v(
-                                      "\n                " +
+                                      "\n              " +
                                         _vm._s(item.heading) +
-                                        "\n                "
+                                        "\n            "
                                     )
                                   ])
                                 : _vm._e()
@@ -42048,9 +42045,9 @@ var render = function() {
                                       [
                                         _c("v-list-item-title", [
                                           _vm._v(
-                                            "\n                    " +
+                                            "\n                " +
                                               _vm._s(item.text) +
-                                              "\n                "
+                                              "\n              "
                                           )
                                         ])
                                       ],
@@ -42096,9 +42093,9 @@ var render = function() {
                                   [
                                     _c("v-list-item-title", [
                                       _vm._v(
-                                        "\n                        " +
+                                        "\n                " +
                                           _vm._s(child.text) +
-                                          "\n                    "
+                                          "\n              "
                                       )
                                     ])
                                   ],
@@ -42134,9 +42131,9 @@ var render = function() {
                             [
                               _c("v-list-item-title", [
                                 _vm._v(
-                                  "\n                    " +
+                                  "\n              " +
                                     _vm._s(item.text) +
-                                    "\n                    "
+                                    "\n            "
                                 )
                               ])
                             ],
@@ -42179,35 +42176,109 @@ var render = function() {
             { staticClass: "ml-0 pl-4", staticStyle: { width: "300px" } },
             [
               _c("span", { staticClass: "hidden-sm-and-down" }, [
-                _vm._v(_vm._s(_vm.title))
+                _vm._v(_vm._s(_vm.Grader))
               ])
             ]
           ),
           _vm._v(" "),
-          _c("v-text-field", {
-            staticClass: "hidden-sm-and-down",
-            attrs: {
-              flat: "",
-              "solo-inverted": "",
-              "hide-details": "",
-              "prepend-inner-icon": "mdi-magnify",
-              label: "Search"
-            }
-          }),
+          _c("v-btn", { attrs: { text: "" } }, [_vm._v(" Home ")]),
           _vm._v(" "),
-          _c("v-spacer"),
+          _c("v-btn", { attrs: { text: "" } }, [_vm._v(" Classroom ")]),
           _vm._v(" "),
           _c(
-            "v-btn",
-            { attrs: { icon: "" } },
-            [_c("v-icon", [_vm._v("mdi-apps")])],
+            "div",
+            { staticClass: "text-xs-center" },
+            [
+              _c(
+                "v-menu",
+                {
+                  attrs: { "offset-y": "" },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "activator",
+                      fn: function(ref) {
+                        var on = ref.on
+                        return [
+                          _c(
+                            "v-btn",
+                            _vm._g({ attrs: { text: "", dark: "" } }, on),
+                            [_vm._v(" Manage Classroom ")]
+                          )
+                        ]
+                      }
+                    }
+                  ])
+                },
+                [
+                  _vm._v(" "),
+                  _c(
+                    "v-list",
+                    _vm._l(_vm.items, function(item, index) {
+                      return _c(
+                        "v-list-tile",
+                        { key: index, on: { click: _vm.y } },
+                        [_c("v-list-tile-title", [_vm._v(_vm._s(item.title))])],
+                        1
+                      )
+                    }),
+                    1
+                  )
+                ],
+                1
+              )
+            ],
             1
           ),
           _vm._v(" "),
+          _c("v-btn", { attrs: { text: "" } }, [_vm._v(" My Score ")]),
+          _vm._v(" "),
+          _c("v-btn", { attrs: { text: "" } }, [_vm._v(" Scoreboards ")]),
+          _vm._v(" "),
           _c(
-            "v-btn",
-            { attrs: { icon: "" } },
-            [_c("v-icon", [_vm._v("mdi-bell")])],
+            "div",
+            { staticClass: "text-xs-center" },
+            [
+              _c(
+                "v-menu",
+                {
+                  attrs: { "offset-y": "" },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "activator",
+                      fn: function(ref) {
+                        var on = ref.on
+                        return [
+                          _c(
+                            "v-btn",
+                            _vm._g(
+                              { attrs: { color: "primary", dark: "" } },
+                              on
+                            ),
+                            [_vm._v(" Username ")]
+                          )
+                        ]
+                      }
+                    }
+                  ])
+                },
+                [
+                  _vm._v(" "),
+                  _c(
+                    "v-list",
+                    _vm._l(_vm.items, function(item, index) {
+                      return _c(
+                        "v-list-tile",
+                        { key: index, on: { click: _vm.y } },
+                        [_c("v-list-tile-title", [_vm._v(_vm._s(item.title))])],
+                        1
+                      )
+                    }),
+                    1
+                  )
+                ],
+                1
+              )
+            ],
             1
           )
         ],

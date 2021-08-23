@@ -58,15 +58,49 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       loading: true,
-      user: null
+      user: null,
+      //   เพิ่มรูปตรง slid
+      items: [{
+        src: 'https://siamrath.co.th/files/styles/1140/public/img/20201229/c79b909950b13cc0e4eb35a2fd5e2f373acc4f232e77c0be506b55f7ba168848.jpg?itok=OL38f8eI'
+      }, {
+        src: 'https://static.posttoday.com/media/content/2018/08/30/AC72A7A32BED489198FFB1620C6168D8.jpg'
+      }, {
+        src: 'https://img.soccersuck.com/images/2021/06/04/1EED5031-AE91-4C8E-AAAF-F55D1634DA47.jpg'
+      }]
     };
   },
   mounted: function mounted() {
-    console.log('Component mounted.');
+    console.log("Component mounted.");
   },
   created: function created() {
     this.initialize();
@@ -82,7 +116,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _this.loading = true;
                 _context.next = 3;
-                return axios.get('/api/user').then(function (response) {
+                return axios.get("/api/user").then(function (response) {
                   if (response.data.success == true) {
                     console.log(response.data);
                     _this.user = response.data.user;
@@ -962,22 +996,51 @@ var render = function() {
     { attrs: { justify: "center" } },
     [
       _c(
+        "v-carousel",
+        {
+          attrs: {
+            cycle: "",
+            height: "400",
+            "hide-delimiter-background": "",
+            "show-arrows-on-hover": ""
+          }
+        },
+        _vm._l(_vm.items, function(item, i) {
+          return _c("v-carousel-item", {
+            key: i,
+            attrs: {
+              src: item.src,
+              "reverse-transition": "fade-transition",
+              transition: "fade-transition"
+            }
+          })
+        }),
+        1
+      ),
+      _vm._v(" "),
+      _c("h1", { staticClass: "text-center , font-weight-black" }, [
+        _vm._v("\n      SOURCE CODE GRADER \n  ")
+      ]),
+      _vm._v(" "),
+      _c("h5", { staticClass: "text-center " }, [
+        _vm._v("\n      Computer Science Maejo University \n  ")
+      ]),
+      _vm._v(" "),
+      _c(
         "v-col",
         [
           _c(
             "v-card",
             { attrs: { loading: _vm.loading } },
             [
-              _c("v-card-title", [_c("span", {}, [_vm._v("Home Component")])]),
+              _c("v-card-title", [_c("span", {}, [_vm._v("Home -")])]),
               _vm._v(" "),
               _c(
                 "v-card-text",
                 [
-                  _vm._v("\n                I'm a home component from "),
+                  _vm._v("\n        I'm a home component from "),
                   _c("br"),
-                  _vm._v(
-                    "\n                /resources/js/pages/home.vue\n\n                "
-                  ),
+                  _vm._v("\n        /resources/js/pages/home.vue\n\n        "),
                   _vm.user
                     ? _c(
                         "v-card",
@@ -991,13 +1054,13 @@ var render = function() {
                           _vm._v(" "),
                           _c("v-card-text", [
                             _vm._v(
-                              "\n                        Name : " +
+                              "\n            Name : " +
                                 _vm._s(_vm.user.name) +
                                 " "
                             ),
                             _c("br"),
                             _vm._v(
-                              "\n                        Email : " +
+                              "\n            Email : " +
                                 _vm._s(_vm.user.email) +
                                 " "
                             ),
