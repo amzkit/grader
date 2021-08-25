@@ -1,6 +1,6 @@
 const state = {
     items: [
-        { icon: 'mdi-home-outline', text: 'Home', url: '/' },
+        // { icon: 'mdi-home-outline', text: 'Home', url: '/' },
         { icon: 'mdi-logout', text: 'Log out', url: '/logout' },
     ],
 }

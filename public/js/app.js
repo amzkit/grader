@@ -5138,10 +5138,46 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
-    return {};
+    var _this = this;
+
+    return {
+      users: [{
+        title: "Click Me",
+        fn: function fn() {
+          _this.$router.push(to = "");
+        }
+      }, {
+        title: "Click Me"
+      }, {
+        title: "Click Me"
+      }, {
+        title: "Click Me 2"
+      }],
+      manages: [{
+        title: "จัดการห้องเรียน",
+        fn: function fn() {
+          _this.$router.push("/manageclass");
+        }
+      }, {
+        title: "จัดการโจทย์",
+        fn: function fn() {
+          _this.$router.push("/managepropos");
+        }
+      }]
+    };
   },
   computed: _objectSpread({
     drawer: {
@@ -5439,7 +5475,23 @@ var routes = [{
     }
   }
 }, {
-  path: "*"
+  path: "/classroom",
+  name: 'classroom',
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ "resources_js_pages_classroom_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/classroom.vue */ "./resources/js/pages/classroom.vue"));
+  }
+}, {
+  path: "/manageclass",
+  name: 'manageclass',
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ "resources_js_pages_manageclass_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/manageclass.vue */ "./resources/js/pages/manageclass.vue"));
+  }
+}, {
+  path: "/managepropos",
+  name: 'managepropos',
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ "resources_js_pages_managepropos_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/managepropos.vue */ "./resources/js/pages/managepropos.vue"));
+  }
 }];
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (routes);
 
@@ -5486,11 +5538,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 var state = {
-  items: [{
-    icon: 'mdi-home-outline',
-    text: 'Home',
-    url: '/'
-  }, {
+  items: [// { icon: 'mdi-home-outline', text: 'Home', url: '/' },
+  {
     icon: 'mdi-logout',
     text: 'Log out',
     url: '/logout'
@@ -42181,9 +42230,11 @@ var render = function() {
             ]
           ),
           _vm._v(" "),
-          _c("v-btn", { attrs: { text: "" } }, [_vm._v(" Home ")]),
+          _c("v-btn", { attrs: { text: "", to: "/" } }, [_vm._v(" Home ")]),
           _vm._v(" "),
-          _c("v-btn", { attrs: { text: "" } }, [_vm._v(" Classroom ")]),
+          _c("v-btn", { attrs: { text: "", to: "/classroom" } }, [
+            _vm._v(" Classroom ")
+          ]),
           _vm._v(" "),
           _c(
             "div",
@@ -42192,17 +42243,32 @@ var render = function() {
               _c(
                 "v-menu",
                 {
-                  attrs: { "offset-y": "" },
+                  attrs: { "offset-y": "", rounded: _vm.rounded },
                   scopedSlots: _vm._u([
                     {
                       key: "activator",
                       fn: function(ref) {
                         var on = ref.on
+                        var attrs = ref.attrs
                         return [
                           _c(
                             "v-btn",
-                            _vm._g({ attrs: { text: "", dark: "" } }, on),
-                            [_vm._v(" Manage Classroom ")]
+                            _vm._g(
+                              _vm._b(
+                                { attrs: { text: "", dark: "" } },
+                                "v-btn",
+                                attrs,
+                                false
+                              ),
+                              on
+                            ),
+                            [
+                              _vm._v(
+                                "\n            Manage Classroom\n            "
+                              ),
+                              _c("v-icon", [_vm._v("mdi-chevron-down")])
+                            ],
+                            1
                           )
                         ]
                       }
@@ -42213,11 +42279,17 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "v-list",
-                    _vm._l(_vm.items, function(item, index) {
+                    _vm._l(_vm.manages, function(manage, index) {
                       return _c(
-                        "v-list-tile",
-                        { key: index, on: { click: _vm.y } },
-                        [_c("v-list-tile-title", [_vm._v(_vm._s(item.title))])],
+                        "v-list-item",
+                        { key: index, attrs: { link: "" } },
+                        [
+                          _c(
+                            "v-list-item-title",
+                            { on: { click: manage.fn } },
+                            [_vm._v(_vm._s(manage.title))]
+                          )
+                        ],
                         1
                       )
                     }),
@@ -42230,9 +42302,13 @@ var render = function() {
             1
           ),
           _vm._v(" "),
-          _c("v-btn", { attrs: { text: "" } }, [_vm._v(" My Score ")]),
+          _c("v-btn", { attrs: { text: "", to: "**path" } }, [
+            _vm._v(" My Score ")
+          ]),
           _vm._v(" "),
-          _c("v-btn", { attrs: { text: "" } }, [_vm._v(" Scoreboards ")]),
+          _c("v-btn", { attrs: { text: "", to: "**path" } }, [
+            _vm._v(" Scoreboards ")
+          ]),
           _vm._v(" "),
           _c(
             "div",
@@ -42241,20 +42317,30 @@ var render = function() {
               _c(
                 "v-menu",
                 {
-                  attrs: { "offset-y": "" },
+                  attrs: { "offset-y": "", rounded: _vm.rounded },
                   scopedSlots: _vm._u([
                     {
                       key: "activator",
                       fn: function(ref) {
                         var on = ref.on
+                        var attrs = ref.attrs
                         return [
                           _c(
                             "v-btn",
                             _vm._g(
-                              { attrs: { color: "primary", dark: "" } },
+                              _vm._b(
+                                { attrs: { color: "primary", dark: "" } },
+                                "v-btn",
+                                attrs,
+                                false
+                              ),
                               on
                             ),
-                            [_vm._v(" Username ")]
+                            [
+                              _vm._v("\n            Profile\n            "),
+                              _c("v-icon", [_vm._v("mdi-chevron-down")])
+                            ],
+                            1
                           )
                         ]
                       }
@@ -42265,11 +42351,15 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "v-list",
-                    _vm._l(_vm.items, function(item, index) {
+                    _vm._l(_vm.users, function(user, index) {
                       return _c(
-                        "v-list-tile",
-                        { key: index, on: { click: _vm.y } },
-                        [_c("v-list-tile-title", [_vm._v(_vm._s(item.title))])],
+                        "v-list-item",
+                        { key: index, attrs: { link: "" } },
+                        [
+                          _c("v-list-item-title", { on: { click: user.fn } }, [
+                            _vm._v(_vm._s(user.title))
+                          ])
+                        ],
                         1
                       )
                     }),
@@ -104494,7 +104584,7 @@ var index = {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_pages_classroom_vue":1,"resources_js_pages_manageclass_vue":1,"resources_js_pages_managepropos_vue":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};

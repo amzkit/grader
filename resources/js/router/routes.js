@@ -10,13 +10,26 @@ const routes = [
                 default:
                     return import('../pages/guest.vue')
             }
-
-
         },
     },
     {
-        path: "*",
-    }
+        path: "/classroom",
+        name: 'classroom',
+        component: () => import('../pages/classroom.vue'),
+        
+    },
+    {
+        path: "/manageclass",
+        name: 'manageclass',
+        component: () => import('../pages/manageclass.vue'),
+        
+    },
+    {
+        path: "/managepropos",
+        name: 'managepropos',
+        component: () => import('../pages/managepropos.vue'),
+        
+    },
 ]
 
 export default routes;

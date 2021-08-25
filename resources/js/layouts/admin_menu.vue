@@ -71,33 +71,43 @@
       </v-toolbar-title>
 
       <!-- menu topbars -->
-      <v-btn text> Home </v-btn>
-      <v-btn text> Classroom </v-btn>
+      <v-btn text to="/"> Home </v-btn>
+      <v-btn text to="/classroom"> Classroom </v-btn>
       <div class="text-xs-center">
-        <v-menu offset-y>
-          <template v-slot:activator="{ on }">
-            <v-btn text dark v-on="on"> Manage Classroom </v-btn>
+        <v-menu offset-y :rounded="rounded">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn text dark v-bind="attrs" v-on="on">
+              Manage Classroom
+              <v-icon>mdi-chevron-down</v-icon>
+            </v-btn>
           </template>
           <v-list>
-            <v-list-tile v-for="(item, index) in items" :key="index" @click="y">
-              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-            </v-list-tile>
+            <v-list-item v-for="(manage, index) in manages" :key="index" link>
+              <v-list-item-title @click="manage.fn">{{
+                manage.title
+              }}</v-list-item-title>
+            </v-list-item>
           </v-list>
         </v-menu>
       </div>
-      <v-btn text> My Score </v-btn>
-      <v-btn text> Scoreboards </v-btn>
+      <v-btn text to="**path"> My Score </v-btn>
+      <v-btn text to="**path"> Scoreboards </v-btn>
 
       <!-- menu profile-->
       <div class="text-xs-center">
-        <v-menu offset-y>
-          <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark v-on="on"> Username </v-btn>
+        <v-menu offset-y :rounded="rounded">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn color="primary" dark v-bind="attrs" v-on="on">
+              Profile
+              <v-icon>mdi-chevron-down</v-icon>
+            </v-btn>
           </template>
           <v-list>
-            <v-list-tile v-for="(item, index) in items" :key="index" @click="y">
-              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-            </v-list-tile>
+            <v-list-item v-for="(user, index) in users" :key="index" link>
+              <v-list-item-title @click="user.fn">{{
+                user.title
+              }}</v-list-item-title>
+            </v-list-item>
           </v-list>
         </v-menu>
       </div>
@@ -108,8 +118,34 @@
 <script>
 import { mapState, mapActions } from "vuex";
 export default {
-  data() {
-    return {};
+  data () {
+    return {
+      users: [
+        {
+          title: "Click Me",
+          fn: () => {
+            this.$router.push(to="");
+         },
+       },
+       { title: "Click Me" },
+       { title: "Click Me" },
+       { title: "Click Me 2" },
+     ],
+     manages: [
+       {
+          title: "จัดการห้องเรียน",
+          fn: () => {
+            this.$router.push("/manageclass");
+          },
+       },
+       {
+         title: "จัดการโจทย์",
+         fn: () => {
+           this.$router.push("/managepropos");
+          },
+        },
+      ],
+    }
   },
   computed: {
     drawer: {
@@ -120,6 +156,7 @@ export default {
         this.$store.commit("top_bar/SET_DRAWER", value);
       },
     },
+
     ...mapState({
       title: (state) => state.top_bar.title,
       items: (state) => state.navigation_drawer.items,
