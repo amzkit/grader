@@ -90,8 +90,8 @@
           </v-list>
         </v-menu>
       </div>
-      <v-btn text to="**path"> My Score </v-btn>
-      <v-btn text to="**path"> Scoreboards </v-btn>
+      <v-btn text to="/myscore"> My Score </v-btn>
+      <v-btn text to="/scoreboard"> Scoreboards </v-btn>
 
       <!-- menu profile-->
       <div class="text-xs-center">
@@ -138,7 +138,7 @@ export default {
         {
           title: "ชื่อ", // อันนี้จะดึงจากฐานข้อมูลเหมือนที่อาจารย์ดึง
           fn: () => {
-            this.$router.push("");
+            this.$user.name
           },
         },
         { 

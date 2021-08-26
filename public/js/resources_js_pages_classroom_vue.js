@@ -34,11 +34,85 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       loading: true,
-      user: null
+      user: null,
+      headers: [{
+        text: 'ชื่องาน',
+        align: 'start',
+        sortable: false,
+        value: 'name'
+      }, {
+        text: 'ครบกำหนดส่ง',
+        value: 'dateline'
+      }, {
+        text: 'วันที่ส่ง',
+        value: 'finish'
+      }, {
+        text: 'สถานะ',
+        value: 'status'
+      }],
+      desserts: [{
+        name: 'งานที่ 1',
+        dateline: '1/1/2222 - 00.00 am',
+        finish: '2/1/2222 - 10.21 am',
+        status: 'ส่งแล้ว(เลยกำหนด)'
+      }, {
+        name: 'งานที่ 2',
+        dateline: '10/1/2222',
+        finish: '',
+        status: 'ยังไม่ส่ง'
+      }, {
+        name: 'งานที่ 3',
+        dateline: '262',
+        finish: '',
+        status: '16.0'
+      }, {
+        name: 'งานที่ 4',
+        dateline: '305',
+        finish: '',
+        status: '3.7'
+      }, {
+        name: 'งานที่ 5',
+        dateline: '356',
+        finish: '',
+        status: '16.0'
+      }, {
+        name: 'งานที่ 6',
+        dateline: '375',
+        finish: '',
+        status: '0.0'
+      }, {
+        name: 'งานที่ 7',
+        dateline: '392',
+        finish: '',
+        status: '0.2'
+      }, {
+        name: 'งานที่ 8',
+        dateline: '408',
+        finish: '',
+        status: '3.2'
+      }, {
+        name: 'งานที่ 9',
+        dateline: '452',
+        finish: '',
+        status: '25.0'
+      }, {
+        name: 'งานที่ 10',
+        dateline: '518',
+        finish: '',
+        status: '26.0'
+      }]
     };
   },
   mounted: function mounted() {
@@ -933,7 +1007,23 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("h1", [_vm._v("Classroom")])
+  return _c(
+    "v-row",
+    { attrs: { justify: "center" } },
+    [
+      _c("h1", [_vm._v("CS000")]),
+      _vm._v(" "),
+      _c("v-data-table", {
+        staticClass: "elevation-1",
+        attrs: {
+          headers: _vm.headers,
+          items: _vm.desserts,
+          "items-per-page": 5
+        }
+      })
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true

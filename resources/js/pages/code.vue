@@ -1,6 +1,6 @@
 <template>
 <v-row justify="center">
-  <h1>จัดการโจทย์</h1>
+  <h1>Coding</h1>
   <v-card-text>
     
   </v-card-text>

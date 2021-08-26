@@ -1,5 +1,13 @@
 <template>
-  <h1>Classroom</h1>
+  <v-row justify="center">
+    <h1>CS000</h1> <!-- ชื่อวิชาเรียน -->
+    <v-data-table
+      :headers="headers"
+      :items="desserts"
+      :items-per-page="5"
+      class="elevation-1"
+    ></v-data-table>
+  </v-row>
 </template>
 
 <script>
@@ -8,6 +16,79 @@ export default {
     return {
       loading: true,
       user: null,
+      headers: [
+          {
+            text: 'ชื่องาน',
+            align: 'start',
+            sortable: false,
+            value: 'name',
+          },
+          { text: 'ครบกำหนดส่ง', value: 'dateline' },
+          { text: 'วันที่ส่ง', value: 'finish' },
+          { text: 'สถานะ', value: 'status' },
+        ],
+        desserts: [
+          {
+            name: 'งานที่ 1',
+            dateline: '1/1/2222 - 00.00 am',
+            finish: '2/1/2222 - 10.21 am',
+            status: 'ส่งแล้ว(เลยกำหนด)',
+          },
+          {
+            name: 'งานที่ 2',
+            dateline: '10/1/2222',
+            finish: '',
+            status: 'ยังไม่ส่ง',
+          },
+          {
+            name: 'งานที่ 3',
+            dateline: '262',
+            finish: '',
+            status: '16.0',
+          },
+          {
+            name: 'งานที่ 4',
+            dateline: '305',
+            finish: '',
+            status: '3.7',
+          },
+          {
+            name: 'งานที่ 5',
+            dateline: '356',
+            finish: '',
+            status: '16.0',
+          },
+          {
+            name: 'งานที่ 6',
+            dateline: '375',
+            finish: '',
+            status:'0.0',
+          },
+          {
+            name: 'งานที่ 7',
+            dateline: '392',
+            finish: '',
+            status: '0.2',
+          },
+          {
+            name: 'งานที่ 8',
+            dateline: '408',
+            finish: '',
+            status: '3.2',
+          },
+          {
+            name: 'งานที่ 9',
+            dateline: '452',
+            finish: '',
+            status: '25.0',
+          },
+          {
+            name: 'งานที่ 10',
+            dateline: '518',
+            finish: '',
+            status: '26.0',
+          },
+        ],
     };
   },
   mounted() {
@@ -32,5 +113,4 @@ export default {
 </script>
 
 <style>
-
 </style>

@@ -5169,7 +5169,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         title: "ชื่อ",
         // อันนี้จะดึงจากฐานข้อมูลเหมือนที่อาจารย์ดึง
         fn: function fn() {
-          _this.$router.push("");
+          _this.$user.name;
         }
       }, {
         title: "Change Name",
@@ -5501,6 +5501,18 @@ var routes = [{
   name: 'managepropos',
   component: function component() {
     return __webpack_require__.e(/*! import() */ "resources_js_pages_managepropos_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/managepropos.vue */ "./resources/js/pages/managepropos.vue"));
+  }
+}, {
+  path: "/myscore",
+  name: 'myscore',
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ "resources_js_pages_myscore_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/myscore.vue */ "./resources/js/pages/myscore.vue"));
+  }
+}, {
+  path: "/scoreboard",
+  name: 'scoreboard',
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ "resources_js_pages_scoreboard_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/scoreboard.vue */ "./resources/js/pages/scoreboard.vue"));
   }
 }];
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (routes);
@@ -42312,11 +42324,11 @@ var render = function() {
             1
           ),
           _vm._v(" "),
-          _c("v-btn", { attrs: { text: "", to: "**path" } }, [
+          _c("v-btn", { attrs: { text: "", to: "/myscore" } }, [
             _vm._v(" My Score ")
           ]),
           _vm._v(" "),
-          _c("v-btn", { attrs: { text: "", to: "**path" } }, [
+          _c("v-btn", { attrs: { text: "", to: "/scoreboard" } }, [
             _vm._v(" Scoreboards ")
           ]),
           _vm._v(" "),
@@ -104594,7 +104606,7 @@ var index = {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_pages_classroom_vue":1,"resources_js_pages_manageclass_vue":1,"resources_js_pages_managepropos_vue":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_pages_classroom_vue":1,"resources_js_pages_manageclass_vue":1,"resources_js_pages_managepropos_vue":1,"resources_js_pages_myscore_vue":1,"resources_js_pages_scoreboard_vue":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};

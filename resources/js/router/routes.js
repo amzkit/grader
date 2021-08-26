@@ -30,6 +30,18 @@ const routes = [
         component: () => import('../pages/managepropos.vue'),
         
     },
+    {
+        path: "/myscore",
+        name: 'myscore',
+        component: () => import('../pages/myscore.vue'),
+        
+    },
+    {
+        path: "/scoreboard",
+        name: 'scoreboard',
+        component: () => import('../pages/scoreboard.vue'),
+        
+    },
 ]
 
 export default routes;

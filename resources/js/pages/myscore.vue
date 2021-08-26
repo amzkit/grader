@@ -1,6 +1,6 @@
 <template>
 <v-row justify="center">
-  <h1>จัดการโจทย์</h1>
+  <h1>My Score</h1>
   <v-card-text>
     
   </v-card-text>
