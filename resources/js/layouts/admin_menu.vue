@@ -67,7 +67,7 @@
         @click.stop="$store.commit('top_bar/SET_DRAWER', !drawer)"
       ></v-app-bar-nav-icon>
       <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
-        <span class="hidden-sm-and-down">{{ Grader }}</span>
+        <span class="hidden-sm-and-down">{{ Title }}</span>
       </v-toolbar-title>
 
       <!-- menu topbars -->
@@ -118,34 +118,49 @@
 <script>
 import { mapState, mapActions } from "vuex";
 export default {
-  data () {
+  data() {
     return {
-      users: [
+      manages: [
         {
-          title: "Click Me",
-          fn: () => {
-            this.$router.push(to="");
-         },
-       },
-       { title: "Click Me" },
-       { title: "Click Me" },
-       { title: "Click Me 2" },
-     ],
-     manages: [
-       {
           title: "จัดการห้องเรียน",
           fn: () => {
             this.$router.push("/manageclass");
           },
-       },
-       {
-         title: "จัดการโจทย์",
-         fn: () => {
-           this.$router.push("/managepropos");
+        },
+        {
+          title: "จัดการโจทย์",
+          fn: () => {
+            this.$router.push("/managepropos");
           },
         },
       ],
-    }
+      users: [
+        {
+          title: "ชื่อ", // อันนี้จะดึงจากฐานข้อมูลเหมือนที่อาจารย์ดึง
+          fn: () => {
+            this.$router.push("");
+          },
+        },
+        { 
+          title: "Change Name", 
+          fn: () => {
+            this.$router.push("");
+          },
+        },
+        { 
+          title: "Change Password", 
+          fn: () => {
+            this.$router.push("");
+          },
+        },
+        {
+          title: "Log Out",
+          fn: () => {
+            this.$router.push("");
+          },
+        },
+      ],
+    };
   },
   computed: {
     drawer: {

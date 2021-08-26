@@ -63,13 +63,13 @@ export default {
     //   เพิ่มรูปตรง slid
       items: [
           {
-              src: 'https://siamrath.co.th/files/styles/1140/public/img/20201229/c79b909950b13cc0e4eb35a2fd5e2f373acc4f232e77c0be506b55f7ba168848.jpg?itok=OL38f8eI',
+              src: 'https://lh3.googleusercontent.com/proxy/Ml3Qrf_Gzvmud_7CXhsCXBRwc8S460ibO0l-k20CK22C05a_BGLowMXXSI7qfi89cMvVT4G-KvXJa7DxmSsxM0oaRIbUFI_j',
           },
           {
-              src: 'https://static.posttoday.com/media/content/2018/08/30/AC72A7A32BED489198FFB1620C6168D8.jpg',
+              src: 'https://mindphp.com/images/knowledge/software-computer-code-1940x900_35196.jpg',
           },
           {
-              src: 'https://img.soccersuck.com/images/2021/06/04/1EED5031-AE91-4C8E-AAAF-F55D1634DA47.jpg',
+              src: 'https://code.org/shared/images/social-media/codeorg2020_social.png',
           }
       ],
     };

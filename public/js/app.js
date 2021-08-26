@@ -5154,18 +5154,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     var _this = this;
 
     return {
-      users: [{
-        title: "Click Me",
-        fn: function fn() {
-          _this.$router.push(to = "");
-        }
-      }, {
-        title: "Click Me"
-      }, {
-        title: "Click Me"
-      }, {
-        title: "Click Me 2"
-      }],
       manages: [{
         title: "จัดการห้องเรียน",
         fn: function fn() {
@@ -5175,6 +5163,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         title: "จัดการโจทย์",
         fn: function fn() {
           _this.$router.push("/managepropos");
+        }
+      }],
+      users: [{
+        title: "ชื่อ",
+        // อันนี้จะดึงจากฐานข้อมูลเหมือนที่อาจารย์ดึง
+        fn: function fn() {
+          _this.$router.push("");
+        }
+      }, {
+        title: "Change Name",
+        fn: function fn() {
+          _this.$router.push("");
+        }
+      }, {
+        title: "Change Password",
+        fn: function fn() {
+          _this.$router.push("");
+        }
+      }, {
+        title: "Log Out",
+        fn: function fn() {
+          _this.$router.push("");
         }
       }]
     };
@@ -42225,7 +42235,7 @@ var render = function() {
             { staticClass: "ml-0 pl-4", staticStyle: { width: "300px" } },
             [
               _c("span", { staticClass: "hidden-sm-and-down" }, [
-                _vm._v(_vm._s(_vm.Grader))
+                _vm._v(_vm._s(_vm.Title))
               ])
             ]
           ),
