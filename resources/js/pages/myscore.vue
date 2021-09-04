@@ -1,41 +1,93 @@
 <template>
-<v-row justify="center">
-  <h1>My Score</h1>
-  <v-card-text>
-    
-  </v-card-text>
-</v-row>
+  <v-data-table
+    :headers="headers"
+    :items="myscore"
+    :items-per-page="5"
+    class="elevation-1"
+  ></v-data-table>
 </template>
 
 <script>
 export default {
-  data: function () {
+  data() {
     return {
-      loading: true,
-      user: null,
+      headers: [
+        {
+          text: "วิชา",
+          align: "start",
+          sortable: false,
+          value: "subject",
+        },
+        { text: "รายชื่องาน", value: "work" },
+        { text: "คะแนน", value: "score" },
+        { text: "วันที่ส่ง", value: "datesent" },
+      ],
+      myscore: [
+        {
+          วิชา: "CS000",
+          รายชื่องาน: 1,
+          คะแนน: 6.0,
+          วันที่ส่ง: 24,
+        },
+        {
+          วิชา: "CS001",
+          รายชื่องาน: 1,
+          คะแนน: 6.0,
+          วันที่ส่ง: 24,
+        },
+        {
+          วิชา: "CS002",
+          รายชื่องาน: 1,
+          คะแนน: 6.0,
+          วันที่ส่ง: 24,
+        },
+        {
+          วิชา: "CS003",
+          รายชื่องาน: 1,
+          คะแนน: 6.0,
+          วันที่ส่ง: 24,
+        },
+        {
+          วิชา: "CS004",
+          รายชื่องาน: 1,
+          คะแนน: 6.0,
+          วันที่ส่ง: 24,
+        },
+        {
+          วิชา: "CS005",
+          รายชื่องาน: 1,
+          คะแนน: 6.0,
+          วันที่ส่ง: 24,
+        },
+        {
+          วิชา: "CS006",
+          รายชื่องาน: 1,
+          คะแนน: 6.0,
+          วันที่ส่ง: 24,
+        },
+        {
+          วิชา: "CS007",
+          รายชื่องาน: 1,
+          คะแนน: 6.0,
+          วันที่ส่ง: 24,
+        },
+        {
+          วิชา: "CS008",
+          รายชื่องาน: 1,
+          คะแนน: 6.0,
+          วันที่ส่ง: 24,
+        },
+        {
+          วิชา: "CS009",
+          รายชื่องาน: 1,
+          คะแนน: 6.0,
+          วันที่ส่ง: 24,
+        },
+      ],
     };
-  },
-  mounted() {
-    console.log("Component mounted.");
-  },
-  created() {
-    this.initialize();
-  },
-  methods: {
-    async initialize() {
-      this.loading = true;
-      await axios.get("/api/user").then((response) => {
-        if (response.data.success == true) {
-          console.log(response.data);
-          this.user = response.data.user;
-        }
-      });
-      this.loading = false;
-    },
   },
 };
 </script>
 
 <style>
-
 </style>
