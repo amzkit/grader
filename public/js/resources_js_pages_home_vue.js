@@ -58,6 +58,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -999,6 +1000,12 @@ var render = function() {
                             _vm._v(
                               "\n                        Email : " +
                                 _vm._s(_vm.user.email) +
+                                " "
+                            ),
+                            _c("br"),
+                            _vm._v(
+                              "\n                        Role : " +
+                                _vm._s(_vm.user.role) +
                                 " "
                             ),
                             _c("br")

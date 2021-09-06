@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'access_token',
     ];
 
     /**
@@ -47,9 +48,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Provider::class, 'user_id', 'id');
     }
-
+/*
     public function getRoleAttribute()
     {
         return 'admin';
     }
+*/
 }

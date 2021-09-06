@@ -28,6 +28,7 @@ import router from './router/index'
     // Guest
     Vue.component("guest-top-bar", require("./layouts/guest_top_bar.vue").default)
     Vue.component("login", require("./auth/login.vue").default )
+    Vue.component("select_role", require("./auth/select_role.vue").default )
 
     // Auth User Home
 

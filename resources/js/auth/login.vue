@@ -12,8 +12,9 @@
                 </v-toolbar>
                 <v-card-text>
                     <div class="text-center">
-                    <v-btn color="error" @click="redirect('/login/google/redirect')">Google Sign-In</v-btn>
+                    <v-btn color="error" @click="redirect('/login/mju/redirect')">MJU Sign-In</v-btn>
                     </div>
+
 
                     <v-divider></v-divider>
 

@@ -16,7 +16,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return response()->json(['success'=>true, 'user'=>$request->user()]);
+Route::middleware('auth:sanctum')->group(function(){
+    Route::post('/set_role', [UserController::class, 'setRole']);
+
+    Route::get('/user', function (Request $request) {
+        return response()->json(['success'=>true, 'user'=>$request->user()]);
+    });
+
+
+
 });
 

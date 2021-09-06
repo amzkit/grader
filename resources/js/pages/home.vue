@@ -16,6 +16,7 @@
                         <v-card-text>
                             Name : {{ user.name }} <br>
                             Email : {{ user.email }} <br>
+                            Role : {{ user.role }} <br>
                         </v-card-text>
                     </v-card>
                 </v-card-text>
