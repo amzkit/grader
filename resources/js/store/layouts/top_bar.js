@@ -1,5 +1,5 @@
 const state = {
-    title: "Title",
+    title: "Grader",
     drawer: false,
     dialog: false,
 }

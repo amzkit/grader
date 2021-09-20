@@ -39,11 +39,102 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       loading: true,
-      user: null
+      user: null,
+      // เลือก classroom
+      select: null,
+      items: ["cs000", "cs001", "cs002", "cs003"],
+      // เลือก ภาษา
+      selectLeg: null,
+      itemsleg: ["C", "C++", "java", "phython"]
+    };
+  },
+  datadate: function datadate() {
+    return {
+      picker: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10)
     };
   },
   mounted: function mounted() {
@@ -67,6 +158,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   if (response.data.success == true) {
                     console.log(response.data);
                     _this.user = response.data.user;
+                    _this.select = null;
                   }
                 });
 
@@ -941,7 +1033,232 @@ var render = function() {
   return _c(
     "v-row",
     { attrs: { justify: "center" } },
-    [_c("h1", [_vm._v("จัดการโจทย์")]), _vm._v(" "), _c("v-card-text")],
+    [
+      _c("h1", [_vm._v("จัดการโจทย์")]),
+      _vm._v(" "),
+      _c(
+        "v-card",
+        [
+          _c(
+            "v-container",
+            { attrs: { fluid: "" } },
+            [
+              _c(
+                "v-row",
+                { attrs: { align: "center" } },
+                [
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "4" } },
+                    [_c("v-subheader", [_vm._v(" ห้องเรียน ")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "6" } },
+                    [
+                      _c("v-select", {
+                        attrs: {
+                          items: _vm.items,
+                          "error-messages": _vm.selectErrors,
+                          label: "เลือกห้องเรียน",
+                          required: ""
+                        },
+                        on: {
+                          change: function($event) {
+                            return _vm.$v.select.$touch()
+                          },
+                          blur: function($event) {
+                            return _vm.$v.select.$touch()
+                          }
+                        },
+                        model: {
+                          value: _vm.select,
+                          callback: function($$v) {
+                            _vm.select = $$v
+                          },
+                          expression: "select"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-row",
+                { attrs: { align: "center" } },
+                [
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "4" } },
+                    [_c("v-subheader", [_vm._v(" ชื่องาน ")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "6" } },
+                    [_c("v-text-field", { attrs: { label: "ใส่ชื่องาน" } })],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-row",
+                { attrs: { align: "center" } },
+                [
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "4" } },
+                    [_c("v-subheader", [_vm._v(" โจทย์ ")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "6" } },
+                    [
+                      _c("v-textarea", {
+                        attrs: { counter: "", label: "พิมพ์โจทย์" }
+                      }),
+                      _vm._v(" "),
+                      [
+                        _c("v-file-input", {
+                          attrs: {
+                            multiple: "",
+                            label: "แนบไฟล์โจทย์",
+                            dense: ""
+                          }
+                        })
+                      ]
+                    ],
+                    2
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-row",
+                { attrs: { align: "center" } },
+                [
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "4" } },
+                    [_c("v-subheader", [_vm._v(" คะแนน ")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "6" } },
+                    [_c("v-text-field", { attrs: { label: "กำหนดคะแนน" } })],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "4" } },
+                    [_c("v-subheader", [_vm._v(" ภาษา ")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "6" } },
+                    [
+                      _c("v-select", {
+                        attrs: {
+                          items: _vm.itemsleg,
+                          "error-messages": _vm.selectErrors,
+                          label: "เลือกภาษา",
+                          required: ""
+                        },
+                        on: {
+                          change: function($event) {
+                            return _vm.$v.selectLeg.$touch()
+                          },
+                          blur: function($event) {
+                            return _vm.$v.selectleg.$touch()
+                          }
+                        },
+                        model: {
+                          value: _vm.selectleg,
+                          callback: function($$v) {
+                            _vm.selectleg = $$v
+                          },
+                          expression: "selectleg"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-row",
+                { attrs: { align: "center" } },
+                [
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "5" } },
+                    [
+                      _c("v-subheader", [_vm._v(" กำหนดส่ง ")]),
+                      _vm._v(" "),
+                      _c("v-date-picker", {
+                        model: {
+                          value: _vm.picker,
+                          callback: function($$v) {
+                            _vm.picker = $$v
+                          },
+                          expression: "picker"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "1" } },
+                    [_c("v-text", [_vm._v("ถึง")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "6" } },
+                    [
+                      _c("v-date-picker", {
+                        model: {
+                          value: _vm.picker,
+                          callback: function($$v) {
+                            _vm.picker = $$v
+                          },
+                          expression: "picker"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
     1
   )
 }

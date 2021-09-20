@@ -68,10 +68,10 @@
                             ></v-text-field>
                           </v-col>
                           <v-col cols="12" sm="6" md="4">
-                            <v-text-field
-                              v-model="editedItem.statusta"
-                              label="สถานะ"
-                            ></v-text-field>
+                            <v-checkbox
+                              v-model="checkbox"
+                              label="TA"
+                            ></v-checkbox>
                           </v-col>
                         </v-row>
                       </v-container>
@@ -149,6 +149,7 @@ export default {
       model: null,
       dialog: false,
       dialogDelete: false,
+      checkbox: false,
       headers: [
         {
           text: "รหัสนักศึกษา",
@@ -165,7 +166,7 @@ export default {
       editedItem: {
         stdid: "",
         names: "",
-        statusta: "",
+        statusta: "${checkbox.toString()}",
       },
       defaultItem: {
         stdid: "",
@@ -207,6 +208,7 @@ export default {
       this.loading = false;
     },
 
+    // ตาราง
     initialize() {
       this.desserts = [
         {

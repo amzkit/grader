@@ -5376,6 +5376,8 @@ vue__WEBPACK_IMPORTED_MODULE_2__.default.use((vuetify__WEBPACK_IMPORTED_MODULE_3
 var app = new vue__WEBPACK_IMPORTED_MODULE_2__.default({
   router: _router_index__WEBPACK_IMPORTED_MODULE_1__.default,
   store: _store__WEBPACK_IMPORTED_MODULE_0__.default,
+  // rounded,
+  // success,
   el: "#app",
   vuetify: new (vuetify__WEBPACK_IMPORTED_MODULE_3___default())(),
   components: {
@@ -5592,7 +5594,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 var state = {
-  title: "Title",
+  title: "Grader",
   drawer: false,
   dialog: false
 };
@@ -42247,7 +42249,7 @@ var render = function() {
             { staticClass: "ml-0 pl-4", staticStyle: { width: "300px" } },
             [
               _c("span", { staticClass: "hidden-sm-and-down" }, [
-                _vm._v(_vm._s(_vm.Title))
+                _vm._v(_vm._s(_vm.title))
               ])
             ]
           ),

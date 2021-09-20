@@ -19,6 +19,7 @@ import AdminMenu from "./admin_menu.vue"
 export default {
     name: 'app',
     components:{ AdminMenu },
+
 }
 
 </script>

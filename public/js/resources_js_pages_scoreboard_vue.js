@@ -177,7 +177,7 @@ var render = function() {
       _c(
         "v-card-title",
         [
-          _vm._v("\n    Scoreboaed\n    "),
+          _vm._v("\n    Scoreboard\n    "),
           _c("v-spacer"),
           _vm._v(" "),
           _c("v-text-field", {

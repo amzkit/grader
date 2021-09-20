@@ -67,7 +67,7 @@
         @click.stop="$store.commit('top_bar/SET_DRAWER', !drawer)"
       ></v-app-bar-nav-icon>
       <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
-        <span class="hidden-sm-and-down">{{ Title }}</span>
+        <span class="hidden-sm-and-down">{{ title }}</span>
       </v-toolbar-title>
 
       <!-- menu topbars -->
@@ -184,3 +184,7 @@ export default {
   },
 };
 </script>
+
+function newFunction() {
+  return "/logout";
+}

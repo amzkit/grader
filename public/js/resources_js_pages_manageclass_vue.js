@@ -184,6 +184,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       model: null,
       dialog: false,
       dialogDelete: false,
+      checkbox: false,
       headers: [{
         text: "รหัสนักศึกษา",
         align: "start",
@@ -205,7 +206,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       editedItem: {
         stdid: "",
         names: "",
-        statusta: ""
+        statusta: "${checkbox.toString()}"
       },
       defaultItem: {
         stdid: "",
@@ -1396,25 +1397,20 @@ var render = function() {
                                                           }
                                                         },
                                                         [
-                                                          _c("v-text-field", {
+                                                          _c("v-checkbox", {
                                                             attrs: {
-                                                              label: "สถานะ"
+                                                              label: "TA"
                                                             },
                                                             model: {
                                                               value:
-                                                                _vm.editedItem
-                                                                  .statusta,
+                                                                _vm.checkbox,
                                                               callback: function(
                                                                 $$v
                                                               ) {
-                                                                _vm.$set(
-                                                                  _vm.editedItem,
-                                                                  "statusta",
-                                                                  $$v
-                                                                )
+                                                                _vm.checkbox = $$v
                                                               },
                                                               expression:
-                                                                "editedItem.statusta"
+                                                                "checkbox"
                                                             }
                                                           })
                                                         ],
