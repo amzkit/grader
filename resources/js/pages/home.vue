@@ -16,15 +16,8 @@
       ></v-carousel-item>
     </v-carousel>
 
-    <h1 class="text-center , font-weight-black">
-        SOURCE CODE GRADER 
-    </h1>
-    <h5 class="text-center ">
-        Computer Science Maejo University 
-    </h5>
-       
-    
-
+    <h1 class="text-center , font-weight-black">SOURCE CODE GRADER</h1>
+    <h5 class="text-center">Computer Science Maejo University</h5>
 
     <!-- Home ที่อาจารย์ทำไว้อย่าพึ่งลบนะ -->
     <v-col>
@@ -60,17 +53,17 @@ export default {
       loading: true,
       user: null,
 
-    //   เพิ่มรูปตรง slid
+      //   เพิ่มรูปตรง slid
       items: [
-          {
-              src: 'https://lh3.googleusercontent.com/proxy/Ml3Qrf_Gzvmud_7CXhsCXBRwc8S460ibO0l-k20CK22C05a_BGLowMXXSI7qfi89cMvVT4G-KvXJa7DxmSsxM0oaRIbUFI_j',
-          },
-          {
-              src: 'https://mindphp.com/images/knowledge/software-computer-code-1940x900_35196.jpg',
-          },
-          {
-              src: 'https://code.org/shared/images/social-media/codeorg2020_social.png',
-          }
+        {
+          src: "https://lh3.googleusercontent.com/proxy/Ml3Qrf_Gzvmud_7CXhsCXBRwc8S460ibO0l-k20CK22C05a_BGLowMXXSI7qfi89cMvVT4G-KvXJa7DxmSsxM0oaRIbUFI_j",
+        },
+        {
+          src: "https://mindphp.com/images/knowledge/software-computer-code-1940x900_35196.jpg",
+        },
+        {
+          src: "https://code.org/shared/images/social-media/codeorg2020_social.png",
+        },
       ],
     };
   },
@@ -89,6 +82,7 @@ export default {
           this.user = response.data.user;
         }
       });
+
       this.loading = false;
     },
   },

@@ -78,13 +78,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -92,11 +85,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       user: null,
       //   เพิ่มรูปตรง slid
       items: [{
-        src: 'https://lh3.googleusercontent.com/proxy/Ml3Qrf_Gzvmud_7CXhsCXBRwc8S460ibO0l-k20CK22C05a_BGLowMXXSI7qfi89cMvVT4G-KvXJa7DxmSsxM0oaRIbUFI_j'
+        src: "https://lh3.googleusercontent.com/proxy/Ml3Qrf_Gzvmud_7CXhsCXBRwc8S460ibO0l-k20CK22C05a_BGLowMXXSI7qfi89cMvVT4G-KvXJa7DxmSsxM0oaRIbUFI_j"
       }, {
-        src: 'https://mindphp.com/images/knowledge/software-computer-code-1940x900_35196.jpg'
+        src: "https://mindphp.com/images/knowledge/software-computer-code-1940x900_35196.jpg"
       }, {
-        src: 'https://code.org/shared/images/social-media/codeorg2020_social.png'
+        src: "https://code.org/shared/images/social-media/codeorg2020_social.png"
       }]
     };
   },
@@ -1020,11 +1013,11 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("h1", { staticClass: "text-center , font-weight-black" }, [
-        _vm._v("\n      SOURCE CODE GRADER \n  ")
+        _vm._v("SOURCE CODE GRADER")
       ]),
       _vm._v(" "),
-      _c("h5", { staticClass: "text-center " }, [
-        _vm._v("\n      Computer Science Maejo University \n  ")
+      _c("h5", { staticClass: "text-center" }, [
+        _vm._v("Computer Science Maejo University")
       ]),
       _vm._v(" "),
       _c(

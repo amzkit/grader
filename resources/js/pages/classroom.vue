@@ -1,12 +1,28 @@
 <template>
   <v-row justify="center">
     <h1>CS000</h1> <!-- ชื่อวิชาเรียน -->
+    <v-col>
+      <v-card>
+      <template v-slot:activator="{ on, attrs }">
+       <v-btn
+         color="primary"
+           dark
+           class="mb-2"
+           v-bind="attrs"
+           v-on="on"
+       >
+       เพิ่มผู้ใช้ห้องเรียน
+       </v-btn>
+      </template>
+
     <v-data-table
       :headers="headers"
       :items="desserts"
       :items-per-page="5"
       class="elevation-1"
     ></v-data-table>
+      </v-card>
+  </v-col>
   </v-row>
 </template>
 

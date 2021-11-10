@@ -129,11 +129,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       items: ["cs000", "cs001", "cs002", "cs003"],
       // เลือก ภาษา
       selectLeg: null,
-      itemsleg: ["C", "C++", "java", "phython"]
-    };
-  },
-  datadate: function datadate() {
-    return {
+      itemsleg: ["C", "C++", "java", "phython"],
+      //เลือกวันที่
       picker: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10)
     };
   },
@@ -154,7 +151,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _this.loading = true;
                 _context.next = 3;
-                return axios.get("/api/user").then(function (response) {
+                return axios.get("api/manage/classroom").then(function (response) {
                   if (response.data.success == true) {
                     console.log(response.data);
                     _this.user = response.data.user;

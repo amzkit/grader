@@ -101,11 +101,8 @@ export default {
       // เลือก ภาษา
       selectLeg: null,
       itemsleg: ["C", "C++", "java", "phython"],
-    };
-  },
 
-  datadate() {
-    return {
+      //เลือกวันที่
       picker: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
         .toISOString()
         .substr(0, 10),
@@ -121,7 +118,7 @@ export default {
   methods: {
     async initialize() {
       this.loading = true;
-      await axios.get("/api/user").then((response) => {
+      await axios.get("api/manage/classroom").then((response) => {
         if (response.data.success == true) {
           console.log(response.data);
           this.user = response.data.user;
@@ -135,5 +132,4 @@ export default {
 </script>
 
 <style>
-
 </style>

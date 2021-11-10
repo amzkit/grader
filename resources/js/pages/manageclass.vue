@@ -2,10 +2,11 @@
   <v-row justify="center">
     <h1>จัดการห้องเรียน</h1>
     <v-col>
-      <v-card :loading="loading">
+      <v-card>
         <!-- ตั้งชื่อห้องเรียน -->
         <v-card-text>
           <v-text-field
+            v-model="editedItem.className"
             color="primary"
             label="ตั้งชื่อห้องเรียน"
           ></v-text-field>
@@ -60,19 +61,27 @@
                               label="รหัสนักศึกษา"
                             ></v-text-field>
                           </v-col>
-                          <v-col cols="12" sm="6" md="4
-                          ">
+                          <v-col
+                            cols="12"
+                            sm="6"
+                            md="6
+                          "
+                          >
                             <v-text-field
-                              v-model="editedItem.names"
-                              label="ชื่อ - นามสกุล"
+                              v-model="editedItem.firstName"
+                              label="ชื่อ"
+                            ></v-text-field>
+                            <v-text-field
+                              v-model="editedItem.lastName"
+                              label="นามสกุล"
                             ></v-text-field>
                           </v-col>
-                          <v-col cols="12" sm="6" md="4">
+                          <v-container class="light--text" fluid>
                             <v-checkbox
                               v-model="checkbox"
-                              label="TA"
+                              :label="`TA`"
                             ></v-checkbox>
-                          </v-col>
+                          </v-container>
                         </v-row>
                       </v-container>
                     </v-card-text>
@@ -82,7 +91,7 @@
                       <v-btn color="blue darken-1" text @click="close">
                         Cancel
                       </v-btn>
-                      <v-btn color="blue darken-1" text @click="save">
+                      <v-btn color="blue darken-1" text @click="saveItem">
                         Save
                       </v-btn>
                     </v-card-actions>
@@ -114,21 +123,20 @@
             <!-- ไอคอน actions -->
             <template v-slot:[`item.actions`]="{ item }">
               <v-icon small class="mr-2" @click="editItem(item)">
-               mdi-pencil
+                mdi-pencil
               </v-icon>
               <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
             </template>
             <template v-slot:no-data>
               <v-btn color="primary" @click="initialize"> Reset </v-btn>
             </template>
-
           </v-data-table>
         </v-card-text>
 
         <!-- ปุ่ม save ทั้งหมด -->
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn :color="success" @click="save"> Save </v-btn>
+          <v-btn @click="saveAll"> Save </v-btn>
         </v-card-actions>
         <v-snackbar v-model="hasSaved" :timeout="2000" absolute bottom left>
           Successfully saved
@@ -157,21 +165,28 @@ export default {
           sortable: false,
           value: "stdid",
         },
-        { text: "ชื่อ - นามสกุล", value: "names" },
-        { text: "สถานะ", value: "statusta" },
+        {
+          text: "ชื่อ - นามสกุล",
+          value: "firstName",
+        },
+        { text: "สถานะ", value: "status" },
         { text: "Actions", value: "actions", sortable: false },
       ],
       desserts: [],
       editedIndex: -1,
       editedItem: {
         stdid: "",
-        names: "",
-        statusta: "${checkbox.toString()}",
+        className: "",
+        firstName: "",
+        lastName: "",
+        status: "",
       },
       defaultItem: {
         stdid: "",
-        names: "",
-        statusta: "",
+        className: "",
+        firstName: "",
+        lastName: "",
+        status: "",
       },
     };
   },
@@ -197,46 +212,21 @@ export default {
     this.initialize();
   },
   methods: {
-    async initialize() {
+    async manageClass() {
       this.loading = true;
-      await axios.get("/api/user").then((response) => {
-        if (response.data.success == true) {
-          console.log(response.data);
-          this.user = response.data.user;
-        }
-      });
+      console.log("asd");
+
       this.loading = false;
     },
 
     // ตาราง
-    initialize() {
-      this.desserts = [
-        {
-          stdid: 6104101392,
-          names: "aa",
-          statusta: "TA",
-        },
-        {
-          stdid: 6111111111,
-          names: "bb",
-          statusta: "",
-        },
-        {
-          stdid: 66666666666,
-          names: "cc",
-          statusta: "",
-        },
-        {
-          stdid: 65453215,
-          names: "สุจารี",
-          statusta: "",
-        },
-        {
-          stdid: 48466445,
-          names: "",
-          statusta: "",
-        },
-      ];
+    async initialize() {
+      this.desserts = [];
+      await axios.get("api/classroom").then((response) => {
+        if (response.data.success == true) {
+          console.log(response.data);
+        }
+      });
     },
 
     editItem(item) {
@@ -272,7 +262,7 @@ export default {
       });
     },
 
-    save() {
+    saveItem() {
       if (this.editedIndex > -1) {
         Object.assign(this.desserts[this.editedIndex], this.editedItem);
       } else {
@@ -281,8 +271,33 @@ export default {
       this.close();
     },
 
-    save() {
+    saveAll() {
       this.hasSaved = true;
+      this.item(this.desserts);
+    },
+
+    async item(item) {
+      let id = 0;
+      await axios
+        .post("api/classroom", {
+          className: "e.className",
+        })
+        .then((response) => {
+          id = response.data.last_insert_id;
+        })
+        .catch((err) => console.log(err));
+
+      await axios
+        .post("api/stdclassroom", {
+          std_id: id,
+          firstName: "e.firstName",
+          lastName: "e.lastName",
+          statusID: 1,
+        })
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((err) => console.log(err));
     },
   },
 };
