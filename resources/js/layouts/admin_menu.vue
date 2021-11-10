@@ -7,49 +7,32 @@
     >
       <v-list dense>
         <template v-for="item in items">
-          <v-row v-if="item.heading" :key="item.heading" align="center">
-            <v-col cols="6">
-              <v-subheader v-if="item.heading">
-                {{ item.heading }}
-              </v-subheader>
-            </v-col>
-            <v-col cols="6" class="text-center">
-              <a href="#!" class="body-2 black--text">EDIT</a>
-            </v-col>
-          </v-row>
-          <v-list-group
-            v-else-if="item.children"
-            :key="item.text"
-            v-model="item.model"
-            :prepend-icon="item.model ? item.icon : item['icon-alt']"
-            append-icon=""
-          >
-            <template v-slot:activator>
-              <v-list-item-content>
-                <v-list-item-title>
-                  {{ item.text }}
-                </v-list-item-title>
-              </v-list-item-content>
-            </template>
-            <v-list-item v-for="(child, i) in item.children" :key="i" link>
-              <v-list-item-action v-if="child.icon">
-                <v-icon>{{ child.icon }}</v-icon>
-              </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title>
-                  {{ child.text }}
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list-group>
-
-          <v-list-item v-else :key="item.text" link @click="redirect(item.url)">
+          <v-list-item :key="item.text" link @click="redirect(item.url)">
             <v-list-item-action>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title>
                 {{ item.text }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
+
+        <template v-for="item in sidebar">
+          <v-list-item
+            :key="item.id"
+            link
+            @click.stop="
+              $store.commit('navigation_drawer/SET_CLASSROOM', item.id)
+            "
+          >
+            <v-list-item-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ item.className }}
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -74,7 +57,7 @@
       <v-btn text to="/"> Home </v-btn>
       <v-btn text to="/classroom"> Classroom </v-btn>
       <div class="text-xs-center">
-        <v-menu offset-y :rounded="rounded">
+        <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn text dark v-bind="attrs" v-on="on">
               Manage Classroom
@@ -95,7 +78,7 @@
 
       <!-- menu profile-->
       <div class="text-xs-center">
-        <v-menu offset-y :rounded="rounded">
+        <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn color="primary" dark v-bind="attrs" v-on="on">
               Profile
@@ -120,6 +103,7 @@ import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
+      sidebar: [],
       manages: [
         {
           title: "จัดการห้องเรียน",
@@ -138,17 +122,17 @@ export default {
         {
           title: "ชื่อ", // อันนี้จะดึงจากฐานข้อมูลเหมือนที่อาจารย์ดึง
           fn: () => {
-            this.$user.name
+            this.$user.name;
           },
         },
-        { 
-          title: "Change Name", 
+        {
+          title: "Change Name",
           fn: () => {
             this.$router.push("");
           },
         },
-        { 
-          title: "Change Password", 
+        {
+          title: "Change Password",
           fn: () => {
             this.$router.push("");
           },
@@ -161,6 +145,9 @@ export default {
         },
       ],
     };
+  },
+  created() {
+    this.initialize();
   },
   computed: {
     drawer: {
@@ -181,10 +168,14 @@ export default {
     redirect(url) {
       window.location.href = url;
     },
+    async initialize() {
+      await axios.get("api/classroom").then((response) => {
+        if (response.data) {
+          this.sidebar = response.data;
+        }
+      });
+      console.log(this.sidebar);
+    },
   },
 };
 </script>
-
-function newFunction() {
-  return "/logout";
-}

@@ -3,11 +3,18 @@ const state = {
         // { icon: 'mdi-home-outline', text: 'Home', url: '/' },
         { icon: 'mdi-logout', text: 'Log out', url: '/logout' },
     ],
+    classroom: 0
 }
 
 const getters = {}
 const actions = {}
-const mutations = {}
+const mutations = {
+    SET_CLASSROOM: (state, newValue) => {
+        state.classroom = newValue
+    },
+}
+
+
 
 
 export default {

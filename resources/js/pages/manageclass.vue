@@ -6,7 +6,7 @@
         <!-- ตั้งชื่อห้องเรียน -->
         <v-card-text>
           <v-text-field
-            v-model="editedItem.className"
+            v-model="nameClassroom"
             color="primary"
             label="ตั้งชื่อห้องเรียน"
           ></v-text-field>
@@ -173,6 +173,7 @@ export default {
         { text: "Actions", value: "actions", sortable: false },
       ],
       desserts: [],
+      nameClassroom: "",
       editedIndex: -1,
       editedItem: {
         stdid: "",
@@ -274,34 +275,39 @@ export default {
     saveAll() {
       this.hasSaved = true;
       this.item(this.desserts);
+      console.log(this.desserts);
     },
 
     async item(item) {
       let id = 0;
+      console.log(item);
       await axios
         .post("api/classroom", {
-          className: "e.className",
+          className: this.nameClassroom,
         })
         .then((response) => {
           id = response.data.last_insert_id;
         })
         .catch((err) => console.log(err));
-
-      await axios
-        .post("api/stdclassroom", {
-          std_id: id,
-          firstName: "e.firstName",
-          lastName: "e.lastName",
-          statusID: 1,
-        })
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((err) => console.log(err));
+      item.map(async (e) => {
+        if (e.stdid) {
+          await axios
+            .post("api/stdclassroom", {
+              std_id: e.stdid,
+              firstName: e.firstName,
+              lastName: e.lastName,
+              classroom_id: id,
+              statusID: 1,
+            })
+            .then((response) => {
+              console.log(response.data);
+            })
+            .catch((err) => console.log(err));
+        }
+      });
     },
   },
 };
 </script>
-
 <style>
 </style>
