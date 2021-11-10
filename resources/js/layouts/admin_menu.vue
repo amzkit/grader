@@ -1,42 +1,37 @@
 <template>
   <div>
-    <v-navigation-drawer
-      v-model="drawer"
-      :clipped="$vuetify.breakpoint.lgAndUp"
-      app
-    >
-      <v-list dense>
-        <template v-for="item in items">
-          <v-list-item :key="item.text" link @click="redirect(item.url)">
-            <v-list-item-action>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>
-                {{ item.text }}
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </template>
+    <v-navigation-drawer v-model="drawer" absolute temporary>
+      <v-list nav dense>
+        <v-list-item-group
+          v-model="group"
+          active-class="deep-purple--text text--accent-4"
+        >
+          <template v-for="item in items">
+            <v-list-item :key="item.text" link @click="redirect(item.url)">
+              <v-list-item-action>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ item.text }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </template>
 
-        <template v-for="item in sidebar">
-          <v-list-item
-            :key="item.id"
-            link
-            @click.stop="
-              $store.commit('navigation_drawer/SET_CLASSROOM', item.id)
-            "
-          >
-            <v-list-item-action>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>
-                {{ item.className }}
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </template>
+          <template v-for="item in sidebar">
+            <v-list-item :key="item.id" link @click="fatchItem(item.id)">
+              <v-list-item-action>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ item.className }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </template>
+        </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
 
@@ -140,7 +135,7 @@ export default {
         {
           title: "Log Out",
           fn: () => {
-            this.$router.push("");
+            this.redirect("/logout");
           },
         },
       ],
@@ -168,13 +163,26 @@ export default {
     redirect(url) {
       window.location.href = url;
     },
+
+    async fatchItem(item) {
+      await axios.get("api/classroom/" + item).then((response) => {
+        if (response.data) {
+          this.$store.commit("data/SET_CLASSROOM", response.data);
+        }
+      });
+      await axios.get("api/stdclassroom/" + item).then((response) => {
+        if (response.data) {
+          this.$store.commit("data/SET_STD_CLASSROOM", response.data);
+        }
+      });
+    },
+
     async initialize() {
       await axios.get("api/classroom").then((response) => {
         if (response.data) {
           this.sidebar = response.data;
         }
       });
-      console.log(this.sidebar);
     },
   },
 };

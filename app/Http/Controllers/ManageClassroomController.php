@@ -49,7 +49,8 @@ class ManageClassroomController extends Controller
      */
     public function show($id)
     {
-        //
+        $manage = ManageClassrooms::find($id);
+        return response()->json($manage, 200);
     }
 
     /**

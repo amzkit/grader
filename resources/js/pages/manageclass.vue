@@ -1,5 +1,8 @@
 <template>
   <v-row justify="center">
+    {{ this.$store.state.data.manageClassroom }}
+    {{ this.$store.state.data.manageStdClassroom }}
+
     <h1>จัดการห้องเรียน</h1>
     <v-col>
       <v-card>
@@ -209,25 +212,12 @@ export default {
   mounted() {
     console.log("Component mounted.");
   },
-  created() {
-    this.initialize();
-  },
+  created() {},
   methods: {
-    async manageClass() {
-      this.loading = true;
-      console.log("asd");
-
-      this.loading = false;
-    },
-
     // ตาราง
     async initialize() {
       this.desserts = [];
-      await axios.get("api/classroom").then((response) => {
-        if (response.data.success == true) {
-          console.log(response.data);
-        }
-      });
+      console.log(this.$store.state.navigation_drawer.classroom);
     },
 
     editItem(item) {

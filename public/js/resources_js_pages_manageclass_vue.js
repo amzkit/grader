@@ -167,6 +167,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -229,11 +232,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   mounted: function mounted() {
     console.log("Component mounted.");
   },
-  created: function created() {
-    this.initialize();
-  },
+  created: function created() {},
   methods: {
-    manageClass: function manageClass() {
+    // ตาราง
+    initialize: function initialize() {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
@@ -241,41 +243,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _this.loading = true;
-                console.log("asd");
-                _this.loading = false;
+                _this.desserts = [];
+                console.log(_this.$store.state.navigation_drawer.classroom);
 
-              case 3:
+              case 2:
               case "end":
                 return _context.stop();
             }
           }
         }, _callee);
-      }))();
-    },
-    // ตาราง
-    initialize: function initialize() {
-      var _this2 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _this2.desserts = [];
-                _context2.next = 3;
-                return axios.get("api/classroom").then(function (response) {
-                  if (response.data.success == true) {
-                    console.log(response.data);
-                  }
-                });
-
-              case 3:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
       }))();
     },
     editItem: function editItem(item) {
@@ -293,21 +269,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.closeDelete();
     },
     close: function close() {
-      var _this3 = this;
+      var _this2 = this;
 
       this.dialog = false;
       this.$nextTick(function () {
-        _this3.editedItem = Object.assign({}, _this3.defaultItem);
-        _this3.editedIndex = -1;
+        _this2.editedItem = Object.assign({}, _this2.defaultItem);
+        _this2.editedIndex = -1;
       });
     },
     closeDelete: function closeDelete() {
-      var _this4 = this;
+      var _this3 = this;
 
       this.dialogDelete = false;
       this.$nextTick(function () {
-        _this4.editedItem = Object.assign({}, _this4.defaultItem);
-        _this4.editedIndex = -1;
+        _this3.editedItem = Object.assign({}, _this3.defaultItem);
+        _this3.editedIndex = -1;
       });
     },
     saveItem: function saveItem() {
@@ -325,19 +301,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       console.log(this.desserts);
     },
     item: function item(_item) {
-      var _this5 = this;
+      var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
         var id;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
                 id = 0;
                 console.log(_item);
-                _context4.next = 4;
+                _context3.next = 4;
                 return axios.post("api/classroom", {
-                  className: _this5.nameClassroom
+                  className: _this4.nameClassroom
                 }).then(function (response) {
                   id = response.data.last_insert_id;
                 })["catch"](function (err) {
@@ -346,17 +322,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 4:
                 _item.map( /*#__PURE__*/function () {
-                  var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(e) {
-                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+                  var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(e) {
+                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
                       while (1) {
-                        switch (_context3.prev = _context3.next) {
+                        switch (_context2.prev = _context2.next) {
                           case 0:
                             if (!e.stdid) {
-                              _context3.next = 3;
+                              _context2.next = 3;
                               break;
                             }
 
-                            _context3.next = 3;
+                            _context2.next = 3;
                             return axios.post("api/stdclassroom", {
                               std_id: e.stdid,
                               firstName: e.firstName,
@@ -371,10 +347,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                           case 3:
                           case "end":
-                            return _context3.stop();
+                            return _context2.stop();
                         }
                       }
-                    }, _callee3);
+                    }, _callee2);
                   }));
 
                   return function (_x) {
@@ -384,10 +360,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 5:
               case "end":
-                return _context4.stop();
+                return _context3.stop();
             }
           }
-        }, _callee4);
+        }, _callee3);
       }))();
     }
   }
@@ -487,6 +463,13 @@ var render = function() {
     "v-row",
     { attrs: { justify: "center" } },
     [
+      _vm._v(
+        "\n  " +
+          _vm._s(this.$store.state.data.manageClassroom) +
+          "\n  " +
+          _vm._s(this.$store.state.data.manageStdClassroom) +
+          "\n\n  "
+      ),
       _c("h1", [_vm._v("จัดการห้องเรียน")]),
       _vm._v(" "),
       _c(

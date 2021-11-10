@@ -5145,11 +5145,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -5187,7 +5182,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, {
         title: "Log Out",
         fn: function fn() {
-          _this.$router.push("");
+          _this.redirect("/logout");
         }
       }]
     };
@@ -5216,7 +5211,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     redirect: function redirect(url) {
       window.location.href = url;
     },
-    initialize: function initialize() {
+    fatchItem: function fatchItem(item) {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
@@ -5225,21 +5220,49 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios.get("api/classroom").then(function (response) {
+                return axios.get("api/classroom/" + item).then(function (response) {
                   if (response.data) {
-                    _this2.sidebar = response.data;
+                    _this2.$store.commit("data/SET_CLASSROOM", response.data);
                   }
                 });
 
               case 2:
-                console.log(_this2.sidebar);
+                _context.next = 4;
+                return axios.get("api/stdclassroom/" + item).then(function (response) {
+                  if (response.data) {
+                    _this2.$store.commit("data/SET_STD_CLASSROOM", response.data);
+                  }
+                });
 
-              case 3:
+              case 4:
               case "end":
                 return _context.stop();
             }
           }
         }, _callee);
+      }))();
+    },
+    initialize: function initialize() {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return axios.get("api/classroom").then(function (response) {
+                  if (response.data) {
+                    _this3.sidebar = response.data;
+                  }
+                });
+
+              case 2:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
       }))();
     }
   }
@@ -5553,6 +5576,41 @@ var routes = [{
 
 /***/ }),
 
+/***/ "./resources/js/store/data.js":
+/*!************************************!*\
+  !*** ./resources/js/store/data.js ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var state = {
+  manageClassroom: {},
+  manageStdClassroom: []
+};
+var getters = {};
+var actions = {};
+var mutations = {
+  SET_CLASSROOM: function SET_CLASSROOM(state, newValue) {
+    state.manageClassroom = newValue;
+  },
+  SET_STD_CLASSROOM: function SET_STD_CLASSROOM(state, newValue) {
+    state.manageStdClassroom = newValue;
+  }
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  namespaced: true,
+  state: state,
+  getters: getters,
+  actions: actions,
+  mutations: mutations
+});
+
+/***/ }),
+
 /***/ "./resources/js/store/index.js":
 /*!*************************************!*\
   !*** ./resources/js/store/index.js ***!
@@ -5564,19 +5622,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _layouts_top_bar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./layouts/top_bar */ "./resources/js/store/layouts/top_bar.js");
 /* harmony import */ var _layouts_navigation_drawer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./layouts/navigation_drawer */ "./resources/js/store/layouts/navigation_drawer.js");
+/* harmony import */ var _data__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./data */ "./resources/js/store/data.js");
 
 
 
 
-vue__WEBPACK_IMPORTED_MODULE_2__.default.use(vuex__WEBPACK_IMPORTED_MODULE_3__.default);
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new vuex__WEBPACK_IMPORTED_MODULE_3__.default.Store({
+
+vue__WEBPACK_IMPORTED_MODULE_3__.default.use(vuex__WEBPACK_IMPORTED_MODULE_4__.default);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new vuex__WEBPACK_IMPORTED_MODULE_4__.default.Store({
   modules: {
     top_bar: _layouts_top_bar__WEBPACK_IMPORTED_MODULE_0__.default,
-    navigation_drawer: _layouts_navigation_drawer__WEBPACK_IMPORTED_MODULE_1__.default
+    navigation_drawer: _layouts_navigation_drawer__WEBPACK_IMPORTED_MODULE_1__.default,
+    data: _data__WEBPACK_IMPORTED_MODULE_2__.default
   }
 }));
 
@@ -42839,7 +42900,7 @@ var render = function() {
       _c(
         "v-navigation-drawer",
         {
-          attrs: { clipped: _vm.$vuetify.breakpoint.lgAndUp, app: "" },
+          attrs: { absolute: "", temporary: "" },
           model: {
             value: _vm.drawer,
             callback: function($$v) {
@@ -42851,91 +42912,103 @@ var render = function() {
         [
           _c(
             "v-list",
-            { attrs: { dense: "" } },
+            { attrs: { nav: "", dense: "" } },
             [
-              _vm._l(_vm.items, function(item) {
-                return [
-                  _c(
-                    "v-list-item",
-                    {
-                      key: item.text,
-                      attrs: { link: "" },
-                      on: {
-                        click: function($event) {
-                          return _vm.redirect(item.url)
-                        }
-                      }
+              _c(
+                "v-list-item-group",
+                {
+                  attrs: { "active-class": "deep-purple--text text--accent-4" },
+                  model: {
+                    value: _vm.group,
+                    callback: function($$v) {
+                      _vm.group = $$v
                     },
-                    [
+                    expression: "group"
+                  }
+                },
+                [
+                  _vm._l(_vm.items, function(item) {
+                    return [
                       _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v(_vm._s(item.icon))])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item-content",
+                        "v-list-item",
+                        {
+                          key: item.text,
+                          attrs: { link: "" },
+                          on: {
+                            click: function($event) {
+                              return _vm.redirect(item.url)
+                            }
+                          }
+                        },
                         [
-                          _c("v-list-item-title", [
-                            _vm._v(
-                              "\n              " +
-                                _vm._s(item.text) +
-                                "\n            "
-                            )
-                          ])
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ]
-              }),
-              _vm._v(" "),
-              _vm._l(_vm.sidebar, function(item) {
-                return [
-                  _c(
-                    "v-list-item",
-                    {
-                      key: item.id,
-                      attrs: { link: "" },
-                      on: {
-                        click: function($event) {
-                          $event.stopPropagation()
-                          return _vm.$store.commit(
-                            "navigation_drawer/SET_CLASSROOM",
-                            item.id
+                          _c(
+                            "v-list-item-action",
+                            [_c("v-icon", [_vm._v(_vm._s(item.icon))])],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item-content",
+                            [
+                              _c("v-list-item-title", [
+                                _vm._v(
+                                  "\n                " +
+                                    _vm._s(item.text) +
+                                    "\n              "
+                                )
+                              ])
+                            ],
+                            1
                           )
-                        }
-                      }
-                    },
-                    [
-                      _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v(_vm._s(item.icon))])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item-content",
-                        [
-                          _c("v-list-item-title", [
-                            _vm._v(
-                              "\n              " +
-                                _vm._s(item.className) +
-                                "\n            "
-                            )
-                          ])
                         ],
                         1
                       )
-                    ],
-                    1
-                  )
-                ]
-              })
+                    ]
+                  }),
+                  _vm._v(" "),
+                  _vm._l(_vm.sidebar, function(item) {
+                    return [
+                      _c(
+                        "v-list-item",
+                        {
+                          key: item.id,
+                          attrs: { link: "" },
+                          on: {
+                            click: function($event) {
+                              return _vm.fatchItem(item.id)
+                            }
+                          }
+                        },
+                        [
+                          _c(
+                            "v-list-item-action",
+                            [_c("v-icon", [_vm._v(_vm._s(item.icon))])],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item-content",
+                            [
+                              _c("v-list-item-title", [
+                                _vm._v(
+                                  "\n                " +
+                                    _vm._s(item.className) +
+                                    "\n              "
+                                )
+                              ])
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ]
+                  })
+                ],
+                2
+              )
             ],
-            2
+            1
           )
         ],
         1
