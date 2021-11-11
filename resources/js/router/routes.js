@@ -4,7 +4,7 @@ const routes = [
         name: 'app',
         component: () => {
             let user_role = document.head.querySelector('meta[name="user-role"]').content
-            switch(user_role){
+            switch (user_role) {
                 case "admin":
                     return import('../pages/home.vue')
                 default:
@@ -15,32 +15,38 @@ const routes = [
     {
         path: "/classroom",
         name: 'classroom',
-        component: () => import('../pages/classroom.vue'),
-        
+        component: () => import('../pages/ClassRoomPage.vue'),
+
     },
     {
         path: "/manageclass",
         name: 'manageclass',
-        component: () => import('../pages/manageclass.vue'),
-        
+        component: () => import('../pages/ManageClassRoomPage.vue'),
+
     },
     {
-        path: "/managepropos",
-        name: 'managepropos',
-        component: () => import('../pages/managepropos.vue'),
-        
+        path: "/newclassroom",
+        name: 'newclassroom',
+        component: () => import('../components/Manage/FormManageClassroom'),
+
+    },
+    {
+        path: "/manageexample",
+        name: 'manageexample',
+        component: () => import('../components/Manage/ManageExample'),
+
     },
     {
         path: "/myscore",
         name: 'myscore',
-        component: () => import('../pages/myscore.vue'),
-        
+        component: () => import('../pages/MyScorePage.vue'),
+
     },
     {
         path: "/scoreboard",
         name: 'scoreboard',
-        component: () => import('../pages/scoreboard.vue'),
-        
+        component: () => import('../pages/ScoreBoardPage.vue'),
+
     },
 ]
 

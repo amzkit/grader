@@ -1,20 +1,15 @@
 <template>
   <v-row justify="center">
-    {{ this.$store.state.data.manageClassroom }}
-    {{ this.$store.state.data.manageStdClassroom }}
-
-    <h1>จัดการห้องเรียน</h1>
+    <h1>เพิ่มห้องเรียน</h1>
     <v-col>
       <v-card>
-        <!-- ตั้งชื่อห้องเรียน -->
         <v-card-text>
           <v-text-field
-            v-model="nameClassroom"
+            v-model="className"
             color="primary"
             label="ตั้งชื่อห้องเรียน"
           ></v-text-field>
 
-          <!-- ตารางรายชื่อผู้ใช้ห้องเรียน -->
           <v-data-table
             :headers="headers"
             :items="desserts"
@@ -27,7 +22,6 @@
                 <v-toolbar-title>รายชื่อผู้ใช้ห้องเรียน</v-toolbar-title>
                 <v-spacer></v-spacer>
 
-                <!-- ช่องค้นหา -->
                 <v-text-field
                   v-model="search"
                   append-icon="mdi-magnify"
@@ -123,7 +117,6 @@
               </v-toolbar>
             </template>
 
-            <!-- ไอคอน actions -->
             <template v-slot:[`item.actions`]="{ item }">
               <v-icon small class="mr-2" @click="editItem(item)">
                 mdi-pencil
@@ -136,7 +129,6 @@
           </v-data-table>
         </v-card-text>
 
-        <!-- ปุ่ม save ทั้งหมด -->
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn @click="saveAll"> Save </v-btn>
@@ -151,6 +143,7 @@
 
 <script>
 export default {
+  name: "FormManageClassroom",
   data: function () {
     return {
       search: "",
@@ -160,7 +153,6 @@ export default {
       model: null,
       dialog: false,
       dialogDelete: false,
-      checkbox: false,
       headers: [
         {
           text: "รหัสนักศึกษา",
@@ -176,18 +168,16 @@ export default {
         { text: "Actions", value: "actions", sortable: false },
       ],
       desserts: [],
-      nameClassroom: "",
       editedIndex: -1,
+      className: "",
       editedItem: {
         stdid: "",
-        className: "",
         firstName: "",
         lastName: "",
         status: "",
       },
       defaultItem: {
         stdid: "",
-        className: "",
         firstName: "",
         lastName: "",
         status: "",
@@ -212,12 +202,25 @@ export default {
   mounted() {
     console.log("Component mounted.");
   },
-  created() {},
+  created() {
+    this.initialize();
+  },
   methods: {
+    async manageClass() {
+      this.loading = true;
+      console.log("asd");
+
+      this.loading = false;
+    },
+
     // ตาราง
     async initialize() {
       this.desserts = [];
-      console.log(this.$store.state.navigation_drawer.classroom);
+      await axios.get("api/classroom").then((response) => {
+        if (response.data.success == true) {
+          console.log(response.data);
+        }
+      });
     },
 
     editItem(item) {
@@ -265,39 +268,36 @@ export default {
     saveAll() {
       this.hasSaved = true;
       this.item(this.desserts);
-      console.log(this.desserts);
     },
 
     async item(item) {
       let id = 0;
-      console.log(item);
       await axios
         .post("api/classroom", {
-          className: this.nameClassroom,
+          className: this.className,
         })
         .then((response) => {
           id = response.data.last_insert_id;
         })
         .catch((err) => console.log(err));
       item.map(async (e) => {
-        if (e.stdid) {
-          await axios
-            .post("api/stdclassroom", {
-              std_id: e.stdid,
-              firstName: e.firstName,
-              lastName: e.lastName,
-              classroom_id: id,
-              statusID: 1,
-            })
-            .then((response) => {
-              console.log(response.data);
-            })
-            .catch((err) => console.log(err));
-        }
+        await axios
+          .post("api/stdclassroom", {
+            std_id: e.stdid,
+            firstName: e.firstName,
+            lastName: e.lastName,
+            classroom_id: id,
+            status_id: 1,
+          })
+          .then((response) => {
+            console.log(response.data);
+          })
+          .catch((err) => console.log(err));
       });
     },
   },
 };
 </script>
+
 <style>
 </style>

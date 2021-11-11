@@ -38,7 +38,7 @@ class ManageClassroomController extends Controller
         $classroom = new ManageClassrooms($request->all());
         $classroom->save();
         $classroom->id;
-        return response()->json(array('success' => true, 'last_insert_id' => $classroom->id), 200);
+        return response()->json(array('success' => true, 'last_insert_id' => $classroom->id, 'res' => $classroom), 200);
     }
 
     /**

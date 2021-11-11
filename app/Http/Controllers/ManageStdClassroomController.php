@@ -48,7 +48,7 @@ class ManageStdClassroomController extends Controller
      */
     public function show($id)
     {
-        $manage = ManageStdClassrooms::select()->where('classroom_id', $id)->get();
+        $manage = ManageStdClassrooms::leftJoin('status', 'manage_std_classrooms.status_id', '=', 'status.statusID')->where('classroom_id', $id)->select()->get();
         return response()->json($manage, 200);
     }
 

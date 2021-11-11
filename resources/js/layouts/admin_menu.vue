@@ -48,7 +48,6 @@
         <span class="hidden-sm-and-down">{{ title }}</span>
       </v-toolbar-title>
 
-      <!-- menu topbars -->
       <v-btn text to="/"> Home </v-btn>
       <v-btn text to="/classroom"> Classroom </v-btn>
       <div class="text-xs-center">
@@ -70,8 +69,6 @@
       </div>
       <v-btn text to="/myscore"> My Score </v-btn>
       <v-btn text to="/scoreboard"> Scoreboards </v-btn>
-
-      <!-- menu profile-->
       <div class="text-xs-center">
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
@@ -82,9 +79,9 @@
           </template>
           <v-list>
             <v-list-item v-for="(user, index) in users" :key="index" link>
-              <v-list-item-title @click="user.fn">{{
-                user.title
-              }}</v-list-item-title>
+              <v-list-item-title @click="user.fn"
+                >{{ user.title }}
+              </v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
@@ -94,7 +91,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -109,7 +106,13 @@ export default {
         {
           title: "จัดการโจทย์",
           fn: () => {
-            this.$router.push("/managepropos");
+            this.$router.push("/manageexample");
+          },
+        },
+        {
+          title: "เพิ่มห้องเรียน",
+          fn: () => {
+            this.$router.push("/newclassroom");
           },
         },
       ],
@@ -141,8 +144,9 @@ export default {
       ],
     };
   },
-  created() {
-    this.initialize();
+  async created() {
+    await this.initialize();
+    await this.fatchItem(this.sidebar[0].id);
   },
   computed: {
     drawer: {

@@ -30,14 +30,14 @@
           I'm a home component from <br />
           /resources/js/pages/home.vue
 
-          <v-card v-if="user" class="mt-3">
+          <v-card v-if="this.$store.state.data.user" class="mt-3">
             <v-card-title>Current User</v-card-title>
             <v-card-subtitle
               >Data retrived from api "/api/user"</v-card-subtitle
             >
             <v-card-text>
-              Name : {{ user.name }} <br />
-              Email : {{ user.email }} <br />
+              Name : {{ this.$store.state.data.user.name }} <br />
+              Email : {{ this.$store.state.data.user.email }} <br />
             </v-card-text>
           </v-card>
         </v-card-text>
@@ -51,8 +51,6 @@ export default {
   data: function () {
     return {
       loading: true,
-      user: null,
-
       //   เพิ่มรูปตรง slid
       items: [
         {
@@ -78,8 +76,8 @@ export default {
       this.loading = true;
       await axios.get("/api/user").then((response) => {
         if (response.data.success == true) {
-          console.log(response.data);
-          this.user = response.data.user;
+          this.$store.commit("data/SET_USER", response.data.user);
+
         }
       });
 

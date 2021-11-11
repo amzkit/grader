@@ -71,7 +71,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       loading: true,
-      user: null,
       //   เพิ่มรูปตรง slid
       items: [{
         src: "https://lh3.googleusercontent.com/proxy/Ml3Qrf_Gzvmud_7CXhsCXBRwc8S460ibO0l-k20CK22C05a_BGLowMXXSI7qfi89cMvVT4G-KvXJa7DxmSsxM0oaRIbUFI_j"
@@ -101,8 +100,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context.next = 3;
                 return axios.get("/api/user").then(function (response) {
                   if (response.data.success == true) {
-                    console.log(response.data);
-                    _this.user = response.data.user;
+                    _this.$store.commit("data/SET_USER", response.data.user);
                   }
                 });
 
@@ -260,7 +258,7 @@ var render = function() {
                   _vm._v("\n        I'm a home component from "),
                   _c("br"),
                   _vm._v("\n        /resources/js/pages/home.vue\n\n        "),
-                  _vm.user
+                  this.$store.state.data.user
                     ? _c(
                         "v-card",
                         { staticClass: "mt-3" },
@@ -274,13 +272,13 @@ var render = function() {
                           _c("v-card-text", [
                             _vm._v(
                               "\n            Name : " +
-                                _vm._s(_vm.user.name) +
+                                _vm._s(this.$store.state.data.user.name) +
                                 " "
                             ),
                             _c("br"),
                             _vm._v(
                               "\n            Email : " +
-                                _vm._s(_vm.user.email) +
+                                _vm._s(this.$store.state.data.user.email) +
                                 " "
                             ),
                             _c("br")
