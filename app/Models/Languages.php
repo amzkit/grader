@@ -5,14 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Status extends Model
+class Languages extends Model
 {
     use HasFactory;
-
     protected $fillable = [
-        'statusID',
-        'statusName',
+        'id',
+        'languagesName',
         'created_at',
-        'updated_at',
+        'updated_at'
     ];
 }

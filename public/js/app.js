@@ -5612,9 +5612,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 var state = {
-  manageClassroom: {},
+  manageClassroom: [],
   manageStdClassroom: [],
-  user: null
+  user: null,
+  language: []
 };
 var getters = {};
 var actions = {};
@@ -5627,6 +5628,9 @@ var mutations = {
   },
   SET_USER: function SET_USER(state, newValue) {
     state.user = newValue;
+  },
+  SET_LANGUAGE: function SET_LANGUAGE(state, newValue) {
+    state.language = newValue;
   }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({

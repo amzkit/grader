@@ -108,55 +108,114 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      loading: true,
-      user: null,
-      // เลือก classroom
-      select: null,
-      items: ["cs000", "cs001", "cs002", "cs003"],
-      // เลือก ภาษา
-      selectLeg: null,
-      itemsleg: ["C", "C++", "java", "phython"],
-      //เลือกวันที่
-      picker: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10)
+      selectedClassroom: 0,
+      workName: "",
+      subjectName: "",
+      subjectFile: null,
+      score: 0,
+      selectedLanguages: 0,
+      stateDate: null,
+      endDate: null
     };
   },
-  mounted: function mounted() {
-    console.log("Component mounted.");
-  },
+  mounted: function mounted() {},
   created: function created() {
     this.initialize();
   },
   methods: {
-    initialize: function initialize() {
+    submitFiles: function submitFiles() {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var formData, file;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _this.loading = true;
-                _context.next = 3;
-                return axios.get("api/manage/classroom").then(function (response) {
-                  if (response.data.success == true) {
-                    console.log(response.data);
-                    _this.user = response.data.user;
-                    _this.select = null;
+                formData = new FormData();
+
+                if (_this.subjectFile) {
+                  for (file in _this.subjectFile) {
+                    formData.append("cave", file);
                   }
-                });
 
-              case 3:
-                _this.loading = false;
+                  console.log(_this.subjectFile);
+                } else {
+                  console.log("there are no files.");
+                }
 
-              case 4:
+              case 2:
               case "end":
                 return _context.stop();
             }
           }
         }, _callee);
+      }))();
+    },
+    initialize: function initialize() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return axios.get("api/languages").then(function (response) {
+                  _this2.$store.commit("data/SET_LANGUAGE", response.data);
+                });
+
+              case 2:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
+    },
+    save: function save() {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                console.log(_this3.subjectFile[0]);
+                _context3.next = 3;
+                return axios.post("api/quiz", {
+                  classroom_id: _this3.selectedClassroom,
+                  work_name: _this3.workName,
+                  subject_name: _this3.subjectName,
+                  subject_file_path: _this3.subjectFile[0],
+                  score: _this3.score,
+                  language_id: _this3.selectedClassroom,
+                  send_start_work: _this3.stateDate,
+                  send_end_work: _this3.endDate
+                });
+
+              case 3:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
       }))();
     }
   }
@@ -282,25 +341,19 @@ var render = function() {
                     [
                       _c("v-select", {
                         attrs: {
-                          items: _vm.items,
-                          "error-messages": _vm.selectErrors,
-                          label: "เลือกห้องเรียน",
-                          required: ""
-                        },
-                        on: {
-                          change: function($event) {
-                            return _vm.$v.select.$touch()
-                          },
-                          blur: function($event) {
-                            return _vm.$v.select.$touch()
-                          }
+                          items: this.$store.state.data.manageClassroom,
+                          "item-text": "className",
+                          "item-value": "id",
+                          "single-line": "",
+                          auto: "",
+                          label: "Classroom"
                         },
                         model: {
-                          value: _vm.select,
+                          value: _vm.selectedClassroom,
                           callback: function($$v) {
-                            _vm.select = $$v
+                            _vm.selectedClassroom = $$v
                           },
-                          expression: "select"
+                          expression: "selectedClassroom"
                         }
                       })
                     ],
@@ -324,7 +377,18 @@ var render = function() {
                   _c(
                     "v-col",
                     { attrs: { cols: "6" } },
-                    [_c("v-text-field", { attrs: { label: "ใส่ชื่องาน" } })],
+                    [
+                      _c("v-text-field", {
+                        attrs: { label: "ใส่ชื่องาน" },
+                        model: {
+                          value: _vm.workName,
+                          callback: function($$v) {
+                            _vm.workName = $$v
+                          },
+                          expression: "workName"
+                        }
+                      })
+                    ],
                     1
                   )
                 ],
@@ -347,15 +411,33 @@ var render = function() {
                     { attrs: { cols: "6" } },
                     [
                       _c("v-textarea", {
-                        attrs: { counter: "", label: "พิมพ์โจทย์" }
+                        attrs: { counter: "", label: "พิมพ์โจทย์" },
+                        model: {
+                          value: _vm.subjectName,
+                          callback: function($$v) {
+                            _vm.subjectName = $$v
+                          },
+                          expression: "subjectName"
+                        }
                       }),
                       _vm._v(" "),
                       [
                         _c("v-file-input", {
+                          ref: "myfile",
                           attrs: {
+                            "show-size": "",
+                            counter: "",
+                            chips: "",
                             multiple: "",
-                            label: "แนบไฟล์โจทย์",
-                            dense: ""
+                            label: "Arquivo Geral"
+                          },
+                          on: { change: _vm.submitFiles },
+                          model: {
+                            value: _vm.subjectFile,
+                            callback: function($$v) {
+                              _vm.subjectFile = $$v
+                            },
+                            expression: "subjectFile"
                           }
                         })
                       ]
@@ -380,7 +462,22 @@ var render = function() {
                   _c(
                     "v-col",
                     { attrs: { cols: "6" } },
-                    [_c("v-text-field", { attrs: { label: "กำหนดคะแนน" } })],
+                    [
+                      _c("v-text-field", {
+                        attrs: {
+                          type: "number",
+                          onfocus: "this.select()",
+                          label: "กำหนดคะแนน"
+                        },
+                        model: {
+                          value: _vm.score,
+                          callback: function($$v) {
+                            _vm.score = $$v
+                          },
+                          expression: "score"
+                        }
+                      })
+                    ],
                     1
                   ),
                   _vm._v(" "),
@@ -397,25 +494,19 @@ var render = function() {
                     [
                       _c("v-select", {
                         attrs: {
-                          items: _vm.itemsleg,
-                          "error-messages": _vm.selectErrors,
-                          label: "เลือกภาษา",
-                          required: ""
-                        },
-                        on: {
-                          change: function($event) {
-                            return _vm.$v.selectLeg.$touch()
-                          },
-                          blur: function($event) {
-                            return _vm.$v.selectleg.$touch()
-                          }
+                          items: this.$store.state.data.language,
+                          "item-text": "languagesName",
+                          "item-value": "id",
+                          "single-line": "",
+                          auto: "",
+                          label: "Languages"
                         },
                         model: {
-                          value: _vm.selectleg,
+                          value: _vm.selectedLanguages,
                           callback: function($$v) {
-                            _vm.selectleg = $$v
+                            _vm.selectedLanguages = $$v
                           },
-                          expression: "selectleg"
+                          expression: "selectedLanguages"
                         }
                       })
                     ],
@@ -437,11 +528,11 @@ var render = function() {
                       _vm._v(" "),
                       _c("v-date-picker", {
                         model: {
-                          value: _vm.picker,
+                          value: _vm.stateDate,
                           callback: function($$v) {
-                            _vm.picker = $$v
+                            _vm.stateDate = $$v
                           },
-                          expression: "picker"
+                          expression: "stateDate"
                         }
                       })
                     ],
@@ -461,11 +552,11 @@ var render = function() {
                     [
                       _c("v-date-picker", {
                         model: {
-                          value: _vm.picker,
+                          value: _vm.endDate,
                           callback: function($$v) {
-                            _vm.picker = $$v
+                            _vm.endDate = $$v
                           },
-                          expression: "picker"
+                          expression: "endDate"
                         }
                       })
                     ],
@@ -479,7 +570,9 @@ var render = function() {
           )
         ],
         1
-      )
+      ),
+      _vm._v(" "),
+      _c("v-btn", { on: { click: _vm.save } }, [_vm._v(" Save ")])
     ],
     1
   )

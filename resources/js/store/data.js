@@ -1,7 +1,8 @@
 const state = {
-    manageClassroom: {},
+    manageClassroom: [],
     manageStdClassroom: [],
     user: null,
+    language: [],
 }
 
 const getters = {}
@@ -15,6 +16,9 @@ const mutations = {
     },
     SET_USER: (state, newValue) => {
         state.user = newValue
+    },
+    SET_LANGUAGE: (state, newValue) => {
+        state.language = newValue
     },
 }
 
