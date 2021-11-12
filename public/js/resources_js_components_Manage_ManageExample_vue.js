@@ -315,7 +315,25 @@ var render = function() {
                             ) +
                             "\n          "
                         )
-                      ])
+                      ]),
+                      _vm._v(" "),
+                      _c("v-select", {
+                        attrs: {
+                          items: this.$store.state.data.manageClassroom,
+                          "item-text": "className",
+                          "item-value": "id",
+                          "single-line": "",
+                          auto: "",
+                          label: "Classroom"
+                        },
+                        model: {
+                          value: _vm.selectedClassroom,
+                          callback: function($$v) {
+                            _vm.selectedClassroom = $$v
+                          },
+                          expression: "selectedClassroom"
+                        }
+                      })
                     ],
                     1
                   )

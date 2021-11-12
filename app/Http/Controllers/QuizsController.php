@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Quizs;
+use Response;
 
 class QuizsController extends Controller
 {
@@ -57,7 +58,12 @@ class QuizsController extends Controller
      */
     public function show($id)
     {
-        //
+        $file = storage_path("app/public/") . $id;
+        if (file_exists($file)) {
+            return response()->download($file);
+        } else {
+            echo ('File not found.');
+        }
     }
 
     /**

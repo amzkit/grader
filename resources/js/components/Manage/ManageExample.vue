@@ -11,7 +11,7 @@
             <v-subheader>
               {{ this.$store.state.data.manageClassroom.className }}
             </v-subheader>
-            <!-- <v-select
+            <v-select
               v-model="selectedClassroom"
               :items="this.$store.state.data.manageClassroom"
               item-text="className"
@@ -19,7 +19,7 @@
               single-line
               auto
               label="Classroom"
-            ></v-select> -->
+            ></v-select>
           </v-col>
         </v-row>
 

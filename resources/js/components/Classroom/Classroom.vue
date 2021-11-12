@@ -3,16 +3,22 @@
     <h1>{{ this.$store.state.data.manageClassroom.className }}</h1>
     <v-col>
       <v-card>
-        <v-data-table
-          :headers="headers"
-          :items="this.$store.state.data.manageClassroomWork"
-          :items-per-page="5"
-          class="elevation-1"
-        ></v-data-table>
       </v-card>
+      <v-data-table
+        :headers="headers"
+        :items="this.$store.state.data.manageClassroomWork"
+        class="elevation-1"
+      >
+        <template v-slot:[`item.subject_file_path`]="{ item }">
+          <v-icon small class="mr-2" @click="download(item)">
+            mdi-file-download
+          </v-icon>
+        </template>
+      </v-data-table>
     </v-col>
   </v-row>
 </template>
+
 
 <script>
 export default {
@@ -38,7 +44,12 @@ export default {
   },
   mounted() {},
   created() {},
-  methods: {},
+  methods: {
+    async download(item) {
+      window.location.href =
+        "api/quiz" + item.subject_file_path.replace("public", "");
+    },
+  },
 };
 </script>
 
