@@ -216,7 +216,7 @@ export default {
     // ตาราง
     async initialize() {
       this.desserts = [];
-      await axios.get("api/classroom").then((response) => {
+      await axios.get("api/manage-classroom").then((response) => {
         if (response.data.success == true) {
           console.log(response.data);
         }
@@ -273,7 +273,7 @@ export default {
     async item(item) {
       let id = 0;
       await axios
-        .post("api/classroom", {
+        .post("api/manage-classroom", {
           className: this.className,
         })
         .then((response) => {
@@ -282,7 +282,7 @@ export default {
         .catch((err) => console.log(err));
       item.map(async (e) => {
         await axios
-          .post("api/stdclassroom", {
+          .post("api/manage-std-classroom", {
             std_id: e.stdid,
             firstName: e.firstName,
             lastName: e.lastName,

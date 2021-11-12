@@ -5242,7 +5242,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return axios.get("api/classroom/" + item).then(function (response) {
+                return axios.get("api/manage-classroom/" + item).then(function (response) {
                   if (response.data) {
                     _this3.$store.commit("data/SET_CLASSROOM", response.data);
                   }
@@ -5250,13 +5250,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 _context2.next = 4;
-                return axios.get("api/stdclassroom/" + item).then(function (response) {
+                return axios.get("api/manage-std-classroom/" + item).then(function (response) {
                   if (response.data) {
                     _this3.$store.commit("data/SET_STD_CLASSROOM", response.data);
                   }
                 });
 
               case 4:
+                _context2.next = 6;
+                return axios.get("api/classroom/" + item).then(function (response) {
+                  if (response.data) {
+                    _this3.$store.commit("data/SET_CLASSROOM_WORK", response.data);
+                  }
+                });
+
+              case 6:
               case "end":
                 return _context2.stop();
             }
@@ -5273,7 +5281,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.next = 2;
-                return axios.get("api/classroom").then(function (response) {
+                return axios.get("api/manage-classroom").then(function (response) {
                   if (response.data) {
                     _this4.sidebar = response.data;
                   }
@@ -5614,6 +5622,7 @@ __webpack_require__.r(__webpack_exports__);
 var state = {
   manageClassroom: [],
   manageStdClassroom: [],
+  manageClassroomWork: [],
   user: null,
   language: []
 };
@@ -5625,6 +5634,9 @@ var mutations = {
   },
   SET_STD_CLASSROOM: function SET_STD_CLASSROOM(state, newValue) {
     state.manageStdClassroom = newValue;
+  },
+  SET_CLASSROOM_WORK: function SET_CLASSROOM_WORK(state, newValue) {
+    state.manageClassroomWork = newValue;
   },
   SET_USER: function SET_USER(state, newValue) {
     state.user = newValue;

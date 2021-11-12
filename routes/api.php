@@ -20,13 +20,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return response()->json(['success' => true, 'user' => $request->user()]);
 });
 
-Route::resource('classroom', 'App\Http\Controllers\ManageClassroomController');
+Route::resource('manage-classroom', 'App\Http\Controllers\ManageClassroomController');
 
-Route::resource('stdclassroom', 'App\Http\Controllers\ManageStdClassroomController');
+Route::resource('manage-std-classroom', 'App\Http\Controllers\ManageStdClassroomController');
+
+Route::resource('classroom', 'App\Http\Controllers\ClassroomController');
 
 Route::resource('languages', 'App\Http\Controllers\LanguagesController');
 
 Route::resource('quiz', 'App\Http\Controllers\QuizsController');
-
-
-

@@ -257,7 +257,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _this2.desserts = [];
                 _context2.next = 3;
-                return axios.get("api/classroom").then(function (response) {
+                return axios.get("api/manage-classroom").then(function (response) {
                   if (response.data.success == true) {
                     console.log(response.data);
                   }
@@ -327,7 +327,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 id = 0;
                 _context4.next = 3;
-                return axios.post("api/classroom", {
+                return axios.post("api/manage-classroom", {
                   className: _this5.className
                 }).then(function (response) {
                   id = response.data.last_insert_id;
@@ -343,7 +343,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                         switch (_context3.prev = _context3.next) {
                           case 0:
                             _context3.next = 2;
-                            return axios.post("api/stdclassroom", {
+                            return axios.post("api/manage-std-classroom", {
                               std_id: e.stdid,
                               firstName: e.firstName,
                               lastName: e.lastName,

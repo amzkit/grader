@@ -35,28 +35,26 @@ __webpack_require__.r(__webpack_exports__);
       headers: [{
         text: "ชื่องาน",
         align: "start",
-        sortable: false,
-        value: "name"
+        sortable: true,
+        value: "work_name"
       }, {
-        text: "ครบกำหนดส่ง",
-        value: "dateline"
+        text: "ชื่อเรื่อง",
+        value: "subject_name"
+      }, {
+        text: "ภาษา",
+        value: "languagesName"
+      }, {
+        text: "คะแนน",
+        value: "score"
+      }, {
+        text: "ไฟล์",
+        value: "subject_file_path"
       }, {
         text: "วันที่ส่ง",
-        value: "finish"
+        value: "send_start_work"
       }, {
-        text: "สถานะ",
-        value: "status"
-      }],
-      desserts: [{
-        name: "งานที่ 1",
-        dateline: "1/1/2222 - 00.00 am",
-        finish: "2/1/2222 - 10.21 am",
-        status: "ส่งแล้ว(เลยกำหนด)"
-      }, {
-        name: "งานที่ 2",
-        dateline: "10/1/2222",
-        finish: "",
-        status: "ยังไม่ส่ง"
+        text: "ครบกำหนดส่ง",
+        value: "send_end_work"
       }]
     };
   },
@@ -270,7 +268,7 @@ var render = function() {
                 staticClass: "elevation-1",
                 attrs: {
                   headers: _vm.headers,
-                  items: _vm.desserts,
+                  items: this.$store.state.data.manageClassroomWork,
                   "items-per-page": 5
                 }
               })

@@ -8,7 +8,10 @@
             <v-subheader> ห้องเรียน </v-subheader>
           </v-col>
           <v-col cols="6">
-            <v-select
+            <v-subheader>
+              {{ this.$store.state.data.manageClassroom.className }}
+            </v-subheader>
+            <!-- <v-select
               v-model="selectedClassroom"
               :items="this.$store.state.data.manageClassroom"
               item-text="className"
@@ -16,7 +19,7 @@
               single-line
               auto
               label="Classroom"
-            ></v-select>
+            ></v-select> -->
           </v-col>
         </v-row>
 
@@ -40,16 +43,11 @@
               label="พิมพ์โจทย์"
             ></v-textarea>
             <template>
-              <v-file-input
-                show-size
-                counter
-                chips
-                multiple
-                label="Arquivo Geral"
-                ref="myfile"
-                @change="submitFiles"
-                v-model="subjectFile"
-              ></v-file-input>
+              <input
+                type="file"
+                class="form-control"
+                v-on:change="onFileChange"
+              />
             </template>
           </v-col>
         </v-row>
@@ -96,7 +94,7 @@
         </v-row>
       </v-container>
     </v-card>
-    <v-btn @click="save"> Save </v-btn>
+    <v-btn @click="formSubmit"> Save </v-btn>
   </v-row>
 </template>
 
@@ -104,6 +102,7 @@
 export default {
   data: function () {
     return {
+      file: "",
       selectedClassroom: 0,
       workName: "",
       subjectName: "",
@@ -120,16 +119,9 @@ export default {
     this.initialize();
   },
   methods: {
-    async submitFiles() {
-      let formData = new FormData();
-      if (this.subjectFile) {
-        for (let file in this.subjectFile) {
-          formData.append("cave", file);
-        }
-        console.log(this.subjectFile);
-      } else {
-        console.log("there are no files.");
-      }
+    onFileChange(e) {
+      console.log(e.target.files[0]);
+      this.file = e.target.files[0];
     },
     async initialize() {
       await axios.get("api/languages").then((response) => {
@@ -137,18 +129,31 @@ export default {
       });
     },
 
-    async save() {
-      console.log(this.subjectFile[0]);
-      await axios.post("api/quiz", {
-        classroom_id: this.selectedClassroom,
-        work_name: this.workName,
-        subject_name: this.subjectName,
-        subject_file_path: this.subjectFile[0],
-        score: this.score,
-        language_id: this.selectedClassroom,
-        send_start_work: this.stateDate,
-        send_end_work: this.endDate,
-      });
+    formSubmit(e) {
+      e.preventDefault();
+      let currentObj = this;
+
+      const config = {
+        headers: { "content-type": "multipart/form-data" },
+      };
+
+      let formData = new FormData();
+      formData.append("classroom_id", this.selectedClassroom);
+      formData.append("work_name", this.workName);
+      formData.append("subject_name", this.subjectName);
+      formData.append("file", this.file);
+      formData.append("score", this.score);
+      formData.append("language_id", this.selectedLanguages);
+      formData.append("send_start_work", this.stateDate);
+      formData.append("send_end_work", this.endDate);
+      axios
+        .post("api/quiz", formData, config)
+        .then(function (response) {
+          currentObj.success = response.data.success;
+        })
+        .catch(function (error) {
+          currentObj.output = error;
+        });
     },
   },
 };

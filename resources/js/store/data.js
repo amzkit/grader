@@ -1,6 +1,7 @@
 const state = {
     manageClassroom: [],
     manageStdClassroom: [],
+    manageClassroomWork: [],
     user: null,
     language: [],
 }
@@ -13,6 +14,9 @@ const mutations = {
     },
     SET_STD_CLASSROOM: (state, newValue) => {
         state.manageStdClassroom = newValue
+    },
+    SET_CLASSROOM_WORK: (state, newValue) => {
+        state.manageClassroomWork = newValue
     },
     SET_USER: (state, newValue) => {
         state.user = newValue

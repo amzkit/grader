@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ManageStdClassrooms;
-use App\Models\ManageClassrooms;
+use App\Models\Quizs;
 
 
 class ClassroomController extends Controller
@@ -16,7 +15,7 @@ class ClassroomController extends Controller
      */
     public function index()
     {
-        return response()->json(ManageClassrooms::all());
+        return response()->json(Quizs::all());
     }
 
     /**
@@ -48,7 +47,8 @@ class ClassroomController extends Controller
      */
     public function show($id)
     {
-        //
+        $manage = Quizs::leftJoin('languages', 'quizs.language_id', '=', 'languages.id')->where('classroom_id', $id)->select()->get();
+        return response()->json($manage, 200);
     }
 
     /**

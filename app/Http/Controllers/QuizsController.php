@@ -35,9 +35,18 @@ class QuizsController extends Controller
      */
     public function store(Request $request)
     {
-        $quizs = new Quizs($request->all());
 
-        $quizs->save();
+        $document = new Quizs($request->all());
+
+
+        $path = $request->file('file')->store('public');
+        $document->subject_file_path = $path;
+        $document->save();
+
+        return response()->json([
+            "success" => true,
+            "message" => "File successfully uploaded",
+        ]);
     }
 
     /**

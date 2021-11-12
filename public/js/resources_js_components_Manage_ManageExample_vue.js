@@ -119,11 +119,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
+      file: "",
       selectedClassroom: 0,
       workName: "",
       subjectName: "",
@@ -139,26 +138,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     this.initialize();
   },
   methods: {
-    submitFiles: function submitFiles() {
+    onFileChange: function onFileChange(e) {
+      console.log(e.target.files[0]);
+      this.file = e.target.files[0];
+    },
+    initialize: function initialize() {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var formData, file;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                formData = new FormData();
-
-                if (_this.subjectFile) {
-                  for (file in _this.subjectFile) {
-                    formData.append("cave", file);
-                  }
-
-                  console.log(_this.subjectFile);
-                } else {
-                  console.log("there are no files.");
-                }
+                _context.next = 2;
+                return axios.get("api/languages").then(function (response) {
+                  _this.$store.commit("data/SET_LANGUAGE", response.data);
+                });
 
               case 2:
               case "end":
@@ -168,55 +163,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee);
       }))();
     },
-    initialize: function initialize() {
-      var _this2 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return axios.get("api/languages").then(function (response) {
-                  _this2.$store.commit("data/SET_LANGUAGE", response.data);
-                });
-
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
-    },
-    save: function save() {
-      var _this3 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                console.log(_this3.subjectFile[0]);
-                _context3.next = 3;
-                return axios.post("api/quiz", {
-                  classroom_id: _this3.selectedClassroom,
-                  work_name: _this3.workName,
-                  subject_name: _this3.subjectName,
-                  subject_file_path: _this3.subjectFile[0],
-                  score: _this3.score,
-                  language_id: _this3.selectedClassroom,
-                  send_start_work: _this3.stateDate,
-                  send_end_work: _this3.endDate
-                });
-
-              case 3:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }))();
+    formSubmit: function formSubmit(e) {
+      e.preventDefault();
+      var currentObj = this;
+      var config = {
+        headers: {
+          "content-type": "multipart/form-data"
+        }
+      };
+      var formData = new FormData();
+      formData.append("classroom_id", this.selectedClassroom);
+      formData.append("work_name", this.workName);
+      formData.append("subject_name", this.subjectName);
+      formData.append("file", this.file);
+      formData.append("score", this.score);
+      formData.append("language_id", this.selectedLanguages);
+      formData.append("send_start_work", this.stateDate);
+      formData.append("send_end_work", this.endDate);
+      axios.post("api/quiz", formData, config).then(function (response) {
+        currentObj.success = response.data.success;
+      })["catch"](function (error) {
+        currentObj.output = error;
+      });
     }
   }
 });
@@ -339,23 +307,15 @@ var render = function() {
                     "v-col",
                     { attrs: { cols: "6" } },
                     [
-                      _c("v-select", {
-                        attrs: {
-                          items: this.$store.state.data.manageClassroom,
-                          "item-text": "className",
-                          "item-value": "id",
-                          "single-line": "",
-                          auto: "",
-                          label: "Classroom"
-                        },
-                        model: {
-                          value: _vm.selectedClassroom,
-                          callback: function($$v) {
-                            _vm.selectedClassroom = $$v
-                          },
-                          expression: "selectedClassroom"
-                        }
-                      })
+                      _c("v-subheader", [
+                        _vm._v(
+                          "\n            " +
+                            _vm._s(
+                              this.$store.state.data.manageClassroom.className
+                            ) +
+                            "\n          "
+                        )
+                      ])
                     ],
                     1
                   )
@@ -422,23 +382,10 @@ var render = function() {
                       }),
                       _vm._v(" "),
                       [
-                        _c("v-file-input", {
-                          ref: "myfile",
-                          attrs: {
-                            "show-size": "",
-                            counter: "",
-                            chips: "",
-                            multiple: "",
-                            label: "Arquivo Geral"
-                          },
-                          on: { change: _vm.submitFiles },
-                          model: {
-                            value: _vm.subjectFile,
-                            callback: function($$v) {
-                              _vm.subjectFile = $$v
-                            },
-                            expression: "subjectFile"
-                          }
+                        _c("input", {
+                          staticClass: "form-control",
+                          attrs: { type: "file" },
+                          on: { change: _vm.onFileChange }
                         })
                       ]
                     ],
@@ -572,7 +519,7 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c("v-btn", { on: { click: _vm.save } }, [_vm._v(" Save ")])
+      _c("v-btn", { on: { click: _vm.formSubmit } }, [_vm._v(" Save ")])
     ],
     1
   )

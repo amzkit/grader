@@ -169,20 +169,26 @@ export default {
     },
 
     async fatchItem(item) {
-      await axios.get("api/classroom/" + item).then((response) => {
+      await axios.get("api/manage-classroom/" + item).then((response) => {
         if (response.data) {
           this.$store.commit("data/SET_CLASSROOM", response.data);
         }
       });
-      await axios.get("api/stdclassroom/" + item).then((response) => {
+      await axios.get("api/manage-std-classroom/" + item).then((response) => {
         if (response.data) {
           this.$store.commit("data/SET_STD_CLASSROOM", response.data);
+        }
+      });
+
+      await axios.get("api/classroom/" + item).then((response) => {
+        if (response.data) {
+          this.$store.commit("data/SET_CLASSROOM_WORK", response.data);
         }
       });
     },
 
     async initialize() {
-      await axios.get("api/classroom").then((response) => {
+      await axios.get("api/manage-classroom").then((response) => {
         if (response.data) {
           this.sidebar = response.data;
         }
