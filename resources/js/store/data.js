@@ -1,5 +1,6 @@
 const state = {
     manageClassroom: [],
+    sidebar: [],
     manageStdClassroom: [],
     manageClassroomWork: [],
     user: null,
@@ -23,6 +24,9 @@ const mutations = {
     },
     SET_LANGUAGE: (state, newValue) => {
         state.language = newValue
+    },
+    SET_SIDE_BAR: (state, newValue) => {
+        state.sidebar = newValue
     },
 }
 

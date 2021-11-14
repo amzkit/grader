@@ -158,14 +158,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "FormManageClassroom",
   data: function data() {
     return {
+      status: [],
       search: "",
       loading: false,
       user: null,
@@ -226,7 +223,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     this.initialize();
   },
   methods: {
-    manageClass: function manageClass() {
+    // ตาราง
+    initialize: function initialize() {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
@@ -234,9 +232,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _this.loading = true;
-                console.log("asd");
-                _this.loading = false;
+                _this.desserts = [];
+                _context.next = 3;
+                return axios.get("api/status").then(function (response) {
+                  _this.status = response.data;
+                });
 
               case 3:
               case "end":
@@ -244,31 +244,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             }
           }
         }, _callee);
-      }))();
-    },
-    // ตาราง
-    initialize: function initialize() {
-      var _this2 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _this2.desserts = [];
-                _context2.next = 3;
-                return axios.get("api/manage-classroom").then(function (response) {
-                  if (response.data.success == true) {
-                    console.log(response.data);
-                  }
-                });
-
-              case 3:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
       }))();
     },
     editItem: function editItem(item) {
@@ -286,21 +261,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.closeDelete();
     },
     close: function close() {
-      var _this3 = this;
+      var _this2 = this;
 
       this.dialog = false;
       this.$nextTick(function () {
-        _this3.editedItem = Object.assign({}, _this3.defaultItem);
-        _this3.editedIndex = -1;
+        _this2.editedItem = Object.assign({}, _this2.defaultItem);
+        _this2.editedIndex = -1;
       });
     },
     closeDelete: function closeDelete() {
-      var _this4 = this;
+      var _this3 = this;
 
       this.dialogDelete = false;
       this.$nextTick(function () {
-        _this4.editedItem = Object.assign({}, _this4.defaultItem);
-        _this4.editedIndex = -1;
+        _this3.editedItem = Object.assign({}, _this3.defaultItem);
+        _this3.editedIndex = -1;
       });
     },
     saveItem: function saveItem() {
@@ -317,38 +292,45 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.item(this.desserts);
     },
     item: function item(_item) {
-      var _this5 = this;
+      var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
         var id;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
                 id = 0;
-                _context4.next = 3;
+                _context3.next = 3;
                 return axios.post("api/manage-classroom", {
-                  className: _this5.className
+                  className: _this4.className
                 }).then(function (response) {
                   id = response.data.last_insert_id;
+
+                  _this4.$store.state.data.sidebar.push({
+                    className: response.data.res.className,
+                    created_at: response.data.res.created_at,
+                    id: id,
+                    updated_at: response.data.res.updated_at
+                  });
                 })["catch"](function (err) {
                   return console.log(err);
                 });
 
               case 3:
                 _item.map( /*#__PURE__*/function () {
-                  var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(e) {
-                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+                  var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(e) {
+                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
                       while (1) {
-                        switch (_context3.prev = _context3.next) {
+                        switch (_context2.prev = _context2.next) {
                           case 0:
-                            _context3.next = 2;
+                            _context2.next = 2;
                             return axios.post("api/manage-std-classroom", {
                               std_id: e.stdid,
                               firstName: e.firstName,
                               lastName: e.lastName,
                               classroom_id: id,
-                              status_id: 1
+                              status_id: e.status
                             }).then(function (response) {
                               console.log(response.data);
                             })["catch"](function (err) {
@@ -357,10 +339,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                           case 2:
                           case "end":
-                            return _context3.stop();
+                            return _context2.stop();
                         }
                       }
-                    }, _callee3);
+                    }, _callee2);
                   }));
 
                   return function (_x) {
@@ -370,10 +352,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 4:
               case "end":
-                return _context4.stop();
+                return _context3.stop();
             }
           }
-        }, _callee4);
+        }, _callee3);
       }))();
     }
   }
@@ -611,13 +593,11 @@ var render = function() {
                                                     "v-row",
                                                     [
                                                       _c(
-                                                        "v-col",
+                                                        "v-container",
                                                         {
-                                                          attrs: {
-                                                            cols: "12",
-                                                            sm: "6",
-                                                            md: "4"
-                                                          }
+                                                          staticClass:
+                                                            "light--text",
+                                                          attrs: { fluid: "" }
                                                         },
                                                         [
                                                           _c("v-text-field", {
@@ -641,22 +621,8 @@ var render = function() {
                                                               expression:
                                                                 "editedItem.stdid"
                                                             }
-                                                          })
-                                                        ],
-                                                        1
-                                                      ),
-                                                      _vm._v(" "),
-                                                      _c(
-                                                        "v-col",
-                                                        {
-                                                          attrs: {
-                                                            cols: "12",
-                                                            sm: "6",
-                                                            md:
-                                                              "6\n                        "
-                                                          }
-                                                        },
-                                                        [
+                                                          }),
+                                                          _vm._v(" "),
                                                           _c("v-text-field", {
                                                             attrs: {
                                                               label: "ชื่อ"
@@ -699,33 +665,34 @@ var render = function() {
                                                               expression:
                                                                 "editedItem.lastName"
                                                             }
-                                                          })
-                                                        ],
-                                                        1
-                                                      ),
-                                                      _vm._v(" "),
-                                                      _c(
-                                                        "v-container",
-                                                        {
-                                                          staticClass:
-                                                            "light--text",
-                                                          attrs: { fluid: "" }
-                                                        },
-                                                        [
-                                                          _c("v-checkbox", {
+                                                          }),
+                                                          _vm._v(" "),
+                                                          _c("v-select", {
                                                             attrs: {
-                                                              label: "TA"
+                                                              items: _vm.status,
+                                                              "item-text":
+                                                                "statusName",
+                                                              "item-value":
+                                                                "id",
+                                                              "single-line": "",
+                                                              auto: "",
+                                                              label: "Status"
                                                             },
                                                             model: {
                                                               value:
-                                                                _vm.checkbox,
+                                                                _vm.editedItem
+                                                                  .status,
                                                               callback: function(
                                                                 $$v
                                                               ) {
-                                                                _vm.checkbox = $$v
+                                                                _vm.$set(
+                                                                  _vm.editedItem,
+                                                                  "status",
+                                                                  $$v
+                                                                )
                                                               },
                                                               expression:
-                                                                "checkbox"
+                                                                "editedItem.status"
                                                             }
                                                           })
                                                         ],

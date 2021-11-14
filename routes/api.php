@@ -29,3 +29,5 @@ Route::resource('classroom', 'App\Http\Controllers\ClassroomController');
 Route::resource('languages', 'App\Http\Controllers\LanguagesController');
 
 Route::resource('quiz', 'App\Http\Controllers\QuizsController');
+
+Route::resource('status', 'App\Http\Controllers\StatusController');

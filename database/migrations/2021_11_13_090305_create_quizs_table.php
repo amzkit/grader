@@ -19,7 +19,7 @@ class CreateQuizsTable extends Migration
             $table->string('work_name');
             $table->string('subject_name');
             $table->string('subject_file_path');
-            $table->integer('score')->unsigned()->nullable();
+            $table->integer('score');
             $table->bigInteger('language_id')->unsigned()->nullable();
             $table->string('send_start_work');
             $table->string('send_end_work');

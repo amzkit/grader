@@ -110,20 +110,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       file: "",
-      selectedClassroom: 0,
+      selectedClassroom: this.$store.state.data.manageClassroom.id,
       workName: "",
       subjectName: "",
       subjectFile: null,
@@ -315,25 +306,7 @@ var render = function() {
                             ) +
                             "\n          "
                         )
-                      ]),
-                      _vm._v(" "),
-                      _c("v-select", {
-                        attrs: {
-                          items: this.$store.state.data.manageClassroom,
-                          "item-text": "className",
-                          "item-value": "id",
-                          "single-line": "",
-                          auto: "",
-                          label: "Classroom"
-                        },
-                        model: {
-                          value: _vm.selectedClassroom,
-                          callback: function($$v) {
-                            _vm.selectedClassroom = $$v
-                          },
-                          expression: "selectedClassroom"
-                        }
-                      })
+                      ])
                     ],
                     1
                   )

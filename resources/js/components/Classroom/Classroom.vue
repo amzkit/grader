@@ -2,8 +2,7 @@
   <v-row justify="center">
     <h1>{{ this.$store.state.data.manageClassroom.className }}</h1>
     <v-col>
-      <v-card>
-      </v-card>
+      <v-card> </v-card>
       <v-data-table
         :headers="headers"
         :items="this.$store.state.data.manageClassroomWork"
@@ -14,6 +13,12 @@
             mdi-file-download
           </v-icon>
         </template>
+        <template v-slot:[`item.send_start_work`]="{ item }">
+          {{ dayjs(item.send_start_work).format("MMMM D, YYYY") }}
+        </template>
+        <template v-slot:[`item.send_end_work`]="{ item }">
+          {{ dayjs(item.send_end_work).format("MMMM D, YYYY") }}
+        </template>
       </v-data-table>
     </v-col>
   </v-row>
@@ -21,6 +26,7 @@
 
 
 <script>
+import dayjs from "dayjs";
 export default {
   data: function () {
     return {
@@ -37,14 +43,21 @@ export default {
         { text: "ภาษา", value: "languagesName" },
         { text: "คะแนน", value: "score" },
         { text: "ไฟล์", value: "subject_file_path" },
-        { text: "วันที่ส่ง", value: "send_start_work" },
-        { text: "ครบกำหนดส่ง", value: "send_end_work" },
+        {
+          text: "วันที่ส่ง",
+          value: "send_start_work",
+        },
+        {
+          text: "ครบกำหนดส่ง",
+          value: "send_end_work",
+        },
       ],
     };
   },
   mounted() {},
   created() {},
   methods: {
+    dayjs,
     async download(item) {
       window.location.href =
         "api/quiz" + item.subject_file_path.replace("public", "");

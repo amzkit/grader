@@ -39,8 +39,10 @@ class QuizsController extends Controller
 
         $document = new Quizs($request->all());
 
+        $originalName = $request->file('file')->getClientOriginalName();
 
-        $path = $request->file('file')->store('public');
+        $path = $request->file('file')->storeAs('public', $originalName);
+
         $document->subject_file_path = $path;
         $document->save();
 

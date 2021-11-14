@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ManageStdClassrooms;
+use App\Models\Statuses;
 
-class ManageStdClassroomController extends Controller
+class StatusController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class ManageStdClassroomController extends Controller
      */
     public function index()
     {
-        return response()->json(ManageStdClassrooms::all());
+        return response()->json(Statuses::all());
     }
 
     /**
@@ -36,10 +36,6 @@ class ManageStdClassroomController extends Controller
     public function store(Request $request)
     {
         //
-        $std_classroom = new ManageStdClassrooms($request->all());
-        $std_classroom->save();
-        $std_classroom->id;
-        return response()->json(['store', 'payload' =>  $request->all()]);
     }
 
     /**
@@ -50,18 +46,7 @@ class ManageStdClassroomController extends Controller
      */
     public function show($id)
     {
-        $manage = ManageStdClassrooms::leftJoin('statuses', 'manage_std_classrooms.status_id', '=', 'statuses.id')->where('classroom_id', $id)
-            ->select(
-                'manage_std_classrooms.id',
-                'manage_std_classrooms.std_id',
-                'manage_std_classrooms.firstName',
-                'manage_std_classrooms.lastName',
-                'statuses.statusName',
-                'manage_std_classrooms.classroom_id'
-            )
-
-            ->get();
-        return response()->json($manage, 200);
+        //
     }
 
     /**
@@ -84,14 +69,7 @@ class ManageStdClassroomController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $manage = ManageStdClassrooms::find($id);
-        $manage->std_id = $request->input('std_id');
-        $manage->firstName = $request->input('firstName');
-        $manage->firstName = $request->input('firstName');
-        $manage->lastName = $request->input('lastName');
-        $manage->status_id = $request->input('status_id');
-        $manage->save();
-        return response()->json($manage, 200);
+        //
     }
 
     /**
@@ -102,8 +80,6 @@ class ManageStdClassroomController extends Controller
      */
     public function destroy($id)
     {
-        $manage = ManageStdClassrooms::find($id);
-        $manage->delete();
-        return response()->json($manage, 200);
+        //
     }
 }

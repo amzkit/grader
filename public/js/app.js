@@ -5139,16 +5139,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     var _this = this;
 
     return {
-      sidebar: [],
       manages: [{
         title: "จัดการห้องเรียน",
         fn: function fn() {
@@ -5202,7 +5198,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
             case 2:
               _context.next = 4;
-              return _this2.fatchItem(_this2.sidebar[0].id);
+              return _this2.fatchItem(_this2.$store.state.data.sidebar[0].id);
 
             case 4:
             case "end":
@@ -5283,7 +5279,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context3.next = 2;
                 return axios.get("api/manage-classroom").then(function (response) {
                   if (response.data) {
-                    _this4.sidebar = response.data;
+                    _this4.$store.commit("data/SET_SIDE_BAR", response.data);
                   }
                 });
 
@@ -5621,6 +5617,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 var state = {
   manageClassroom: [],
+  sidebar: [],
   manageStdClassroom: [],
   manageClassroomWork: [],
   user: null,
@@ -5643,6 +5640,9 @@ var mutations = {
   },
   SET_LANGUAGE: function SET_LANGUAGE(state, newValue) {
     state.language = newValue;
+  },
+  SET_SIDE_BAR: function SET_SIDE_BAR(state, newValue) {
+    state.sidebar = newValue;
   }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -42961,14 +42961,7 @@ var render = function() {
               _c(
                 "v-list-item-group",
                 {
-                  attrs: { "active-class": "deep-purple--text text--accent-4" },
-                  model: {
-                    value: _vm.group,
-                    callback: function($$v) {
-                      _vm.group = $$v
-                    },
-                    expression: "group"
-                  }
+                  attrs: { "active-class": "deep-purple--text text--accent-4" }
                 },
                 [
                   _vm._l(_vm.items, function(item) {
@@ -43010,7 +43003,7 @@ var render = function() {
                     ]
                   }),
                   _vm._v(" "),
-                  _vm._l(_vm.sidebar, function(item) {
+                  _vm._l(this.$store.state.data.sidebar, function(item) {
                     return [
                       _c(
                         "v-list-item",

@@ -52,18 +52,11 @@
                     <v-card-text>
                       <v-container>
                         <v-row>
-                          <v-col cols="12" sm="6" md="4">
+                          <v-container class="light--text" fluid>
                             <v-text-field
                               v-model="editedItem.stdid"
                               label="รหัสนักศึกษา"
                             ></v-text-field>
-                          </v-col>
-                          <v-col
-                            cols="12"
-                            sm="6"
-                            md="6
-                          "
-                          >
                             <v-text-field
                               v-model="editedItem.firstName"
                               label="ชื่อ"
@@ -72,12 +65,15 @@
                               v-model="editedItem.lastName"
                               label="นามสกุล"
                             ></v-text-field>
-                          </v-col>
-                          <v-container class="light--text" fluid>
-                            <v-checkbox
-                              v-model="checkbox"
-                              :label="`TA`"
-                            ></v-checkbox>
+                            <v-select
+                              v-model="editedItem.status"
+                              :items="status"
+                              item-text="statusName"
+                              item-value="id"
+                              single-line
+                              auto
+                              label="Status"
+                            ></v-select>
                           </v-container>
                         </v-row>
                       </v-container>
@@ -146,6 +142,7 @@ export default {
   name: "FormManageClassroom",
   data: function () {
     return {
+      status: [],
       search: "",
       loading: false,
       user: null,
@@ -206,20 +203,11 @@ export default {
     this.initialize();
   },
   methods: {
-    async manageClass() {
-      this.loading = true;
-      console.log("asd");
-
-      this.loading = false;
-    },
-
     // ตาราง
     async initialize() {
       this.desserts = [];
-      await axios.get("api/manage-classroom").then((response) => {
-        if (response.data.success == true) {
-          console.log(response.data);
-        }
+      await axios.get("api/status").then((response) => {
+        this.status = response.data;
       });
     },
 
@@ -278,6 +266,12 @@ export default {
         })
         .then((response) => {
           id = response.data.last_insert_id;
+          this.$store.state.data.sidebar.push({
+            className: response.data.res.className,
+            created_at: response.data.res.created_at,
+            id: id,
+            updated_at: response.data.res.updated_at,
+          });
         })
         .catch((err) => console.log(err));
       item.map(async (e) => {
@@ -287,7 +281,7 @@ export default {
             firstName: e.firstName,
             lastName: e.lastName,
             classroom_id: id,
-            status_id: 1,
+            status_id: e.status,
           })
           .then((response) => {
             console.log(response.data);

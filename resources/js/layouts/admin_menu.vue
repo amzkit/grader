@@ -2,10 +2,7 @@
   <div>
     <v-navigation-drawer v-model="drawer" absolute temporary>
       <v-list nav dense>
-        <v-list-item-group
-          v-model="group"
-          active-class="deep-purple--text text--accent-4"
-        >
+        <v-list-item-group active-class="deep-purple--text text--accent-4">
           <template v-for="item in items">
             <v-list-item :key="item.text" link @click="redirect(item.url)">
               <v-list-item-action>
@@ -19,7 +16,7 @@
             </v-list-item>
           </template>
 
-          <template v-for="item in sidebar">
+          <template v-for="item in this.$store.state.data.sidebar">
             <v-list-item :key="item.id" link @click="fatchItem(item.id)">
               <v-list-item-action>
                 <v-icon>{{ item.icon }}</v-icon>
@@ -95,7 +92,6 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      sidebar: [],
       manages: [
         {
           title: "จัดการห้องเรียน",
@@ -146,7 +142,7 @@ export default {
   },
   async created() {
     await this.initialize();
-    await this.fatchItem(this.sidebar[0].id);
+    await this.fatchItem(this.$store.state.data.sidebar[0].id);
   },
   computed: {
     drawer: {
@@ -190,7 +186,7 @@ export default {
     async initialize() {
       await axios.get("api/manage-classroom").then((response) => {
         if (response.data) {
-          this.sidebar = response.data;
+          this.$store.commit("data/SET_SIDE_BAR", response.data);
         }
       });
     },

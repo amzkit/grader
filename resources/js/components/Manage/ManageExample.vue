@@ -11,15 +11,6 @@
             <v-subheader>
               {{ this.$store.state.data.manageClassroom.className }}
             </v-subheader>
-            <v-select
-              v-model="selectedClassroom"
-              :items="this.$store.state.data.manageClassroom"
-              item-text="className"
-              item-value="id"
-              single-line
-              auto
-              label="Classroom"
-            ></v-select>
           </v-col>
         </v-row>
 
@@ -103,7 +94,7 @@ export default {
   data: function () {
     return {
       file: "",
-      selectedClassroom: 0,
+      selectedClassroom: this.$store.state.data.manageClassroom.id,
       workName: "",
       subjectName: "",
       subjectFile: null,
