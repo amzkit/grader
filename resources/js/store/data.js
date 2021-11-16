@@ -1,17 +1,19 @@
 const state = {
-    manageClassroom: [],
-    sidebar: [],
+    classroom: {},
+    classrooms: [],
     manageStdClassroom: [],
     manageClassroomWork: [],
     user: null,
     language: [],
+    loading: false,
+    classroomExam: [],
 }
 
 const getters = {}
 const actions = {}
 const mutations = {
-    SET_CLASSROOM: (state, newValue) => {
-        state.manageClassroom = newValue
+    SET_CLASSROOM_ID: (state, newValue) => {
+        state.classroom = newValue
     },
     SET_STD_CLASSROOM: (state, newValue) => {
         state.manageStdClassroom = newValue
@@ -25,8 +27,14 @@ const mutations = {
     SET_LANGUAGE: (state, newValue) => {
         state.language = newValue
     },
-    SET_SIDE_BAR: (state, newValue) => {
-        state.sidebar = newValue
+    SET_CLASSROOMS: (state, newValue) => {
+        state.classrooms = newValue
+    },
+    SET_LOADING: (state, newValue) => {
+        state.loading = newValue
+    },
+    SET_CLASSROOM_EXAM: (state, newValue) => {
+        state.classroomExam = newValue
     },
 }
 

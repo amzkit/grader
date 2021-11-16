@@ -76,15 +76,16 @@
         </v-data-table>
       </v-card>
     </v-col>
-    <!-- <DeleteDialog message="asdasd" :open="dialogDelete"   /> -->
+    <Loading :loading="true" />
   </v-row>
 </template>
 
 <script>
 import DeleteDialog from "../Dialog/DeleteDialog.vue";
+import Loading from "../Loading/Loading.vue";
 export default {
   name: "ManageClassroom",
-  components: { DeleteDialog },
+  components: { DeleteDialog, Loading },
   data() {
     return {
       dialog: false,

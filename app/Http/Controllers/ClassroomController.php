@@ -15,7 +15,7 @@ class ClassroomController extends Controller
      */
     public function index()
     {
-        return response()->json(Quizs::all());
+        return response()->json(['success' => true, 'payload' =>  Quizs::all()]);
     }
 
     /**
@@ -47,8 +47,22 @@ class ClassroomController extends Controller
      */
     public function show($id)
     {
-        $manage = Quizs::leftJoin('languages', 'quizs.language_id', '=', 'languages.id')->where('classroom_id', $id)->select()->get();
-        return response()->json($manage, 200);
+        $manage = Quizs::leftJoin('languages', 'quizs.language_id', '=', 'languages.id')
+            ->where('classroom_id', $id)
+            ->select(
+                'quizs.id',
+                'languages.id AS languagesId',
+                'languages.languagesName',
+                'quizs.classroom_id',
+                'quizs.score',
+                'quizs.send_end_work',
+                'quizs.send_start_work',
+                'quizs.subject_file_path',
+                'quizs.subject_name',
+                'quizs.work_name',
+            )
+            ->get();
+        return response()->json(['success' => true, 'payload' =>  $manage]);
     }
 
     /**

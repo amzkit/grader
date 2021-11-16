@@ -14,7 +14,8 @@ class LanguagesController extends Controller
      */
     public function index()
     {
-        return response()->json(Languages::all());
+
+        return response()->json(['success' => true, 'payload' =>  Languages::all()]);
     }
 
     /**

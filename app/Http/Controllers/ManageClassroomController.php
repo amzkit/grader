@@ -14,7 +14,7 @@ class ManageClassroomController extends Controller
      */
     public function index()
     {
-        return response()->json(ManageClassrooms::all());
+        return response()->json(['success' => true, 'payload' =>  ManageClassrooms::all()]);
     }
 
     /**
@@ -38,7 +38,7 @@ class ManageClassroomController extends Controller
         $classroom = new ManageClassrooms($request->all());
         $classroom->save();
         $classroom->id;
-        return response()->json(array('success' => true, 'last_insert_id' => $classroom->id, 'res' => $classroom), 200);
+        return response()->json(array('success' => true, 'last_insert_id' => $classroom->id, 'payload' => $classroom));
     }
 
     /**
@@ -50,7 +50,7 @@ class ManageClassroomController extends Controller
     public function show($id)
     {
         $manage = ManageClassrooms::find($id);
-        return response()->json($manage, 200);
+        return response()->json(['success' => true, 'payload' =>  $manage]);
     }
 
     /**

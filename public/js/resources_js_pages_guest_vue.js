@@ -41,15 +41,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     GuestTopBar: _layouts_guest_top_bar_vue__WEBPACK_IMPORTED_MODULE_0__.default
   },
-  mounted: function mounted() {
-    console.log('Component mounted.');
-  }
+  mounted: function mounted() {}
 });
 
 /***/ }),
@@ -175,11 +172,11 @@ var render = function() {
                           _vm._v(" "),
                           _c("v-card-text", [
                             _vm._v(
-                              "\n                            I'm a Guest Index component from "
+                              "\n              I'm a Guest Index component from "
                             ),
                             _c("br"),
                             _vm._v(
-                              "\n                            /resources/js/pages/guest.vue\n                        "
+                              "\n              /resources/js/pages/guest.vue\n            "
                             )
                           ])
                         ],

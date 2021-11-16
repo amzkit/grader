@@ -77,7 +77,6 @@ export default {
       await axios.get("/api/user").then((response) => {
         if (response.data.success == true) {
           this.$store.commit("data/SET_USER", response.data.user);
-
         }
       });
 

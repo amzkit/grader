@@ -14,7 +14,7 @@ class StatusController extends Controller
      */
     public function index()
     {
-        return response()->json(Statuses::all());
+        return response()->json(['success' => true, 'payload' =>  Statuses::all()]);
     }
 
     /**

@@ -15,7 +15,7 @@ class QuizsController extends Controller
      */
     public function index()
     {
-        return response()->json(Quizs::all());
+        return response()->json(['success' => true, 'payload' =>  Quizs::all()]);
     }
 
     /**
@@ -45,11 +45,7 @@ class QuizsController extends Controller
 
         $document->subject_file_path = $path;
         $document->save();
-
-        return response()->json([
-            "success" => true,
-            "message" => "File successfully uploaded",
-        ]);
+        return response()->json(['success' => true, 'payload' =>  Quizs::all()]);
     }
 
     /**

@@ -9,7 +9,7 @@
           </v-col>
           <v-col cols="6">
             <v-subheader>
-              {{ this.$store.state.data.manageClassroom.className }}
+              <!-- {{ this.$store.state.data.manageClassroom.className }} -->
             </v-subheader>
           </v-col>
         </v-row>

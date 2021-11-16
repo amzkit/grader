@@ -15,19 +15,6 @@
               </v-list-item-content>
             </v-list-item>
           </template>
-
-          <template v-for="item in this.$store.state.data.sidebar">
-            <v-list-item :key="item.id" link @click="fatchItem(item.id)">
-              <v-list-item-action>
-                <v-icon>{{ item.icon }}</v-icon>
-              </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title>
-                  {{ item.className }}
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </template>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
@@ -84,31 +71,35 @@
         </v-menu>
       </div>
     </v-app-bar>
+    <Loading :loading="this.loading" />
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import Loading from "../components/Loading/Loading.vue";
 export default {
+  components: { Loading },
   data() {
     return {
+      loading: false,
       manages: [
         {
           title: "จัดการห้องเรียน",
           fn: () => {
-            this.$router.push("/manageclass");
+            this.$router.push("/manage-class");
           },
         },
         {
           title: "จัดการโจทย์",
           fn: () => {
-            this.$router.push("/manageexample");
+            this.$router.push("/manage-example");
           },
         },
         {
           title: "เพิ่มห้องเรียน",
           fn: () => {
-            this.$router.push("/newclassroom");
+            this.$router.push("/new-classroom");
           },
         },
       ],
@@ -140,16 +131,17 @@ export default {
       ],
     };
   },
-  async created() {
-    await this.initialize();
-    await this.fatchItem(this.$store.state.data.sidebar[0].id);
-  },
+  // async created() {
+  //   await this.initialize();
+  //   await this.fatchItem(this.$store.state.data.sidebar[0].id);
+  // },
   computed: {
     drawer: {
       get() {
         return this.$store.state.top_bar.drawer;
       },
       set(value) {
+        this.loading = false;
         this.$store.commit("top_bar/SET_DRAWER", value);
       },
     },
@@ -164,32 +156,36 @@ export default {
       window.location.href = url;
     },
 
-    async fatchItem(item) {
-      await axios.get("api/manage-classroom/" + item).then((response) => {
-        if (response.data) {
-          this.$store.commit("data/SET_CLASSROOM", response.data);
-        }
-      });
-      await axios.get("api/manage-std-classroom/" + item).then((response) => {
-        if (response.data) {
-          this.$store.commit("data/SET_STD_CLASSROOM", response.data);
-        }
-      });
+    // async fatchItem(item) {
+    //   await axios.get(`api/manage-classroom/${item}`).then((response) => {
+    //     if (response.data.success == true) {
+    //       this.loading = false;
+    //       this.$store.commit("data/SET_CLASSROOM", response.data.payload);
+    //     }
+    //   });
+    //   await axios.get(`api/manage-std-classroom/${item}`).then((response) => {
+    //     if (response.data.success == true) {
+    //       this.loading = false;
+    //       this.$store.commit("data/SET_STD_CLASSROOM", response.data.payload);
+    //     }
+    //   });
 
-      await axios.get("api/classroom/" + item).then((response) => {
-        if (response.data) {
-          this.$store.commit("data/SET_CLASSROOM_WORK", response.data);
-        }
-      });
-    },
+    //   await axios.get(`api/classroom/${item}`).then((response) => {
+    //     if (response.data.success == true) {
+    //       this.loading = false;
+    //       this.$store.commit("data/SET_CLASSROOM_WORK", response.data.payload);
+    //     }
+    //   });
+    // },
 
-    async initialize() {
-      await axios.get("api/manage-classroom").then((response) => {
-        if (response.data) {
-          this.$store.commit("data/SET_SIDE_BAR", response.data);
-        }
-      });
-    },
+    // async initialize() {
+    //   await axios.get("api/manage-classroom").then((response) => {
+    //     if (response.data.success == true) {
+    //       this.loading = false;
+    //       this.$store.commit("data/SET_SIDE_BAR", response.data.payload);
+    //     }
+    //   });
+    // },
   },
 };
 </script>

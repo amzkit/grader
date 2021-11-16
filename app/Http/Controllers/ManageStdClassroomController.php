@@ -14,7 +14,7 @@ class ManageStdClassroomController extends Controller
      */
     public function index()
     {
-        return response()->json(ManageStdClassrooms::all());
+        return response()->json(['success' => true, 'payload' =>  ManageStdClassrooms::all()]);
     }
 
     /**
@@ -39,7 +39,7 @@ class ManageStdClassroomController extends Controller
         $std_classroom = new ManageStdClassrooms($request->all());
         $std_classroom->save();
         $std_classroom->id;
-        return response()->json(['store', 'payload' =>  $request->all()]);
+        return response()->json(['success' => true, 'payload' =>  $request->all()]);
     }
 
     /**
@@ -61,7 +61,7 @@ class ManageStdClassroomController extends Controller
             )
 
             ->get();
-        return response()->json($manage, 200);
+        return response()->json(['success' => true, 'payload' =>  $manage->all()]);
     }
 
     /**
@@ -91,7 +91,7 @@ class ManageStdClassroomController extends Controller
         $manage->lastName = $request->input('lastName');
         $manage->status_id = $request->input('status_id');
         $manage->save();
-        return response()->json($manage, 200);
+        return response()->json(['success' => true, 'payload' =>  $manage->all()]);
     }
 
     /**
@@ -104,6 +104,6 @@ class ManageStdClassroomController extends Controller
     {
         $manage = ManageStdClassrooms::find($id);
         $manage->delete();
-        return response()->json($manage, 200);
+        return response()->json(['success' => true, 'payload' =>  $manage->all()]);
     }
 }
