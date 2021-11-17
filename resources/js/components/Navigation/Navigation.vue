@@ -2,17 +2,32 @@
   <div>
     <v-navigation-drawer absolute permanent left>
       <v-list dense nav>
-        <v-list-item-group v-model="model">
-          <v-list-item
-            v-for="item in this.$store.state.data.classrooms"
-            :key="item.id"
-            link
-            @click="fatchItem(item.id)"
-          >
+        <v-list-item-group v-model="model" mandatory>
+          <div v-if="this.$store.state.data.classrooms[0]">
+            <v-list-item
+              v-for="item in this.$store.state.data.classrooms"
+              :key="item.id"
+              link
+              @click="fatchItem(item.id)"
+            >
+              <v-list-item-content>
+                <v-list-item-title>{{ item.className }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </div>
+          <div v-else>
             <v-list-item-content>
-              <v-list-item-title>{{ item.className }}</v-list-item-title>
+              <v-list-item-title>
+                <v-btn
+                  color="primary"
+                  block
+                  @click="$router.push('/new-classroom')"
+                >
+                  New Classroom
+                </v-btn>
+              </v-list-item-title>
             </v-list-item-content>
-          </v-list-item>
+          </div>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>

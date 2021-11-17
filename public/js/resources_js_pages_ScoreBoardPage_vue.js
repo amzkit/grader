@@ -79,6 +79,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Navigation",
   data: function data() {
@@ -666,6 +681,7 @@ var render = function() {
               _c(
                 "v-list-item-group",
                 {
+                  attrs: { mandatory: "" },
                   model: {
                     value: _vm.model,
                     callback: function($$v) {
@@ -674,33 +690,77 @@ var render = function() {
                     expression: "model"
                   }
                 },
-                _vm._l(this.$store.state.data.classrooms, function(item) {
-                  return _c(
-                    "v-list-item",
-                    {
-                      key: item.id,
-                      attrs: { link: "" },
-                      on: {
-                        click: function($event) {
-                          return _vm.fatchItem(item.id)
-                        }
-                      }
-                    },
-                    [
-                      _c(
-                        "v-list-item-content",
+                [
+                  this.$store.state.data.classrooms[0]
+                    ? _c(
+                        "div",
+                        _vm._l(this.$store.state.data.classrooms, function(
+                          item
+                        ) {
+                          return _c(
+                            "v-list-item",
+                            {
+                              key: item.id,
+                              attrs: { link: "" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.fatchItem(item.id)
+                                }
+                              }
+                            },
+                            [
+                              _c(
+                                "v-list-item-content",
+                                [
+                                  _c("v-list-item-title", [
+                                    _vm._v(_vm._s(item.className))
+                                  ])
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        }),
+                        1
+                      )
+                    : _c(
+                        "div",
                         [
-                          _c("v-list-item-title", [
-                            _vm._v(_vm._s(item.className))
-                          ])
+                          _c(
+                            "v-list-item-content",
+                            [
+                              _c(
+                                "v-list-item-title",
+                                [
+                                  _c(
+                                    "v-btn",
+                                    {
+                                      attrs: { color: "primary", block: "" },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.$router.push(
+                                            "/new-classroom"
+                                          )
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                New Classroom\n              "
+                                      )
+                                    ]
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
                         ],
                         1
                       )
-                    ],
-                    1
-                  )
-                }),
-                1
+                ]
               )
             ],
             1

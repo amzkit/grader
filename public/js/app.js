@@ -5151,6 +5151,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -5167,14 +5169,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         icon: "mdi-pencil",
         text: "Manage",
         subLinks: [{
+          text: "New Classroom",
+          to: "/new-classroom"
+        }, {
           text: "Manage Classroom",
           to: "/manage-classroom"
         }, {
           text: "Manage Example",
           to: "/manage-example"
-        }, {
-          text: "New Classroom",
-          to: "/new-classroom"
         }]
       }, {
         to: "/my-score",
@@ -42942,7 +42944,7 @@ var render = function() {
                             }
                           }
                         },
-                        [_vm._v(" Logout ")]
+                        [_vm._v("\n          Logout\n        ")]
                       )
                     ],
                     1

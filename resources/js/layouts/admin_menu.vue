@@ -61,7 +61,9 @@
       </v-list>
       <template v-slot:append>
         <div class="pa-2">
-          <v-btn color="error" block @click="redirect('/logout')"> Logout </v-btn>
+          <v-btn color="error" block @click="redirect('/logout')">
+            Logout
+          </v-btn>
         </div>
       </template>
     </v-navigation-drawer>
@@ -120,16 +122,16 @@ export default {
           text: "Manage",
           subLinks: [
             {
+              text: "New Classroom",
+              to: "/new-classroom",
+            },
+            {
               text: "Manage Classroom",
               to: "/manage-classroom",
             },
             {
               text: "Manage Example",
               to: "/manage-example",
-            },
-            {
-              text: "New Classroom",
-              to: "/new-classroom",
             },
           ],
         },
