@@ -5157,14 +5157,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     return {
       links: [{
         to: "/",
-        icon: "mdi-view-dashboard",
+        icon: "mdi-home",
         text: "Home"
       }, {
         to: "/classroom",
         icon: "mdi-view-dashboard",
         text: "Classroom"
       }, {
-        icon: "mdi-tennis",
+        icon: "mdi-pencil",
         text: "Manage",
         subLinks: [{
           text: "Manage Classroom",
@@ -42935,7 +42935,7 @@ var render = function() {
                       _c(
                         "v-btn",
                         {
-                          attrs: { block: "" },
+                          attrs: { color: "error", block: "" },
                           on: {
                             click: function($event) {
                               return _vm.redirect("/logout")

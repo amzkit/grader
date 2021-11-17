@@ -1,32 +1,45 @@
-<template>
 
-  <v-row justify="center">
-    <!-- <h1>{{ this.$store.state.data.manageClassroom.className }}</h1> -->
-    <v-col>
-      <v-card>
-        <v-card-title>
-          Scoreboard
-          <v-spacer></v-spacer>
-          <v-text-field
-            v-model="search"
-            append-icon="mdi-magnify"
-            label="Search"
-            single-line
-            hide-details
-          ></v-text-field>
-        </v-card-title>
-        <v-data-table
-          :headers="headers"
-          :items="desserts"
-          :search="search"
-        ></v-data-table>
-      </v-card>
+<template>
+  <v-row>
+    <Loading :loading="this.$store.state.data.loading" />
+    <v-col cols="2">
+      <Navigation />
+    </v-col>
+    <v-col cols="10">
+      <div v-if="!this.$store.state.data.loading">
+        <v-row justify="center">
+          <v-card>
+            <v-card-title>
+              {{ $store.state.data.classroom.className }}
+              <v-spacer></v-spacer>
+              <v-text-field
+                v-model="search"
+                append-icon="mdi-magnify"
+                label="Search"
+                single-line
+                hide-details
+              ></v-text-field>
+            </v-card-title>
+            <v-data-table
+              :headers="headers"
+              :items="desserts"
+              :search="search"
+            ></v-data-table>
+          </v-card>
+        </v-row>
+      </div>
     </v-col>
   </v-row>
 </template>
 
 <script>
+import Navigation from "../Navigation/Navigation.vue";
+import Loading from "../Loading/Loading.vue";
 export default {
+  components: {
+    Navigation,
+    Loading,
+  },
   data() {
     return {
       search: "",
