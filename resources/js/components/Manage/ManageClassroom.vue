@@ -1,91 +1,107 @@
-
 <template>
-  <v-row justify="center">
-    <h1>{{ this.$store.state.data.manageClassroom.className }}</h1>
-    <v-col>
-      <v-dialog v-model="dialog" max-width="500px">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-            เพิ่มผู้ใช้ห้องเรียน
-          </v-btn>
-        </template>
-        <v-card>
-          <v-card-title>
-            <span class="text-h5">{{ formTitle }}</span>
-          </v-card-title>
-
-          <v-card-text>
-            <v-container>
-              <v-row>
-                <v-container class="light--text" fluid>
-                  <v-text-field
-                    v-model="editedItem.stdid"
-                    label="รหัสนักศึกษา"
-                  ></v-text-field>
-                  <v-text-field
-                    v-model="editedItem.firstName"
-                    label="ชื่อ"
-                  ></v-text-field>
-                  <v-text-field
-                    v-model="editedItem.lastName"
-                    label="นามสกุล"
-                  ></v-text-field>
-                  <v-select
-                    v-model="editedItem.status"
-                    :items="status"
-                    item-text="statusName"
-                    item-value="id"
-                    single-line
-                    auto
-                    label="Status"
-                  ></v-select>
-                </v-container>
-              </v-row>
-            </v-container>
-          </v-card-text>
-
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="close"> Cancel </v-btn>
-            <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-      <v-card>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-            เพิ่มผู้ใช้ห้องเรียน
-          </v-btn>
-        </template>
-
-        <v-data-table
-          :headers="headers"
-          :items="this.$store.state.data.manageStdClassroom"
-          :search="search"
-          class="elevation-1"
-        >
-          <template v-slot:[`item.actions`]="{ item }">
-            <v-icon small class="mr-2" @click="editItem(item)">
-              mdi-pencil
-            </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-          </template>
-          <template v-slot:no-data>
-            <v-btn color="primary" @click="initialize"> Reset </v-btn>
-          </template>
-        </v-data-table>
-      </v-card>
+  <v-row>
+    <Loading :loading="this.$store.state.data.loading" />
+    <v-col cols="2">
+      <Navigation />
     </v-col>
-    <Loading :loading="true" />
+    <v-col cols="10">
+      <div v-if="!this.$store.state.data.loading">
+        <v-row justify="center">
+          <v-col>
+            <v-data-table
+              :headers="headers"
+              :items="this.$store.state.data.manageStdClassroom"
+              class="elevation-1"
+            >
+              <template v-slot:[`item.actions`]="{ item }">
+                <v-icon small class="mr-2" @click="editItem(item)">
+                  mdi-pencil
+                </v-icon>
+                <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+              </template>
+              <template v-slot:top>
+                <v-toolbar flat>
+                  <v-toolbar-title>{{
+                    $store.state.data.classroom.className
+                  }}</v-toolbar-title>
+                  <v-divider class="mx-4" inset vertical></v-divider>
+                  <v-spacer></v-spacer>
+                  <v-dialog v-model="dialog" max-width="500px">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        color="primary"
+                        dark
+                        class="mb-2"
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        New Item
+                      </v-btn>
+                    </template>
+
+                    <v-card>
+                      <v-card-title>
+                        <span class="text-h5">{{ formTitle }}</span>
+                      </v-card-title>
+
+                      <v-card-text>
+                        <v-container>
+                          <v-row>
+                            <v-container class="light--text" fluid>
+                              <v-text-field
+                                v-model="editedItem.stdid"
+                                label="รหัสนักศึกษา"
+                              ></v-text-field>
+                              <v-text-field
+                                v-model="editedItem.firstName"
+                                label="ชื่อ"
+                              ></v-text-field>
+                              <v-text-field
+                                v-model="editedItem.lastName"
+                                label="นามสกุล"
+                              ></v-text-field>
+                              <v-select
+                                v-model="editedItem.status"
+                                :items="status"
+                                item-text="statusName"
+                                item-value="id"
+                                single-line
+                                auto
+                                label="Status"
+                              ></v-select>
+                            </v-container>
+                          </v-row>
+                        </v-container>
+                      </v-card-text>
+
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue darken-1" text @click="close">
+                          Cancel
+                        </v-btn>
+                        <v-btn color="blue darken-1" text @click="save">
+                          Save
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                </v-toolbar>
+              </template>
+            </v-data-table>
+          </v-col>
+        </v-row>
+      </div>
+    </v-col>
   </v-row>
 </template>
 
 <script>
 import DeleteDialog from "../Dialog/DeleteDialog.vue";
 import Loading from "../Loading/Loading.vue";
+import Navigation from "../Navigation/Navigation.vue";
 export default {
   name: "ManageClassroom",
-  components: { DeleteDialog, Loading },
+  components: { DeleteDialog, Loading, Navigation },
   data() {
     return {
       dialog: false,
@@ -133,7 +149,6 @@ export default {
       this.dialog = false;
     },
     async initialize() {
-      this.desserts = [];
       await axios.get("api/status").then((response) => {
         this.status = response.data;
       });

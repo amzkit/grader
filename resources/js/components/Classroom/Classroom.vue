@@ -5,38 +5,36 @@
       <Navigation />
     </v-col>
     <v-col cols="10">
-      <v-row justify="center">
-        <h1>
-          {{
-            this.$store.state.data.loading
-              ? "Loading..."
-              : this.$store.state.data.classroom.className
-          }}
-        </h1>
-        <v-col>
-          <v-data-table
-            :headers="headers"
-            :items="this.$store.state.data.manageClassroomWork"
-            class="elevation-1"
-            @click:row="rowClick"
-          >
-            <template slot="items" slot-scope="props">
-              <tr @click="rowClicked(props.item)"></tr>
-            </template>
-            <template v-slot:[`item.subject_file_path`]="{ item }">
-              <v-icon small class="mr-2" @click="download(item)">
-                mdi-file-download
-              </v-icon>
-            </template>
-            <template v-slot:[`item.send_start_work`]="{ item }">
-              {{ dayjs(item.send_start_work).format("MMMM D, YYYY") }}
-            </template>
-            <template v-slot:[`item.send_end_work`]="{ item }">
-              {{ dayjs(item.send_end_work).format("MMMM D, YYYY") }}
-            </template>
-          </v-data-table>
-        </v-col>
-      </v-row>
+      <div v-if="!this.$store.state.data.loading">
+        <v-row justify="center">
+          <h1>
+            {{ this.$store.state.data.classroom.className }}
+          </h1>
+          <v-col>
+            <v-data-table
+              :headers="headers"
+              :items="this.$store.state.data.manageClassroomWork"
+              class="elevation-1"
+              @click:row="rowClick"
+            >
+              <template slot="items" slot-scope="props">
+                <tr @click="rowClicked(props.item)"></tr>
+              </template>
+              <template v-slot:[`item.subject_file_path`]="{ item }">
+                <v-icon small class="mr-2" @click="download(item)">
+                  mdi-file-download
+                </v-icon>
+              </template>
+              <template v-slot:[`item.send_start_work`]="{ item }">
+                {{ dayjs(item.send_start_work).format("MMMM D, YYYY") }}
+              </template>
+              <template v-slot:[`item.send_end_work`]="{ item }">
+                {{ dayjs(item.send_end_work).format("MMMM D, YYYY") }}
+              </template>
+            </v-data-table>
+          </v-col>
+        </v-row>
+      </div>
     </v-col>
   </v-row>
 </template>
@@ -55,8 +53,6 @@ export default {
   },
   data: function () {
     return {
-      item: null,
-      user: null,
       headers: [
         {
           text: "ชื่องาน",

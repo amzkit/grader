@@ -1,22 +1,69 @@
 <template>
   <div>
     <v-navigation-drawer v-model="drawer" absolute temporary>
-      <v-list nav dense>
-        <v-list-item-group active-class="deep-purple--text text--accent-4">
-          <template v-for="item in items">
-            <v-list-item :key="item.text" link @click="redirect(item.url)">
-              <v-list-item-action>
-                <v-icon>{{ item.icon }}</v-icon>
-              </v-list-item-action>
-              <v-list-item-content>
+      <v-list-item>
+        <v-list-item-avatar>
+          <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title v-if="this.$store.state.data.user !== null">{{
+            this.$store.state.data.user.name
+          }}</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list dense>
+        <div v-for="(link, i) in links" :key="i">
+          <v-list-item
+            v-if="!link.subLinks"
+            :key="i"
+            :to="link.to"
+            avatar
+            link
+            class="v-list-item"
+          >
+            <v-list-item-icon>
+              <v-icon>{{ link.icon }}</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title>{{ link.text }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-group v-else :key="link.text" no-action>
+            <template v-slot:activator>
+              <v-list-item-icon>
+                <v-icon>{{ link.icon }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>
+                <v-list-item-content>
+                  <v-list-item-title>{{ link.text }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item-title>
+            </template>
+
+            <v-list-item
+              v-for="sublink in link.subLinks"
+              :to="sublink.to"
+              :key="sublink.text"
+              link
+            >
+              <v-list dense>
                 <v-list-item-title>
-                  {{ item.text }}
+                  <v-list-item-content>
+                    <v-list-item-title v-text="sublink.text" />
+                  </v-list-item-content>
                 </v-list-item-title>
-              </v-list-item-content>
+              </v-list>
             </v-list-item>
-          </template>
-        </v-list-item-group>
+          </v-list-group>
+        </div>
       </v-list>
+      <template v-slot:append>
+        <div class="pa-2">
+          <v-btn block @click="redirect('/logout')"> Logout </v-btn>
+        </div>
+      </template>
     </v-navigation-drawer>
 
     <v-app-bar
@@ -31,110 +78,77 @@
       <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
         <span class="hidden-sm-and-down">{{ title }}</span>
       </v-toolbar-title>
+      <v-spacer></v-spacer>
 
-      <v-btn text to="/"> Home </v-btn>
-      <v-btn text to="/classroom"> Classroom </v-btn>
-      <div class="text-xs-center">
-        <v-menu offset-y>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn text dark v-bind="attrs" v-on="on">
-              Manage Classroom
-              <v-icon>mdi-chevron-down</v-icon>
-            </v-btn>
-          </template>
-          <v-list>
-            <v-list-item v-for="(manage, index) in manages" :key="index" link>
-              <v-list-item-title @click="manage.fn">{{
-                manage.title
-              }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-      </div>
-      <v-btn text to="/myscore"> My Score </v-btn>
-      <v-btn text to="/scoreboard"> Scoreboards </v-btn>
-      <div class="text-xs-center">
-        <v-menu offset-y>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn color="primary" dark v-bind="attrs" v-on="on">
-              Profile
-              <v-icon>mdi-chevron-down</v-icon>
-            </v-btn>
-          </template>
-          <v-list>
-            <v-list-item v-for="(user, index) in users" :key="index" link>
-              <v-list-item-title @click="user.fn"
-                >{{ user.title }}
-              </v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-      </div>
+      <v-menu left bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon v-bind="attrs" v-on="on">
+            <v-icon>mdi-dots-vertical</v-icon>
+          </v-btn>
+        </template>
+
+        <v-list>
+          <v-list-item link>
+            <v-list-item-title @click="redirect('/logout')"
+              >Logout
+            </v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-app-bar>
-    <Loading :loading="this.loading" />
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
-import Loading from "../components/Loading/Loading.vue";
 export default {
-  components: { Loading },
   data() {
     return {
-      loading: false,
-      manages: [
+      links: [
         {
-          title: "จัดการห้องเรียน",
-          fn: () => {
-            this.$router.push("/manage-class");
-          },
+          to: "/",
+          icon: "mdi-view-dashboard",
+          text: "Home",
         },
         {
-          title: "จัดการโจทย์",
-          fn: () => {
-            this.$router.push("/manage-example");
-          },
+          to: "/classroom",
+          icon: "mdi-view-dashboard",
+          text: "Classroom",
         },
         {
-          title: "เพิ่มห้องเรียน",
-          fn: () => {
-            this.$router.push("/new-classroom");
-          },
-        },
-      ],
-      users: [
-        {
-          title: "ชื่อ", // อันนี้จะดึงจากฐานข้อมูลเหมือนที่อาจารย์ดึง
-          fn: () => {
-            this.$user.name;
-          },
-        },
-        {
-          title: "Change Name",
-          fn: () => {
-            this.$router.push("");
-          },
+          icon: "mdi-tennis",
+          text: "Manage",
+          subLinks: [
+            {
+              text: "Manage Classroom",
+              to: "/manage-classroom",
+            },
+            {
+              text: "Manage Example",
+              to: "/manage-example",
+            },
+            {
+              text: "New Classroom",
+              to: "/new-classroom",
+            },
+          ],
         },
         {
-          title: "Change Password",
-          fn: () => {
-            this.$router.push("");
-          },
+          to: "/my-score",
+          icon: "mdi-view-dashboard",
+          text: "Myscore",
         },
         {
-          title: "Log Out",
-          fn: () => {
-            this.redirect("/logout");
-          },
+          to: "/scoreboard",
+          icon: "mdi-view-dashboard",
+          text: "Scoreboard",
         },
       ],
     };
   },
-  // async created() {
-  //   await this.initialize();
-  //   await this.fatchItem(this.$store.state.data.sidebar[0].id);
-  // },
+  async created() {
+    await this.initialize();
+  },
   computed: {
     drawer: {
       get() {
@@ -155,37 +169,16 @@ export default {
     redirect(url) {
       window.location.href = url;
     },
-
-    // async fatchItem(item) {
-    //   await axios.get(`api/manage-classroom/${item}`).then((response) => {
-    //     if (response.data.success == true) {
-    //       this.loading = false;
-    //       this.$store.commit("data/SET_CLASSROOM", response.data.payload);
-    //     }
-    //   });
-    //   await axios.get(`api/manage-std-classroom/${item}`).then((response) => {
-    //     if (response.data.success == true) {
-    //       this.loading = false;
-    //       this.$store.commit("data/SET_STD_CLASSROOM", response.data.payload);
-    //     }
-    //   });
-
-    //   await axios.get(`api/classroom/${item}`).then((response) => {
-    //     if (response.data.success == true) {
-    //       this.loading = false;
-    //       this.$store.commit("data/SET_CLASSROOM_WORK", response.data.payload);
-    //     }
-    //   });
-    // },
-
-    // async initialize() {
-    //   await axios.get("api/manage-classroom").then((response) => {
-    //     if (response.data.success == true) {
-    //       this.loading = false;
-    //       this.$store.commit("data/SET_SIDE_BAR", response.data.payload);
-    //     }
-    //   });
-    // },
+    router(url) {
+      this.$router.push(url);
+    },
+    async initialize() {
+      await axios.get("/api/user").then((response) => {
+        if (response.data.success == true) {
+          this.$store.commit("data/SET_USER", response.data.user);
+        }
+      });
+    },
   },
 };
 </script>

@@ -254,10 +254,6 @@ var render = function() {
     "v-row",
     { attrs: { justify: "center" } },
     [
-      _c("h1", [
-        _vm._v(_vm._s(this.$store.state.data.manageClassroom.className))
-      ]),
-      _vm._v(" "),
       _c(
         "v-col",
         [

@@ -2,7 +2,7 @@
   <div>
     <v-navigation-drawer absolute permanent left>
       <v-list dense nav>
-        <v-list-item-group active-class="deep-purple--text text--accent-4">
+        <v-list-item-group v-model="model">
           <v-list-item
             v-for="item in this.$store.state.data.classrooms"
             :key="item.id"
@@ -23,10 +23,13 @@
 export default {
   name: "Navigation",
   data: function () {
-    return {};
+    return {
+      model: 0,
+    };
   },
   async created() {
     await this.initialize();
+    await this.fatchItem(this.$store.state.data.classrooms[0].id);
   },
   methods: {
     loading(setLoading) {
@@ -55,8 +58,6 @@ export default {
       });
       await axios.get(`api/classroom/${item}`).then((response) => {
         if (response.data.success == true) {
-          console.log(response.data.payload);
-
           this.$store.commit("data/SET_CLASSROOM_WORK", response.data.payload);
         }
       });

@@ -1,7 +1,7 @@
 
 <template>
   <v-row justify="center">
-    <h1>{{ this.$store.state.data.manageClassroom.className }}</h1>
+    <!-- <h1>{{ this.$store.state.data.manageClassroom.className }}</h1> -->
     <v-col>
       <v-card>
         <v-data-table

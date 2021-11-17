@@ -24,8 +24,8 @@ const routes = [
         component: () => import('../components/Classroom/Code.vue'),
     },
     {
-        path: "/manage-class",
-        name: 'manage-class',
+        path: "/manage-classroom",
+        name: 'manage-classroom',
         component: () => import('../pages/ManageClassRoomPage.vue'),
 
     },
