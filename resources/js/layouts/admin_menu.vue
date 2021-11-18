@@ -12,7 +12,7 @@
         </v-list-item-content>
       </v-list-item>
       <v-list dense>
-        <div v-for="(link, i) in links" :key="i">
+        <div v-for="(link, i) in admin" :key="i">
           <v-list-item
             v-if="!link.subLinks"
             :key="i"
@@ -78,7 +78,9 @@
         @click.stop="$store.commit('top_bar/SET_DRAWER', !drawer)"
       ></v-app-bar-nav-icon>
       <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
-        <span class="hidden-sm-and-down">{{ title }}</span>
+        <button @click="redirect('/')" class="-hidden-sm-and-down">
+          {{ title }}
+        </button>
       </v-toolbar-title>
       <v-spacer></v-spacer>
 
@@ -106,7 +108,7 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      links: [
+      admin: [
         {
           to: "/",
           icon: "mdi-home",
@@ -144,6 +146,54 @@ export default {
           to: "/scoreboard",
           icon: "mdi-view-dashboard",
           text: "Scoreboard",
+        },
+      ],
+      student: [
+        {
+          to: "/",
+          icon: "mdi-home",
+          text: "Home",
+        },
+        {
+          to: "/classroom",
+          icon: "mdi-view-dashboard",
+          text: "Classroom",
+        },
+        {
+          icon: "mdi-pencil",
+          text: "Manage",
+          subLinks: [
+            {
+              text: "New Classroom",
+              to: "/new-classroom",
+            },
+          ],
+        },
+      ],
+      ta: [
+        {
+          to: "/",
+          icon: "mdi-home",
+          text: "Home",
+        },
+        {
+          to: "/classroom",
+          icon: "mdi-view-dashboard",
+          text: "Classroom",
+        },
+        {
+          icon: "mdi-pencil",
+          text: "Manage",
+          subLinks: [
+            {
+              text: "Manage Classroom",
+              to: "/manage-classroom",
+            },
+            {
+              text: "Manage Example",
+              to: "/manage-example",
+            },
+          ],
         },
       ],
     };

@@ -29,7 +29,7 @@ import router from './router/index'
     // Guest
     Vue.component("guest-top-bar", require("./layouts/guest_top_bar.vue").default)
     Vue.component("login", require("./auth/login.vue").default )
-
+    Vue.component("register", require("./auth/register.vue").default )
     // Auth User Home
 
 

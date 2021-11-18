@@ -7,29 +7,38 @@
           <v-flex xs12 sm10 md6>
             <v-card class="elevation-12">
               <v-toolbar dark color="primary">
-                <v-toolbar-title>Log In</v-toolbar-title>
+                <v-toolbar-title>Register</v-toolbar-title>
                 <v-spacer></v-spacer>
               </v-toolbar>
               <v-card-text>
-                <v-form ref="form" id="form" method="POST" action="/login">
+                <v-form ref="form" id="form" method="POST" action="/register">
                   <v-text-field
                     prepend-icon="person"
-                    v-model="email"
-                    name="email"
-                    label="Email"
+                    name="name"
+                    label="Name"
                     type="text"
-                    placeholder=" "
-                    persistent-placeholder
+                    required
                   ></v-text-field>
                   <v-text-field
-                    id="password"
-                    v-model="password"
-                    prepend-icon="lock"
+                    prepend-icon="person"
+                    name="email"
+                    label="Email"
+                    type="email"
+                    required
+                  ></v-text-field>
+                  <v-text-field
+                    prepend-icon="person"
                     name="password"
                     label="Password"
                     type="password"
-                    placeholder=" "
-                    persistent-placeholder
+                    required
+                  ></v-text-field>
+                  <v-text-field
+                    prepend-icon="person"
+                    name="password_confirmation"
+                    label="password"
+                    type="password"
+                    required
                   ></v-text-field>
                   <v-text-field
                     v-show="false"
@@ -42,7 +51,7 @@
                 <v-spacer></v-spacer>
                 <div class="text-center">
                   <v-btn color="primary" type="submit" form="form"
-                    >Log in</v-btn
+                    >Register</v-btn
                   >
                 </div>
               </v-card-actions>
@@ -61,20 +70,12 @@ import GuestTopBar from "../layouts/guest_top_bar.vue";
 export default {
   components: { GuestTopBar },
   data: () => ({
-    drawer: null,
-    email: "",
-    password: "",
-    //csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-    csrf: document.head.querySelector('meta[name="csrf-token"]').content,
+    csrf: document
+      .querySelector('meta[name="csrf-token"]')
+      .getAttribute("content"),
   }),
-  props: {
-    source: String,
-  },
-  methods: {
-    redirect(url) {
-      window.location.href = url;
-    },
-  },
+  props: {},
+  methods: {},
 };
 </script>
 
