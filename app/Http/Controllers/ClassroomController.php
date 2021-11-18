@@ -15,7 +15,7 @@ class ClassroomController extends Controller
      */
     public function index()
     {
-        return response()->json(['success' => true, 'payload' =>  Quizs::all()]);
+        // return response()->json(['success' => true, 'payload' =>  Quizs::all()]);
     }
 
     /**

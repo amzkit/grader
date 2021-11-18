@@ -279,7 +279,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context.next = 2;
                 return axios.get("api/status").then(function (response) {
-                  _this.status = response.data;
+                  _this.status = response.data.payload;
                 });
 
               case 2:
@@ -320,7 +320,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   std_id: _this2.editedItem.stdid,
                   firstName: _this2.editedItem.firstName,
                   lastName: _this2.editedItem.lastName,
-                  classroom_id: _this2.$store.state.data.manageClassroom.id,
+                  classroom_id: _this2.$store.state.data.classroom.id,
                   status_id: _this2.editedItem.status
                 }).then(function (response) {
                   console.log(response.data.payload);

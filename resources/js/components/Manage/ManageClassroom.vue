@@ -150,7 +150,7 @@ export default {
     },
     async initialize() {
       await axios.get("api/status").then((response) => {
-        this.status = response.data;
+        this.status = response.data.payload;
       });
     },
     async deleteItem(item) {
@@ -162,7 +162,7 @@ export default {
           std_id: this.editedItem.stdid,
           firstName: this.editedItem.firstName,
           lastName: this.editedItem.lastName,
-          classroom_id: this.$store.state.data.manageClassroom.id,
+          classroom_id: this.$store.state.data.classroom.id,
           status_id: this.editedItem.status,
         })
         .then((response) => {

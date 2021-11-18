@@ -14,6 +14,16 @@ class ManageClassroomController extends Controller
      */
     public function index()
     {
+        // $manage = ManageStdClassrooms::leftJoin(
+        //     'manage_classrooms',
+        //     'manage_std_classrooms.classroom_id',
+        //     '=',
+        //     'manage_classrooms.id'
+        // )
+        //     ->where('std_id', '6104101310')
+        //     ->select()
+        //     ->get();
+        // return response()->json([$manage]);
         return response()->json(['success' => true, 'payload' =>  ManageClassrooms::all()]);
     }
 
