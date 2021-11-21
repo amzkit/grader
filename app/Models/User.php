@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role'
     ];
 
     /**
@@ -42,14 +43,4 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    public function providers()
-    {
-        return $this->hasMany(Provider::class, 'user_id', 'id');
-    }
-
-    public function getRoleAttribute()
-    {
-        return 'admin';
-    }
 }

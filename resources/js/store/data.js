@@ -3,7 +3,7 @@ const state = {
     classrooms: [],
     manageStdClassroom: [],
     manageClassroomWork: [],
-    user: null,
+    user: [],
     language: [],
     loading: false,
     classroomExam: [],

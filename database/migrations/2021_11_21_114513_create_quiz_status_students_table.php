@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateQuizsTable extends Migration
+class CreateQuizStatusStudentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,17 @@ class CreateQuizsTable extends Migration
      */
     public function up()
     {
-        Schema::create('quizs', function (Blueprint $table) {
-            $table->id()->autoIncrement();
+        Schema::create('quiz_status_students', function (Blueprint $table) {
+            $table->id();
             $table->bigInteger('classroom_id')->unsigned();
-            $table->string('language');
-            $table->integer('score');
-            $table->string('send_start_work');
-            $table->string('send_end_work');
-            $table->string('subject_file_path');
-            $table->string('subject_name');
-            $table->string('work_name');
+            $table->bigInteger('student_id')->unsigned();
+            $table->bigInteger('quiz_id')->unsigned();
+            $table->boolean('status')->default(false);
             $table->timestamps();
 
             $table->foreign('classroom_id')->references('id')->on('classrooms')->onDelete('cascade');
+            $table->foreign('quiz_id')->references('id')->on('quizs')->onDelete('cascade');
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
         });
     }
 
@@ -36,6 +34,6 @@ class CreateQuizsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('quizs');
+        Schema::dropIfExists('quiz_status_students');
     }
 }

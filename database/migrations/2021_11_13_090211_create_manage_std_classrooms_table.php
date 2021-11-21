@@ -13,17 +13,15 @@ class CreateManageStdClassroomsTable extends Migration
      */
     public function up()
     {
-        Schema::create('manage_std_classrooms', function (Blueprint $table) {
+        Schema::create('std_classrooms', function (Blueprint $table) {
             $table->id()->autoIncrement();
-            $table->string('std_id')->nullable();
-            $table->string('firstName');
-            $table->string('lastName');
-            $table->bigInteger('status_id')->unsigned()->nullable();
-            $table->bigInteger('classroom_id')->unsigned()->nullable();
+            $table->bigInteger('classroom_id')->unsigned();
+            $table->bigInteger('student_id')->unsigned();
+            $table->enum('status', ['student', 'ta']);
             $table->timestamps();
 
-            $table->foreign('status_id')->references('id')->on('statuses')->onDelete('cascade');
-            $table->foreign('classroom_id')->references('id')->on('manage_classrooms')->onDelete('cascade');
+            $table->foreign('classroom_id')->references('id')->on('classrooms')->onDelete('cascade');
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
         });
     }
 

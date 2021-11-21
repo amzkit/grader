@@ -3,99 +3,48 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\QuizStatusStudent;
+use App\Models\StdClassrooms;
 use App\Models\Quizs;
+use Illuminate\Support\Facades\DB;
+
 
 
 class ClassroomController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function classrooms(Request $request)
     {
-        // return response()->json(['success' => true, 'payload' =>  Quizs::all()]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $manage = Quizs::leftJoin('languages', 'quizs.language_id', '=', 'languages.id')
-            ->where('classroom_id', $id)
+        $studentId = $request->input('studentid');
+        $classroom = StdClassrooms::join('students', 'std_classrooms.student_id', '=', 'students.id')
+            ->join('classrooms', 'std_classrooms.classroom_id', '=', 'classrooms.id')
             ->select(
-                'quizs.id',
-                'languages.id AS languagesId',
-                'languages.languagesName',
-                'quizs.classroom_id',
-                'quizs.score',
-                'quizs.send_end_work',
-                'quizs.send_start_work',
-                'quizs.subject_file_path',
-                'quizs.subject_name',
-                'quizs.work_name',
+                'classrooms.id AS roomId',
+                'classrooms.className',
+                'students.name',
+                'students.email',
+                'students.student_id',
             )
+            ->where('students.student_id', $studentId)
             ->get();
-        return response()->json(['success' => true, 'payload' =>  $manage]);
+        return response()->json(['success' => true, 'payload' =>  $classroom]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function room(Request $request)
     {
-        //
-    }
+        $studentId = $request->input('studentid');
+        $roomId = $request->input('roomid');
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $classroom = Quizs::join('classrooms', 'quizs.classroom_id', '=', 'classrooms.id')
+            ->leftJoin('quiz_status_students', 'quizs.id', '=', 'quiz_status_students.quiz_id')
+            ->leftJoin('students', 'quiz_status_students.id', '=', 'students.id')
+            ->select(
+                'classrooms.id AS roomId',
+                'classrooms.className',
+                'quizs.language',
+            )
+            ->where('classrooms.id', $roomId)
+            ->get();
+        return response()->json(['success' => true, 'payload' => $classroom]);
     }
 }

@@ -52,12 +52,18 @@ export default {
     },
     async initialize() {
       this.loading(true);
-      await axios.get("api/manage-classroom").then((response) => {
-        if (response.data.success == true) {
-          this.$store.commit("data/SET_CLASSROOMS", response.data.payload);
-          this.loading(false);
-        }
-      });
+      await axios
+        .get("api/classroom", {
+          params: {
+            studentid: this.$store.state.data.user.student_id,
+          },
+        })
+        .then((response) => {
+          if (response.data.success == true) {
+            this.$store.commit("data/SET_CLASSROOMS", response.data.payload);
+            this.loading(false);
+          }
+        });
     },
     async fatchItem(item) {
       this.loading(true);

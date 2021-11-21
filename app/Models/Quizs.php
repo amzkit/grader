@@ -10,14 +10,14 @@ class Quizs extends Model
     use HasFactory;
     protected $fillable = [
         'id',
-        'classroom_id',
-        'work_name',
-        'subject_name',
-        'subject_file_path',
+        'classroom_id ',
+        'language',
         'score',
-        'language_id',
         'send_start_work',
         'send_end_work',
+        'subject_file_path',
+        'subject_name',
+        'work_name',
         'created_at',
         'updated_at'
     ];

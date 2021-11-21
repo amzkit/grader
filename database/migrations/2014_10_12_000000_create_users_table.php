@@ -18,9 +18,13 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->bigInteger('student_id')->unsigned()->nullable();;
             $table->string('password');
+            $table->enum('role', ['admin', 'student', 'ta', 'teacher']);
             $table->rememberToken();
             $table->timestamps();
+
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
         });
     }
 

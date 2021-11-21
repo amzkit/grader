@@ -12,7 +12,14 @@
         </v-list-item-content>
       </v-list-item>
       <v-list dense>
-        <div v-for="(link, i) in admin" :key="i">
+        <div
+          v-for="(link, i) in role === 'student'
+            ? student
+            : role === 'ta'
+            ? ta
+            : admin"
+          :key="i"
+        >
           <v-list-item
             v-if="!link.subLinks"
             :key="i"
@@ -202,6 +209,11 @@ export default {
     await this.initialize();
   },
   computed: {
+    role: {
+      get() {
+        return document.head.querySelector('meta[name="user-role"]').content;
+      },
+    },
     drawer: {
       get() {
         return this.$store.state.top_bar.drawer;

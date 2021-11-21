@@ -5269,6 +5269,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -5360,6 +5367,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }))();
   },
   computed: _objectSpread({
+    role: {
+      get: function get() {
+        return document.head.querySelector('meta[name="user-role"]').content;
+      }
+    },
     drawer: {
       get: function get() {
         return this.$store.state.top_bar.drawer;
@@ -5668,10 +5680,15 @@ var routes = [{
   name: 'app',
   component: function component() {
     var user_role = document.head.querySelector('meta[name="user-role"]').content;
-    console.log(user_role);
 
     switch (user_role) {
       case "admin":
+        return __webpack_require__.e(/*! import() */ "resources_js_pages_home_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/home.vue */ "./resources/js/pages/home.vue"));
+
+      case "student":
+        return __webpack_require__.e(/*! import() */ "resources_js_pages_home_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/home.vue */ "./resources/js/pages/home.vue"));
+
+      case "ta":
         return __webpack_require__.e(/*! import() */ "resources_js_pages_home_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/home.vue */ "./resources/js/pages/home.vue"));
 
       default:
@@ -5741,7 +5758,7 @@ var state = {
   classrooms: [],
   manageStdClassroom: [],
   manageClassroomWork: [],
-  user: null,
+  user: [],
   language: [],
   loading: false,
   classroomExam: []
@@ -43384,130 +43401,137 @@ var render = function() {
           _c(
             "v-list",
             { attrs: { dense: "" } },
-            _vm._l(_vm.admin, function(link, i) {
-              return _c(
-                "div",
-                { key: i },
-                [
-                  !link.subLinks
-                    ? _c(
-                        "v-list-item",
-                        {
-                          key: i,
-                          staticClass: "v-list-item",
-                          attrs: { to: link.to, avatar: "", link: "" }
-                        },
-                        [
-                          _c(
-                            "v-list-item-icon",
-                            [_c("v-icon", [_vm._v(_vm._s(link.icon))])],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-list-item-content",
-                            [
-                              _c("v-list-item-title", [
-                                _vm._v(_vm._s(link.text))
-                              ])
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    : _c(
-                        "v-list-group",
-                        {
-                          key: link.text,
-                          attrs: { "no-action": "" },
-                          scopedSlots: _vm._u(
-                            [
-                              {
-                                key: "activator",
-                                fn: function() {
-                                  return [
-                                    _c(
-                                      "v-list-item-icon",
-                                      [
-                                        _c("v-icon", [
-                                          _vm._v(_vm._s(link.icon))
-                                        ])
-                                      ],
-                                      1
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-list-item-title",
-                                      [
-                                        _c(
-                                          "v-list-item-content",
-                                          [
-                                            _c("v-list-item-title", [
-                                              _vm._v(_vm._s(link.text))
-                                            ])
-                                          ],
-                                          1
-                                        )
-                                      ],
-                                      1
-                                    )
-                                  ]
-                                },
-                                proxy: true
-                              }
-                            ],
-                            null,
-                            true
-                          )
-                        },
-                        [
-                          _vm._v(" "),
-                          _vm._l(link.subLinks, function(sublink) {
-                            return _c(
-                              "v-list-item",
-                              {
-                                key: sublink.text,
-                                attrs: { to: sublink.to, link: "" }
-                              },
+            _vm._l(
+              _vm.role === "student"
+                ? _vm.student
+                : _vm.role === "ta"
+                ? _vm.ta
+                : _vm.admin,
+              function(link, i) {
+                return _c(
+                  "div",
+                  { key: i },
+                  [
+                    !link.subLinks
+                      ? _c(
+                          "v-list-item",
+                          {
+                            key: i,
+                            staticClass: "v-list-item",
+                            attrs: { to: link.to, avatar: "", link: "" }
+                          },
+                          [
+                            _c(
+                              "v-list-item-icon",
+                              [_c("v-icon", [_vm._v(_vm._s(link.icon))])],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-list-item-content",
                               [
-                                _c(
-                                  "v-list",
-                                  { attrs: { dense: "" } },
-                                  [
-                                    _c(
-                                      "v-list-item-title",
-                                      [
-                                        _c(
-                                          "v-list-item-content",
-                                          [
-                                            _c("v-list-item-title", {
-                                              domProps: {
-                                                textContent: _vm._s(
-                                                  sublink.text
-                                                )
-                                              }
-                                            })
-                                          ],
-                                          1
-                                        )
-                                      ],
-                                      1
-                                    )
-                                  ],
-                                  1
-                                )
+                                _c("v-list-item-title", [
+                                  _vm._v(_vm._s(link.text))
+                                ])
                               ],
                               1
                             )
-                          })
-                        ],
-                        2
-                      )
-                ],
-                1
-              )
-            }),
+                          ],
+                          1
+                        )
+                      : _c(
+                          "v-list-group",
+                          {
+                            key: link.text,
+                            attrs: { "no-action": "" },
+                            scopedSlots: _vm._u(
+                              [
+                                {
+                                  key: "activator",
+                                  fn: function() {
+                                    return [
+                                      _c(
+                                        "v-list-item-icon",
+                                        [
+                                          _c("v-icon", [
+                                            _vm._v(_vm._s(link.icon))
+                                          ])
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-list-item-title",
+                                        [
+                                          _c(
+                                            "v-list-item-content",
+                                            [
+                                              _c("v-list-item-title", [
+                                                _vm._v(_vm._s(link.text))
+                                              ])
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    ]
+                                  },
+                                  proxy: true
+                                }
+                              ],
+                              null,
+                              true
+                            )
+                          },
+                          [
+                            _vm._v(" "),
+                            _vm._l(link.subLinks, function(sublink) {
+                              return _c(
+                                "v-list-item",
+                                {
+                                  key: sublink.text,
+                                  attrs: { to: sublink.to, link: "" }
+                                },
+                                [
+                                  _c(
+                                    "v-list",
+                                    { attrs: { dense: "" } },
+                                    [
+                                      _c(
+                                        "v-list-item-title",
+                                        [
+                                          _c(
+                                            "v-list-item-content",
+                                            [
+                                              _c("v-list-item-title", {
+                                                domProps: {
+                                                  textContent: _vm._s(
+                                                    sublink.text
+                                                  )
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            })
+                          ],
+                          2
+                        )
+                  ],
+                  1
+                )
+              }
+            ),
             0
           )
         ],

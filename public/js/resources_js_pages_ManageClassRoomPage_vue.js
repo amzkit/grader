@@ -452,7 +452,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this2.loading(true);
 
                 _context2.next = 3;
-                return axios.get("api/manage-classroom").then(function (response) {
+                return axios.get("api/classroom", {
+                  params: {
+                    studentid: _this2.$store.state.data.user.student_id
+                  }
+                }).then(function (response) {
                   if (response.data.success == true) {
                     _this2.$store.commit("data/SET_CLASSROOMS", response.data.payload);
 

@@ -13,7 +13,7 @@ class CreateManageClassroomsTable extends Migration
      */
     public function up()
     {
-        Schema::create('manage_classrooms', function (Blueprint $table) {
+        Schema::create('classrooms', function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->string('className');
             $table->timestamps();
