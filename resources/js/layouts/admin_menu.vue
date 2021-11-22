@@ -206,7 +206,7 @@ export default {
     };
   },
   async created() {
-    await this.initialize();
+    await this.user();
   },
   computed: {
     role: {
@@ -236,7 +236,7 @@ export default {
     router(url) {
       this.$router.push(url);
     },
-    async initialize() {
+    async user() {
       await axios.get("/api/user").then((response) => {
         if (response.data.success == true) {
           this.$store.commit("data/SET_USER", response.data.user);

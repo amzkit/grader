@@ -13,13 +13,14 @@
           <v-col>
             <v-data-table
               :headers="headers"
-              :items="this.$store.state.data.manageClassroomWork"
+              :items="this.$store.state.data.classroom.payload"
               class="elevation-1"
               @click:row="rowClick"
             >
               <template slot="items" slot-scope="props">
                 <tr @click="rowClicked(props.item)"></tr>
               </template>
+
               <template v-slot:[`item.subject_file_path`]="{ item }">
                 <v-icon small class="mr-2" @click="download(item)">
                   mdi-file-download
@@ -30,6 +31,9 @@
               </template>
               <template v-slot:[`item.send_end_work`]="{ item }">
                 {{ dayjs(item.send_end_work).format("MMMM D, YYYY") }}
+              </template>
+              <template v-slot:[`item.status`]="{ item }">
+                {{ status($store.state.data.classroom.status, item.quizId) }}
               </template>
             </v-data-table>
           </v-col>
@@ -61,7 +65,7 @@ export default {
           value: "work_name",
         },
         { text: "ชื่อเรื่อง", value: "subject_name" },
-        { text: "ภาษา", value: "languagesName" },
+        { text: "ภาษา", value: "language" },
         { text: "คะแนน", value: "score" },
         { text: "ไฟล์", value: "subject_file_path" },
         {
@@ -71,6 +75,10 @@ export default {
         {
           text: "ครบกำหนดส่ง",
           value: "send_end_work",
+        },
+        {
+          text: "สถานะ",
+          value: "status",
         },
       ],
     };
@@ -91,6 +99,13 @@ export default {
         name: "classroom-code",
         params: { id: item.id },
       });
+    },
+    status(item, quizId) {
+      try {
+        return item.find((e) => e.quizId == quizId).status && "send";
+      } catch {
+        return "not send";
+      }
     },
   },
 };

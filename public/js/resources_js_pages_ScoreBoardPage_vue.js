@@ -110,13 +110,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return _this.initialize();
+              return _this.user();
 
             case 2:
               _context.next = 4;
-              return _this.fatchItem(_this.$store.state.data.classrooms[0].id);
+              return _this.initialize();
 
             case 4:
+              _context.next = 6;
+              return _this.fatchItem(_this.$store.state.data.classrooms[0].roomId);
+
+            case 6:
             case "end":
               return _context.stop();
           }
@@ -125,10 +129,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }))();
   },
   methods: {
-    loading: function loading(setLoading) {
-      this.$store.commit("data/SET_LOADING", setLoading);
-    },
-    initialize: function initialize() {
+    user: function user() {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
@@ -136,22 +137,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _this2.loading(true);
-
-                _context2.next = 3;
-                return axios.get("api/classroom", {
-                  params: {
-                    studentid: _this2.$store.state.data.user.student_id
-                  }
-                }).then(function (response) {
+                _context2.next = 2;
+                return axios.get("/api/user").then(function (response) {
                   if (response.data.success == true) {
-                    _this2.$store.commit("data/SET_CLASSROOMS", response.data.payload);
-
-                    _this2.loading(false);
+                    _this2.$store.commit("data/SET_USER", response.data.user);
                   }
                 });
 
-              case 3:
+              case 2:
               case "end":
                 return _context2.stop();
             }
@@ -159,7 +152,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2);
       }))();
     },
-    fatchItem: function fatchItem(item) {
+    loading: function loading(setLoading) {
+      this.$store.commit("data/SET_LOADING", setLoading);
+    },
+    initialize: function initialize() {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
@@ -170,37 +166,69 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this3.loading(true);
 
                 _context3.next = 3;
-                return axios.get("api/manage-classroom/".concat(item)).then(function (response) {
+                return axios.get("api/classroom", {
+                  params: {
+                    studentid: _this3.$store.state.data.user.student_id ? _this3.$store.state.data.user.student_id : "admin"
+                  }
+                }).then(function (response) {
                   if (response.data.success == true) {
-                    _this3.$store.commit("data/SET_CLASSROOM_ID", response.data.payload);
+                    _this3.$store.commit("data/SET_CLASSROOMS", response.data.payload);
+
+                    _this3.loading(false);
                   }
                 });
 
               case 3:
-                _context3.next = 5;
-                return axios.get("api/manage-std-classroom/".concat(item)).then(function (response) {
-                  if (response.data.success == true) {
-                    _this3.$store.commit("data/SET_STD_CLASSROOM", response.data.payload);
-                  }
-                });
-
-              case 5:
-                _context3.next = 7;
-                return axios.get("api/classroom/".concat(item)).then(function (response) {
-                  if (response.data.success == true) {
-                    _this3.$store.commit("data/SET_CLASSROOM_WORK", response.data.payload);
-                  }
-                });
-
-              case 7:
-                _this3.loading(false);
-
-              case 8:
               case "end":
                 return _context3.stop();
             }
           }
         }, _callee3);
+      }))();
+    },
+    fatchItem: function fatchItem(item) {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _this4.loading(true);
+
+                _context4.next = 3;
+                return axios.get("api/classroom/room", {
+                  params: {
+                    studentid: _this4.$store.state.data.user.student_id ? _this4.$store.state.data.user.student_id : "admin",
+                    roomid: item
+                  }
+                }).then(function (response) {
+                  if (response.data.success == true) {
+                    console.log(response.data);
+
+                    _this4.$store.commit("data/SET_CLASSROOM_ID", response.data);
+                  }
+                });
+
+              case 3:
+                // await axios.get(`api/manage-std-classroom/${item}`).then((response) => {
+                //   if (response.data.success == true) {
+                //     this.$store.commit("data/SET_STD_CLASSROOM", response.data.payload);
+                //   }
+                // });
+                // await axios.get(`api/classroom/${item}`).then((response) => {
+                //   if (response.data.success == true) {
+                //     this.$store.commit("data/SET_CLASSROOM_WORK", response.data.payload);
+                //   }
+                // });
+                _this4.loading(false);
+
+              case 4:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
       }))();
     }
   }
@@ -708,7 +736,7 @@ var render = function() {
                               attrs: { link: "" },
                               on: {
                                 click: function($event) {
-                                  return _vm.fatchItem(item.id)
+                                  return _vm.fatchItem(item.roomId)
                                 }
                               }
                             },

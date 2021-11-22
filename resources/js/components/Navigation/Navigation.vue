@@ -8,7 +8,7 @@
               v-for="item in this.$store.state.data.classrooms"
               :key="item.id"
               link
-              @click="fatchItem(item.id)"
+              @click="fatchItem(item.roomId)"
             >
               <v-list-item-content>
                 <v-list-item-title>{{ item.className }}</v-list-item-title>
@@ -43,10 +43,18 @@ export default {
     };
   },
   async created() {
+    await this.user();
     await this.initialize();
-    await this.fatchItem(this.$store.state.data.classrooms[0].id);
+    await this.fatchItem(this.$store.state.data.classrooms[0].roomId);
   },
   methods: {
+    async user() {
+      await axios.get("/api/user").then((response) => {
+        if (response.data.success == true) {
+          this.$store.commit("data/SET_USER", response.data.user);
+        }
+      });
+    },
     loading(setLoading) {
       this.$store.commit("data/SET_LOADING", setLoading);
     },
@@ -55,7 +63,9 @@ export default {
       await axios
         .get("api/classroom", {
           params: {
-            studentid: this.$store.state.data.user.student_id,
+            studentid: this.$store.state.data.user.student_id
+              ? this.$store.state.data.user.student_id
+              : "admin",
           },
         })
         .then((response) => {
@@ -67,21 +77,31 @@ export default {
     },
     async fatchItem(item) {
       this.loading(true);
-      await axios.get(`api/manage-classroom/${item}`).then((response) => {
-        if (response.data.success == true) {
-          this.$store.commit("data/SET_CLASSROOM_ID", response.data.payload);
-        }
-      });
-      await axios.get(`api/manage-std-classroom/${item}`).then((response) => {
-        if (response.data.success == true) {
-          this.$store.commit("data/SET_STD_CLASSROOM", response.data.payload);
-        }
-      });
-      await axios.get(`api/classroom/${item}`).then((response) => {
-        if (response.data.success == true) {
-          this.$store.commit("data/SET_CLASSROOM_WORK", response.data.payload);
-        }
-      });
+      await axios
+        .get(`api/classroom/room`, {
+          params: {
+            studentid: this.$store.state.data.user.student_id
+              ? this.$store.state.data.user.student_id
+              : "admin",
+            roomid: item,
+          },
+        })
+        .then((response) => {
+          if (response.data.success == true) {
+            console.log(response.data);
+            this.$store.commit("data/SET_CLASSROOM_ID", response.data);
+          }
+        });
+      // await axios.get(`api/manage-std-classroom/${item}`).then((response) => {
+      //   if (response.data.success == true) {
+      //     this.$store.commit("data/SET_STD_CLASSROOM", response.data.payload);
+      //   }
+      // });
+      // await axios.get(`api/classroom/${item}`).then((response) => {
+      //   if (response.data.success == true) {
+      //     this.$store.commit("data/SET_CLASSROOM_WORK", response.data.payload);
+      //   }
+      // });
       this.loading(false);
     },
   },

@@ -5356,7 +5356,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return _this.initialize();
+              return _this.user();
 
             case 2:
             case "end":
@@ -5396,7 +5396,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     router: function router(url) {
       this.$router.push(url);
     },
-    initialize: function initialize() {
+    user: function user() {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
