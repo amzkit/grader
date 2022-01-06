@@ -243,22 +243,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       model: 0
     };
   },
-  created: function created() {
-    var _this = this;
+  created: function created() {// await this.initialize();
+    // await this.fatchItem(this.$store.state.data.classrooms[0].id);
 
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.next = 2;
-              return _this.initialize();
-
-            case 2:
-              _context.next = 4;
-              return _this.fatchItem(_this.$store.state.data.classrooms[0].id);
-
-            case 4:
             case "end":
               return _context.stop();
           }
@@ -271,25 +263,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.$store.commit("data/SET_LOADING", setLoading);
     },
     initialize: function initialize() {
-      var _this2 = this;
+      var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _this2.loading(true);
+                _this.loading(true);
 
                 _context2.next = 3;
                 return axios.get("api/classroom", {
                   params: {
-                    studentid: _this2.$store.state.data.user.student_id
+                    studentid: _this.$store.state.data.user.student_id
                   }
                 }).then(function (response) {
                   if (response.data.success == true) {
-                    _this2.$store.commit("data/SET_CLASSROOMS", response.data.payload);
+                    _this.$store.commit("data/SET_CLASSROOMS", response.data.payload);
 
-                    _this2.loading(false);
+                    _this.loading(false);
                   }
                 });
 
@@ -302,19 +294,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     fatchItem: function fatchItem(item) {
-      var _this3 = this;
+      var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                _this3.loading(true);
+                _this2.loading(true);
 
                 _context3.next = 3;
                 return axios.get("api/manage-classroom/".concat(item)).then(function (response) {
                   if (response.data.success == true) {
-                    _this3.$store.commit("data/SET_CLASSROOM_ID", response.data.payload);
+                    _this2.$store.commit("data/SET_CLASSROOM_ID", response.data.payload);
                   }
                 });
 
@@ -322,7 +314,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context3.next = 5;
                 return axios.get("api/manage-std-classroom/".concat(item)).then(function (response) {
                   if (response.data.success == true) {
-                    _this3.$store.commit("data/SET_STD_CLASSROOM", response.data.payload);
+                    _this2.$store.commit("data/SET_STD_CLASSROOM", response.data.payload);
                   }
                 });
 
@@ -330,12 +322,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context3.next = 7;
                 return axios.get("api/classroom/".concat(item)).then(function (response) {
                   if (response.data.success == true) {
-                    _this3.$store.commit("data/SET_CLASSROOM_WORK", response.data.payload);
+                    _this2.$store.commit("data/SET_CLASSROOM_WORK", response.data.payload);
                   }
                 });
 
               case 7:
-                _this3.loading(false);
+                _this2.loading(false);
 
               case 8:
               case "end":

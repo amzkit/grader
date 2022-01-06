@@ -91,20 +91,115 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
 
-      <v-menu left bottom>
+      <v-menu
+        v-model="menu"
+        :close-on-content-click="false"
+        :nudge-width="200"
+        offset-x
+      >
         <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on">
-            <v-icon>mdi-dots-vertical</v-icon>
-          </v-btn>
+          <v-btn color="indigo" dark v-bind="attrs" v-on="on"> Menu </v-btn>
         </template>
 
-        <v-list>
-          <v-list-item link>
-            <v-list-item-title @click="redirect('/logout')"
-              >Logout
-            </v-list-item-title>
-          </v-list-item>
-        </v-list>
+        <v-card>
+          <v-list>
+            <v-list-item>
+              <v-list-item-avatar>
+                <v-img
+                  src="https://randomuser.me/api/portraits/men/78.jpg"
+                ></v-img>
+              </v-list-item-avatar>
+
+              <v-list-item-content>
+                <v-list-item-title>{{
+                  this.$store.state.data.user.name
+                }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+          <v-divider></v-divider>
+          <v-list>
+            <v-list-group no-action>
+              <template v-slot:activator>
+                <v-list-item-title>
+                  <v-list-item-content>
+                    <v-list-item-title>ROLE</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item-title>
+              </template>
+              <v-list-item
+                link
+                v-if="this.$store.state.data.user.role_admin === 1"
+                @click="changeRoleUser('admin')"
+              >
+                <v-list-item-title>
+                  <v-list-item-content>
+                    <v-list-item-title>Admin </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item-title>
+                <v-list-item-icon>
+                  <v-icon>mdi-view-dashboard</v-icon>
+                </v-list-item-icon>
+              </v-list-item>
+              <v-list-item
+                link
+                v-if="this.$store.state.data.user.role_ta === 1"
+                @click="changeRoleUser('ta')"
+              >
+                <v-list-item-title>
+                  <v-list-item-content>
+                    <v-list-item-title>Teacher Assistant </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item-title>
+                <v-list-item-icon>
+                  <v-icon>mdi-view-dashboard</v-icon>
+                </v-list-item-icon>
+              </v-list-item>
+              <v-list-item
+                link
+                v-if="this.$store.state.data.user.std_id !== null"
+                @click="changeRoleUser('student')"
+              >
+                <v-list-item-title>
+                  <v-list-item-content>
+                    <v-list-item-title>Student </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item-title>
+                <v-list-item-icon>
+                  <v-icon>mdi-view-dashboard</v-icon>
+                </v-list-item-icon>
+              </v-list-item>
+              <v-list-item
+                link
+                v-if="this.$store.state.data.user.role_teacher === 1"
+                @click="changeRoleUser('teacher')"
+              >
+                <v-list-item-title>
+                  <v-list-item-content>
+                    <v-list-item-title>Teacher </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item-title>
+                <v-list-item-icon>
+                  <v-icon>mdi-view-dashboard</v-icon>
+                </v-list-item-icon>
+              </v-list-item>
+            </v-list-group>
+            <div class="pa-1">
+              <v-btn color="primary" block @click="redirect('/changepassword')">
+                Change Password
+              </v-btn>
+            </div>
+            <div class="pa-1">
+              <v-btn color="error" block @click="redirect('/logout')">
+                Logout
+              </v-btn>
+            </div>
+          </v-list>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+          </v-card-actions>
+        </v-card>
       </v-menu>
     </v-app-bar>
   </div>
@@ -115,6 +210,10 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
+      fav: true,
+      menu: false,
+      message: false,
+      hints: true,
       admin: [
         {
           to: "/",
@@ -223,7 +322,6 @@ export default {
         this.$store.commit("top_bar/SET_DRAWER", value);
       },
     },
-
     ...mapState({
       title: (state) => state.top_bar.title,
       items: (state) => state.navigation_drawer.items,
@@ -235,6 +333,13 @@ export default {
     },
     router(url) {
       this.$router.push(url);
+    },
+    async changeRoleUser(role) {
+      console.log(role);
+      await axios.put("api/user/" + this.$store.state.data.user.id, {
+        role: role,
+      });
+      this.redirect("/");
     },
     async initialize() {
       await axios.get("/api/user").then((response) => {

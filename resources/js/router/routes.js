@@ -11,10 +11,17 @@ const routes = [
                     return import('../pages/home.vue')
                 case "ta":
                     return import('../pages/home.vue')
+                case "teacher":
+                    return import('../pages/home.vue')
                 default:
                     return import('../pages/guest.vue')
             }
         },
+    },
+    {
+        path: "/changepassword",
+        name: 'changepassword',
+        component: () => import('../auth/ChangePassword.vue'),
     },
     {
         path: "/classroom",

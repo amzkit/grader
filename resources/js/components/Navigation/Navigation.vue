@@ -43,8 +43,8 @@ export default {
     };
   },
   async created() {
-    await this.initialize();
-    await this.fatchItem(this.$store.state.data.classrooms[0].id);
+    // await this.initialize();
+    // await this.fatchItem(this.$store.state.data.classrooms[0].id);
   },
   methods: {
     loading(setLoading) {
