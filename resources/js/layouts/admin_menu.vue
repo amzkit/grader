@@ -17,6 +17,8 @@
             ? student
             : role === 'ta'
             ? ta
+            : role === 'teacher'
+            ? teacher
             : admin"
           :key="i"
         >
@@ -123,7 +125,11 @@
               <template v-slot:activator>
                 <v-list-item-title>
                   <v-list-item-content>
-                    <v-list-item-title>ROLE</v-list-item-title>
+                    <v-list-item-title>
+                      {{
+                        `ROLE (${$store.state.data.user.role.toUpperCase()})`
+                      }}</v-list-item-title
+                    >
                   </v-list-item-content>
                 </v-list-item-title>
               </template>
@@ -277,6 +283,32 @@ export default {
         },
       ],
       ta: [
+        {
+          to: "/",
+          icon: "mdi-home",
+          text: "Home",
+        },
+        {
+          to: "/classroom",
+          icon: "mdi-view-dashboard",
+          text: "Classroom",
+        },
+        {
+          icon: "mdi-pencil",
+          text: "Manage",
+          subLinks: [
+            {
+              text: "Manage Classroom",
+              to: "/manage-classroom",
+            },
+            {
+              text: "Manage Example",
+              to: "/manage-example",
+            },
+          ],
+        },
+      ],
+      teacher: [
         {
           to: "/",
           icon: "mdi-home",

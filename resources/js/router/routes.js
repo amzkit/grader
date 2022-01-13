@@ -19,6 +19,11 @@ const routes = [
         },
     },
     {
+        path: "/add-user",
+        name: 'add-user',
+        component: () => import('../components/Admin/UserImport.vue'),
+    },
+    {
         path: "/changepassword",
         name: 'changepassword',
         component: () => import('../auth/ChangePassword.vue'),

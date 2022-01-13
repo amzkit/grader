@@ -22,5 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::put('user/{user_id}', 'App\Http\Controllers\UserController@update');
-
-Route::post('/changePassword','App\Http\Controllers\Auth\ChangePasswordController@changePassword');
+Route::post('user/file/upload', 'App\Http\Controllers\UserController@import');
+Route::post('/changePassword', 'App\Http\Controllers\Auth\ChangePasswordController@changePassword');

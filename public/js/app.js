@@ -5371,6 +5371,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -5426,6 +5432,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }]
       }],
       ta: [{
+        to: "/",
+        icon: "mdi-home",
+        text: "Home"
+      }, {
+        to: "/classroom",
+        icon: "mdi-view-dashboard",
+        text: "Classroom"
+      }, {
+        icon: "mdi-pencil",
+        text: "Manage",
+        subLinks: [{
+          text: "Manage Classroom",
+          to: "/manage-classroom"
+        }, {
+          text: "Manage Example",
+          to: "/manage-example"
+        }]
+      }],
+      teacher: [{
         to: "/",
         icon: "mdi-home",
         text: "Home"
@@ -5821,6 +5846,12 @@ var routes = [{
       default:
         return __webpack_require__.e(/*! import() */ "resources_js_pages_guest_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/guest.vue */ "./resources/js/pages/guest.vue"));
     }
+  }
+}, {
+  path: "/add-user",
+  name: 'add-user',
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ "resources_js_components_Admin_UserImport_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Admin/UserImport.vue */ "./resources/js/components/Admin/UserImport.vue"));
   }
 }, {
   path: "/changepassword",
@@ -43539,6 +43570,8 @@ var render = function() {
                 ? _vm.student
                 : _vm.role === "ta"
                 ? _vm.ta
+                : _vm.role === "teacher"
+                ? _vm.teacher
                 : _vm.admin,
               function(link, i) {
                 return _c(
@@ -43813,7 +43846,14 @@ var render = function() {
                                         "v-list-item-content",
                                         [
                                           _c("v-list-item-title", [
-                                            _vm._v("ROLE")
+                                            _vm._v(
+                                              "\n                    " +
+                                                _vm._s(
+                                                  "ROLE (" +
+                                                    _vm.$store.state.data.user.role.toUpperCase() +
+                                                    ")"
+                                                )
+                                            )
                                           ])
                                         ],
                                         1
@@ -106293,7 +106333,7 @@ var index = {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_auth_ChangePassword_vue":1,"resources_js_pages_ClassRoomPage_vue":1,"resources_js_components_Classroom_Code_vue":1,"resources_js_pages_ManageClassRoomPage_vue":1,"resources_js_components_Manage_FormManageClassroom_vue":1,"resources_js_components_Manage_ManageExample_vue":1,"resources_js_pages_MyScorePage_vue":1,"resources_js_pages_ScoreBoardPage_vue":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_components_Admin_UserImport_vue":1,"resources_js_auth_ChangePassword_vue":1,"resources_js_pages_ClassRoomPage_vue":1,"resources_js_components_Classroom_Code_vue":1,"resources_js_pages_ManageClassRoomPage_vue":1,"resources_js_components_Manage_FormManageClassroom_vue":1,"resources_js_components_Manage_ManageExample_vue":1,"resources_js_pages_MyScorePage_vue":1,"resources_js_pages_ScoreBoardPage_vue":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};
