@@ -23,6 +23,11 @@ export default {
       };
       let formData = new FormData();
       formData.append("import_file", this.file);
+      // formData.append("course_name", "CS112");
+      formData.append("start_date", "01/01/2020");
+      formData.append("start_time", "01:00");
+      formData.append("end_date", "02/01/2020");
+      formData.append("end_time", "02:00");
       await axios
         .post("/api/user/file/upload", formData, config)
         .then(function (response) {

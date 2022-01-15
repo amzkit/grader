@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Course;
+use App\Models\Classroom;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -48,9 +51,9 @@ class UserController extends Controller
         preg_match_all('/\s\D{2}[0-9]{3}\s/', $file[0], $course);
         $course = (iconv('TIS-620', 'UTF-8//ignore', $course[0][0])); // Only work on b"xxxx" string
         $course = str_replace(' ', '', $course);
+
         preg_match_all('!\d+!', $course, $course_id);
         $course_id = $course_id[0][0];
-
 
         $file_data = (iconv('TIS-620', 'UTF-8//ignore', $file[0]));
 
@@ -87,32 +90,56 @@ class UserController extends Controller
                 'password' => Hash::make($student_id),
             ];
 
-            $user = User::updateOrCreate($userWhere, $userData);
+            $userDB = User::updateOrCreate($userWhere, $userData);
 
-            // $enrolWhere = [
-            //     'user_id'   =>  $user->id,
-            //     'course_id' =>  $course_id,
-            // ];
+            if (isset($request->course_name) && $request->course_name != '') {
+                $courseWhere = [
+                    'course_name' =>  $request->course_name,
+                ];
 
-            // $enrolData = [
-            //     'section'   =>  $section,
-            //     'year'      =>  $year,
-            //     'semester'  =>  $semester
-            // ];
+                $courseData = [
+                    'course_name' =>  $request->course_name,
+                ];
+                $courseDB = Course::updateOrCreate($courseWhere, $courseData);
+            } else {
+                $courseWhere = [
+                    'course_name' => $course,
+                ];
+
+                $courseData = [
+                    'course_name' => $course,
+                ];
+                $courseDB = Course::updateOrCreate($courseWhere, $courseData);
+            }
+
+
+            $classroomWhere = [
+                'user_id'   =>  $userDB->id,
+                'course_id' => $courseDB->id,
+            ];
+
+            $classroomData = [
+                'section'   =>  $section,
+                'year'      =>  $year,
+                'semester'  =>  $semester
+            ];
 
             // //  Extract dates from request
-            // $start_datetime = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $request->start_date.' '.$request->start_time);
-            // $end_datetime = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $request->end_date.' '.$request->end_time);
+            if (
+                isset($request->start_date) && $request->start_date != '' && isset($request->start_time) && $request->start_time != ''
+                && isset($request->end_date) && $request->end_date != '' && isset($request->end_time) && $request->end_time != ''
+            ) {
+                $start_datetime = Carbon::createFromFormat('d/m/Y H:i', $request->start_date . ' ' . $request->start_time);
+                $end_datetime = Carbon::createFromFormat('d/m/Y H:i', $request->end_date . ' ' . $request->end_time);
+            }
 
-            // if(isset($start_datetime) && $start_datetime != ''){
-            //     $enrolData['start_datetime'] = $start_datetime;
-            // }
-            // if(isset($end_datetime) && $end_datetime != ''){
-            //     $enrolData['end_datetime'] = $end_datetime;
-            // }
-            // //dd($enrolWhere, $enrolData);
-            // \App\Enrollment::updateOrCreate($enrolWhere, $enrolData);
-
+            if (isset($start_datetime) && $start_datetime != '') {
+                $classroomData['start_datetime'] = $start_datetime;
+            }
+            if (isset($end_datetime) && $end_datetime != '') {
+                $classroomData['end_datetime'] = $end_datetime;
+            }
+            $classroomDB = Classroom::updateOrCreate($classroomWhere, $classroomData);
         }
 
         // \Alert::toast('<strong>Success</strong> : '.count($students[0]).' users on CS'.$course_id.' ('. $semester_year .') imported')->position($position = 'center')->timerProgressBar()->autoClose(3000);

@@ -52,15 +52,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   }
                 };
                 formData = new FormData();
-                formData.append("import_file", _this.file);
-                _context.next = 6;
+                formData.append("import_file", _this.file); // formData.append("course_name", "CS112");
+
+                formData.append("start_date", "01/01/2020");
+                formData.append("start_time", "01:00");
+                formData.append("end_date", "02/01/2020");
+                formData.append("end_time", "02:00");
+                _context.next = 10;
                 return axios.post("/api/user/file/upload", formData, config).then(function (response) {
                   console.log("Uploaded", response);
                 })["catch"](function (error) {
                   console.log(error);
                 });
 
-              case 6:
+              case 10:
               case "end":
                 return _context.stop();
             }
