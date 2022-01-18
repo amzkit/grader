@@ -87,6 +87,7 @@ class UserController extends Controller
                 'name'  =>  $name,
                 'email' =>  $student_id . "@mju.ac.th",
                 'role_student' =>  1,
+                'role' =>  "student",
                 'password' => Hash::make($student_id),
             ];
 

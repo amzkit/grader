@@ -34,25 +34,13 @@ const routes = [
         component: () => import('../pages/ClassRoomPage.vue'),
     },
     {
-        path: "/classroom/:id",
-        name: 'classroom-code',
-        component: () => import('../components/Classroom/Code.vue'),
-    },
-    {
         path: "/manage-classroom",
         name: 'manage-classroom',
-        component: () => import('../pages/ManageClassRoomPage.vue'),
-
+        component: () => import('../components/Manage/ManageClassroom.vue'),
     },
     {
-        path: "/new-classroom",
-        name: 'new-classroom',
-        component: () => import('../components/Manage/FormManageClassroom'),
-
-    },
-    {
-        path: "/manage-example",
-        name: 'manage-example',
+        path: "/new-example",
+        name: 'new-example',
         component: () => import('../components/Manage/ManageExample'),
 
     },

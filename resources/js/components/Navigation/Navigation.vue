@@ -1,21 +1,15 @@
 <template>
   <div>
+    <Loading :loading="this.loading" />
     <v-navigation-drawer absolute permanent left>
       <v-list dense nav>
         <v-list-item-group v-model="model" mandatory>
-          <div v-if="this.$store.state.data.classrooms[0]">
-            <v-list-item
-              v-for="item in this.$store.state.data.classrooms"
-              :key="item.id"
-              link
-              @click="fatchItem(item.id)"
-            >
-              <v-list-item-content>
-                <v-list-item-title>{{ item.className }}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </div>
-          <div v-else>
+          <div
+            v-if="
+              this.$store.state.data.user.role === 'admin' ||
+              this.$store.state.data.user.role === 'teacher'
+            "
+          >
             <v-list-item-content>
               <v-list-item-title>
                 <v-btn
@@ -28,6 +22,18 @@
               </v-list-item-title>
             </v-list-item-content>
           </div>
+          <div>
+            <v-list-item
+              v-for="item in this.$store.state.data.classrooms"
+              :key="item.id"
+              link
+              @click="onClick(item.courseId)"
+            >
+              <v-list-item-content>
+                <v-list-item-title>{{ item.course_name }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </div>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
@@ -35,54 +41,54 @@
 </template>
 
 <script>
+import Loading from "../Loading/Loading.vue";
 export default {
   name: "Navigation",
+  components: {
+    Loading,
+  },
+  props: {
+    onClick: Function,
+  },
   data: function () {
     return {
       model: 0,
+      loading: false,
     };
   },
   async created() {
-    // await this.initialize();
-    // await this.fatchItem(this.$store.state.data.classrooms[0].id);
+    await this.check_user();
+    await this.classroom();
+    await this.onClick(
+      this.$store.state.data.classrooms.length > 0
+        ? this.$store.state.data.classrooms[0].courseId
+        : 0
+    );
   },
   methods: {
-    loading(setLoading) {
-      this.$store.commit("data/SET_LOADING", setLoading);
+    async check_user() {
+      this.loading = true;
+      await axios.get("/api/user").then((response) => {
+        if (response.data.success == true) {
+          this.$store.commit("data/SET_USER", response.data.user);
+        }
+      });
+      this.loading = false;
     },
-    async initialize() {
-      this.loading(true);
+    async classroom() {
+      this.loading = true;
       await axios
         .get("api/classroom", {
           params: {
-            studentid: this.$store.state.data.user.student_id,
+            studentid: this.$store.state.data.user.username,
           },
         })
         .then((response) => {
           if (response.data.success == true) {
             this.$store.commit("data/SET_CLASSROOMS", response.data.payload);
-            this.loading(false);
           }
         });
-    },
-    async fatchItem(item) {
-      this.loading(true);
-      await axios.get(`api/manage-classroom/${item}`).then((response) => {
-        if (response.data.success == true) {
-          this.$store.commit("data/SET_CLASSROOM_ID", response.data.payload);
-        }
-      });
-      await axios.get(`api/manage-std-classroom/${item}`).then((response) => {
-        if (response.data.success == true) {
-          this.$store.commit("data/SET_STD_CLASSROOM", response.data.payload);
-        }
-      });
-      await axios.get(`api/classroom/${item}`).then((response) => {
-        if (response.data.success == true) {
-          this.$store.commit("data/SET_CLASSROOM_WORK", response.data.payload);
-        }
-      });
-      this.loading(false);
+      this.loading = false;
     },
   },
 };

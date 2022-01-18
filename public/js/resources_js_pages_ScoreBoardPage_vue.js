@@ -52,6 +52,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Loading_Loading_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Loading/Loading.vue */ "./resources/js/components/Loading/Loading.vue");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -94,21 +95,47 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Navigation",
+  components: {
+    Loading: _Loading_Loading_vue__WEBPACK_IMPORTED_MODULE_1__.default
+  },
+  props: {
+    onClick: Function
+  },
   data: function data() {
     return {
-      model: 0
+      model: 0,
+      loading: false
     };
   },
-  created: function created() {// await this.initialize();
-    // await this.fatchItem(this.$store.state.data.classrooms[0].id);
+  created: function created() {
+    var _this = this;
 
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
+              _context.next = 2;
+              return _this.check_user();
+
+            case 2:
+              _context.next = 4;
+              return _this.classroom();
+
+            case 4:
+              _context.next = 6;
+              return _this.onClick(_this.$store.state.data.classrooms.length > 0 ? _this.$store.state.data.classrooms[0].courseId : 0);
+
+            case 6:
             case "end":
               return _context.stop();
           }
@@ -117,33 +144,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }))();
   },
   methods: {
-    loading: function loading(setLoading) {
-      this.$store.commit("data/SET_LOADING", setLoading);
-    },
-    initialize: function initialize() {
-      var _this = this;
+    check_user: function check_user() {
+      var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _this.loading(true);
-
+                _this2.loading = true;
                 _context2.next = 3;
-                return axios.get("api/classroom", {
-                  params: {
-                    studentid: _this.$store.state.data.user.student_id
-                  }
-                }).then(function (response) {
+                return axios.get("/api/user").then(function (response) {
                   if (response.data.success == true) {
-                    _this.$store.commit("data/SET_CLASSROOMS", response.data.payload);
-
-                    _this.loading(false);
+                    _this2.$store.commit("data/SET_USER", response.data.user);
                   }
                 });
 
               case 3:
+                _this2.loading = false;
+
+              case 4:
               case "end":
                 return _context2.stop();
             }
@@ -151,43 +171,30 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2);
       }))();
     },
-    fatchItem: function fatchItem(item) {
-      var _this2 = this;
+    classroom: function classroom() {
+      var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                _this2.loading(true);
-
+                _this3.loading = true;
                 _context3.next = 3;
-                return axios.get("api/manage-classroom/".concat(item)).then(function (response) {
+                return axios.get("api/classroom", {
+                  params: {
+                    studentid: _this3.$store.state.data.user.username
+                  }
+                }).then(function (response) {
                   if (response.data.success == true) {
-                    _this2.$store.commit("data/SET_CLASSROOM_ID", response.data.payload);
+                    _this3.$store.commit("data/SET_CLASSROOMS", response.data.payload);
                   }
                 });
 
               case 3:
-                _context3.next = 5;
-                return axios.get("api/manage-std-classroom/".concat(item)).then(function (response) {
-                  if (response.data.success == true) {
-                    _this2.$store.commit("data/SET_STD_CLASSROOM", response.data.payload);
-                  }
-                });
+                _this3.loading = false;
 
-              case 5:
-                _context3.next = 7;
-                return axios.get("api/classroom/".concat(item)).then(function (response) {
-                  if (response.data.success == true) {
-                    _this2.$store.commit("data/SET_CLASSROOM_WORK", response.data.payload);
-                  }
-                });
-
-              case 7:
-                _this2.loading(false);
-
-              case 8:
+              case 4:
               case "end":
                 return _context3.stop();
             }
@@ -666,6 +673,8 @@ var render = function() {
   return _c(
     "div",
     [
+      _c("Loading", { attrs: { loading: this.loading } }),
+      _vm._v(" "),
       _c(
         "v-navigation-drawer",
         { attrs: { absolute: "", permanent: "", left: "" } },
@@ -687,40 +696,9 @@ var render = function() {
                   }
                 },
                 [
-                  this.$store.state.data.classrooms[0]
+                  this.$store.state.data.user.role === "admin" ||
+                  this.$store.state.data.user.role === "teacher"
                     ? _c(
-                        "div",
-                        _vm._l(this.$store.state.data.classrooms, function(
-                          item
-                        ) {
-                          return _c(
-                            "v-list-item",
-                            {
-                              key: item.id,
-                              attrs: { link: "" },
-                              on: {
-                                click: function($event) {
-                                  return _vm.fatchItem(item.id)
-                                }
-                              }
-                            },
-                            [
-                              _c(
-                                "v-list-item-content",
-                                [
-                                  _c("v-list-item-title", [
-                                    _vm._v(_vm._s(item.className))
-                                  ])
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        }),
-                        1
-                      )
-                    : _c(
                         "div",
                         [
                           _c(
@@ -756,6 +734,38 @@ var render = function() {
                         ],
                         1
                       )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    _vm._l(this.$store.state.data.classrooms, function(item) {
+                      return _c(
+                        "v-list-item",
+                        {
+                          key: item.id,
+                          attrs: { link: "" },
+                          on: {
+                            click: function($event) {
+                              return _vm.onClick(item.courseId)
+                            }
+                          }
+                        },
+                        [
+                          _c(
+                            "v-list-item-content",
+                            [
+                              _c("v-list-item-title", [
+                                _vm._v(_vm._s(item.course_name))
+                              ])
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    }),
+                    1
+                  )
                 ]
               )
             ],

@@ -5397,8 +5397,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         icon: "mdi-pencil",
         text: "Manage",
         subLinks: [{
-          text: "New Classroom",
-          to: "/new-classroom"
+          text: "New Example",
+          to: "/new-example"
         }, {
           text: "Manage Classroom",
           to: "/manage-classroom"
@@ -5414,6 +5414,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         to: "/scoreboard",
         icon: "mdi-view-dashboard",
         text: "Scoreboard"
+      }, {
+        icon: "mdi-pencil",
+        text: "User",
+        subLinks: [{
+          text: "New User",
+          to: "/new-user"
+        }, {
+          text: "Manage User",
+          to: "/manage-user"
+        }]
       }],
       student: [{
         to: "/",
@@ -5866,26 +5876,14 @@ var routes = [{
     return __webpack_require__.e(/*! import() */ "resources_js_pages_ClassRoomPage_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/ClassRoomPage.vue */ "./resources/js/pages/ClassRoomPage.vue"));
   }
 }, {
-  path: "/classroom/:id",
-  name: 'classroom-code',
-  component: function component() {
-    return __webpack_require__.e(/*! import() */ "resources_js_components_Classroom_Code_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Classroom/Code.vue */ "./resources/js/components/Classroom/Code.vue"));
-  }
-}, {
   path: "/manage-classroom",
   name: 'manage-classroom',
   component: function component() {
-    return __webpack_require__.e(/*! import() */ "resources_js_pages_ManageClassRoomPage_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/ManageClassRoomPage.vue */ "./resources/js/pages/ManageClassRoomPage.vue"));
+    return __webpack_require__.e(/*! import() */ "resources_js_components_Manage_ManageClassroom_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Manage/ManageClassroom.vue */ "./resources/js/components/Manage/ManageClassroom.vue"));
   }
 }, {
-  path: "/new-classroom",
-  name: 'new-classroom',
-  component: function component() {
-    return __webpack_require__.e(/*! import() */ "resources_js_components_Manage_FormManageClassroom_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Manage/FormManageClassroom */ "./resources/js/components/Manage/FormManageClassroom.vue"));
-  }
-}, {
-  path: "/manage-example",
-  name: 'manage-example',
+  path: "/new-example",
+  name: 'new-example',
   component: function component() {
     return __webpack_require__.e(/*! import() */ "resources_js_components_Manage_ManageExample_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Manage/ManageExample */ "./resources/js/components/Manage/ManageExample.vue"));
   }
@@ -5918,41 +5916,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 var state = {
-  classroom: {},
   classrooms: [],
-  manageStdClassroom: [],
-  manageClassroomWork: [],
   user: [],
-  language: [],
-  loading: false,
-  classroomExam: []
+  schedule_all: []
 };
 var getters = {};
 var actions = {};
 var mutations = {
-  SET_CLASSROOM_ID: function SET_CLASSROOM_ID(state, newValue) {
-    state.classroom = newValue;
-  },
-  SET_STD_CLASSROOM: function SET_STD_CLASSROOM(state, newValue) {
-    state.manageStdClassroom = newValue;
-  },
-  SET_CLASSROOM_WORK: function SET_CLASSROOM_WORK(state, newValue) {
-    state.manageClassroomWork = newValue;
+  SET_CLASSROOMS: function SET_CLASSROOMS(state, newValue) {
+    state.classrooms = newValue;
   },
   SET_USER: function SET_USER(state, newValue) {
     state.user = newValue;
   },
-  SET_LANGUAGE: function SET_LANGUAGE(state, newValue) {
-    state.language = newValue;
-  },
-  SET_CLASSROOMS: function SET_CLASSROOMS(state, newValue) {
-    state.classrooms = newValue;
-  },
-  SET_LOADING: function SET_LOADING(state, newValue) {
-    state.loading = newValue;
-  },
-  SET_CLASSROOM_EXAM: function SET_CLASSROOM_EXAM(state, newValue) {
-    state.classroomExam = newValue;
+  SET_SCHEDULES_ALL: function SET_SCHEDULES_ALL(state, newValue) {
+    state.schedule_all = newValue;
   }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -106333,7 +106311,7 @@ var index = {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_components_Admin_UserImport_vue":1,"resources_js_auth_ChangePassword_vue":1,"resources_js_pages_ClassRoomPage_vue":1,"resources_js_components_Classroom_Code_vue":1,"resources_js_pages_ManageClassRoomPage_vue":1,"resources_js_components_Manage_FormManageClassroom_vue":1,"resources_js_components_Manage_ManageExample_vue":1,"resources_js_pages_MyScorePage_vue":1,"resources_js_pages_ScoreBoardPage_vue":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_components_Admin_UserImport_vue":1,"resources_js_auth_ChangePassword_vue":1,"resources_js_pages_ClassRoomPage_vue":1,"resources_js_components_Manage_ManageClassroom_vue":1,"resources_js_components_Manage_ManageExample_vue":1,"resources_js_pages_MyScorePage_vue":1,"resources_js_pages_ScoreBoardPage_vue":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};

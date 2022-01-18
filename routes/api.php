@@ -23,4 +23,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::put('user/{user_id}', 'App\Http\Controllers\UserController@update');
 Route::post('user/file/upload', 'App\Http\Controllers\UserController@import');
-Route::post('/changePassword', 'App\Http\Controllers\Auth\ChangePasswordController@changePassword');
+Route::post('changePassword', 'App\Http\Controllers\Auth\ChangePasswordController@changePassword');
+
+Route::post('problem', 'App\Http\Controllers\ProblemsController@insert');
+
+Route::get('classroom', 'App\Http\Controllers\ClassroomController@getClassrooms');
+Route::get('schedule', 'App\Http\Controllers\ScheduleController@getSchedule');
+Route::get('schedule/download/{file_name}', 'App\Http\Controllers\ProblemsController@download');
