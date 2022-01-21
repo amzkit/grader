@@ -86,6 +86,7 @@ export default {
         .then((response) => {
           if (response.data.success == true) {
             this.$store.commit("data/SET_CLASSROOMS", response.data.payload);
+            console.log(response.data.payload);
           }
         });
       this.loading = false;

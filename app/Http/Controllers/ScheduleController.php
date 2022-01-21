@@ -23,6 +23,7 @@ class ScheduleController extends Controller
                 "problems.file",
                 "schedules.start_date",
                 "schedules.end_date",
+                "problems.id as problemsId",
             )
             ->get();
 

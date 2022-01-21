@@ -1,9 +1,9 @@
-(self["webpackChunk"] = self["webpackChunk"] || []).push([["resources_js_pages_ClassRoomPage_vue"],{
+(self["webpackChunk"] = self["webpackChunk"] || []).push([["resources_js_components_Classroom_NewClassroom_vue"],{
 
-/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Classroom/Classroom.vue?vue&type=script&lang=js&":
-/*!**************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Classroom/Classroom.vue?vue&type=script&lang=js& ***!
-  \**************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Classroom/NewClassroom.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Classroom/NewClassroom.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -16,7 +16,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Navigation_Navigation_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Navigation/Navigation.vue */ "./resources/js/components/Navigation/Navigation.vue");
-/* harmony import */ var _Loading_Loading_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Loading/Loading.vue */ "./resources/js/components/Loading/Loading.vue");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -64,97 +63,123 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
-    Navigation: _Navigation_Navigation_vue__WEBPACK_IMPORTED_MODULE_2__.default,
-    Loading: _Loading_Loading_vue__WEBPACK_IMPORTED_MODULE_3__.default
+    Navigation: _Navigation_Navigation_vue__WEBPACK_IMPORTED_MODULE_2__.default
   },
   data: function data() {
     return {
-      loading: false,
-      headers: [{
-        text: "ชื่องาน",
-        align: "start",
-        sortable: true,
-        value: "title"
-      }, {
-        text: "ชื่อเรื่อง",
-        value: "question"
-      }, {
-        text: "ภาษา",
-        value: "language"
-      }, {
-        text: "คะแนน",
-        value: "score"
-      }, {
-        text: "ไฟล์",
-        value: "file"
-      }, {
-        text: "วันที่ส่ง",
-        value: "start_date"
-      }, {
-        text: "ครบกำหนดส่ง",
-        value: "end_date"
-      }]
+      clasroom: "",
+      file: "",
+      start_date: null,
+      end_date: null,
+      menu1: false,
+      menu2: false
     };
   },
-  created: function created() {// await this.check_user();
-
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }))();
+  computed: {
+    computedDateFormattedStartDate: function computedDateFormattedStartDate() {
+      return this.start_date ? dayjs__WEBPACK_IMPORTED_MODULE_1___default()(this.start_date).format("dddd, MMMM D, YYYY") : "";
+    },
+    computedDateFormattedEndDate: function computedDateFormattedEndDate() {
+      return this.end_date ? dayjs__WEBPACK_IMPORTED_MODULE_1___default()(this.end_date).format("dddd, MMMM D, YYYY") : "";
+    }
   },
   methods: {
-    dayjs: (dayjs__WEBPACK_IMPORTED_MODULE_1___default()),
-    download: function download(item) {
-      window.location.href = "api/schedule/download".concat(item.file.replace("problem_file", ""));
+    onFileChange: function onFileChange(e) {
+      this.file = e.target.files[0];
     },
-    fatchItemSchedule: function fatchItemSchedule(id) {
+    formSubmit: function formSubmit(e) {
       var _this = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var config, formData;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context.prev = _context.next) {
               case 0:
-                _this.loading = true;
-
-                if (!id) {
-                  _context2.next = 4;
-                  break;
-                }
-
-                _context2.next = 4;
-                return axios.get("/api/schedule", {
-                  params: {
-                    course_id: id
+                e.preventDefault();
+                console.log(_this.start_date);
+                config = {
+                  headers: {
+                    "content-type": "multipart/form-data"
                   }
-                }).then(function (response) {
-                  if (response.data.success == true) {
-                    _this.$store.commit("data/SET_SCHEDULES_ALL", response.data.payload);
-                  }
+                };
+                formData = new FormData();
+                formData.append("import_file", _this.file);
+                formData.append("course_name", _this.clasroom);
+                formData.append("start_date", _this.start_date);
+                formData.append("end_date", _this.end_date);
+                _context.next = 10;
+                return axios.post("/api/user/file/upload", formData, config).then(function (response) {
+                  console.log("Uploaded", response);
+                })["catch"](function (error) {
+                  console.log(error);
                 });
 
-              case 4:
-                _this.loading = false;
-
-              case 5:
+              case 10:
               case "end":
-                return _context2.stop();
+                return _context.stop();
             }
           }
-        }, _callee2);
+        }, _callee);
       }))();
     }
   }
@@ -371,31 +396,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/ClassRoomPage.vue?vue&type=script&lang=js&":
-/*!***************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/ClassRoomPage.vue?vue&type=script&lang=js& ***!
-  \***************************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _components_Classroom_Classroom__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/Classroom/Classroom */ "./resources/js/components/Classroom/Classroom.vue");
-//
-//
-//
-//
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  components: {
-    Classroom: _components_Classroom_Classroom__WEBPACK_IMPORTED_MODULE_0__.default
-  }
-});
-
-/***/ }),
-
 /***/ "./node_modules/dayjs/dayjs.min.js":
 /*!*****************************************!*\
   !*** ./node_modules/dayjs/dayjs.min.js ***!
@@ -406,10 +406,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/Classroom/Classroom.vue":
-/*!*********************************************************!*\
-  !*** ./resources/js/components/Classroom/Classroom.vue ***!
-  \*********************************************************/
+/***/ "./resources/js/components/Classroom/NewClassroom.vue":
+/*!************************************************************!*\
+  !*** ./resources/js/components/Classroom/NewClassroom.vue ***!
+  \************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -417,8 +417,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _Classroom_vue_vue_type_template_id_6d807fdc___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Classroom.vue?vue&type=template&id=6d807fdc& */ "./resources/js/components/Classroom/Classroom.vue?vue&type=template&id=6d807fdc&");
-/* harmony import */ var _Classroom_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Classroom.vue?vue&type=script&lang=js& */ "./resources/js/components/Classroom/Classroom.vue?vue&type=script&lang=js&");
+/* harmony import */ var _NewClassroom_vue_vue_type_template_id_3bef079a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./NewClassroom.vue?vue&type=template&id=3bef079a& */ "./resources/js/components/Classroom/NewClassroom.vue?vue&type=template&id=3bef079a&");
+/* harmony import */ var _NewClassroom_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NewClassroom.vue?vue&type=script&lang=js& */ "./resources/js/components/Classroom/NewClassroom.vue?vue&type=script&lang=js&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -428,9 +428,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 ;
 var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
-  _Classroom_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
-  _Classroom_vue_vue_type_template_id_6d807fdc___WEBPACK_IMPORTED_MODULE_0__.render,
-  _Classroom_vue_vue_type_template_id_6d807fdc___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  _NewClassroom_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _NewClassroom_vue_vue_type_template_id_3bef079a___WEBPACK_IMPORTED_MODULE_0__.render,
+  _NewClassroom_vue_vue_type_template_id_3bef079a___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
   false,
   null,
   null,
@@ -440,7 +440,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/Classroom/Classroom.vue"
+component.options.__file = "resources/js/components/Classroom/NewClassroom.vue"
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
@@ -523,10 +523,10 @@ component.options.__file = "resources/js/components/Navigation/Navigation.vue"
 
 /***/ }),
 
-/***/ "./resources/js/pages/ClassRoomPage.vue":
-/*!**********************************************!*\
-  !*** ./resources/js/pages/ClassRoomPage.vue ***!
-  \**********************************************/
+/***/ "./resources/js/components/Classroom/NewClassroom.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************!*\
+  !*** ./resources/js/components/Classroom/NewClassroom.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -534,47 +534,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _ClassRoomPage_vue_vue_type_template_id_de78e02e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ClassRoomPage.vue?vue&type=template&id=de78e02e& */ "./resources/js/pages/ClassRoomPage.vue?vue&type=template&id=de78e02e&");
-/* harmony import */ var _ClassRoomPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ClassRoomPage.vue?vue&type=script&lang=js& */ "./resources/js/pages/ClassRoomPage.vue?vue&type=script&lang=js&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-;
-var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
-  _ClassRoomPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
-  _ClassRoomPage_vue_vue_type_template_id_de78e02e___WEBPACK_IMPORTED_MODULE_0__.render,
-  _ClassRoomPage_vue_vue_type_template_id_de78e02e___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/pages/ClassRoomPage.vue"
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
-
-/***/ }),
-
-/***/ "./resources/js/components/Classroom/Classroom.vue?vue&type=script&lang=js&":
-/*!**********************************************************************************!*\
-  !*** ./resources/js/components/Classroom/Classroom.vue?vue&type=script&lang=js& ***!
-  \**********************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Classroom_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Classroom.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Classroom/Classroom.vue?vue&type=script&lang=js&");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Classroom_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_NewClassroom_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./NewClassroom.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Classroom/NewClassroom.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_NewClassroom_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
 
 /***/ }),
 
@@ -610,35 +571,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/pages/ClassRoomPage.vue?vue&type=script&lang=js&":
-/*!***********************************************************************!*\
-  !*** ./resources/js/pages/ClassRoomPage.vue?vue&type=script&lang=js& ***!
-  \***********************************************************************/
+/***/ "./resources/js/components/Classroom/NewClassroom.vue?vue&type=template&id=3bef079a&":
+/*!*******************************************************************************************!*\
+  !*** ./resources/js/components/Classroom/NewClassroom.vue?vue&type=template&id=3bef079a& ***!
+  \*******************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NewClassroom_vue_vue_type_template_id_3bef079a___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NewClassroom_vue_vue_type_template_id_3bef079a___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ClassRoomPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ClassRoomPage.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/ClassRoomPage.vue?vue&type=script&lang=js&");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ClassRoomPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
-
-/***/ }),
-
-/***/ "./resources/js/components/Classroom/Classroom.vue?vue&type=template&id=6d807fdc&":
-/*!****************************************************************************************!*\
-  !*** ./resources/js/components/Classroom/Classroom.vue?vue&type=template&id=6d807fdc& ***!
-  \****************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Classroom_vue_vue_type_template_id_6d807fdc___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Classroom_vue_vue_type_template_id_6d807fdc___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
-/* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Classroom_vue_vue_type_template_id_6d807fdc___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Classroom.vue?vue&type=template&id=6d807fdc& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Classroom/Classroom.vue?vue&type=template&id=6d807fdc&");
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NewClassroom_vue_vue_type_template_id_3bef079a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./NewClassroom.vue?vue&type=template&id=3bef079a& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Classroom/NewClassroom.vue?vue&type=template&id=3bef079a&");
 
 
 /***/ }),
@@ -677,27 +622,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/pages/ClassRoomPage.vue?vue&type=template&id=de78e02e&":
-/*!*****************************************************************************!*\
-  !*** ./resources/js/pages/ClassRoomPage.vue?vue&type=template&id=de78e02e& ***!
-  \*****************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ClassRoomPage_vue_vue_type_template_id_de78e02e___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ClassRoomPage_vue_vue_type_template_id_de78e02e___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
-/* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ClassRoomPage_vue_vue_type_template_id_de78e02e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ClassRoomPage.vue?vue&type=template&id=de78e02e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/ClassRoomPage.vue?vue&type=template&id=de78e02e&");
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Classroom/Classroom.vue?vue&type=template&id=6d807fdc&":
-/*!*******************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Classroom/Classroom.vue?vue&type=template&id=6d807fdc& ***!
-  \*******************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Classroom/NewClassroom.vue?vue&type=template&id=3bef079a&":
+/*!**********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Classroom/NewClassroom.vue?vue&type=template&id=3bef079a& ***!
+  \**********************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -713,84 +641,286 @@ var render = function() {
   return _c(
     "v-row",
     [
-      _c("Loading", { attrs: { loading: this.loading } }),
-      _vm._v(" "),
       _c(
         "v-col",
-        { attrs: { cols: "2" } },
-        [_c("Navigation", { attrs: { onClick: _vm.fatchItemSchedule } })],
-        1
-      ),
-      _vm._v(" "),
-      _c("v-col", { attrs: { cols: "10" } }, [
-        !this.$store.state.data.loading
-          ? _c(
-              "div",
-              [
-                _c(
-                  "v-row",
-                  { attrs: { justify: "center" } },
-                  [
-                    _c(
-                      "v-col",
-                      [
-                        _c("v-data-table", {
-                          staticClass: "elevation-1",
-                          attrs: {
-                            headers: _vm.headers,
-                            items: this.$store.state.data.schedule_all
-                          },
-                          scopedSlots: _vm._u(
+        { attrs: { cols: "12" } },
+        [
+          _c(
+            "v-row",
+            { attrs: { justify: "center" } },
+            [
+              _c("h1", [_vm._v("New Classroom")]),
+              _vm._v(" "),
+              _c(
+                "v-card",
+                [
+                  _c(
+                    "v-container",
+                    { attrs: { fluid: "" } },
+                    [
+                      _c(
+                        "v-row",
+                        { attrs: { align: "center" } },
+                        [
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "4" } },
+                            [_c("v-subheader", [_vm._v(" ชื่อห้องเรียน ")])],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "6" } },
                             [
-                              {
-                                key: "item.file",
-                                fn: function(ref) {
-                                  var item = ref.item
-                                  return [
-                                    item.file
-                                      ? _c(
-                                          "div",
-                                          [
-                                            _c(
-                                              "v-icon",
-                                              {
-                                                staticClass: "mr-2",
-                                                attrs: { small: "" },
-                                                on: {
-                                                  click: function($event) {
-                                                    return _vm.download(item)
-                                                  }
-                                                }
-                                              },
-                                              [
-                                                _vm._v(
-                                                  "\n                  mdi-file-download\n                "
-                                                )
-                                              ]
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      : _vm._e()
-                                  ]
+                              _c("v-text-field", {
+                                attrs: { label: "ชื่อห้องเรียน" },
+                                model: {
+                                  value: _vm.clasroom,
+                                  callback: function($$v) {
+                                    _vm.clasroom = $$v
+                                  },
+                                  expression: "clasroom"
                                 }
-                              }
+                              })
                             ],
-                            null,
-                            true
+                            1
                           )
-                        })
-                      ],
-                      1
-                    )
-                  ],
-                  1
-                )
-              ],
-              1
-            )
-          : _vm._e()
-      ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-row",
+                        { attrs: { align: "center" } },
+                        [
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "4" } },
+                            [
+                              _c("v-subheader", [
+                                _vm._v(" ไฟล์รายชื่อนักศึกษา ")
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "6" } },
+                            [
+                              [
+                                _c("input", {
+                                  staticClass: "form-control",
+                                  attrs: { type: "file" },
+                                  on: { change: _vm.onFileChange }
+                                })
+                              ]
+                            ],
+                            2
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-row",
+                        { attrs: { align: "center" } },
+                        [
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "4" } },
+                            [_c("v-subheader", [_vm._v(" เทอมเริ่มต้น ")])],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "6" } },
+                            [
+                              _c(
+                                "v-menu",
+                                {
+                                  attrs: {
+                                    "close-on-content-click": false,
+                                    "max-width": "290"
+                                  },
+                                  scopedSlots: _vm._u([
+                                    {
+                                      key: "activator",
+                                      fn: function(ref) {
+                                        var on = ref.on
+                                        var attrs = ref.attrs
+                                        return [
+                                          _c(
+                                            "v-text-field",
+                                            _vm._g(
+                                              _vm._b(
+                                                {
+                                                  attrs: {
+                                                    value:
+                                                      _vm.computedDateFormattedStartDate,
+                                                    clearable: "",
+                                                    label: "เทอมเริ่มต้น",
+                                                    readonly: ""
+                                                  },
+                                                  on: {
+                                                    "click:clear": function(
+                                                      $event
+                                                    ) {
+                                                      _vm.start_date = null
+                                                    }
+                                                  }
+                                                },
+                                                "v-text-field",
+                                                attrs,
+                                                false
+                                              ),
+                                              on
+                                            )
+                                          )
+                                        ]
+                                      }
+                                    }
+                                  ]),
+                                  model: {
+                                    value: _vm.menu1,
+                                    callback: function($$v) {
+                                      _vm.menu1 = $$v
+                                    },
+                                    expression: "menu1"
+                                  }
+                                },
+                                [
+                                  _vm._v(" "),
+                                  _c("v-date-picker", {
+                                    on: {
+                                      change: function($event) {
+                                        _vm.menu1 = false
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.start_date,
+                                      callback: function($$v) {
+                                        _vm.start_date = $$v
+                                      },
+                                      expression: "start_date"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "4" } },
+                            [_c("v-subheader", [_vm._v(" เทอมสิ้นสุด ")])],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "6" } },
+                            [
+                              _c(
+                                "v-menu",
+                                {
+                                  attrs: {
+                                    "close-on-content-click": false,
+                                    "max-width": "290"
+                                  },
+                                  scopedSlots: _vm._u([
+                                    {
+                                      key: "activator",
+                                      fn: function(ref) {
+                                        var on = ref.on
+                                        var attrs = ref.attrs
+                                        return [
+                                          _c(
+                                            "v-text-field",
+                                            _vm._g(
+                                              _vm._b(
+                                                {
+                                                  attrs: {
+                                                    value:
+                                                      _vm.computedDateFormattedEndDate,
+                                                    clearable: "",
+                                                    label: "เทอมสิ้นสุด",
+                                                    readonly: ""
+                                                  },
+                                                  on: {
+                                                    "click:clear": function(
+                                                      $event
+                                                    ) {
+                                                      _vm.end_date = null
+                                                    }
+                                                  }
+                                                },
+                                                "v-text-field",
+                                                attrs,
+                                                false
+                                              ),
+                                              on
+                                            )
+                                          )
+                                        ]
+                                      }
+                                    }
+                                  ]),
+                                  model: {
+                                    value: _vm.menu2,
+                                    callback: function($$v) {
+                                      _vm.menu2 = $$v
+                                    },
+                                    expression: "menu2"
+                                  }
+                                },
+                                [
+                                  _vm._v(" "),
+                                  _c("v-date-picker", {
+                                    on: {
+                                      change: function($event) {
+                                        _vm.menu2 = false
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.end_date,
+                                      callback: function($$v) {
+                                        _vm.end_date = $$v
+                                      },
+                                      expression: "end_date"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                { attrs: { color: "primary" }, on: { click: _vm.formSubmit } },
+                [_vm._v(" Save ")]
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
     ],
     1
   )
@@ -973,31 +1103,6 @@ var render = function() {
     ],
     1
   )
-}
-var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/ClassRoomPage.vue?vue&type=template&id=de78e02e&":
-/*!********************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/ClassRoomPage.vue?vue&type=template&id=de78e02e& ***!
-  \********************************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render),
-/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
-/* harmony export */ });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", [_c("Classroom")], 1)
 }
 var staticRenderFns = []
 render._withStripped = true

@@ -19,9 +19,24 @@ const routes = [
         },
     },
     {
-        path: "/add-user",
-        name: 'add-user',
+        path: "/new-user",
+        name: 'new-user',
         component: () => import('../components/Admin/UserImport.vue'),
+    },
+    {
+        path: "/manage-user",
+        name: 'manage-user',
+        component: () => import('../components/Admin/ManageUser.vue'),
+    },
+    {
+        path: "/manage-example",
+        name: 'manage-example',
+        component: () => import('../components/Manage/ManageExample.vue'),
+    },
+    {
+        path: "/new-classroom",
+        name: 'new-classroom',
+        component: () => import('../components/Classroom/NewClassroom.vue'),
     },
     {
         path: "/changepassword",
@@ -41,7 +56,7 @@ const routes = [
     {
         path: "/new-example",
         name: 'new-example',
-        component: () => import('../components/Manage/ManageExample'),
+        component: () => import('../components/Manage/NewExample.vue'),
 
     },
     {

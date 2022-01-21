@@ -188,6 +188,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 }).then(function (response) {
                   if (response.data.success == true) {
                     _this3.$store.commit("data/SET_CLASSROOMS", response.data.payload);
+
+                    console.log(response.data.payload);
                   }
                 });
 

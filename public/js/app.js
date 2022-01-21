@@ -5858,10 +5858,28 @@ var routes = [{
     }
   }
 }, {
-  path: "/add-user",
-  name: 'add-user',
+  path: "/new-user",
+  name: 'new-user',
   component: function component() {
     return __webpack_require__.e(/*! import() */ "resources_js_components_Admin_UserImport_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Admin/UserImport.vue */ "./resources/js/components/Admin/UserImport.vue"));
+  }
+}, {
+  path: "/manage-user",
+  name: 'manage-user',
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ "resources_js_components_Admin_ManageUser_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Admin/ManageUser.vue */ "./resources/js/components/Admin/ManageUser.vue"));
+  }
+}, {
+  path: "/manage-example",
+  name: 'manage-example',
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ "resources_js_components_Manage_ManageExample_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Manage/ManageExample.vue */ "./resources/js/components/Manage/ManageExample.vue"));
+  }
+}, {
+  path: "/new-classroom",
+  name: 'new-classroom',
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ "resources_js_components_Classroom_NewClassroom_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Classroom/NewClassroom.vue */ "./resources/js/components/Classroom/NewClassroom.vue"));
   }
 }, {
   path: "/changepassword",
@@ -5885,7 +5903,7 @@ var routes = [{
   path: "/new-example",
   name: 'new-example',
   component: function component() {
-    return __webpack_require__.e(/*! import() */ "resources_js_components_Manage_ManageExample_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Manage/ManageExample */ "./resources/js/components/Manage/ManageExample.vue"));
+    return __webpack_require__.e(/*! import() */ "resources_js_components_Manage_NewExample_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Manage/NewExample.vue */ "./resources/js/components/Manage/NewExample.vue"));
   }
 }, {
   path: "/my-score",
@@ -106311,7 +106329,7 @@ var index = {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_components_Admin_UserImport_vue":1,"resources_js_auth_ChangePassword_vue":1,"resources_js_pages_ClassRoomPage_vue":1,"resources_js_components_Manage_ManageClassroom_vue":1,"resources_js_components_Manage_ManageExample_vue":1,"resources_js_pages_MyScorePage_vue":1,"resources_js_pages_ScoreBoardPage_vue":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_components_Admin_UserImport_vue":1,"resources_js_components_Admin_ManageUser_vue":1,"resources_js_components_Manage_ManageExample_vue":1,"resources_js_components_Classroom_NewClassroom_vue":1,"resources_js_auth_ChangePassword_vue":1,"resources_js_pages_ClassRoomPage_vue":1,"resources_js_components_Manage_ManageClassroom_vue":1,"resources_js_components_Manage_NewExample_vue":1,"resources_js_pages_MyScorePage_vue":1,"resources_js_pages_ScoreBoardPage_vue":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};

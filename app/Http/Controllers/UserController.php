@@ -20,8 +20,30 @@ class UserController extends Controller
         return $request->input('role');
     }
 
+    public function getUser()
+    {
+        $user = User::get();
+        return response()->json(['success' => true, 'payload' =>  $user]);
+    }
+
     public function import(Request $request)
     {
+
+        if ($request->status === 'teacher') {
+            $userWhere = [
+                'username'  => $request->username
+            ];
+
+            $userData = [
+                'name'  =>  $request->name,
+                'email' =>   $request->email,
+                'role_teacher' =>  1,
+                'role' =>  "teacher",
+                'password' => Hash::make($request->password),
+            ];
+            $userDB = User::updateOrCreate($userWhere, $userData);
+            return response()->json(['success' => true, 'payload' =>  $request]);
+        }
 
 
         $validator = Validator::make(
@@ -125,25 +147,11 @@ class UserController extends Controller
                 'semester'  =>  $semester
             ];
 
-            // //  Extract dates from request
-            if (
-                isset($request->start_date) && $request->start_date != '' && isset($request->start_time) && $request->start_time != ''
-                && isset($request->end_date) && $request->end_date != '' && isset($request->end_time) && $request->end_time != ''
-            ) {
-                $start_datetime = Carbon::createFromFormat('d/m/Y H:i', $request->start_date . ' ' . $request->start_time);
-                $end_datetime = Carbon::createFromFormat('d/m/Y H:i', $request->end_date . ' ' . $request->end_time);
-            }
+            $classroomData['start_datetime'] =  $request->start_date;
+            $classroomData['end_datetime'] =  $request->end_date;
 
-            if (isset($start_datetime) && $start_datetime != '') {
-                $classroomData['start_datetime'] = $start_datetime;
-            }
-            if (isset($end_datetime) && $end_datetime != '') {
-                $classroomData['end_datetime'] = $end_datetime;
-            }
             $classroomDB = Classroom::updateOrCreate($classroomWhere, $classroomData);
         }
-
-        // \Alert::toast('<strong>Success</strong> : '.count($students[0]).' users on CS'.$course_id.' ('. $semester_year .') imported')->position($position = 'center')->timerProgressBar()->autoClose(3000);
-        // return back();
+        return response()->json(['success' => true,]);
     }
 }

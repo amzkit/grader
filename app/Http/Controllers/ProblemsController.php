@@ -30,4 +30,10 @@ class ProblemsController extends Controller
             echo ('File not found.');
         }
     }
+
+    public function getProblem()
+    {
+        $problem = Problem::get();
+        return response()->json(['success' => true, 'payload' =>  $problem]);
+    }
 }
