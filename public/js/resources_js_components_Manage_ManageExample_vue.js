@@ -223,6 +223,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 
 
@@ -313,13 +314,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                console.log(_this2.selectedExamplesId);
-                console.log(_this2.roomId);
-                console.log(_this2.start_date);
-                console.log(_this2.end_date);
+                _context2.next = 2;
+                return axios.post("/api/manage/example", {
+                  exampleId: _this2.selectedExamplesId,
+                  roomId: _this2.roomId,
+                  start_date: _this2.start_date,
+                  end_date: _this2.end_date
+                }).then(function (response) {
+                  console.log(response.data.payload);
+                })["catch"](function (error) {
+                  console.log(error);
+                });
+
+              case 2:
                 _this2.dialog = false;
 
-              case 5:
+              case 3:
               case "end":
                 return _context2.stop();
             }
@@ -357,7 +367,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3);
       }))();
     },
-    fatchItemSchedule: function fatchItemSchedule(id) {
+    fatchItemSchedule: function fatchItemSchedule(item) {
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
@@ -367,16 +377,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _this4.loading = true;
 
-                if (!id) {
+                if (!item) {
                   _context4.next = 5;
                   break;
                 }
 
-                _this4.roomId = id;
+                _this4.roomId = item.courseId;
                 _context4.next = 5;
                 return axios.get("/api/schedule", {
                   params: {
-                    course_id: id
+                    course_id: item.courseId
                   }
                 }).then(function (response) {
                   if (response.data.success == true) {
@@ -499,7 +509,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
             case 4:
               _context.next = 6;
-              return _this.onClick(_this.$store.state.data.classrooms.length > 0 ? _this.$store.state.data.classrooms[0].courseId : 0);
+              return _this.onClick(_this.$store.state.data.classrooms.length > 0 ? _this.$store.state.data.classrooms[0] : 0);
 
             case 6:
             case "end":
@@ -868,6 +878,8 @@ var render = function() {
   return _c(
     "v-row",
     [
+      _c("Loading", { attrs: { loading: this.loading } }),
+      _vm._v(" "),
       _c(
         "v-col",
         { attrs: { cols: "2" } },
@@ -1582,7 +1594,7 @@ var render = function() {
                           attrs: { link: "" },
                           on: {
                             click: function($event) {
-                              return _vm.onClick(item.courseId)
+                              return _vm.onClick(item)
                             }
                           }
                         },

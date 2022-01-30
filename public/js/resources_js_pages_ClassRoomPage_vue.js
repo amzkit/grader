@@ -120,7 +120,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     download: function download(item) {
       window.location.href = "api/schedule/download".concat(item.file.replace("problem_file", ""));
     },
-    fatchItemSchedule: function fatchItemSchedule(id) {
+    fatchItemSchedule: function fatchItemSchedule(item) {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
@@ -130,7 +130,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _this.loading = true;
 
-                if (!id) {
+                if (!item) {
                   _context2.next = 4;
                   break;
                 }
@@ -138,7 +138,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context2.next = 4;
                 return axios.get("/api/schedule", {
                   params: {
-                    course_id: id
+                    course_id: item.courseId
                   }
                 }).then(function (response) {
                   if (response.data.success == true) {
@@ -295,7 +295,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
             case 4:
               _context.next = 6;
-              return _this.onClick(_this.$store.state.data.classrooms.length > 0 ? _this.$store.state.data.classrooms[0].courseId : 0);
+              return _this.onClick(_this.$store.state.data.classrooms.length > 0 ? _this.$store.state.data.classrooms[0] : 0);
 
             case 6:
             case "end":
@@ -774,6 +774,40 @@ var render = function() {
                                       : _vm._e()
                                   ]
                                 }
+                              },
+                              {
+                                key: "item.send_start_work",
+                                fn: function(ref) {
+                                  var item = ref.item
+                                  return [
+                                    _vm._v(
+                                      "\n              " +
+                                        _vm._s(
+                                          _vm
+                                            .dayjs(item.send_start_work)
+                                            .format("MMMM D, YYYY")
+                                        ) +
+                                        "\n            "
+                                    )
+                                  ]
+                                }
+                              },
+                              {
+                                key: "item.send_end_work",
+                                fn: function(ref) {
+                                  var item = ref.item
+                                  return [
+                                    _vm._v(
+                                      "\n              " +
+                                        _vm._s(
+                                          _vm
+                                            .dayjs(item.send_end_work)
+                                            .format("MMMM D, YYYY")
+                                        ) +
+                                        "\n            "
+                                    )
+                                  ]
+                                }
                               }
                             ],
                             null,
@@ -942,7 +976,7 @@ var render = function() {
                           attrs: { link: "" },
                           on: {
                             click: function($event) {
-                              return _vm.onClick(item.courseId)
+                              return _vm.onClick(item)
                             }
                           }
                         },

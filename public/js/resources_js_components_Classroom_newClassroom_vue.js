@@ -16,6 +16,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Navigation_Navigation_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Navigation/Navigation.vue */ "./resources/js/components/Navigation/Navigation.vue");
+/* harmony import */ var _Loading_Loading_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Loading/Loading.vue */ "./resources/js/components/Loading/Loading.vue");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -118,11 +119,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
-    Navigation: _Navigation_Navigation_vue__WEBPACK_IMPORTED_MODULE_2__.default
+    Navigation: _Navigation_Navigation_vue__WEBPACK_IMPORTED_MODULE_2__.default,
+    Loading: _Loading_Loading_vue__WEBPACK_IMPORTED_MODULE_3__.default
   },
   data: function data() {
     return {
@@ -131,7 +135,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       start_date: null,
       end_date: null,
       menu1: false,
-      menu2: false
+      menu2: false,
+      loading: false
     };
   },
   computed: {
@@ -155,8 +160,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
+                _this.loading = true;
                 e.preventDefault();
-                console.log(_this.start_date);
                 config = {
                   headers: {
                     "content-type": "multipart/form-data"
@@ -168,13 +173,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 formData.append("start_date", _this.start_date);
                 formData.append("end_date", _this.end_date);
                 _context.next = 10;
-                return axios.post("/api/user/file/upload", formData, config).then(function (response) {
-                  console.log("Uploaded", response);
+                return axios.post("/api/user/file/upload", formData, config).then(function () {
+                  window.location.href = "/manage-classroom";
+                  this.loading = false;
                 })["catch"](function (error) {
                   console.log(error);
                 });
 
               case 10:
+                _this.loading = false;
+
+              case 11:
               case "end":
                 return _context.stop();
             }
@@ -320,7 +329,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
             case 4:
               _context.next = 6;
-              return _this.onClick(_this.$store.state.data.classrooms.length > 0 ? _this.$store.state.data.classrooms[0].courseId : 0);
+              return _this.onClick(_this.$store.state.data.classrooms.length > 0 ? _this.$store.state.data.classrooms[0] : 0);
 
             case 6:
             case "end":
@@ -641,6 +650,8 @@ var render = function() {
   return _c(
     "v-row",
     [
+      _c("Loading", { attrs: { loading: this.loading } }),
+      _vm._v(" "),
       _c(
         "v-col",
         { attrs: { cols: "12" } },
@@ -1072,7 +1083,7 @@ var render = function() {
                           attrs: { link: "" },
                           on: {
                             click: function($event) {
-                              return _vm.onClick(item.courseId)
+                              return _vm.onClick(item)
                             }
                           }
                         },

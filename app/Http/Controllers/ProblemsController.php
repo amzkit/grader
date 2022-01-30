@@ -36,4 +36,6 @@ class ProblemsController extends Controller
         $problem = Problem::get();
         return response()->json(['success' => true, 'payload' =>  $problem]);
     }
+
+    
 }

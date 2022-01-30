@@ -24,12 +24,12 @@
                   </v-icon>
                 </div>
               </template>
-              <!-- <template v-slot:[`item.send_start_work`]="{ item }">
+              <template v-slot:[`item.send_start_work`]="{ item }">
                 {{ dayjs(item.send_start_work).format("MMMM D, YYYY") }}
               </template>
               <template v-slot:[`item.send_end_work`]="{ item }">
                 {{ dayjs(item.send_end_work).format("MMMM D, YYYY") }}
-              </template> -->
+              </template>
             </v-data-table>
           </v-col>
         </v-row>
@@ -84,13 +84,13 @@ export default {
         ""
       )}`;
     },
-    async fatchItemSchedule(id) {
+    async fatchItemSchedule(item) {
       this.loading = true;
-      if (id) {
+      if (item) {
         await axios
           .get("/api/schedule", {
             params: {
-              course_id: id,
+              course_id: item.courseId,
             },
           })
           .then((response) => {

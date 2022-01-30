@@ -1,5 +1,6 @@
 <template>
   <v-row>
+    <Loading :loading="this.loading" />
     <v-col cols="2">
       <Navigation :onClick="fatchItemSchedule" />
     </v-col>
@@ -231,10 +232,19 @@ export default {
       )}`;
     },
     async postExample() {
-      console.log(this.selectedExamplesId);
-      console.log(this.roomId);
-      console.log(this.start_date);
-      console.log(this.end_date);
+      await axios
+        .post("/api/manage/example", {
+          exampleId: this.selectedExamplesId,
+          roomId: this.roomId,
+          start_date: this.start_date,
+          end_date: this.end_date,
+        })
+        .then(function (response) {
+          console.log(response.data.payload);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
       this.dialog = false;
     },
     async getProblems() {
@@ -248,14 +258,14 @@ export default {
       this.problemList = problems[0];
       this.loading = false;
     },
-    async fatchItemSchedule(id) {
+    async fatchItemSchedule(item) {
       this.loading = true;
-      if (id) {
-        this.roomId = id;
+      if (item) {
+        this.roomId = item.courseId;
         await axios
           .get("/api/schedule", {
             params: {
-              course_id: id,
+              course_id: item.courseId,
             },
           })
           .then((response) => {
@@ -279,4 +289,5 @@ export default {
   },
 };
 </script>
+
 

@@ -1,5 +1,6 @@
 <template>
   <v-row>
+    <Loading :loading="this.loading" />
     <v-col cols="12">
       <v-row justify="center">
         <h1>New Classroom</h1>
@@ -97,9 +98,11 @@
 <script>
 import dayjs from "dayjs";
 import Navigation from "../Navigation/Navigation.vue";
+import Loading from "../Loading/Loading.vue";
 export default {
   components: {
     Navigation,
+    Loading,
   },
   data: function () {
     return {
@@ -109,6 +112,7 @@ export default {
       end_date: null,
       menu1: false,
       menu2: false,
+      loading: false,
     };
   },
   computed: {
@@ -128,8 +132,9 @@ export default {
       this.file = e.target.files[0];
     },
     async formSubmit(e) {
+      this.loading = true;
       e.preventDefault();
-      console.log(this.start_date);
+
       const config = {
         headers: { "content-type": "multipart/form-data" },
       };
@@ -142,12 +147,14 @@ export default {
 
       await axios
         .post("/api/user/file/upload", formData, config)
-        .then(function (response) {
-          console.log("Uploaded", response);
+        .then(function () {
+          window.location.href = "/manage-classroom";
+          this.loading = false;
         })
         .catch(function (error) {
           console.log(error);
         });
+      this.loading = false;
     },
   },
 };

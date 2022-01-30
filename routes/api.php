@@ -33,3 +33,9 @@ Route::get('schedule', 'App\Http\Controllers\ScheduleController@getSchedule');
 Route::get('schedule/download/{file_name}', 'App\Http\Controllers\ProblemsController@download');
 
 Route::get('manage/user', 'App\Http\Controllers\UserController@getUser');
+
+Route::get('manage/classroom', 'App\Http\Controllers\ClassroomController@getManageClassrooms');
+Route::put('manage/classroom/{id}', 'App\Http\Controllers\ClassroomController@updateClassrooms');
+Route::delete('manage/classroom/{stdId}/{courseId}', 'App\Http\Controllers\ClassroomController@delClassrooms');
+
+Route::post('manage/example', 'App\Http\Controllers\ScheduleController@insertManageExample');

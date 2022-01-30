@@ -29,4 +29,25 @@ class ScheduleController extends Controller
 
         return response()->json(['success' => true, 'payload' =>  $schedule]);
     }
+
+    public function insertManageExample(Request $request)
+    {
+        foreach ($request->exampleId as $exampleId) {
+
+            $sheduleWhere = [
+                'course_id'  => $request->roomId,
+                'problem_id' =>  $exampleId
+            ];
+
+            $sheduleData = [
+                'start_date'  =>  $request->start_date,
+                'end_date'  =>  $request->end_date,
+                'problem_id' =>  $exampleId
+            ];
+
+            $shedule = Schedule::updateOrCreate($sheduleWhere, $sheduleData);
+
+        }
+        return response()->json(['success' => true, 'payload' => $shedule]);
+    }
 }

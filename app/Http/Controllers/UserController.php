@@ -144,6 +144,7 @@ class UserController extends Controller
             $classroomData = [
                 'section'   =>  $section,
                 'year'      =>  $year,
+                "role"      =>  "student",
                 'semester'  =>  $semester
             ];
 

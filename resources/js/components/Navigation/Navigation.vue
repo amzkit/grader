@@ -27,7 +27,7 @@
               v-for="item in this.$store.state.data.classrooms"
               :key="item.id"
               link
-              @click="onClick(item.courseId)"
+              @click="onClick(item)"
             >
               <v-list-item-content>
                 <v-list-item-title>{{ item.course_name }}</v-list-item-title>
@@ -61,7 +61,7 @@ export default {
     await this.classroom();
     await this.onClick(
       this.$store.state.data.classrooms.length > 0
-        ? this.$store.state.data.classrooms[0].courseId
+        ? this.$store.state.data.classrooms[0]
         : 0
     );
   },

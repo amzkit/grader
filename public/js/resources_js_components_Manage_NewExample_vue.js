@@ -299,7 +299,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
             case 4:
               _context.next = 6;
-              return _this.onClick(_this.$store.state.data.classrooms.length > 0 ? _this.$store.state.data.classrooms[0].courseId : 0);
+              return _this.onClick(_this.$store.state.data.classrooms.length > 0 ? _this.$store.state.data.classrooms[0] : 0);
 
             case 6:
             case "end":
@@ -944,7 +944,7 @@ var render = function() {
                           attrs: { link: "" },
                           on: {
                             click: function($event) {
-                              return _vm.onClick(item.courseId)
+                              return _vm.onClick(item)
                             }
                           }
                         },
