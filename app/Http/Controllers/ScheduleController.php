@@ -16,6 +16,7 @@ class ScheduleController extends Controller
         $schedule = Schedule::where('course_id', '=',  $course_id)
             ->leftJoin("problems", "problems.id", "=", "schedules.problem_id")
             ->select(
+                "schedules.id",
                 "problems.title",
                 "problems.question",
                 "problems.score",
@@ -46,8 +47,21 @@ class ScheduleController extends Controller
             ];
 
             $shedule = Schedule::updateOrCreate($sheduleWhere, $sheduleData);
-
         }
         return response()->json(['success' => true, 'payload' => $shedule]);
+    }
+
+    public function deleteManageExample($id)
+    {
+        if (Schedule::where('id', $id)->exists()) {
+            Schedule::find($id)->delete();
+            return response()->json([
+                "message" => "records delete successfully"
+            ], 200);
+        } else {
+            return response()->json([
+                "message" => "not found"
+            ], 404);
+        }
     }
 }

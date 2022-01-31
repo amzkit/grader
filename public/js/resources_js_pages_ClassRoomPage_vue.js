@@ -120,6 +120,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     download: function download(item) {
       window.location.href = "api/schedule/download".concat(item.file.replace("problem_file", ""));
     },
+    invalidDate: function invalidDate(item) {
+      return item ? dayjs__WEBPACK_IMPORTED_MODULE_1___default()(item).format("MMMM D, YYYY") : "-";
+    },
     fatchItemSchedule: function fatchItemSchedule(item) {
       var _this = this;
 
@@ -221,6 +224,27 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -776,16 +800,14 @@ var render = function() {
                                 }
                               },
                               {
-                                key: "item.send_start_work",
+                                key: "item.start_date",
                                 fn: function(ref) {
                                   var item = ref.item
                                   return [
                                     _vm._v(
                                       "\n              " +
                                         _vm._s(
-                                          _vm
-                                            .dayjs(item.send_start_work)
-                                            .format("MMMM D, YYYY")
+                                          _vm.invalidDate(item.start_date)
                                         ) +
                                         "\n            "
                                     )
@@ -793,17 +815,13 @@ var render = function() {
                                 }
                               },
                               {
-                                key: "item.send_end_work",
+                                key: "item.end_date",
                                 fn: function(ref) {
                                   var item = ref.item
                                   return [
                                     _vm._v(
                                       "\n              " +
-                                        _vm._s(
-                                          _vm
-                                            .dayjs(item.send_end_work)
-                                            .format("MMMM D, YYYY")
-                                        ) +
+                                        _vm._s(_vm.invalidDate(item.end_date)) +
                                         "\n            "
                                     )
                                   ]
@@ -897,6 +915,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
 var render = function() {
+  var this$1 = this
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -966,36 +985,81 @@ var render = function() {
                       )
                     : _vm._e(),
                   _vm._v(" "),
-                  _c(
-                    "div",
-                    _vm._l(this.$store.state.data.classrooms, function(item) {
-                      return _c(
-                        "v-list-item",
-                        {
-                          key: item.id,
-                          attrs: { link: "" },
-                          on: {
-                            click: function($event) {
-                              return _vm.onClick(item)
+                  _c("div", [
+                    this.$store.state.data.user.role === "admin" ||
+                    this.$store.state.data.user.role === "teacher"
+                      ? _c(
+                          "div",
+                          _vm._l(this.$store.state.data.classrooms, function(
+                            item
+                          ) {
+                            return _c(
+                              "v-list-item",
+                              {
+                                key: item.id,
+                                attrs: { link: "" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.onClick(item)
+                                  }
+                                }
+                              },
+                              [
+                                _c(
+                                  "v-list-item-content",
+                                  [
+                                    _c("v-list-item-title", [
+                                      _vm._v(_vm._s(item.course_name))
+                                    ])
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          }),
+                          1
+                        )
+                      : _c(
+                          "div",
+                          _vm._l(
+                            this.$store.state.data.classrooms.filter(function(
+                              e
+                            ) {
+                              return (
+                                e.role === this$1.$store.state.data.user.role
+                              )
+                            }),
+                            function(item) {
+                              return _c(
+                                "v-list-item",
+                                {
+                                  key: item.id,
+                                  attrs: { link: "" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.onClick(item)
+                                    }
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "v-list-item-content",
+                                    [
+                                      _c("v-list-item-title", [
+                                        _vm._v(_vm._s(item.course_name))
+                                      ])
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
                             }
-                          }
-                        },
-                        [
-                          _c(
-                            "v-list-item-content",
-                            [
-                              _c("v-list-item-title", [
-                                _vm._v(_vm._s(item.course_name))
-                              ])
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    }),
-                    1
-                  )
+                          ),
+                          1
+                        )
+                  ])
                 ]
               )
             ],

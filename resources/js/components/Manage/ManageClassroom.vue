@@ -18,7 +18,7 @@
                 <v-toolbar-title>Manage Classroom</v-toolbar-title>
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <v-spacer></v-spacer>
-                <v-dialog v-model="dialog" max-width="500px">
+                <v-dialog v-model="dialog" max-width="650px">
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn
                       color="primary"
@@ -31,15 +31,26 @@
                     </v-btn>
                   </template>
                   <v-card>
-                    <v-card-title>
-                      <span class="text-h5">{{ formTitle }}</span>
-                    </v-card-title>
-
-                    <v-card-text>
-                      <v-container>
-                        <v-row>
-                          <v-col cols="12">
-                            <div v-if="editedIndex === -1">
+                    <v-toolbar flat color="primary" dark>
+                      <v-toolbar-title>{{ formTitle }}</v-toolbar-title>
+                    </v-toolbar>
+                    <div v-if="editedIndex === -1">
+                      <v-tabs vertical>
+                        <v-tab>
+                          <v-icon left> mdi-account </v-icon>
+                          Import File
+                        </v-tab>
+                        <v-tab>
+                          <v-icon left> mdi-lock </v-icon>
+                          Add Student
+                        </v-tab>
+                        <v-tab>
+                          <v-icon left> mdi-lock </v-icon>
+                          Add Teacher
+                        </v-tab>
+                        <v-tab-item>
+                          <v-card flat>
+                            <v-card-text>
                               <template>
                                 <input
                                   type="file"
@@ -90,33 +101,109 @@
                                   @change="menu2 = false"
                                 ></v-date-picker>
                               </v-menu>
-                            </div>
-                            <div v-else>
-                              <v-text-field
-                                v-model="editedItem.name"
-                                label="Name"
-                                disabled
-                              ></v-text-field>
-                              <v-text-field
-                                v-model="editedItem.section"
-                                label="Section"
-                              ></v-text-field>
-                              <v-text-field
-                                v-model="editedItem.semester"
-                                label="Semester"
-                              ></v-text-field>
-                              <v-select
-                                v-model="editedItem.role"
-                                :items="['student', 'ta']"
-                                single-line
-                                auto
-                                label="Role"
-                              ></v-select>
-                            </div>
-                          </v-col>
-                        </v-row>
-                      </v-container>
-                    </v-card-text>
+                            </v-card-text>
+                          </v-card>
+                        </v-tab-item>
+                        <v-tab-item>
+                          <v-card flat>
+                            <v-card-text>
+                              <v-col cols="12">
+                                <v-combobox
+                                  v-model="selectUser"
+                                  :items="userItems"
+                                  label="Name"
+                                  item-text="name"
+                                ></v-combobox>
+                                <div
+                                  v-if="
+                                    !userItems.find(
+                                      (e) => e.id === selectUser.id
+                                    )
+                                  "
+                                >
+                                  <v-text-field
+                                    v-model="addItem.student_id"
+                                    label="Student ID"
+                                    type="number"
+                                  ></v-text-field>
+                                </div>
+
+                                <v-text-field
+                                  v-model="editedItem.year"
+                                  label="Year"
+                                  type="number"
+                                ></v-text-field>
+
+                                <v-text-field
+                                  v-model="editedItem.section"
+                                  label="Section"
+                                ></v-text-field>
+                                <v-text-field
+                                  v-model="editedItem.semester"
+                                  label="Semester"
+                                ></v-text-field>
+                                <v-select
+                                  v-model="editedItem.role"
+                                  :items="['student', 'ta']"
+                                  single-line
+                                  auto
+                                  label="Role"
+                                ></v-select>
+                              </v-col>
+                            </v-card-text>
+                          </v-card>
+                        </v-tab-item>
+                        <v-tab-item>
+                          <v-card flat>
+                            <v-card-text>
+                              <v-col cols="12">
+                                <v-combobox
+                                  v-model="selectUser"
+                                  :items="
+                                    userItems.filter((e) => e.role_teacher)
+                                  "
+                                  label="Name"
+                                  item-text="name"
+                                ></v-combobox>
+                              </v-col>
+                            </v-card-text>
+                          </v-card>
+                        </v-tab-item>
+                      </v-tabs>
+                    </div>
+                    <div v-else>
+                      <v-card-text>
+                        <v-container>
+                          <v-row>
+                            <v-card-text>
+                              <v-col cols="12">
+                                <v-text-field
+                                  v-model="editedItem.name"
+                                  label="Name"
+                                  disabled
+                                ></v-text-field>
+                                <v-text-field
+                                  v-model="editedItem.section"
+                                  label="Section"
+                                ></v-text-field>
+                                <v-text-field
+                                  v-model="editedItem.semester"
+                                  label="Semester"
+                                ></v-text-field>
+                                <v-select
+                                  v-model="editedItem.role"
+                                  :items="['student', 'ta']"
+                                  single-line
+                                  auto
+                                  label="Role"
+                                ></v-select>
+                              </v-col>
+                            </v-card-text>
+                          </v-row>
+                        </v-container>
+                      </v-card-text>
+                    </div>
+
                     <v-card-actions>
                       <v-spacer></v-spacer>
                       <v-btn color="blue darken-1" text @click="close">
@@ -150,6 +237,12 @@
                 </v-dialog>
               </v-toolbar>
             </template>
+            <template v-slot:[`item.start_datetime`]="{ item }">
+              {{ invalidDate(item.start_datetime) }}
+            </template>
+            <template v-slot:[`item.end_datetime`]="{ item }">
+              {{ invalidDate(item.end_datetime) }}
+            </template>
             <template v-slot:[`item.action`]="{ item }">
               <v-icon small class="mr-2" @click="editItem(item)">
                 mdi-pencil
@@ -172,11 +265,17 @@ export default {
   name: "ManageClassroom",
   components: { DeleteDialog, Loading, Navigation },
   data: () => ({
+    selectUser: "",
+    addItem: {
+      student_id: "",
+    },
+    userItems: [],
     loading: false,
     search: "",
     file: "",
     dialog: false,
     classroomName: "",
+    classroomId: 0,
     headers: [
       {
         text: "Name",
@@ -212,8 +311,8 @@ export default {
       end_datetime: "",
       role: "",
     },
-    start_date: null,
-    end_date: null,
+    start_date: "",
+    end_date: "",
     menu1: false,
     menu2: false,
   }),
@@ -243,7 +342,29 @@ export default {
     },
   },
 
+  created() {
+    this.getUser();
+  },
+
   methods: {
+    dayjs,
+    invalidDate(item) {
+      return item ? dayjs(item).format("MMMM D, YYYY") : "-";
+    },
+    async getUser() {
+      var userItems = [];
+      await axios
+        .get("/api/manage/user")
+        .then(function (response) {
+          if (response.data.success === true) {
+            userItems = response.data.payload;
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      this.userItems = userItems;
+    },
     onFileChange(e) {
       this.file = e.target.files[0];
     },
@@ -263,12 +384,7 @@ export default {
       this.desserts.splice(this.editedIndex, 1);
       this.closeDelete();
       this.loading = true;
-      await axios.delete(
-        "/api/manage/classroom/" +
-          this.editedItem.user_id +
-          "/" +
-          this.editedItem.course_id
-      );
+      await axios.delete("/api/manage/classroom/" + this.editedItem.id);
       this.loading = false;
     },
 
@@ -293,8 +409,7 @@ export default {
       if (this.editedIndex > -1) {
         this.loading = true;
         Object.assign(this.desserts[this.editedIndex], this.editedItem);
-        await axios.put("/api/manage/classroom/" + this.editedItem.user_id, {
-          course_id: this.editedItem.course_id,
+        await axios.put("/api/manage/classroom/" + this.editedItem.id, {
           role: this.editedItem.role,
         });
         this.loading = false;
@@ -304,9 +419,29 @@ export default {
           headers: { "content-type": "multipart/form-data" },
         };
         let formData = new FormData();
-
+        if (
+          this.editedItem.role === "ta" ||
+          this.editedItem.role === "student"
+        ) {
+          this.addItem.student_id =
+            this.userItems.find((e) => e.id === this.selectUser.id)?.username ??
+            this.addItem.student_id;
+          formData.append("name", this.selectUser);
+          formData.append("student_id", this.addItem.student_id);
+          formData.append("year", this.editedItem.year);
+          formData.append("section", this.editedItem.section);
+          formData.append("semester", this.editedItem.semester);
+          formData.append("role", this.editedItem.role);
+        } else if (this.editedItem.role === "teacher") {
+          formData.append(
+            "user_id",
+            this.userItems.find((e) => e.id === this.selectUser.id).id
+          );
+          formData.append("role", "teacher");
+        }
         formData.append("import_file", this.file);
         formData.append("course_name", this.classroomName);
+        formData.append("course_id", this.classroomId);
         formData.append("start_date", this.start_date);
         formData.append("end_date", this.end_date);
 
@@ -325,6 +460,7 @@ export default {
     async fatchItemClassroom(item) {
       this.loading = true;
       this.classroomName = item.course_name;
+      this.classroomId = item.courseId;
       if (item) {
         await axios
           .get("/api/manage/classroom", {

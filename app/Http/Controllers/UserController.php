@@ -20,6 +20,13 @@ class UserController extends Controller
         return $request->input('role');
     }
 
+    public function editUser(Request $request, $id)
+    {
+        $user = User::find($id);
+        // $user->save();
+        return $user;
+    }
+
     public function getUser()
     {
         $user = User::get();
@@ -29,22 +36,82 @@ class UserController extends Controller
     public function import(Request $request)
     {
 
-        if ($request->status === 'teacher') {
-            $userWhere = [
-                'username'  => $request->username
-            ];
+        if ($request->role === 'teacher') {
 
-            $userData = [
-                'name'  =>  $request->name,
-                'email' =>   $request->email,
-                'role_teacher' =>  1,
-                'role' =>  "teacher",
-                'password' => Hash::make($request->password),
-            ];
-            $userDB = User::updateOrCreate($userWhere, $userData);
-            return response()->json(['success' => true, 'payload' =>  $request]);
+            if (User::where('id', $request->user_id)->first()) {
+                $userDB = User::where('id', $request->user_id)->first();
+
+                $classroomWhere = [
+                    'user_id'   =>  $userDB->id,
+                    'course_id' => $request->course_id,
+                ];
+
+                $classroomData = [
+                    "role"      =>  $request->role,
+                ];
+                $classroomDB = Classroom::updateOrCreate($classroomWhere, $classroomData);
+
+                return response()->json(['success' => true, 'payload' =>  $request]);
+            } else {
+                $userWhere = [
+                    'username'  => $request->username
+                ];
+
+                $userData = [
+                    'name'  =>  $request->name,
+                    'email' =>   $request->email,
+                    'role_teacher' =>  1,
+                    'role' =>  "teacher",
+                    'password' => Hash::make($request->password),
+                ];
+                $userDB = User::updateOrCreate($userWhere, $userData);
+                return response()->json(['success' => true, 'payload' =>  $request]);
+            }
         }
 
+        if ($request->role === 'student' || $request->role === 'ta') {
+
+
+            if (User::where('username', $request->student_id)->first()) {
+                $userDB = User::where('username', $request->student_id)->first();
+                $userDB->update([
+                    'role_ta' =>  $request->role === 'ta' ? 1 : $userDB->role_ta,
+                    'role_student' =>  $request->role === 'student' ? 1 : $userDB->role_student,
+                    'role' =>  $request->role,
+                ]);
+            } else {
+                $userWhere = [
+                    'username'  => $request->student_id
+                ];
+                $userData = [
+                    'email' =>  $request->student_id . "@mju.ac.th",
+                    'password' => Hash::make($request->student_id),
+                    'name'  =>  $request->name,
+                    'role_ta' =>  $request->role === 'ta' && 1,
+                    'role_student' =>  $request->role === 'student' && 1,
+                    'role' =>  $request->role,
+                ];
+                $userDB = User::updateOrCreate($userWhere, $userData);
+            }
+
+            $classroomWhere = [
+                'user_id'   =>  $userDB->id,
+                'course_id' => $request->course_id,
+            ];
+
+            $classroomData = [
+                'section'   =>  $request->section,
+                'year'      =>  $request->year,
+                "role"      =>  $request->role,
+                'semester'  =>  $request->semester
+            ];
+
+            // $classroomData['start_datetime'] =  $request->start_date;
+            // $classroomData['end_datetime'] =  $request->end_date;
+
+            $classroomDB = Classroom::updateOrCreate($classroomWhere, $classroomData);
+            return response()->json(['success' => true, 'payload' =>  $request]);
+        }
 
         $validator = Validator::make(
             [
@@ -148,11 +215,11 @@ class UserController extends Controller
                 'semester'  =>  $semester
             ];
 
-            $classroomData['start_datetime'] =  $request->start_date;
-            $classroomData['end_datetime'] =  $request->end_date;
+            $classroomData['start_datetime'] =  $request->start_date !== '' ?  $request->start_date : NULL;
+            $classroomData['end_datetime'] =  $request->end_date !== '' ?  $request->end_date : NULL;
 
             $classroomDB = Classroom::updateOrCreate($classroomWhere, $classroomData);
         }
-        return response()->json(['success' => true,]);
+        return response()->json(['success' => $request]);
     }
 }

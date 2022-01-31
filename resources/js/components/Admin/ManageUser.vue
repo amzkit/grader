@@ -50,7 +50,8 @@
                 </v-text-field>
               </v-toolbar>
             </template>
-            <template v-slot:[`item.actions`]="{ item }">
+
+            <template v-slot:[`item.action`]="{ item }">
               <v-icon small class="mr-2" @click="editItem(item)">
                 mdi-pencil
               </v-icon>
@@ -80,7 +81,8 @@ export default {
         },
         { text: "Email", value: "email" },
         { text: "Username", value: "username" },
-        { text: "Role", value: "role" },
+        { text: "Role last active", value: "role" },
+        { text: "Action", value: "action" },
       ],
       editedIndex: -1,
       editedItem: {

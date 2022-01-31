@@ -267,6 +267,27 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Navigation",
@@ -865,6 +886,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
 var render = function() {
+  var this$1 = this
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -934,36 +956,81 @@ var render = function() {
                       )
                     : _vm._e(),
                   _vm._v(" "),
-                  _c(
-                    "div",
-                    _vm._l(this.$store.state.data.classrooms, function(item) {
-                      return _c(
-                        "v-list-item",
-                        {
-                          key: item.id,
-                          attrs: { link: "" },
-                          on: {
-                            click: function($event) {
-                              return _vm.onClick(item)
+                  _c("div", [
+                    this.$store.state.data.user.role === "admin" ||
+                    this.$store.state.data.user.role === "teacher"
+                      ? _c(
+                          "div",
+                          _vm._l(this.$store.state.data.classrooms, function(
+                            item
+                          ) {
+                            return _c(
+                              "v-list-item",
+                              {
+                                key: item.id,
+                                attrs: { link: "" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.onClick(item)
+                                  }
+                                }
+                              },
+                              [
+                                _c(
+                                  "v-list-item-content",
+                                  [
+                                    _c("v-list-item-title", [
+                                      _vm._v(_vm._s(item.course_name))
+                                    ])
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          }),
+                          1
+                        )
+                      : _c(
+                          "div",
+                          _vm._l(
+                            this.$store.state.data.classrooms.filter(function(
+                              e
+                            ) {
+                              return (
+                                e.role === this$1.$store.state.data.user.role
+                              )
+                            }),
+                            function(item) {
+                              return _c(
+                                "v-list-item",
+                                {
+                                  key: item.id,
+                                  attrs: { link: "" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.onClick(item)
+                                    }
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "v-list-item-content",
+                                    [
+                                      _c("v-list-item-title", [
+                                        _vm._v(_vm._s(item.course_name))
+                                      ])
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
                             }
-                          }
-                        },
-                        [
-                          _c(
-                            "v-list-item-content",
-                            [
-                              _c("v-list-item-title", [
-                                _vm._v(_vm._s(item.course_name))
-                              ])
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    }),
-                    1
-                  )
+                          ),
+                          1
+                        )
+                  ])
                 ]
               )
             ],

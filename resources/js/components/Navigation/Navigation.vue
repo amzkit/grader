@@ -23,16 +23,37 @@
             </v-list-item-content>
           </div>
           <div>
-            <v-list-item
-              v-for="item in this.$store.state.data.classrooms"
-              :key="item.id"
-              link
-              @click="onClick(item)"
+            <div
+              v-if="
+                this.$store.state.data.user.role === 'admin' ||
+                this.$store.state.data.user.role === 'teacher'
+              "
             >
-              <v-list-item-content>
-                <v-list-item-title>{{ item.course_name }}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
+              <v-list-item
+                v-for="item in this.$store.state.data.classrooms"
+                :key="item.id"
+                link
+                @click="onClick(item)"
+              >
+                <v-list-item-content>
+                  <v-list-item-title>{{ item.course_name }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </div>
+            <div v-else>
+              <v-list-item
+                v-for="item in this.$store.state.data.classrooms.filter(
+                  (e) => e.role === this.$store.state.data.user.role
+                )"
+                :key="item.id"
+                link
+                @click="onClick(item)"
+              >
+                <v-list-item-content>
+                  <v-list-item-title>{{ item.course_name }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </div>
           </div>
         </v-list-item-group>
       </v-list>

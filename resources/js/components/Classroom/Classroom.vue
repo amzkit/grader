@@ -24,11 +24,11 @@
                   </v-icon>
                 </div>
               </template>
-              <template v-slot:[`item.send_start_work`]="{ item }">
-                {{ dayjs(item.send_start_work).format("MMMM D, YYYY") }}
+              <template v-slot:[`item.start_date`]="{ item }">
+                {{ invalidDate(item.start_date) }}
               </template>
-              <template v-slot:[`item.send_end_work`]="{ item }">
-                {{ dayjs(item.send_end_work).format("MMMM D, YYYY") }}
+              <template v-slot:[`item.end_date`]="{ item }">
+                {{ invalidDate(item.end_date) }}
               </template>
             </v-data-table>
           </v-col>
@@ -83,6 +83,9 @@ export default {
         "problem_file",
         ""
       )}`;
+    },
+    invalidDate(item) {
+      return item ? dayjs(item).format("MMMM D, YYYY") : "-";
     },
     async fatchItemSchedule(item) {
       this.loading = true;

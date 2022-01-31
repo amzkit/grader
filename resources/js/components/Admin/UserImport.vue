@@ -129,7 +129,7 @@ export default {
 
       if (this.status === "teacher") {
         formData.append("username", this.username);
-        formData.append("status", this.status);
+        formData.append("role", this.status);
         formData.append("name", this.name);
         formData.append("email", this.email);
         formData.append("password", this.password);

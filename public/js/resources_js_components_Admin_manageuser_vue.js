@@ -83,6 +83,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -103,8 +104,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         text: "Username",
         value: "username"
       }, {
-        text: "Role",
+        text: "Role last active",
         value: "role"
+      }, {
+        text: "Action",
+        value: "action"
       }],
       editedIndex: -1,
       editedItem: {
@@ -426,7 +430,7 @@ var render = function() {
                           proxy: true
                         },
                         {
-                          key: "item.actions",
+                          key: "item.action",
                           fn: function(ref) {
                             var item = ref.item
                             return [

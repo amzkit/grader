@@ -165,7 +165,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 if (_this.status === "teacher") {
                   formData.append("username", _this.username);
-                  formData.append("status", _this.status);
+                  formData.append("role", _this.status);
                   formData.append("name", _this.name);
                   formData.append("email", _this.email);
                   formData.append("password", _this.password);
