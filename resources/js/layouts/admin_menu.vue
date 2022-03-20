@@ -236,8 +236,8 @@ export default {
           text: "Manage",
           subLinks: [
             {
-              text: "New Classroom",
-              to: "/new-classroom",
+              text: "New Example",
+              to: "/new-example",
             },
             {
               text: "Manage Classroom",
@@ -258,6 +258,20 @@ export default {
           to: "/scoreboard",
           icon: "mdi-view-dashboard",
           text: "Scoreboard",
+        },
+        {
+          icon: "mdi-pencil",
+          text: "User",
+          subLinks: [
+            {
+              text: "New User",
+              to: "/new-user",
+            },
+            {
+              text: "Manage User",
+              to: "/manage-user",
+            },
+          ],
         },
       ],
       student: [

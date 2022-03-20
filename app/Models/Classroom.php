@@ -14,6 +14,7 @@ class Classroom extends Model
         'course_id',
         'section',
         "year",
+        "role",
         "semester",
         "start_datetime",
         "end_datetime",

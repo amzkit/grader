@@ -19,9 +19,24 @@ const routes = [
         },
     },
     {
-        path: "/add-user",
-        name: 'add-user',
+        path: "/new-user",
+        name: 'new-user',
         component: () => import('../components/Admin/UserImport.vue'),
+    },
+    {
+        path: "/manage-user",
+        name: 'manage-user',
+        component: () => import('../components/Admin/ManageUser.vue'),
+    },
+    {
+        path: "/manage-example",
+        name: 'manage-example',
+        component: () => import('../components/Manage/ManageExample.vue'),
+    },
+    {
+        path: "/new-classroom",
+        name: 'new-classroom',
+        component: () => import('../components/Classroom/NewClassroom.vue'),
     },
     {
         path: "/changepassword",
@@ -34,26 +49,14 @@ const routes = [
         component: () => import('../pages/ClassRoomPage.vue'),
     },
     {
-        path: "/classroom/:id",
-        name: 'classroom-code',
-        component: () => import('../components/Classroom/Code.vue'),
-    },
-    {
         path: "/manage-classroom",
         name: 'manage-classroom',
-        component: () => import('../pages/ManageClassRoomPage.vue'),
-
+        component: () => import('../components/Manage/ManageClassroom.vue'),
     },
     {
-        path: "/new-classroom",
-        name: 'new-classroom',
-        component: () => import('../components/Manage/FormManageClassroom'),
-
-    },
-    {
-        path: "/manage-example",
-        name: 'manage-example',
-        component: () => import('../components/Manage/ManageExample'),
+        path: "/new-example",
+        name: 'new-example',
+        component: () => import('../components/Manage/NewExample.vue'),
 
     },
     {

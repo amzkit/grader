@@ -1,111 +1,174 @@
 <template>
   <v-row>
-    <Loading :loading="this.$store.state.data.loading" />
+    <Loading :loading="this.loading" />
     <v-col cols="2">
-      <Navigation />
+      <Navigation :onClick="fatchItemSchedule" />
     </v-col>
     <v-col cols="10">
-      <div v-if="!this.$store.state.data.loading">
-        <v-row justify="center">
-          <h1>จัดการโจทย์</h1>
-          <v-card>
-            <v-container fluid>
-              <v-row align="center">
-                <v-col cols="4">
-                  <v-subheader> ห้องเรียน </v-subheader>
-                </v-col>
-                <v-col cols="6">
-                  {{ this.$store.state.data.classroom.className }}
-                </v-col>
-              </v-row>
-
-              <v-row align="center">
-                <v-col cols="4">
-                  <v-subheader> ชื่องาน </v-subheader>
-                </v-col>
-                <v-col cols="6">
-                  <v-text-field
-                    v-model="workName"
-                    label="ใส่ชื่องาน"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-
-              <v-row align="center">
-                <v-col cols="4">
-                  <v-subheader> โจทย์ </v-subheader>
-                </v-col>
-                <v-col cols="6">
-                  <v-textarea
-                    counter
-                    v-model="subjectName"
-                    label="พิมพ์โจทย์"
-                  ></v-textarea>
-                  <template>
-                    <input
-                      type="file"
-                      class="form-control"
-                      v-on:change="onFileChange"
-                    />
+      <v-row justify="center">
+        <v-col>
+          <v-data-table
+            :headers="headers"
+            :items="desserts"
+            sort-by="calories"
+            class="elevation-1"
+          >
+            <template v-slot:top>
+              <v-toolbar flat>
+                <v-toolbar-title>Manage Example</v-toolbar-title>
+                <v-divider class="mx-4" inset vertical></v-divider>
+                <v-spacer></v-spacer>
+                <v-dialog v-model="dialog" max-width="500px">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      color="primary"
+                      dark
+                      class="mb-2"
+                      v-bind="attrs"
+                      v-on="on"
+                    >
+                      New Item
+                    </v-btn>
                   </template>
-                </v-col>
-              </v-row>
+                  <v-card>
+                    <v-card-title>
+                      <span class="text-h5">{{ formTitle }}</span>
+                    </v-card-title>
 
-              <v-row align="center">
-                <v-col cols="4">
-                  <v-subheader> คะแนน </v-subheader>
-                </v-col>
-                <v-col cols="6">
-                  <v-text-field
-                    type="number"
-                    v-model="score"
-                    onfocus="this.select()"
-                    label="กำหนดคะแนน"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="4">
-                  <v-subheader> ภาษา </v-subheader>
-                </v-col>
-                <v-col cols="6">
-                  <v-select
-                    v-model="selectedLanguages"
-                    :items="this.$store.state.data.language"
-                    item-text="languagesName"
-                    item-value="id"
-                    single-line
-                    auto
-                    label="Languages"
-                  ></v-select>
-                </v-col>
-              </v-row>
-
-              <v-row align="center">
-                <v-col cols="12">
-                  <v-subheader> กำหนดส่ง </v-subheader>
-                </v-col>
-              </v-row>
-
-              <v-row align="center">
-                <v-col cols="5">
-                  <v-date-picker v-model="stateDate"></v-date-picker>
-                </v-col>
-                <v-col cols="2">
-                  <v-text>ถึง</v-text>
-                </v-col>
-                <v-col cols="5">
-                  <v-date-picker v-model="endDate"></v-date-picker>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-card>
-          <v-btn @click="formSubmit"> Save </v-btn>
-        </v-row>
-      </div>
+                    <v-card-text>
+                      <v-container>
+                        <v-row>
+                          <v-col cols="12">
+                            <div v-if="editedIndex === -1">
+                              <v-autocomplete
+                                label="Examples"
+                                v-model="selectedExamplesId"
+                                :items="
+                                  problemList.filter(
+                                    (e) =>
+                                      !desserts
+                                        .map((e) => e.problemsId)
+                                        .includes(e.id)
+                                  )
+                                "
+                                item-text="title"
+                                item-value="id"
+                                hide-no-data
+                                hide-selected
+                                multiple
+                                chips
+                                deletable-chips
+                              >
+                              </v-autocomplete>
+                            </div>
+                            <v-menu
+                              v-model="menu1"
+                              :close-on-content-click="false"
+                              max-width="290"
+                            >
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-text-field
+                                  :value="computedDateFormattedStartDate"
+                                  clearable
+                                  label="เทอมเริ่มต้น"
+                                  readonly
+                                  v-bind="attrs"
+                                  v-on="on"
+                                  @click:clear="start_date = null"
+                                ></v-text-field>
+                              </template>
+                              <v-date-picker
+                                v-model="start_date"
+                                @change="menu1 = false"
+                              ></v-date-picker>
+                            </v-menu>
+                            <v-menu
+                              v-model="menu2"
+                              :close-on-content-click="false"
+                              max-width="290"
+                            >
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-text-field
+                                  :value="computedDateFormattedEndDate"
+                                  clearable
+                                  label="เทอมสิ้นสุด"
+                                  readonly
+                                  v-bind="attrs"
+                                  v-on="on"
+                                  @click:clear="end_date = null"
+                                ></v-text-field>
+                              </template>
+                              <v-date-picker
+                                v-model="end_date"
+                                @change="menu2 = false"
+                              ></v-date-picker>
+                            </v-menu>
+                          </v-col>
+                        </v-row>
+                      </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="blue darken-1" text @click="close">
+                        Cancel
+                      </v-btn>
+                      <v-btn color="blue darken-1" text @click="save">
+                        Save
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+                <v-dialog v-model="dialogDelete" max-width="500px">
+                  <v-card>
+                    <v-card-title class="text-h5"
+                      >Are you sure you want to delete this item?</v-card-title
+                    >
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="blue darken-1" text @click="closeDelete"
+                        >Cancel</v-btn
+                      >
+                      <v-btn
+                        color="blue darken-1"
+                        text
+                        @click="deleteItemConfirm"
+                        >OK</v-btn
+                      >
+                      <v-spacer></v-spacer>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </v-toolbar>
+            </template>
+            <template v-slot:[`item.file`]="{ item }">
+              <div v-if="item.file">
+                <v-icon small class="mr-2" @click="download(item)">
+                  mdi-file-download
+                </v-icon>
+              </div>
+            </template>
+            <template v-slot:[`item.start_date`]="{ item }">
+              {{ invalidDate(item.start_date) }}
+            </template>
+            <template v-slot:[`item.end_date`]="{ item }">
+              {{ invalidDate(item.end_date) }}
+            </template>
+            <template v-slot:[`item.action`]="{ item }">
+              <v-icon small class="mr-2" @click="editItem(item)">
+                mdi-pencil
+              </v-icon>
+              <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+            </template>
+          </v-data-table>
+        </v-col>
+      </v-row>
     </v-col>
   </v-row>
 </template>
 
+
 <script>
+import dayjs from "dayjs";
 import Navigation from "../Navigation/Navigation.vue";
 import Loading from "../Loading/Loading.vue";
 export default {
@@ -115,67 +178,211 @@ export default {
   },
   data: function () {
     return {
-      file: "",
-      workName: "",
-      subjectName: "",
-      subjectFile: null,
-      score: 0,
-      selectedLanguages: 0,
-      stateDate: null,
-      endDate: null,
+      problemList: [],
+      selectedExamplesId: [],
+      roomId: 0,
+      roomName: "",
+      search: "",
+      loading: false,
+      dialog: false,
+      headers: [
+        {
+          text: "ชื่องาน",
+          align: "start",
+          sortable: true,
+          value: "title",
+        },
+        { text: "ชื่อเรื่อง", value: "question" },
+        { text: "ภาษา", value: "language" },
+        { text: "คะแนน", value: "score" },
+        { text: "ไฟล์", value: "file" },
+        {
+          text: "วันที่ส่ง",
+          value: "start_date",
+        },
+        {
+          text: "ครบกำหนดส่ง",
+          value: "end_date",
+        },
+        {
+          text: "Action",
+          value: "action",
+        },
+      ],
+      desserts: [],
+      dialogDelete: false,
+      editedIndex: -1,
+      editedItem: {
+        name: "",
+        section: "",
+        semester: "",
+        year: "",
+        start_datetime: "",
+        end_datetime: "",
+        role: "",
+      },
+      defaultItem: {
+        name: "",
+        section: "",
+        semester: "",
+        year: "",
+        start_datetime: "",
+        end_datetime: "",
+        role: "",
+      },
+      start_date: null,
+      end_date: null,
+      menu1: false,
+      menu2: false,
     };
   },
-  created() {
-    this.initialize();
+  async created() {
+    await this.getProblems();
   },
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+    },
+    computedDateFormattedStartDate() {
+      return this.start_date
+        ? dayjs(this.start_date).format("dddd, MMMM D, YYYY")
+        : "";
+    },
+    computedDateFormattedEndDate() {
+      return this.end_date
+        ? dayjs(this.end_date).format("dddd, MMMM D, YYYY")
+        : "";
+    },
+  },
+
+  watch: {
+    dialog(val) {
+      val || this.close();
+    },
+    dialogDelete(val) {
+      val || this.closeDelete();
+    },
+  },
+
   methods: {
-    resetForm() {
-      this.file = null;
-      this.workName = "";
-      this.subjectName = null;
-      this.subjectFile = null;
-      this.score = 0;
-      this.selectedLanguages = 0;
-      this.stateDate = null;
-      this.endDate = null;
+    dayjs,
+    invalidDate(item) {
+      return item ? dayjs(item).format("MMMM D, YYYY") : "-";
     },
-    onFileChange(e) {
-      this.file = e.target.files[0];
+    download(item) {
+      window.location.href = `api/schedule/download${item.file.replace(
+        "problem_file",
+        ""
+      )}`;
     },
-    async initialize() {
-      await axios.get("api/languages").then((response) => {
-        this.$store.commit("data/SET_LANGUAGE", response.data.payload);
+
+    editItem(item) {
+      this.editedIndex = this.desserts.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+
+    deleteItem(item) {
+      this.editedIndex = this.desserts.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialogDelete = true;
+    },
+
+    deleteItemConfirm() {
+      this.desserts.splice(this.editedIndex, 1);
+      this.deleteSchedule();
+      this.closeDelete();
+    },
+
+    close() {
+      this.dialog = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
       });
     },
 
-    async formSubmit(e) {
-      e.preventDefault();
-      let currentObj = this;
-      const config = {
-        headers: { "content-type": "multipart/form-data" },
-      };
-      let formData = new FormData();
-      formData.append("classroom_id", this.$store.state.data.classroom.id);
-      formData.append("work_name", this.workName);
-      formData.append("subject_name", this.subjectName);
-      formData.append("file", this.file);
-      formData.append("score", this.score);
-      formData.append("language_id", this.selectedLanguages);
-      formData.append("send_start_work", this.stateDate);
-      formData.append("send_end_work", this.endDate);
+    closeDelete() {
+      this.dialogDelete = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+
+    save() {
+      if (this.editedIndex > -1) {
+        Object.assign(this.desserts[this.editedIndex], this.editedItem);
+      } else {
+        this.postExample();
+      }
+      this.close();
+    },
+
+    async postExample() {
+      this.loading = true;
       await axios
-        .post("api/quiz", formData, config)
-        .then(function (response) {
-          currentObj.success = response.data.success;
+        .post("/api/manage/example", {
+          exampleId: this.selectedExamplesId,
+          roomId: this.roomId,
+          start_date: this.start_date,
+          end_date: this.end_date,
+        })
+        .then(function () {
+          location.reload();
         })
         .catch(function (error) {
-          currentObj.output = error;
+          console.log(error);
         });
-      this.resetForm();
+      this.dialog = false;
+      this.loading = false;
+    },
+
+    async deleteSchedule() {
+      this.loading = true;
+      await axios
+        .delete("api/manage/example/" + this.editedItem.id)
+        .then(function (response) {
+          console.log(response.data.payload);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      this.loading = false;
+    },
+
+    async getProblems() {
+      this.loading = true;
+      await axios.get("/api/problem").then((response) => {
+        if (response.data.success == true) {
+          this.problemList = response.data.payload;
+          console.log("problemList", this.problemList);
+        }
+      });
+      this.loading = false;
+    },
+
+    async fatchItemSchedule(item) {
+      this.loading = true;
+      if (item) {
+        this.roomId = item.courseId;
+        await axios
+          .get("/api/schedule", {
+            params: {
+              course_id: item.courseId,
+            },
+          })
+          .then((response) => {
+            if (response.data.success == true) {
+              this.desserts = response.data.payload;
+              console.log("desserts", this.desserts);
+            }
+          });
+      }
+      this.loading = false;
     },
   },
 };
 </script>
 
-<style>
-</style>
+

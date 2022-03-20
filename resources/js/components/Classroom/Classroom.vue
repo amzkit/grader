@@ -1,35 +1,34 @@
 <template>
   <v-row>
-    <Loading :loading="this.$store.state.data.loading" />
+    <Loading :loading="this.loading" />
     <v-col cols="2">
-      <Navigation />
+      <Navigation :onClick="fatchItemSchedule" />
     </v-col>
     <v-col cols="10">
       <div v-if="!this.$store.state.data.loading">
         <v-row justify="center">
-          <h1>
-            {{ this.$store.state.data.classroom.className }}
-          </h1>
           <v-col>
             <v-data-table
               :headers="headers"
-              :items="this.$store.state.data.manageClassroomWork"
+              :items="this.$store.state.data.schedule_all"
               class="elevation-1"
-              @click:row="rowClick"
             >
-              <template slot="items" slot-scope="props">
+              <!-- @click:row="rowClick"  -->
+              <!-- <template slot="items" slot-scope="props">
                 <tr @click="rowClicked(props.item)"></tr>
+              </template> -->
+              <template v-slot:[`item.file`]="{ item }">
+                <div v-if="item.file">
+                  <v-icon small class="mr-2" @click="download(item)">
+                    mdi-file-download
+                  </v-icon>
+                </div>
               </template>
-              <template v-slot:[`item.subject_file_path`]="{ item }">
-                <v-icon small class="mr-2" @click="download(item)">
-                  mdi-file-download
-                </v-icon>
+              <template v-slot:[`item.start_date`]="{ item }">
+                {{ invalidDate(item.start_date) }}
               </template>
-              <template v-slot:[`item.send_start_work`]="{ item }">
-                {{ dayjs(item.send_start_work).format("MMMM D, YYYY") }}
-              </template>
-              <template v-slot:[`item.send_end_work`]="{ item }">
-                {{ dayjs(item.send_end_work).format("MMMM D, YYYY") }}
+              <template v-slot:[`item.end_date`]="{ item }">
+                {{ invalidDate(item.end_date) }}
               </template>
             </v-data-table>
           </v-col>
@@ -44,57 +43,71 @@
 import dayjs from "dayjs";
 import Navigation from "../Navigation/Navigation.vue";
 import Loading from "../Loading/Loading.vue";
-import Code from "../Classroom/Code.vue";
 export default {
   components: {
     Navigation,
     Loading,
-    Code,
   },
   data: function () {
     return {
+      loading: false,
       headers: [
         {
           text: "ชื่องาน",
           align: "start",
           sortable: true,
-          value: "work_name",
+          value: "title",
         },
-        { text: "ชื่อเรื่อง", value: "subject_name" },
-        { text: "ภาษา", value: "languagesName" },
+        { text: "ชื่อเรื่อง", value: "question" },
+        { text: "ภาษา", value: "language" },
         { text: "คะแนน", value: "score" },
-        { text: "ไฟล์", value: "subject_file_path" },
+        { text: "ไฟล์", value: "file" },
         {
           text: "วันที่ส่ง",
-          value: "send_start_work",
+          value: "start_date",
         },
         {
           text: "ครบกำหนดส่ง",
-          value: "send_end_work",
+          value: "end_date",
         },
       ],
     };
   },
-  mounted() {},
-  created() {},
+  async created() {
+    // await this.check_user();
+  },
   methods: {
     dayjs,
     download(item) {
-      window.location.href = `api/quiz/${item.subject_file_path.replace(
-        "public",
+      window.location.href = `api/schedule/download${item.file.replace(
+        "problem_file",
         ""
       )}`;
     },
-    rowClick(item) {
-      this.$store.commit("data/SET_CLASSROOM_EXAM", item);
-      this.$router.replace({
-        name: "classroom-code",
-        params: { id: item.id },
-      });
+    invalidDate(item) {
+      return item ? dayjs(item).format("MMMM D, YYYY") : "-";
+    },
+    async fatchItemSchedule(item) {
+      this.loading = true;
+      if (item) {
+        await axios
+          .get("/api/schedule", {
+            params: {
+              course_id: item.courseId,
+            },
+          })
+          .then((response) => {
+            if (response.data.success == true) {
+              this.$store.commit(
+                "data/SET_SCHEDULES_ALL",
+                response.data.payload
+              );
+            }
+          });
+      }
+      this.loading = false;
     },
   },
 };
 </script>
 
-<style>
-</style>

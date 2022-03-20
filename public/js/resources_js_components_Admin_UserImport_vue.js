@@ -26,10 +26,120 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      file: ""
+      file: "",
+      status: "",
+      username: "",
+      name: "",
+      email: "",
+      password: "",
+      showPassword: false,
+      rules: {
+        required: function required(value) {
+          return !!value || "Required.";
+        },
+        min: function min(v) {
+          return v.length >= 8 || "Min 8 characters.";
+        },
+        email: function email(v) {
+          return /.+@.+/.test(v) || "Invalid e-mail.";
+        }
+      }
     };
   },
   methods: {
@@ -52,20 +162,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   }
                 };
                 formData = new FormData();
-                formData.append("import_file", _this.file); // formData.append("course_name", "CS112");
 
-                formData.append("start_date", "01/01/2020");
-                formData.append("start_time", "01:00");
-                formData.append("end_date", "02/01/2020");
-                formData.append("end_time", "02:00");
-                _context.next = 10;
+                if (_this.status === "teacher") {
+                  formData.append("username", _this.username);
+                  formData.append("role", _this.status);
+                  formData.append("name", _this.name);
+                  formData.append("email", _this.email);
+                  formData.append("password", _this.password);
+                } else {
+                  formData.append("import_file", _this.file);
+                }
+
+                _context.next = 6;
                 return axios.post("/api/user/file/upload", formData, config).then(function (response) {
                   console.log("Uploaded", response);
                 })["catch"](function (error) {
                   console.log(error);
                 });
 
-              case 10:
+              case 6:
               case "end":
                 return _context.stop();
             }
@@ -167,15 +282,307 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "div",
+    "v-row",
     [
-      _c("input", {
-        staticClass: "form-control",
-        attrs: { type: "file" },
-        on: { change: _vm.onFileChange }
-      }),
-      _vm._v(" "),
-      _c("v-btn", { on: { click: _vm.formSubmit } }, [_vm._v(" Save ")])
+      _c("v-col", { attrs: { cols: "12" } }, [
+        _c(
+          "div",
+          [
+            _c(
+              "v-row",
+              { attrs: { justify: "center" } },
+              [
+                _c("h1", [_vm._v("New User")]),
+                _vm._v(" "),
+                _c(
+                  "v-card",
+                  [
+                    _c(
+                      "v-container",
+                      { attrs: { fluid: "" } },
+                      [
+                        _c(
+                          "v-row",
+                          { attrs: { align: "center" } },
+                          [
+                            _c(
+                              "v-col",
+                              { attrs: { cols: "4" } },
+                              [_c("v-subheader", [_vm._v(" Status ")])],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-col",
+                              { attrs: { cols: "6" } },
+                              [
+                                _c(
+                                  "v-radio-group",
+                                  {
+                                    attrs: { row: "" },
+                                    model: {
+                                      value: _vm.status,
+                                      callback: function($$v) {
+                                        _vm.status = $$v
+                                      },
+                                      expression: "status"
+                                    }
+                                  },
+                                  [
+                                    _c("v-radio", {
+                                      attrs: {
+                                        label: "Teacher",
+                                        value: "teacher"
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c("v-radio", {
+                                      attrs: {
+                                        label: "Student",
+                                        value: "student"
+                                      }
+                                    })
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        this.status === "student"
+                          ? _c(
+                              "div",
+                              [
+                                _c(
+                                  "v-row",
+                                  { attrs: { align: "center" } },
+                                  [
+                                    _c(
+                                      "v-col",
+                                      { attrs: { cols: "4" } },
+                                      [
+                                        _c("v-subheader", [
+                                          _vm._v(" ImportFile ")
+                                        ])
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c("v-col", { attrs: { cols: "6" } }, [
+                                      _c("div", [
+                                        _c("input", {
+                                          staticClass: "form-control",
+                                          attrs: { type: "file" },
+                                          on: { change: _vm.onFileChange }
+                                        })
+                                      ])
+                                    ])
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          : this.status === "teacher"
+                          ? _c(
+                              "div",
+                              [
+                                _c(
+                                  "v-row",
+                                  { attrs: { align: "center" } },
+                                  [
+                                    _c(
+                                      "v-col",
+                                      { attrs: { cols: "4" } },
+                                      [
+                                        _c("v-subheader", [
+                                          _vm._v(" Username ")
+                                        ])
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-col",
+                                      { attrs: { cols: "6" } },
+                                      [
+                                        _c("v-text-field", {
+                                          attrs: {
+                                            rules: [_vm.rules.required],
+                                            label: "Username"
+                                          },
+                                          model: {
+                                            value: _vm.username,
+                                            callback: function($$v) {
+                                              _vm.username = $$v
+                                            },
+                                            expression: "username"
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-row",
+                                  { attrs: { align: "center" } },
+                                  [
+                                    _c(
+                                      "v-col",
+                                      { attrs: { cols: "4" } },
+                                      [_c("v-subheader", [_vm._v(" Name ")])],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-col",
+                                      { attrs: { cols: "6" } },
+                                      [
+                                        _c("v-text-field", {
+                                          attrs: {
+                                            rules: [_vm.rules.required],
+                                            label: "Name"
+                                          },
+                                          model: {
+                                            value: _vm.name,
+                                            callback: function($$v) {
+                                              _vm.name = $$v
+                                            },
+                                            expression: "name"
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-row",
+                                  { attrs: { align: "center" } },
+                                  [
+                                    _c(
+                                      "v-col",
+                                      { attrs: { cols: "4" } },
+                                      [_c("v-subheader", [_vm._v(" E-mail ")])],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-col",
+                                      { attrs: { cols: "6" } },
+                                      [
+                                        _c("v-text-field", {
+                                          attrs: {
+                                            rules: [
+                                              _vm.rules.required,
+                                              _vm.rules.email
+                                            ],
+                                            label: "E-mail"
+                                          },
+                                          model: {
+                                            value: _vm.email,
+                                            callback: function($$v) {
+                                              _vm.email = $$v
+                                            },
+                                            expression: "email"
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-row",
+                                  { attrs: { align: "center" } },
+                                  [
+                                    _c(
+                                      "v-col",
+                                      { attrs: { cols: "4" } },
+                                      [
+                                        _c("v-subheader", [
+                                          _vm._v(" Password ")
+                                        ])
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-col",
+                                      { attrs: { cols: "6" } },
+                                      [
+                                        _c("v-text-field", {
+                                          staticClass: "input-group--focused",
+                                          attrs: {
+                                            "append-icon": _vm.showPassword
+                                              ? "mdi-eye"
+                                              : "mdi-eye-off",
+                                            rules: [
+                                              _vm.rules.required,
+                                              _vm.rules.min
+                                            ],
+                                            type: _vm.showPassword
+                                              ? "text"
+                                              : "password",
+                                            label: "Password",
+                                            hint: "At least 8 characters",
+                                            value: "wqfasds"
+                                          },
+                                          on: {
+                                            "click:append": function($event) {
+                                              _vm.showPassword = !_vm.showPassword
+                                            }
+                                          },
+                                          model: {
+                                            value: _vm.password,
+                                            callback: function($$v) {
+                                              _vm.password = $$v
+                                            },
+                                            expression: "password"
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          : _vm._e()
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "v-btn",
+                  {
+                    attrs: { color: "primary" },
+                    on: { click: _vm.formSubmit }
+                  },
+                  [_vm._v(" Save ")]
+                )
+              ],
+              1
+            )
+          ],
+          1
+        )
+      ])
     ],
     1
   )

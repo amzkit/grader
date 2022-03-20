@@ -1,15 +1,15 @@
 <template>
   <div>
-    <ManageClassroom />
+    <NewClassroom />
   </div>
 </template>
 
 <script>
-import ManageClassroom from "../components/Manage/ManageClassroom";
+import NewClassroom from "../components/Manage/NewClassroom";
 
 export default {
   components: {
-    ManageClassroom,
+    NewClassroom,
   },
 };
 </script>
