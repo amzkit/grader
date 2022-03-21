@@ -5390,9 +5390,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         icon: "mdi-home",
         text: "Home"
       }, {
-        to: "/classroom",
+        to: "/mission",
         icon: "mdi-view-dashboard",
-        text: "Classroom"
+        text: "Mission"
+      }, {
+        to: "/new-test",
+        icon: "mdi-view-dashboard",
+        text: "New Test"
       }, {
         icon: "mdi-pencil",
         text: "Manage",
@@ -5430,9 +5434,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         icon: "mdi-home",
         text: "Home"
       }, {
-        to: "/classroom",
+        to: "/mission",
         icon: "mdi-view-dashboard",
-        text: "Classroom"
+        text: "Mission"
       }, {
         icon: "mdi-pencil",
         text: "Manage",
@@ -5835,8 +5839,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 var routes = [{
-  path: '/',
-  name: 'app',
+  path: "/",
+  name: "app",
   component: function component() {
     var user_role = document.head.querySelector('meta[name="user-role"]').content;
 
@@ -5859,63 +5863,75 @@ var routes = [{
   }
 }, {
   path: "/new-user",
-  name: 'new-user',
+  name: "new-user",
   component: function component() {
     return __webpack_require__.e(/*! import() */ "resources_js_components_Admin_UserImport_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Admin/UserImport.vue */ "./resources/js/components/Admin/UserImport.vue"));
   }
 }, {
   path: "/manage-user",
-  name: 'manage-user',
+  name: "manage-user",
   component: function component() {
     return __webpack_require__.e(/*! import() */ "resources_js_components_Admin_ManageUser_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Admin/ManageUser.vue */ "./resources/js/components/Admin/ManageUser.vue"));
   }
 }, {
   path: "/manage-example",
-  name: 'manage-example',
+  name: "manage-example",
   component: function component() {
     return __webpack_require__.e(/*! import() */ "resources_js_components_Manage_ManageExample_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Manage/ManageExample.vue */ "./resources/js/components/Manage/ManageExample.vue"));
   }
 }, {
   path: "/new-classroom",
-  name: 'new-classroom',
+  name: "new-classroom",
   component: function component() {
     return __webpack_require__.e(/*! import() */ "resources_js_components_Classroom_NewClassroom_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Classroom/NewClassroom.vue */ "./resources/js/components/Classroom/NewClassroom.vue"));
   }
 }, {
-  path: "/changepassword",
-  name: 'changepassword',
+  path: "/change-password",
+  name: "change-password",
   component: function component() {
     return __webpack_require__.e(/*! import() */ "resources_js_auth_ChangePassword_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../auth/ChangePassword.vue */ "./resources/js/auth/ChangePassword.vue"));
   }
 }, {
   path: "/classroom",
-  name: 'classroom',
+  name: "classroom",
   component: function component() {
     return __webpack_require__.e(/*! import() */ "resources_js_pages_ClassRoomPage_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/ClassRoomPage.vue */ "./resources/js/pages/ClassRoomPage.vue"));
   }
 }, {
   path: "/manage-classroom",
-  name: 'manage-classroom',
+  name: "manage-classroom",
   component: function component() {
     return __webpack_require__.e(/*! import() */ "resources_js_components_Manage_ManageClassroom_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Manage/ManageClassroom.vue */ "./resources/js/components/Manage/ManageClassroom.vue"));
   }
 }, {
   path: "/new-example",
-  name: 'new-example',
+  name: "new-example",
   component: function component() {
     return __webpack_require__.e(/*! import() */ "resources_js_components_Manage_NewExample_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Manage/NewExample.vue */ "./resources/js/components/Manage/NewExample.vue"));
   }
 }, {
   path: "/my-score",
-  name: 'my-score',
+  name: "my-score",
   component: function component() {
     return __webpack_require__.e(/*! import() */ "resources_js_pages_MyScorePage_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/MyScorePage.vue */ "./resources/js/pages/MyScorePage.vue"));
   }
 }, {
   path: "/scoreboard",
-  name: 'scoreboard',
+  name: "scoreboard",
   component: function component() {
     return __webpack_require__.e(/*! import() */ "resources_js_pages_ScoreBoardPage_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/ScoreBoardPage.vue */ "./resources/js/pages/ScoreBoardPage.vue"));
+  }
+}, {
+  path: "/mission",
+  name: "mission",
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ "resources_js_components_Classroom_Mission_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Classroom/Mission.vue */ "./resources/js/components/Classroom/Mission.vue"));
+  }
+}, {
+  path: "/new-test",
+  name: "new-test",
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ "resources_js_components_Test_NewTest_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Test/NewTest.vue */ "./resources/js/components/Test/NewTest.vue"));
   }
 }];
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (routes);
@@ -5934,15 +5950,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 var state = {
-  classrooms: [],
+  courses: [],
   user: [],
   schedule_all: []
 };
 var getters = {};
 var actions = {};
 var mutations = {
-  SET_CLASSROOMS: function SET_CLASSROOMS(state, newValue) {
-    state.classrooms = newValue;
+  SET_COURSES: function SET_COURSES(state, newValue) {
+    state.courses = newValue;
   },
   SET_USER: function SET_USER(state, newValue) {
     state.user = newValue;
@@ -106329,7 +106345,7 @@ var index = {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_components_Admin_UserImport_vue":1,"resources_js_components_Admin_ManageUser_vue":1,"resources_js_components_Manage_ManageExample_vue":1,"resources_js_components_Classroom_NewClassroom_vue":1,"resources_js_auth_ChangePassword_vue":1,"resources_js_pages_ClassRoomPage_vue":1,"resources_js_components_Manage_ManageClassroom_vue":1,"resources_js_components_Manage_NewExample_vue":1,"resources_js_pages_MyScorePage_vue":1,"resources_js_pages_ScoreBoardPage_vue":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_components_Admin_UserImport_vue":1,"resources_js_components_Admin_ManageUser_vue":1,"resources_js_components_Manage_ManageExample_vue":1,"resources_js_components_Classroom_NewClassroom_vue":1,"resources_js_auth_ChangePassword_vue":1,"resources_js_pages_ClassRoomPage_vue":1,"resources_js_components_Manage_ManageClassroom_vue":1,"resources_js_components_Manage_NewExample_vue":1,"resources_js_pages_MyScorePage_vue":1,"resources_js_pages_ScoreBoardPage_vue":1,"resources_js_components_Classroom_Mission_vue":1,"resources_js_components_Test_NewTest_vue":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};

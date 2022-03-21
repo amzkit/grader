@@ -227,9 +227,14 @@ export default {
           text: "Home",
         },
         {
-          to: "/classroom",
+          to: "/mission",
           icon: "mdi-view-dashboard",
-          text: "Classroom",
+          text: "Mission",
+        },
+        {
+          to: "/new-test",
+          icon: "mdi-view-dashboard",
+          text: "New Test",
         },
         {
           icon: "mdi-pencil",
@@ -281,9 +286,9 @@ export default {
           text: "Home",
         },
         {
-          to: "/classroom",
+          to: "/mission",
           icon: "mdi-view-dashboard",
-          text: "Classroom",
+          text: "Mission",
         },
         {
           icon: "mdi-pencil",

@@ -131,7 +131,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       clasroom: "",
-      file: "",
+      file: null,
       start_date: null,
       end_date: null,
       menu1: false,
@@ -168,11 +168,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   }
                 };
                 formData = new FormData();
+                formData.append("check_file", _this.file != null ? true : false);
                 formData.append("import_file", _this.file);
                 formData.append("course_name", _this.clasroom);
                 formData.append("start_date", _this.start_date);
                 formData.append("end_date", _this.end_date);
-                _context.next = 10;
+                _context.next = 11;
                 return axios.post("/api/user/file/upload", formData, config).then(function () {
                   window.location.href = "/manage-classroom";
                   this.loading = false;
@@ -180,10 +181,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   console.log(error);
                 });
 
-              case 10:
+              case 11:
                 _this.loading = false;
 
-              case 11:
+              case 12:
               case "end":
                 return _context.stop();
             }
@@ -318,6 +319,33 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Navigation",
@@ -330,7 +358,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       model: 0,
-      loading: false
+      loading: false,
+      dialog: false,
+      course_name: ""
     };
   },
   created: function created() {
@@ -350,7 +380,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
             case 4:
               _context.next = 6;
-              return _this.onClick(_this.$store.state.data.classrooms.length > 0 ? _this.$store.state.data.classrooms[0] : 0);
+              return _this.onClick(_this.$store.state.data.courses.length > 0 ? _this.$store.state.data.courses[0] : 0);
 
             case 6:
             case "end":
@@ -404,7 +434,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   }
                 }).then(function (response) {
                   if (response.data.success == true) {
-                    _this3.$store.commit("data/SET_CLASSROOMS", response.data.payload);
+                    _this3.$store.commit("data/SET_COURSES", response.data.payload);
 
                     console.log(response.data.payload);
                   }
@@ -419,6 +449,36 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             }
           }
         }, _callee3);
+      }))();
+    },
+    new_course: function new_course() {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _this4.loading = true;
+                _context4.next = 3;
+                return axios.post("api/course", {
+                  course_name: _this4.course_name
+                }).then(function (response) {
+                  if (response.data.success == true) {
+                    _this4.$store.state.data.courses.push(response.data.payload);
+                  }
+                });
+
+              case 3:
+                _this4.loading = false;
+                _this4.dialog = false;
+
+              case 5:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
       }))();
     }
   }
@@ -1067,22 +1127,174 @@ var render = function() {
                                 "v-list-item-title",
                                 [
                                   _c(
-                                    "v-btn",
+                                    "v-dialog",
                                     {
-                                      attrs: { color: "primary", block: "" },
-                                      on: {
-                                        click: function($event) {
-                                          return _vm.$router.push(
-                                            "/new-classroom"
-                                          )
-                                        }
+                                      attrs: {
+                                        persistent: "",
+                                        "max-width": "600px"
+                                      },
+                                      scopedSlots: _vm._u(
+                                        [
+                                          {
+                                            key: "activator",
+                                            fn: function(ref) {
+                                              var on = ref.on
+                                              var attrs = ref.attrs
+                                              return [
+                                                _c(
+                                                  "v-btn",
+                                                  _vm._g(
+                                                    _vm._b(
+                                                      {
+                                                        attrs: {
+                                                          color: "primary",
+                                                          block: "",
+                                                          dark: ""
+                                                        }
+                                                      },
+                                                      "v-btn",
+                                                      attrs,
+                                                      false
+                                                    ),
+                                                    on
+                                                  ),
+                                                  [
+                                                    _vm._v(
+                                                      "\n                    New Classroom\n                  "
+                                                    )
+                                                  ]
+                                                )
+                                              ]
+                                            }
+                                          }
+                                        ],
+                                        null,
+                                        false,
+                                        1716546992
+                                      ),
+                                      model: {
+                                        value: _vm.dialog,
+                                        callback: function($$v) {
+                                          _vm.dialog = $$v
+                                        },
+                                        expression: "dialog"
                                       }
                                     },
                                     [
-                                      _vm._v(
-                                        "\n                New Classroom\n              "
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-card",
+                                        [
+                                          _c("v-card-title", [
+                                            _c(
+                                              "span",
+                                              { staticClass: "text-h5" },
+                                              [_vm._v("New Classroom")]
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-card-text",
+                                            [
+                                              _c(
+                                                "v-container",
+                                                [
+                                                  _c(
+                                                    "v-row",
+                                                    [
+                                                      _c(
+                                                        "v-col",
+                                                        {
+                                                          attrs: {
+                                                            cols: "12",
+                                                            sm: "12",
+                                                            md: "12"
+                                                          }
+                                                        },
+                                                        [
+                                                          _c("v-text-field", {
+                                                            attrs: {
+                                                              label:
+                                                                "Room Name",
+                                                              required: ""
+                                                            },
+                                                            model: {
+                                                              value:
+                                                                _vm.course_name,
+                                                              callback: function(
+                                                                $$v
+                                                              ) {
+                                                                _vm.course_name = $$v
+                                                              },
+                                                              expression:
+                                                                "course_name"
+                                                            }
+                                                          })
+                                                        ],
+                                                        1
+                                                      )
+                                                    ],
+                                                    1
+                                                  )
+                                                ],
+                                                1
+                                              )
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-card-actions",
+                                            [
+                                              _c("v-spacer"),
+                                              _vm._v(" "),
+                                              _c(
+                                                "v-btn",
+                                                {
+                                                  attrs: {
+                                                    color: "blue darken-1",
+                                                    text: ""
+                                                  },
+                                                  on: {
+                                                    click: function($event) {
+                                                      _vm.dialog = false
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "\n                      Close\n                    "
+                                                  )
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "v-btn",
+                                                {
+                                                  attrs: {
+                                                    color: "blue darken-1",
+                                                    text: ""
+                                                  },
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.new_course()
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "\n                      Save\n                    "
+                                                  )
+                                                ]
+                                              )
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
                                       )
-                                    ]
+                                    ],
+                                    1
                                   )
                                 ],
                                 1
@@ -1100,7 +1312,7 @@ var render = function() {
                     this.$store.state.data.user.role === "teacher"
                       ? _c(
                           "div",
-                          _vm._l(this.$store.state.data.classrooms, function(
+                          _vm._l(this.$store.state.data.courses, function(
                             item
                           ) {
                             return _c(
@@ -1133,9 +1345,7 @@ var render = function() {
                       : _c(
                           "div",
                           _vm._l(
-                            this.$store.state.data.classrooms.filter(function(
-                              e
-                            ) {
+                            this.$store.state.data.courses.filter(function(e) {
                               return (
                                 e.role === this$1.$store.state.data.user.role
                               )

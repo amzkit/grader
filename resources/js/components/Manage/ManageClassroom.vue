@@ -44,10 +44,6 @@
                           <v-icon left> mdi-lock </v-icon>
                           Add Student
                         </v-tab>
-                        <v-tab>
-                          <v-icon left> mdi-lock </v-icon>
-                          Add Teacher
-                        </v-tab>
                         <v-tab-item>
                           <v-card flat>
                             <v-card-text>
@@ -149,22 +145,6 @@
                                   auto
                                   label="Role"
                                 ></v-select>
-                              </v-col>
-                            </v-card-text>
-                          </v-card>
-                        </v-tab-item>
-                        <v-tab-item>
-                          <v-card flat>
-                            <v-card-text>
-                              <v-col cols="12">
-                                <v-combobox
-                                  v-model="selectUser"
-                                  :items="
-                                    userItems.filter((e) => e.role_teacher)
-                                  "
-                                  label="Name"
-                                  item-text="name"
-                                ></v-combobox>
                               </v-col>
                             </v-card-text>
                           </v-card>
@@ -272,10 +252,9 @@ export default {
     userItems: [],
     loading: false,
     search: "",
-    file: "",
+    file: null,
     dialog: false,
-    classroomName: "",
-    classroomId: 0,
+    course_id: 0,
     headers: [
       {
         text: "Name",
@@ -419,7 +398,13 @@ export default {
           headers: { "content-type": "multipart/form-data" },
         };
         let formData = new FormData();
-        if (
+        if (this.file != null) {
+          formData.append("check_file", true);
+          formData.append("import_file", this.file);
+          formData.append("course_id", this.course_id);
+          formData.append("start_date", this.start_date);
+          formData.append("end_date", this.end_date);
+        } else if (
           this.editedItem.role === "ta" ||
           this.editedItem.role === "student"
         ) {
@@ -432,19 +417,8 @@ export default {
           formData.append("section", this.editedItem.section);
           formData.append("semester", this.editedItem.semester);
           formData.append("role", this.editedItem.role);
-        } else if (this.editedItem.role === "teacher") {
-          formData.append(
-            "user_id",
-            this.userItems.find((e) => e.id === this.selectUser.id).id
-          );
-          formData.append("role", "teacher");
+          formData.append("course_id", this.course_id);
         }
-        formData.append("import_file", this.file);
-        formData.append("course_name", this.classroomName);
-        formData.append("course_id", this.classroomId);
-        formData.append("start_date", this.start_date);
-        formData.append("end_date", this.end_date);
-
         await axios
           .post("/api/user/file/upload", formData, config)
           .then(function () {
@@ -459,8 +433,7 @@ export default {
 
     async fatchItemClassroom(item) {
       this.loading = true;
-      this.classroomName = item.course_name;
-      this.classroomId = item.courseId;
+      this.course_id = item.courseId;
       if (item) {
         await axios
           .get("/api/manage/classroom", {

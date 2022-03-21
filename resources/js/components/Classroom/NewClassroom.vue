@@ -107,7 +107,7 @@ export default {
   data: function () {
     return {
       clasroom: "",
-      file: "",
+      file: null,
       start_date: null,
       end_date: null,
       menu1: false,
@@ -140,6 +140,7 @@ export default {
       };
       let formData = new FormData();
 
+      formData.append("check_file", this.file != null ? true : false);
       formData.append("import_file", this.file);
       formData.append("course_name", this.clasroom);
       formData.append("start_date", this.start_date);

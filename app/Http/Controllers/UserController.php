@@ -36,41 +36,7 @@ class UserController extends Controller
     public function import(Request $request)
     {
 
-        if ($request->role === 'teacher') {
-
-            if (User::where('id', $request->user_id)->first()) {
-                $userDB = User::where('id', $request->user_id)->first();
-
-                $classroomWhere = [
-                    'user_id'   =>  $userDB->id,
-                    'course_id' => $request->course_id,
-                ];
-
-                $classroomData = [
-                    "role"      =>  $request->role,
-                ];
-                $classroomDB = Classroom::updateOrCreate($classroomWhere, $classroomData);
-
-                return response()->json(['success' => true, 'payload' =>  $request]);
-            } else {
-                $userWhere = [
-                    'username'  => $request->username
-                ];
-
-                $userData = [
-                    'name'  =>  $request->name,
-                    'email' =>   $request->email,
-                    'role_teacher' =>  1,
-                    'role' =>  "teacher",
-                    'password' => Hash::make($request->password),
-                ];
-                $userDB = User::updateOrCreate($userWhere, $userData);
-                return response()->json(['success' => true, 'payload' =>  $request]);
-            }
-        }
-
         if ($request->role === 'student' || $request->role === 'ta') {
-
 
             if (User::where('username', $request->student_id)->first()) {
                 $userDB = User::where('username', $request->student_id)->first();
@@ -106,119 +72,96 @@ class UserController extends Controller
                 'semester'  =>  $request->semester
             ];
 
-            // $classroomData['start_datetime'] =  $request->start_date;
-            // $classroomData['end_datetime'] =  $request->end_date;
-
             $classroomDB = Classroom::updateOrCreate($classroomWhere, $classroomData);
             return response()->json(['success' => true, 'payload' =>  $request]);
         }
 
-        $validator = Validator::make(
-            [
-                'file'      => $request->import_file,
-                'extension' => strtolower($request->import_file->getClientOriginalExtension()),
-            ],
-            [
-                'file'          => 'required',
-                'extension'      => 'required|in:rtf',
-            ]
+        if ($request->check_file == true) {
 
-        );
+            $validator = Validator::make(
+                [
+                    'file'      => $request->import_file,
+                    'extension' => strtolower($request->import_file->getClientOriginalExtension()),
+                ],
+                [
+                    'file'          => 'required',
+                    'extension'      => 'required|in:rtf',
+                ]
 
-        $extension = $request->import_file->extension();
-        $fileName = $request->import_file->getClientOriginalName();
-        $import_file = $request->import_file;
+            );
 
-        // Extract Data from imported file
-        $request->import_file->storeAs('import_file/', $fileName);
+            $extension = $request->import_file->extension();
+            $fileName = $request->import_file->getClientOriginalName();
+            $import_file = $request->import_file;
 
-        $file = file($import_file->getPathname());
+            // Extract Data from imported file
+            $request->import_file->storeAs('import_file/', $fileName);
 
-        preg_match('/}{\\\hich\\\af19\\\dbch\\\af15\\\loch\\\f19\s\s}{\\\b\s\\\hich\\\af19\\\dbch\\\af15\\\loch\\\f19\s[0-9]}/', $file[0], $section);
-        $section = explode('}', explode(' ', $section[0])[4])[0];
+            $file = file($import_file->getPathname());
 
-        preg_match_all('/\s\D{2}[0-9]{3}\s/', $file[0], $course);
-        $course = (iconv('TIS-620', 'UTF-8//ignore', $course[0][0])); // Only work on b"xxxx" string
-        $course = str_replace(' ', '', $course);
+            preg_match('/}{\\\hich\\\af19\\\dbch\\\af15\\\loch\\\f19\s\s}{\\\b\s\\\hich\\\af19\\\dbch\\\af15\\\loch\\\f19\s[0-9]}/', $file[0], $section);
+            $section = explode('}', explode(' ', $section[0])[4])[0];
 
-        preg_match_all('!\d+!', $course, $course_id);
-        $course_id = $course_id[0][0];
+            preg_match_all('/\s\D{2}[0-9]{3}\s/', $file[0], $course);
+            $course = (iconv('TIS-620', 'UTF-8//ignore', $course[0][0])); // Only work on b"xxxx" string
+            $course = str_replace(' ', '', $course);
 
-        $file_data = (iconv('TIS-620', 'UTF-8//ignore', $file[0]));
+            preg_match_all('!\d+!', $course, $course_id);
+            $course_id = $course_id[0][0];
 
-
-        /////////////////////////////////////////////////////////////////////
-        //  Extract Semester and Year
-        preg_match('/ปีการศึกษา}{\\\b\\\fs32\s\\\hich\\\af19\\\dbch\\\af15\\\loch\\\f19\s\s[0-9]{1}\\/[0-9]{4}/', $file_data, $semester_year);
-        $semester_year = explode('  ', $semester_year[0])[1];
-        $semester = explode('/', $semester_year)[0];
-        $year = explode('/', $semester_year)[1];
-
-        /////////////////////////////////////////////////////////////////////
-        //  Extract Student
+            $file_data = (iconv('TIS-620', 'UTF-8//ignore', $file[0]));
 
 
+            /////////////////////////////////////////////////////////////////////
+            //  Extract Semester and Year
+            preg_match('/ปีการศึกษา}{\\\b\\\fs32\s\\\hich\\\af19\\\dbch\\\af15\\\loch\\\f19\s\s[0-9]{1}\\/[0-9]{4}/', $file_data, $semester_year);
+            $semester_year = explode('  ', $semester_year[0])[1];
+            $semester = explode('/', $semester_year)[0];
+            $year = explode('/', $semester_year)[1];
 
-        preg_match_all('/[0-9]{10}\\\cell\\\hich\\\af19\\\dbch\\\af15\\\loch\\\f19\s[^0-9]+}/', $file_data, $students);
+            /////////////////////////////////////////////////////////////////////
+            //  Extract Student
 
-        foreach ($students[0] as $i => $student) {
-            $student_id = substr($student, 0, 10);
-            $name = explode('\\f19 ', $student)[1];
-            $name = explode('}', $name)[0];
+            preg_match_all('/[0-9]{10}\\\cell\\\hich\\\af19\\\dbch\\\af15\\\loch\\\f19\s[^0-9]+}/', $file_data, $students);
+
+            foreach ($students[0] as $i => $student) {
+                $student_id = substr($student, 0, 10);
+                $name = explode('\\f19 ', $student)[1];
+                $name = explode('}', $name)[0];
 
 
 
-            $userWhere = [
-                'username'  => $student_id
-            ];
-
-            $userData = [
-                'name'  =>  $name,
-                'email' =>  $student_id . "@mju.ac.th",
-                'role_student' =>  1,
-                'role' =>  "student",
-                'password' => Hash::make($student_id),
-            ];
-
-            $userDB = User::updateOrCreate($userWhere, $userData);
-
-            if (isset($request->course_name) && $request->course_name != '') {
-                $courseWhere = [
-                    'course_name' =>  $request->course_name,
+                $userWhere = [
+                    'username'  => $student_id
                 ];
 
-                $courseData = [
-                    'course_name' =>  $request->course_name,
-                ];
-                $courseDB = Course::updateOrCreate($courseWhere, $courseData);
-            } else {
-                $courseWhere = [
-                    'course_name' => $course,
+                $userData = [
+                    'name'  =>  $name,
+                    'email' =>  $student_id . "@mju.ac.th",
+                    'role_student' =>  1,
+                    'role' =>  "student",
+                    'password' => Hash::make($student_id),
                 ];
 
-                $courseData = [
-                    'course_name' => $course,
+                $userDB = User::updateOrCreate($userWhere, $userData);
+
+                $classroomWhere = [
+                    'user_id'   =>  $userDB->id,
+                    'course_id' => $request->course_id,
                 ];
-                $courseDB = Course::updateOrCreate($courseWhere, $courseData);
+
+                $classroomData = [
+                    'section'   =>  $section,
+                    'year'      =>  $year,
+                    "role"      =>  "student",
+                    'semester'  =>  $semester
+                ];
+
+                $classroomData['start_datetime'] =  $request->start_date !== '' ?  $request->start_date : NULL;
+                $classroomData['end_datetime'] =  $request->end_date !== '' ?  $request->end_date : NULL;
+
+                $classroomDB = Classroom::updateOrCreate($classroomWhere, $classroomData);
             }
-
-
-            $classroomWhere = [
-                'user_id'   =>  $userDB->id,
-                'course_id' => $courseDB->id,
-            ];
-
-            $classroomData = [
-                'section'   =>  $section,
-                'year'      =>  $year,
-                "role"      =>  "student",
-                'semester'  =>  $semester
-            ];
-
-            $classroomData['start_datetime'] =  $request->start_date !== '' ?  $request->start_date : NULL;
-            $classroomData['end_datetime'] =  $request->end_date !== '' ?  $request->end_date : NULL;
-
-            $classroomDB = Classroom::updateOrCreate($classroomWhere, $classroomData);
         }
         return response()->json(['success' => $request]);
     }

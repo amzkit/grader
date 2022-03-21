@@ -1,5 +1,5 @@
 const state = {
-    classrooms: [],
+    courses: [],
     user: [],
     schedule_all: [],
 }
@@ -7,8 +7,8 @@ const state = {
 const getters = {}
 const actions = {}
 const mutations = {
-    SET_CLASSROOMS: (state, newValue) => {
-        state.classrooms = newValue
+    SET_COURSES: (state, newValue) => {
+        state.courses = newValue
     },
     SET_USER: (state, newValue) => {
         state.user = newValue
