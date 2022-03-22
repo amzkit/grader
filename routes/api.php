@@ -47,3 +47,6 @@ Route::delete('manage/example/{id}', 'App\Http\Controllers\ScheduleController@de
 Route::post('test-case', 'App\Http\Controllers\TestcaseController@insert');
 
 Route::post('course', 'App\Http\Controllers\CourseController@insert');
+
+Route::post('submission', 'App\Http\Controllers\SubmissionController@submission');
+Route::get('submission', 'App\Http\Controllers\SubmissionController@getSubmission');

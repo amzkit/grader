@@ -70,6 +70,8 @@
                               >
                               </v-autocomplete>
                             </div>
+
+                            <!-- DATE TIME 1 -->
                             <v-menu
                               v-model="menu1"
                               :close-on-content-click="false"
@@ -92,7 +94,37 @@
                               ></v-date-picker>
                             </v-menu>
                             <v-menu
+                              ref="menu"
                               v-model="menu2"
+                              :close-on-content-click="false"
+                              :nudge-right="40"
+                              :return-value.sync="start_time"
+                              transition="scale-transition"
+                              offset-y
+                              max-width="290px"
+                              min-width="290px"
+                            >
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-text-field
+                                  v-model="start_time"
+                                  label="Picker in menu"
+                                  readonly
+                                  v-bind="attrs"
+                                  v-on="on"
+                                ></v-text-field>
+                              </template>
+                              <v-time-picker
+                                v-if="menu2"
+                                format="24hr"
+                                v-model="start_time"
+                                full-width
+                                @click:minute="$refs.menu.save(start_time)"
+                              ></v-time-picker>
+                            </v-menu>
+
+                            <!-- DATE TIME 2 -->
+                            <v-menu
+                              v-model="menu3"
                               :close-on-content-click="false"
                               max-width="290"
                             >
@@ -109,8 +141,36 @@
                               </template>
                               <v-date-picker
                                 v-model="end_date"
-                                @change="menu2 = false"
+                                @change="menu3 = false"
                               ></v-date-picker>
+                            </v-menu>
+                            <v-menu
+                              ref="menu2"
+                              v-model="menu4"
+                              :close-on-content-click="false"
+                              :nudge-right="40"
+                              :return-value.sync="end_time"
+                              transition="scale-transition"
+                              offset-y
+                              max-width="290px"
+                              min-width="290px"
+                            >
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-text-field
+                                  v-model="end_time"
+                                  label="Picker in menu"
+                                  readonly
+                                  v-bind="attrs"
+                                  v-on="on"
+                                ></v-text-field>
+                              </template>
+                              <v-time-picker
+                                v-if="menu4"
+                                format="24hr"
+                                v-model="end_time"
+                                full-width
+                                @click:minute="$refs.menu2.save(end_time)"
+                              ></v-time-picker>
                             </v-menu>
                           </v-col>
                         </v-row>
@@ -241,8 +301,12 @@ export default {
       },
       start_date: null,
       end_date: null,
+      start_time: null,
+      end_time: null,
       menu1: false,
       menu2: false,
+      menu3: false,
+      menu4: false,
     };
   },
   async created() {
@@ -276,7 +340,7 @@ export default {
   methods: {
     dayjs,
     invalidDate(item) {
-      return item ? dayjs(item).format("MMMM D, YYYY") : "-";
+      return item ? dayjs(item).format("MMMM D, YYYY hh:mm A") : "-";
     },
     download(item) {
       window.location.href = `api/schedule/download${item.file.replace(
@@ -321,8 +385,7 @@ export default {
 
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
-        this.updateExample();
+        this.updateExample(this.editedItem);
       } else {
         this.postExample();
       }
@@ -335,8 +398,12 @@ export default {
         .post("/api/manage/example", {
           exampleId: this.selectedExamplesId,
           roomId: this.roomId,
-          start_date: this.start_date,
-          end_date: this.end_date,
+          start_date: dayjs(`${this.start_date} ${this.start_time}`).format(
+            "MM-DD-YYYY hh:mm A"
+          ),
+          end_date: dayjs(`${this.end_date} ${this.end_time}`).format(
+            "MM-DD-YYYY hh:mm A"
+          ),
         })
         .then(function () {
           location.reload();
@@ -348,14 +415,17 @@ export default {
       this.loading = false;
     },
 
-    async updateExample() {
+    async updateExample(item) {
       this.loading = true;
       await axios
         .put("/api/manage/example", {
-          exampleId: this.editedItem.problemsId,
-          roomId: this.roomId,
-          start_date: this.start_date,
-          end_date: this.end_date,
+          id: item.id,
+          start_date: dayjs(`${this.start_date} ${this.start_time}`).format(
+            "MM-DD-YYYY hh:mm A"
+          ),
+          end_date: dayjs(`${this.end_date} ${this.end_time}`).format(
+            "MM-DD-YYYY hh:mm A"
+          ),
         })
         .then(function () {
           location.reload();

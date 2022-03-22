@@ -11,7 +11,17 @@
             <div>
               <v-expansion-panels class="mb-6">
                 <v-expansion-panel
-                  v-for="(item, i) in this.$store.state.data.schedule_all"
+                  v-for="(
+                    item, i
+                  ) in this.$store.state.data.schedule_all.filter((e) => {
+                    const missionSend = missionPass.find(
+                      (p) => p.schedule_id == e.id
+                    );
+                    if (missionSend) {
+                      return null;
+                    }
+                    return e;
+                  })"
                   :key="i"
                 >
                   <v-expansion-panel-header expand-icon="mdi-menu-down">
@@ -124,10 +134,11 @@
                           </v-expansion-panel-content>
                         </v-col>
                         <v-col cols="8" class="d-flex align-center">
-                          <v-file-input
-                            label="File input"
-                            v-model="files"
-                          ></v-file-input>
+                          <input
+                            type="file"
+                            class="form-control"
+                            v-on:change="onFileChange"
+                          />
                         </v-col>
                       </v-row>
                     </v-row>
@@ -146,22 +157,20 @@
                 </v-expansion-panel>
               </v-expansion-panels>
 
-              <!-- <v-expansion-panels>
-                <v-expansion-panel>
+              <v-expansion-panels>
+                <v-expansion-panel v-for="(item, i) in missionPass" :key="i">
                   <v-expansion-panel-header disable-icon-rotate>
-                    Item
+                    {{ item.title }}
+
                     <template v-slot:actions>
                       <v-icon color="teal"> mdi-check </v-icon>
                     </template>
                   </v-expansion-panel-header>
                   <v-expansion-panel-content>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    {{ item.message }}
                   </v-expansion-panel-content>
                 </v-expansion-panel>
-              </v-expansion-panels> -->
+              </v-expansion-panels>
             </div>
           </v-col>
         </v-row>
@@ -185,14 +194,23 @@ export default {
       loading: false,
       loader: null,
       loadingDownload: false,
-      files: null,
+      file: null,
+      course_id: 0,
+      missionPass: [],
     };
   },
-  async created() {
-    // await this.check_user();
+  async created() {},
+
+  computed: {
+    getDateTime() {
+      return dayjs(new Date()).format("MM-DD-YYYY hh:mm A");
+    },
   },
   methods: {
     dayjs,
+    err(item) {
+      console.log(item);
+    },
     download(item) {
       window.location.href = `api/schedule/download${item.replace(
         "problem_file",
@@ -200,42 +218,33 @@ export default {
       )}`;
     },
     invalidDate(item) {
-      return item ? dayjs(item).format("MMMM D, YYYY") : "-";
+      return item ? dayjs(item).format("MMMM D, YYYY hh:mm A") : "-";
+    },
+    onFileChange(e) {
+      this.file = e.target.files[0];
     },
     async sendMission(item) {
+      const config = {
+        headers: { "content-type": "multipart/form-data" },
+      };
       let formData = new FormData();
-      if (this.files) {
-        for (let file in this.files) {
-          formData.append("file", file);
-          formData.append("studentId", 1);
-          formData.append("problemsId", item.problemsId);
-        }
-        // axios
-        //   .post(
-        //     "/////////////////////////",
-        //     {
-        //       files: formData,
-        //       test: "test",
-        //     },
-        //     {
-        //       headers: {
-        //         "Content-Type": "multipart/form-data",
-        //       },
-        //     }
-        //   )
-        //   .then((response) => {
-        //     console.log("Success!");
-        //     console.log({ response });
-        //   })
-        //   .catch((error) => {
-        //     console.log({ error });
-        //   });
-      } else {
-        console.log("there are no files.");
-      }
+      formData.append("sourcefile", this.file);
+      formData.append("Lang", item.language);
+      formData.append("problem_id", item.problemsId);
+      formData.append("course_id", this.course_id);
+      await axios
+        .post("/api/submission", formData, config)
+        .then(function (response) {
+          location.reload();
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
     async fatchItemSchedule(item) {
       this.loading = true;
+      this.course_id = item.courseId;
+      this.fetchItemSubmission(item.courseId);
       if (item) {
         await axios
           .get("/api/schedule", {
@@ -252,6 +261,22 @@ export default {
             }
           });
       }
+      this.loading = false;
+    },
+    async fetchItemSubmission(course_id) {
+      this.loading = true;
+      console.log("asda", course_id);
+      await axios
+        .get("/api/submission", {
+          params: {
+            course_id: this.course_id,
+          },
+        })
+        .then((response) => {
+          if (response.data.success == true) {
+            this.missionPass = response.data.payload;
+          }
+        });
       this.loading = false;
     },
   },

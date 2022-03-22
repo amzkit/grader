@@ -235,6 +235,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -248,11 +257,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       loading: false,
       loader: null,
       loadingDownload: false,
-      files: null
+      file: null,
+      course_id: 0,
+      missionPass: []
     };
   },
-  created: function created() {// await this.check_user();
-
+  created: function created() {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
@@ -265,56 +275,52 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee);
     }))();
   },
+  computed: {
+    getDateTime: function getDateTime() {
+      return dayjs__WEBPACK_IMPORTED_MODULE_1___default()(new Date()).format("MM-DD-YYYY hh:mm A");
+    }
+  },
   methods: {
     dayjs: (dayjs__WEBPACK_IMPORTED_MODULE_1___default()),
+    err: function err(item) {
+      console.log(item);
+    },
     download: function download(item) {
       window.location.href = "api/schedule/download".concat(item.replace("problem_file", ""));
     },
     invalidDate: function invalidDate(item) {
-      return item ? dayjs__WEBPACK_IMPORTED_MODULE_1___default()(item).format("MMMM D, YYYY") : "-";
+      return item ? dayjs__WEBPACK_IMPORTED_MODULE_1___default()(item).format("MMMM D, YYYY hh:mm A") : "-";
+    },
+    onFileChange: function onFileChange(e) {
+      this.file = e.target.files[0];
     },
     sendMission: function sendMission(item) {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        var formData, file;
+        var config, formData;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
+                config = {
+                  headers: {
+                    "content-type": "multipart/form-data"
+                  }
+                };
                 formData = new FormData();
+                formData.append("sourcefile", _this.file);
+                formData.append("Lang", item.language);
+                formData.append("problem_id", item.problemsId);
+                formData.append("course_id", _this.course_id);
+                _context2.next = 8;
+                return axios.post("/api/submission", formData, config).then(function (response) {
+                  location.reload();
+                })["catch"](function (error) {
+                  console.log(error);
+                });
 
-                if (_this.files) {
-                  for (file in _this.files) {
-                    formData.append("file", file);
-                    formData.append("studentId", 1);
-                    formData.append("problemsId", item.problemsId);
-                  } // axios
-                  //   .post(
-                  //     "/////////////////////////",
-                  //     {
-                  //       files: formData,
-                  //       test: "test",
-                  //     },
-                  //     {
-                  //       headers: {
-                  //         "Content-Type": "multipart/form-data",
-                  //       },
-                  //     }
-                  //   )
-                  //   .then((response) => {
-                  //     console.log("Success!");
-                  //     console.log({ response });
-                  //   })
-                  //   .catch((error) => {
-                  //     console.log({ error });
-                  //   });
-
-                } else {
-                  console.log("there are no files.");
-                }
-
-              case 2:
+              case 8:
               case "end":
                 return _context2.stop();
             }
@@ -331,13 +337,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context3.prev = _context3.next) {
               case 0:
                 _this2.loading = true;
+                _this2.course_id = item.courseId;
+
+                _this2.fetchItemSubmission(item.courseId);
 
                 if (!item) {
-                  _context3.next = 4;
+                  _context3.next = 6;
                   break;
                 }
 
-                _context3.next = 4;
+                _context3.next = 6;
                 return axios.get("/api/schedule", {
                   params: {
                     course_id: item.courseId
@@ -348,15 +357,47 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   }
                 });
 
-              case 4:
+              case 6:
                 _this2.loading = false;
 
-              case 5:
+              case 7:
               case "end":
                 return _context3.stop();
             }
           }
         }, _callee3);
+      }))();
+    },
+    fetchItemSubmission: function fetchItemSubmission(course_id) {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _this3.loading = true;
+                console.log("asda", course_id);
+                _context4.next = 4;
+                return axios.get("/api/submission", {
+                  params: {
+                    course_id: _this3.course_id
+                  }
+                }).then(function (response) {
+                  if (response.data.success == true) {
+                    _this3.missionPass = response.data.payload;
+                  }
+                });
+
+              case 4:
+                _this3.loading = false;
+
+              case 5:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
       }))();
     }
   }
@@ -933,7 +974,19 @@ var render = function() {
                             "v-expansion-panels",
                             { staticClass: "mb-6" },
                             _vm._l(
-                              this.$store.state.data.schedule_all,
+                              this.$store.state.data.schedule_all.filter(
+                                function(e) {
+                                  var missionSend = _vm.missionPass.find(
+                                    function(p) {
+                                      return p.schedule_id == e.id
+                                    }
+                                  )
+                                  if (missionSend) {
+                                    return null
+                                  }
+                                  return e
+                                }
+                              ),
                               function(item, i) {
                                 return _c(
                                   "v-expansion-panel",
@@ -1371,22 +1424,15 @@ var render = function() {
                                                     attrs: { cols: "8" }
                                                   },
                                                   [
-                                                    _c("v-file-input", {
-                                                      attrs: {
-                                                        label: "File input"
-                                                      },
-                                                      model: {
-                                                        value: _vm.files,
-                                                        callback: function(
-                                                          $$v
-                                                        ) {
-                                                          _vm.files = $$v
-                                                        },
-                                                        expression: "files"
+                                                    _c("input", {
+                                                      staticClass:
+                                                        "form-control",
+                                                      attrs: { type: "file" },
+                                                      on: {
+                                                        change: _vm.onFileChange
                                                       }
                                                     })
-                                                  ],
-                                                  1
+                                                  ]
                                                 )
                                               ],
                                               1
@@ -1430,6 +1476,60 @@ var render = function() {
                                 )
                               }
                             ),
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-expansion-panels",
+                            _vm._l(_vm.missionPass, function(item, i) {
+                              return _c(
+                                "v-expansion-panel",
+                                { key: i },
+                                [
+                                  _c(
+                                    "v-expansion-panel-header",
+                                    {
+                                      attrs: { "disable-icon-rotate": "" },
+                                      scopedSlots: _vm._u(
+                                        [
+                                          {
+                                            key: "actions",
+                                            fn: function() {
+                                              return [
+                                                _c(
+                                                  "v-icon",
+                                                  { attrs: { color: "teal" } },
+                                                  [_vm._v(" mdi-check ")]
+                                                )
+                                              ]
+                                            },
+                                            proxy: true
+                                          }
+                                        ],
+                                        null,
+                                        true
+                                      )
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                  " +
+                                          _vm._s(item.title) +
+                                          "\n\n                  "
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("v-expansion-panel-content", [
+                                    _vm._v(
+                                      "\n                  " +
+                                        _vm._s(item.message) +
+                                        "\n                "
+                                    )
+                                  ])
+                                ],
+                                1
+                              )
+                            }),
                             1
                           )
                         ],

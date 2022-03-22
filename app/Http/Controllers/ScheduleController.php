@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Schedule;
 use App\Models\Problem;
+use Carbon\Carbon;
 
 class ScheduleController extends Controller
 {
@@ -12,6 +13,8 @@ class ScheduleController extends Controller
     public function getSchedule(Request $request)
     {
         $course_id = $request->course_id;
+
+        $now = Carbon::now()->toDateTimeString();
 
         $schedule = Schedule::where('course_id', '=',  $course_id)
             ->leftJoin("problems", "problems.id", "=", "schedules.problem_id")
@@ -54,7 +57,7 @@ class ScheduleController extends Controller
 
     public function updateManageExample(Request $request)
     {
-        $schedule = Schedule::where("problem_id", $request->exampleId)->orWhere('course_id', $request->roomId)->first();
+        $schedule = Schedule::where("id", $request->id)->first();
         $schedule->update(
             [
                 'start_date' => $request->start_date,

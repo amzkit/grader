@@ -23,24 +23,43 @@ class SubmissionController extends Controller
         $this->middleware('auth');
     }
 
+    public function getSubmission(Request $request)
+    {
+        $schedule = Submission::where('user_id', '=',  auth()->user()->id)
+            ->join('schedules', 'submissions.schedule_id', '=', 'schedules.id')
+            ->join('problems', 'submissions.problem_id', '=', 'problems.id')
+            ->where('course_id', '=', $request->course_id)
+            ->get();
+        return response()->json(['success' => true, 'payload' =>  $schedule]);
+    }
+
 
     public function submission(Request $request)
     {
         // add date check $request->input('schedule_id');
+
+
         $now = Carbon::now()->toDateTimeString();
-        $passdue = Schedule::where('id', '=', $request->input('schedule_id'))->where('end_time', '<=', $now)->count();
-        if ($passdue > 0) {
-            return redirect('/submission/' . $request->input('problem_id') . '/' . $request->input('schedule_id'))->withErrors(array('message' => 'The submission of this task is no longer allowed! +_+'));
-        }
+        $passdue = Schedule::where('problem_id', '=', $request->input('problem_id'))
+            ->where('course_id', '=', $request->input('course_id'))
+            ->first();
+
+
+        // if ($passdue->end_date <= $now) {
+        //     return response()->json([
+        //         "message" => "The submission of this task is no longer allowed! +_+"
+        //     ], 200);
+        // }
+
+
 
         if ($request->hasFile('sourcefile')) {
-
             $submission = new Submission;
             $submission->problem_id = $request->input('problem_id');
-            $submission->schedule_id = $request->input('schedule_id');
+            $submission->schedule_id = $passdue->id;
             $submission->Lang = $request->input('Lang');
             $submission->user_id = auth()->user()->id;
-            $submission->IP = Request::ip();
+            $submission->IP = \Request::ip();
             $submission->score = 0.0;
             $submission->message = "waiting";
             $submission->compiler_message = "waiting";
@@ -51,16 +70,15 @@ class SubmissionController extends Controller
             $waitinglist = new Waitinglist;
             $waitinglist->submission_id = $submission->id;
 
-            $user = User::find(auth()->user()->id);
-            $user->lang = $request->input('Lang');
-            $user->save();
             $waitinglist->save();
 
-
-            return  redirect('/submission/' . $submission->id . '/edit')->with('success', 'Scccessfully uploaded!');
+            return response()->json([
+                'success', 'Scccessfully uploaded!'
+            ], 200);
         } else {
-
-            return redirect('/submission/' . $request->input('problem_id') . '/' . $request->input('schedule_id'))->withErrors(array('message' => 'File not found!!'));
+            return response()->json([
+                'message' => 'File not found!!'
+            ], 200);
         }
     }
 }
