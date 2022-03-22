@@ -5390,34 +5390,37 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         icon: "mdi-home",
         text: "Home"
       }, {
-        to: "/mission",
-        icon: "mdi-view-dashboard",
-        text: "Mission"
-      }, {
-        to: "/new-test",
-        icon: "mdi-view-dashboard",
-        text: "New Test"
+        icon: "mdi-pencil",
+        text: "Mission",
+        subLinks: [{
+          to: "/mission",
+          text: "Mission"
+        }, {
+          text: "New Mission",
+          to: "/new-mission"
+        }, {
+          text: "Manage Mission",
+          to: "/manage-mission"
+        }]
       }, {
         icon: "mdi-pencil",
-        text: "Manage",
+        text: "Classroom",
         subLinks: [{
-          text: "New Example",
-          to: "/new-example"
-        }, {
           text: "Manage Classroom",
           to: "/manage-classroom"
-        }, {
-          text: "Manage Example",
-          to: "/manage-example"
         }]
       }, {
         to: "/my-score",
         icon: "mdi-view-dashboard",
-        text: "Myscore"
+        text: "My Score"
       }, {
         to: "/scoreboard",
         icon: "mdi-view-dashboard",
         text: "Scoreboard"
+      }, {
+        to: "/new-test",
+        icon: "mdi-view-dashboard",
+        text: "New Test"
       }, {
         icon: "mdi-pencil",
         text: "User",
@@ -5861,7 +5864,8 @@ var routes = [{
         return __webpack_require__.e(/*! import() */ "resources_js_pages_guest_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/guest.vue */ "./resources/js/pages/guest.vue"));
     }
   }
-}, {
+}, // User
+{
   path: "/new-user",
   name: "new-user",
   component: function component() {
@@ -5874,22 +5878,43 @@ var routes = [{
     return __webpack_require__.e(/*! import() */ "resources_js_components_Admin_ManageUser_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Admin/ManageUser.vue */ "./resources/js/components/Admin/ManageUser.vue"));
   }
 }, {
-  path: "/manage-example",
-  name: "manage-example",
-  component: function component() {
-    return __webpack_require__.e(/*! import() */ "resources_js_components_Manage_ManageExample_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Manage/ManageExample.vue */ "./resources/js/components/Manage/ManageExample.vue"));
-  }
-}, {
-  path: "/new-classroom",
-  name: "new-classroom",
-  component: function component() {
-    return __webpack_require__.e(/*! import() */ "resources_js_components_Classroom_NewClassroom_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Classroom/NewClassroom.vue */ "./resources/js/components/Classroom/NewClassroom.vue"));
-  }
-}, {
   path: "/change-password",
   name: "change-password",
   component: function component() {
     return __webpack_require__.e(/*! import() */ "resources_js_auth_ChangePassword_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../auth/ChangePassword.vue */ "./resources/js/auth/ChangePassword.vue"));
+  }
+}, // Mission
+{
+  path: "/manage-mission",
+  name: "manage-mission",
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ "resources_js_components_Mission_ManageMission_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Mission/ManageMission.vue */ "./resources/js/components/Mission/ManageMission.vue"));
+  }
+}, {
+  path: "/new-mission",
+  name: "new-mission",
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ "resources_js_components_Mission_NewMission_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Mission/NewMission.vue */ "./resources/js/components/Mission/NewMission.vue"));
+  }
+}, {
+  path: "/mission",
+  name: "mission",
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ "resources_js_components_Mission_Mission_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Mission/Mission.vue */ "./resources/js/components/Mission/Mission.vue"));
+  }
+}, // Test Mission
+{
+  path: "/new-test",
+  name: "new-test",
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ "resources_js_components_TestMission_NewTest_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/TestMission/NewTest.vue */ "./resources/js/components/TestMission/NewTest.vue"));
+  }
+}, // Classroom
+{
+  path: "/manage-classroom",
+  name: "manage-classroom",
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ "resources_js_components_Classroom_ManageClassroom_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Classroom/ManageClassroom.vue */ "./resources/js/components/Classroom/ManageClassroom.vue"));
   }
 }, {
   path: "/classroom",
@@ -5898,40 +5923,24 @@ var routes = [{
     return __webpack_require__.e(/*! import() */ "resources_js_pages_ClassRoomPage_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/ClassRoomPage.vue */ "./resources/js/pages/ClassRoomPage.vue"));
   }
 }, {
-  path: "/manage-classroom",
-  name: "manage-classroom",
+  path: "/new-classroom",
+  name: "new-classroom",
   component: function component() {
-    return __webpack_require__.e(/*! import() */ "resources_js_components_Manage_ManageClassroom_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Manage/ManageClassroom.vue */ "./resources/js/components/Manage/ManageClassroom.vue"));
+    return __webpack_require__.e(/*! import() */ "resources_js_components_Classroom_NewClassroom_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Classroom/NewClassroom.vue */ "./resources/js/components/Classroom/NewClassroom.vue"));
   }
-}, {
-  path: "/new-example",
-  name: "new-example",
-  component: function component() {
-    return __webpack_require__.e(/*! import() */ "resources_js_components_Manage_NewExample_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Manage/NewExample.vue */ "./resources/js/components/Manage/NewExample.vue"));
-  }
-}, {
+}, // Score
+{
   path: "/my-score",
   name: "my-score",
   component: function component() {
     return __webpack_require__.e(/*! import() */ "resources_js_pages_MyScorePage_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/MyScorePage.vue */ "./resources/js/pages/MyScorePage.vue"));
   }
-}, {
+}, // Scoreboard
+{
   path: "/scoreboard",
   name: "scoreboard",
   component: function component() {
     return __webpack_require__.e(/*! import() */ "resources_js_pages_ScoreBoardPage_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/ScoreBoardPage.vue */ "./resources/js/pages/ScoreBoardPage.vue"));
-  }
-}, {
-  path: "/mission",
-  name: "mission",
-  component: function component() {
-    return __webpack_require__.e(/*! import() */ "resources_js_components_Classroom_Mission_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Classroom/Mission.vue */ "./resources/js/components/Classroom/Mission.vue"));
-  }
-}, {
-  path: "/new-test",
-  name: "new-test",
-  component: function component() {
-    return __webpack_require__.e(/*! import() */ "resources_js_components_Test_NewTest_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Test/NewTest.vue */ "./resources/js/components/Test/NewTest.vue"));
   }
 }];
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (routes);
@@ -106345,7 +106354,7 @@ var index = {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_components_Admin_UserImport_vue":1,"resources_js_components_Admin_ManageUser_vue":1,"resources_js_components_Manage_ManageExample_vue":1,"resources_js_components_Classroom_NewClassroom_vue":1,"resources_js_auth_ChangePassword_vue":1,"resources_js_pages_ClassRoomPage_vue":1,"resources_js_components_Manage_ManageClassroom_vue":1,"resources_js_components_Manage_NewExample_vue":1,"resources_js_pages_MyScorePage_vue":1,"resources_js_pages_ScoreBoardPage_vue":1,"resources_js_components_Classroom_Mission_vue":1,"resources_js_components_Test_NewTest_vue":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_components_Admin_UserImport_vue":1,"resources_js_components_Admin_ManageUser_vue":1,"resources_js_auth_ChangePassword_vue":1,"resources_js_components_Mission_ManageMission_vue":1,"resources_js_components_Mission_NewMission_vue":1,"resources_js_components_Mission_Mission_vue":1,"resources_js_components_TestMission_NewTest_vue":1,"resources_js_components_Classroom_ManageClassroom_vue":1,"resources_js_pages_ClassRoomPage_vue":1,"resources_js_components_Classroom_NewClassroom_vue":1,"resources_js_pages_MyScorePage_vue":1,"resources_js_pages_ScoreBoardPage_vue":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};

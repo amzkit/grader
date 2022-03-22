@@ -18,7 +18,8 @@ class CreateProblemsTable extends Migration
             $table->string('title');
             $table->string('question');
             $table->string('score');
-            $table->string('language')->nullable()->default(null);
+            $table->float('level')->nullable()->default(null);
+            $table->string('language');
             $table->string('file')->nullable()->default(null);
             $table->timestamps();
         });

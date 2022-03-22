@@ -20,6 +20,7 @@ const routes = [
             }
         }
     },
+    // User
     {
         path: "/new-user",
         name: "new-user",
@@ -31,19 +32,37 @@ const routes = [
         component: () => import("../components/Admin/ManageUser.vue")
     },
     {
-        path: "/manage-example",
-        name: "manage-example",
-        component: () => import("../components/Manage/ManageExample.vue")
-    },
-    {
-        path: "/new-classroom",
-        name: "new-classroom",
-        component: () => import("../components/Classroom/NewClassroom.vue")
-    },
-    {
         path: "/change-password",
         name: "change-password",
         component: () => import("../auth/ChangePassword.vue")
+    },
+    // Mission
+    {
+        path: "/manage-mission",
+        name: "manage-mission",
+        component: () => import("../components/Mission/ManageMission.vue")
+    },
+    {
+        path: "/new-mission",
+        name: "new-mission",
+        component: () => import("../components/Mission/NewMission.vue")
+    },
+    {
+        path: "/mission",
+        name: "mission",
+        component: () => import("../components/Mission/Mission.vue")
+    },
+    // Test Mission
+    {
+        path: "/new-test",
+        name: "new-test",
+        component: () => import("../components/TestMission/NewTest.vue")
+    },
+    // Classroom
+    {
+        path: "/manage-classroom",
+        name: "manage-classroom",
+        component: () => import("../components/Classroom/ManageClassroom.vue")
     },
     {
         path: "/classroom",
@@ -51,35 +70,22 @@ const routes = [
         component: () => import("../pages/ClassRoomPage.vue")
     },
     {
-        path: "/manage-classroom",
-        name: "manage-classroom",
-        component: () => import("../components/Manage/ManageClassroom.vue")
+        path: "/new-classroom",
+        name: "new-classroom",
+        component: () => import("../components/Classroom/NewClassroom.vue")
     },
-    {
-        path: "/new-example",
-        name: "new-example",
-        component: () => import("../components/Manage/NewExample.vue")
-    },
+    // Score
     {
         path: "/my-score",
         name: "my-score",
         component: () => import("../pages/MyScorePage.vue")
     },
+    // Scoreboard
     {
         path: "/scoreboard",
         name: "scoreboard",
         component: () => import("../pages/ScoreBoardPage.vue")
-    },
-    {
-        path: "/mission",
-        name: "mission",
-        component: () => import("../components/Classroom/Mission.vue")
-    },
-    {
-        path: "/new-test",
-        name: "new-test",
-        component: () => import("../components/Test/NewTest.vue")
-    },
+    }
 ];
 
 export default routes;

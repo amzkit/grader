@@ -19,6 +19,7 @@ class ScheduleController extends Controller
                 "schedules.id",
                 "problems.title",
                 "problems.question",
+                "problems.level",
                 "problems.score",
                 "problems.language",
                 "problems.file",
@@ -35,20 +36,32 @@ class ScheduleController extends Controller
     {
         foreach ($request->exampleId as $exampleId) {
 
-            $sheduleWhere = [
+            $scheduleWhere = [
                 'course_id'  => $request->roomId,
                 'problem_id' =>  $exampleId
             ];
 
-            $sheduleData = [
+            $scheduleData = [
                 'start_date'  =>  $request->start_date,
                 'end_date'  =>  $request->end_date,
                 'problem_id' =>  $exampleId
             ];
 
-            $shedule = Schedule::updateOrCreate($sheduleWhere, $sheduleData);
+            $schedule = Schedule::updateOrCreate($scheduleWhere, $scheduleData);
         }
-        return response()->json(['success' => true, 'payload' => $shedule]);
+        return response()->json(['success' => true, 'payload' => $schedule]);
+    }
+
+    public function updateManageExample(Request $request)
+    {
+        $schedule = Schedule::where("problem_id", $request->exampleId)->orWhere('course_id', $request->roomId)->first();
+        $schedule->update(
+            [
+                'start_date' => $request->start_date,
+                'end_date' => $request->end_date
+            ]
+        );
+        return response()->json(['success' => true, 'payload' => $schedule]);
     }
 
     public function deleteManageExample($id)

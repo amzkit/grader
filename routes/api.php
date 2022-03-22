@@ -41,6 +41,7 @@ Route::put('manage/classroom/{id}', 'App\Http\Controllers\ClassroomController@up
 Route::delete('manage/classroom/{id}', 'App\Http\Controllers\ClassroomController@delClassrooms');
 
 Route::post('manage/example', 'App\Http\Controllers\ScheduleController@insertManageExample');
+Route::put('manage/example', 'App\Http\Controllers\ScheduleController@updateManageExample');
 Route::delete('manage/example/{id}', 'App\Http\Controllers\ScheduleController@deleteManageExample');
 
 Route::post('test-case', 'App\Http\Controllers\TestcaseController@insert');

@@ -227,42 +227,47 @@ export default {
           text: "Home",
         },
         {
-          to: "/mission",
-          icon: "mdi-view-dashboard",
+          icon: "mdi-pencil",
           text: "Mission",
-        },
-        {
-          to: "/new-test",
-          icon: "mdi-view-dashboard",
-          text: "New Test",
+          subLinks: [
+            {
+              to: "/mission",
+              text: "Mission",
+            },
+            {
+              text: "New Mission",
+              to: "/new-mission",
+            },
+            {
+              text: "Manage Mission",
+              to: "/manage-mission",
+            },
+          ],
         },
         {
           icon: "mdi-pencil",
-          text: "Manage",
+          text: "Classroom",
           subLinks: [
-            {
-              text: "New Example",
-              to: "/new-example",
-            },
             {
               text: "Manage Classroom",
               to: "/manage-classroom",
-            },
-            {
-              text: "Manage Example",
-              to: "/manage-example",
             },
           ],
         },
         {
           to: "/my-score",
           icon: "mdi-view-dashboard",
-          text: "Myscore",
+          text: "My Score",
         },
         {
           to: "/scoreboard",
           icon: "mdi-view-dashboard",
           text: "Scoreboard",
+        },
+        {
+          to: "/new-test",
+          icon: "mdi-view-dashboard",
+          text: "New Test",
         },
         {
           icon: "mdi-pencil",

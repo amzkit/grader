@@ -3,30 +3,27 @@
     <v-col cols="12">
       <div v-if="!this.$store.state.data.loading">
         <v-row justify="center">
-          <h1>จัดการโจทย์</h1>
+          <h1>New Mission</h1>
           <v-card>
             <v-container fluid>
               <v-row align="center">
                 <v-col cols="4">
-                  <v-subheader> ชื่องาน </v-subheader>
+                  <v-subheader> Title </v-subheader>
                 </v-col>
                 <v-col cols="6">
-                  <v-text-field
-                    v-model="title"
-                    label="ใส่ชื่องาน"
-                  ></v-text-field>
+                  <v-text-field v-model="title" label="Title"></v-text-field>
                 </v-col>
               </v-row>
 
               <v-row align="center">
                 <v-col cols="4">
-                  <v-subheader> โจทย์ </v-subheader>
+                  <v-subheader> Question </v-subheader>
                 </v-col>
                 <v-col cols="6">
                   <v-textarea
                     counter
                     v-model="question"
-                    label="พิมพ์โจทย์"
+                    label="Question"
                   ></v-textarea>
                   <template>
                     <input
@@ -40,29 +37,46 @@
 
               <v-row align="center">
                 <v-col cols="4">
-                  <v-subheader> คะแนน </v-subheader>
+                  <v-subheader> Level </v-subheader>
+                </v-col>
+                <v-col cols="6">
+                  <div class="text-center">
+                    <v-rating
+                      v-model="level"
+                      color="yellow darken-3"
+                      background-color="grey darken-1"
+                      empty-icon="$ratingFull"
+                      half-increments
+                      hover
+                      large
+                    ></v-rating>
+                    <div>
+                      <span class="text-caption text-uppercase">level:</span>
+                      <span class="font-weight-bold">
+                        {{ level }}
+                      </span>
+                    </div>
+                  </div>
+                </v-col>
+                <v-col cols="4">
+                  <v-subheader> Score </v-subheader>
                 </v-col>
                 <v-col cols="6">
                   <v-text-field
                     type="number"
                     v-model="score"
                     onfocus="this.select()"
-                    label="กำหนดคะแนน"
+                    label="Score"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="4">
-                  <v-subheader> ภาษา </v-subheader>
+                  <v-subheader> Language </v-subheader>
                 </v-col>
                 <v-col cols="6">
-                  <v-select
+                  <v-text-field
                     v-model="language"
-                    :items="this.$store.state.data.language"
-                    item-text="languagesName"
-                    item-value="id"
-                    single-line
-                    auto
-                    label="Languages"
-                  ></v-select>
+                    label="Language"
+                  ></v-text-field>
                 </v-col>
               </v-row>
             </v-container>
@@ -87,6 +101,7 @@ export default {
       score: "",
       language: "",
       file: "",
+      level: 0,
     };
   },
   created() {},
@@ -100,6 +115,7 @@ export default {
       this.score = null;
       this.language = null;
       this.file = 0;
+      this.level = 0;
     },
     async formSubmit(e) {
       e.preventDefault();
@@ -110,8 +126,9 @@ export default {
       formData.append("title", this.title);
       formData.append("question", this.question);
       formData.append("score", this.score);
-      formData.append("language", "this.language");
+      formData.append("language", this.language);
       formData.append("file", this.file);
+      formData.append("level", this.level);
       await axios
         .post("/api/problem", formData, config)
         .then(function (response) {

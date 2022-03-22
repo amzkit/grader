@@ -17,7 +17,24 @@
                   <v-expansion-panel-header expand-icon="mdi-menu-down">
                     <v-row no-gutters>
                       <v-col cols="4">
-                        {{ item.title }}
+                        <v-fade-transition leave-absolute>
+                          <v-row no-gutters style="width: 100%">
+                            <v-col cols="6">
+                              {{ item.title }}
+                            </v-col>
+                            <v-col>
+                              <v-rating
+                                v-model="item.level"
+                                background-color="white"
+                                color="yellow accent-4"
+                                dense
+                                half-increments
+                                hover
+                                size="18"
+                              ></v-rating>
+                            </v-col>
+                          </v-row>
+                        </v-fade-transition>
                       </v-col>
 
                       <v-col cols="8" class="text--secondary">
@@ -79,7 +96,7 @@
                         </v-col>
                       </v-row>
 
-                      <v-row>
+                      <v-row v-if="item.file">
                         <v-col cols="4" class="d-flex align-center">
                           <v-expansion-panel-content>
                             Download File Question

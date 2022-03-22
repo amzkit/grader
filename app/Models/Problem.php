@@ -12,6 +12,7 @@ class Problem extends Model
         'id',
         'title',
         'question',
+        'level',
         'score',
         "language",
         "file",

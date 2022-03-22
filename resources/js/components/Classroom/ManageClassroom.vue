@@ -12,12 +12,20 @@
             :items="desserts"
             sort-by="calories"
             class="elevation-1"
+            :search="search"
           >
             <template v-slot:top>
               <v-toolbar flat>
                 <v-toolbar-title>Manage Classroom</v-toolbar-title>
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <v-spacer></v-spacer>
+                <v-text-field
+                  v-model="search"
+                  append-icon="mdi-magnify"
+                  label="Search"
+                  hide-details
+                  class="mr-5"
+                ></v-text-field>
                 <v-dialog v-model="dialog" max-width="650px">
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn
@@ -64,7 +72,7 @@
                                   <v-text-field
                                     :value="computedDateFormattedStartDate"
                                     clearable
-                                    label="เทอมเริ่มต้น"
+                                    label="Start Date"
                                     readonly
                                     v-bind="attrs"
                                     v-on="on"
@@ -85,7 +93,7 @@
                                   <v-text-field
                                     :value="computedDateFormattedEndDate"
                                     clearable
-                                    label="เทอมสิ้นสุด"
+                                    label="End Date"
                                     readonly
                                     v-bind="attrs"
                                     v-on="on"

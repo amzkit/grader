@@ -12,12 +12,20 @@
             :items="desserts"
             sort-by="calories"
             class="elevation-1"
+            :search="search"
           >
             <template v-slot:top>
               <v-toolbar flat>
                 <v-toolbar-title>Manage Example</v-toolbar-title>
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <v-spacer></v-spacer>
+                <v-text-field
+                  v-model="search"
+                  append-icon="mdi-magnify"
+                  label="Search"
+                  hide-details
+                  class="mr-5"
+                ></v-text-field>
                 <v-dialog v-model="dialog" max-width="500px">
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn
@@ -30,6 +38,7 @@
                       New Item
                     </v-btn>
                   </template>
+
                   <v-card>
                     <v-card-title>
                       <span class="text-h5">{{ formTitle }}</span>
@@ -70,7 +79,7 @@
                                 <v-text-field
                                   :value="computedDateFormattedStartDate"
                                   clearable
-                                  label="เทอมเริ่มต้น"
+                                  label="Start Date"
                                   readonly
                                   v-bind="attrs"
                                   v-on="on"
@@ -91,7 +100,7 @@
                                 <v-text-field
                                   :value="computedDateFormattedEndDate"
                                   clearable
-                                  label="เทอมสิ้นสุด"
+                                  label="End Date"
                                   readonly
                                   v-bind="attrs"
                                   v-on="on"
@@ -217,8 +226,8 @@ export default {
         section: "",
         semester: "",
         year: "",
-        start_datetime: "",
-        end_datetime: "",
+        start_date: "",
+        end_date: "",
         role: "",
       },
       defaultItem: {
@@ -226,8 +235,8 @@ export default {
         section: "",
         semester: "",
         year: "",
-        start_datetime: "",
-        end_datetime: "",
+        start_date: "",
+        end_date: "",
         role: "",
       },
       start_date: null,
@@ -313,6 +322,7 @@ export default {
     save() {
       if (this.editedIndex > -1) {
         Object.assign(this.desserts[this.editedIndex], this.editedItem);
+        this.updateExample();
       } else {
         this.postExample();
       }
@@ -324,6 +334,25 @@ export default {
       await axios
         .post("/api/manage/example", {
           exampleId: this.selectedExamplesId,
+          roomId: this.roomId,
+          start_date: this.start_date,
+          end_date: this.end_date,
+        })
+        .then(function () {
+          location.reload();
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      this.dialog = false;
+      this.loading = false;
+    },
+
+    async updateExample() {
+      this.loading = true;
+      await axios
+        .put("/api/manage/example", {
+          exampleId: this.editedItem.problemsId,
           roomId: this.roomId,
           start_date: this.start_date,
           end_date: this.end_date,
