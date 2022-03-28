@@ -163,7 +163,7 @@
               </v-list-item>
               <v-list-item
                 link
-                v-if="this.$store.state.data.user.std_id !== null"
+                v-if="this.$store.state.data.user.role_student === 1"
                 @click="changeRoleUser('student')"
               >
                 <v-list-item-title>
@@ -241,6 +241,10 @@ export default {
             {
               text: "Manage Mission",
               to: "/manage-mission",
+            },
+            {
+              text: "Manage Mission Classroom",
+              to: "/manage-mission-classroom",
             },
           ],
         },

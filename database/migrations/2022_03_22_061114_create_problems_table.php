@@ -17,11 +17,15 @@ class CreateProblemsTable extends Migration
             $table->id();
             $table->string('title');
             $table->string('question');
-            $table->string('score');
+            $table->float('score');
+            $table->string('tolerant')->default('$');
             $table->float('level')->nullable()->default(null);
-            $table->string('language');
+            $table->bigInteger('language_id')->unsigned();
             $table->string('file')->nullable()->default(null);
             $table->timestamps();
+
+            $table->foreign('language_id')->references('id')->on('languages')->onDelete('cascade');
+
         });
     }
 

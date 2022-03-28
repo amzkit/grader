@@ -36,6 +36,8 @@
         "webpack-cli": "^4.7.2"
     },
     "dependencies": {
-        "dayjs": "^1.10.7"
+        "@morioh/v-quill-editor": "^1.0.2",
+        "dayjs": "^1.10.7",
+        "vue2-editor": "^2.10.3"
     }
 }

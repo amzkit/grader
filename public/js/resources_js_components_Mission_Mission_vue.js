@@ -244,6 +244,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 
 
@@ -259,7 +260,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       loadingDownload: false,
       file: null,
       course_id: 0,
-      missionPass: []
+      missionPass: [],
+      customToolbar: [["clean"]]
     };
   },
   created: function created() {
@@ -368,7 +370,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3);
       }))();
     },
-    fetchItemSubmission: function fetchItemSubmission(course_id) {
+    fetchItemSubmission: function fetchItemSubmission() {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
@@ -377,8 +379,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context4.prev = _context4.next) {
               case 0:
                 _this3.loading = true;
-                console.log("asda", course_id);
-                _context4.next = 4;
+                _context4.next = 3;
                 return axios.get("/api/submission", {
                   params: {
                     course_id: _this3.course_id
@@ -389,10 +390,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   }
                 });
 
-              case 4:
+              case 3:
                 _this3.loading = false;
 
-              case 5:
+              case 4:
               case "end":
                 return _context4.stop();
             }
@@ -1048,14 +1049,11 @@ var render = function() {
                                                           [
                                                             _c("v-rating", {
                                                               attrs: {
-                                                                "background-color":
-                                                                  "white",
                                                                 color:
                                                                   "yellow accent-4",
+                                                                "background-color":
+                                                                  "grey darken-1",
                                                                 dense: "",
-                                                                "half-increments":
-                                                                  "",
-                                                                hover: "",
                                                                 size: "18"
                                                               },
                                                               model: {
@@ -1204,20 +1202,14 @@ var render = function() {
                                                     attrs: { cols: "8" }
                                                   },
                                                   [
-                                                    _c(
-                                                      "v-expansion-panel-content",
-                                                      [
-                                                        _vm._v(
-                                                          "\n                          " +
-                                                            _vm._s(
-                                                              item.question
-                                                            ) +
-                                                            "\n                        "
+                                                    _c("div", {
+                                                      domProps: {
+                                                        innerHTML: _vm._s(
+                                                          item.question
                                                         )
-                                                      ]
-                                                    )
-                                                  ],
-                                                  1
+                                                      }
+                                                    })
+                                                  ]
                                                 )
                                               ],
                                               1
@@ -1427,7 +1419,10 @@ var render = function() {
                                                     _c("input", {
                                                       staticClass:
                                                         "form-control",
-                                                      attrs: { type: "file" },
+                                                      attrs: {
+                                                        type: "file",
+                                                        accept: item.type
+                                                      },
                                                       on: {
                                                         change: _vm.onFileChange
                                                       }
@@ -1496,11 +1491,45 @@ var render = function() {
                                             key: "actions",
                                             fn: function() {
                                               return [
-                                                _c(
-                                                  "v-icon",
-                                                  { attrs: { color: "teal" } },
-                                                  [_vm._v(" mdi-check ")]
-                                                )
+                                                item.message == "waiting"
+                                                  ? _c(
+                                                      "div",
+                                                      [
+                                                        _c(
+                                                          "v-icon",
+                                                          {
+                                                            attrs: {
+                                                              color: "primary"
+                                                            }
+                                                          },
+                                                          [
+                                                            _vm._v(
+                                                              "\n                        mdi-checkbox-blank-circle-outline\n                      "
+                                                            )
+                                                          ]
+                                                        )
+                                                      ],
+                                                      1
+                                                    )
+                                                  : _c(
+                                                      "div",
+                                                      [
+                                                        _c(
+                                                          "v-icon",
+                                                          {
+                                                            attrs: {
+                                                              color: "teal"
+                                                            }
+                                                          },
+                                                          [
+                                                            _vm._v(
+                                                              " mdi-check "
+                                                            )
+                                                          ]
+                                                        )
+                                                      ],
+                                                      1
+                                                    )
                                               ]
                                             },
                                             proxy: true
@@ -1517,15 +1546,7 @@ var render = function() {
                                           "\n\n                  "
                                       )
                                     ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c("v-expansion-panel-content", [
-                                    _vm._v(
-                                      "\n                  " +
-                                        _vm._s(item.message) +
-                                        "\n                "
-                                    )
-                                  ])
+                                  )
                                 ],
                                 1
                               )

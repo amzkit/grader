@@ -4,46 +4,45 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
- require("./bootstrap");
+require("./bootstrap");
 
- window.Vue = require("vue").default;
+window.Vue = require("vue").default;
 
 // Vuex
-import store from './store'
+import store from "./store";
 
 // Vue Router
-import router from './router/index'
+import router from "./router/index";
 
+/**
+ * The following block of code may be used to automatically register your
+ * Vue components. It will recursively scan this directory for the Vue
+ * components and automatically register them with their "basename".
+ *
+ * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
+ */
 
- /**
-  * The following block of code may be used to automatically register your
-  * Vue components. It will recursively scan this directory for the Vue
-  * components and automatically register them with their "basename".
-  *
-  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
-  */
+// const files = require.context('./', true, /\.vue$/i)
+// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
- // const files = require.context('./', true, /\.vue$/i)
- // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+// Guest
+Vue.component("guest-top-bar", require("./layouts/guest_top_bar.vue").default);
+Vue.component("login", require("./auth/login.vue").default);
+Vue.component("register", require("./auth/register.vue").default);
+// Auth User Home
 
-    // Guest
-    Vue.component("guest-top-bar", require("./layouts/guest_top_bar.vue").default)
-    Vue.component("login", require("./auth/login.vue").default )
-    Vue.component("register", require("./auth/register.vue").default )
-    // Auth User Home
+/**
+ * Next, we will create a fresh Vue application instance and attach it to
+ * the page. Then, you may begin adding components to this application
+ * or customize the JavaScript scaffolding to fit your unique needs.
+ */
 
+import Vuetify from "vuetify";
+import Vue from "vue";
 
- /**
-  * Next, we will create a fresh Vue application instance and attach it to
-  * the page. Then, you may begin adding components to this application
-  * or customize the JavaScript scaffolding to fit your unique needs.
-  */
-
-import Vuetify from 'vuetify';
-import Vue from 'vue';
 Vue.use(Vuetify);
 
-import App from './layouts/app.vue';
+import App from "./layouts/app.vue";
 
 const app = new Vue({
     router,
@@ -52,6 +51,5 @@ const app = new Vue({
     // success,
     el: "#app",
     vuetify: new Vuetify(),
-    components: { App },
-    
+    components: { App }
 });

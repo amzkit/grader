@@ -16,8 +16,8 @@ class CreateSubmissionsTable extends Migration
         Schema::create('submissions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
-            $table->bigInteger('problem_id');
-            $table->bigInteger('schedule_id');
+            $table->bigInteger('problem_id')->unsigned();
+            $table->bigInteger('schedule_id')->unsigned();
             $table->bigInteger('user_id');
             $table->longText('code');
             $table->boolean('graded')->default(false);
@@ -27,6 +27,10 @@ class CreateSubmissionsTable extends Migration
             $table->string('Lang', 50);
             $table->string('fname', 240);
             $table->longText('compiler_message');
+
+            $table->foreign('schedule_id')->references('id')->on('schedules')->onDelete('cascade');
+            $table->foreign('problem_id')->references('id')->on('problems')->onDelete('cascade');
+
         });
     }
 

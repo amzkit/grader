@@ -15,10 +15,13 @@ class CreateTestcasesTable extends Migration
     {
         Schema::create('testcases', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('problem_id');
-            $table->longText('input')->nullable();
-            $table->longText('output')->nullable();
+            $table->bigInteger('problem_id')->unsigned();
+            $table->longText('input')->nullable()->default(null);
+            $table->longText('output')->nullable()->default(null);
             $table->timestamps();
+
+            $table->foreign('problem_id')->references('id')->on('problems')->onDelete('cascade');
+
         });
     }
 

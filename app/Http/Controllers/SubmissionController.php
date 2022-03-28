@@ -23,6 +23,53 @@ class SubmissionController extends Controller
         $this->middleware('auth');
     }
 
+    public function getScoreBoard(Request $request)
+    {
+        $course_id = $request->course_id;
+
+        $schedule = Schedule::where('course_id', '=',  $course_id)
+            ->join("problems", "problems.id", "=", "schedules.problem_id")
+            ->join("languages", "languages.id", "=", "problems.language_id")
+            ->select(
+                "schedules.id",
+                "problems.title",
+                "problems.question",
+                "problems.level",
+                "problems.score",
+                "languages.id as languageId",
+                "languages.lang as language",
+                "languages.type",
+                "problems.file",
+                "schedules.start_date",
+                "schedules.end_date",
+                "problems.id as problemsId",
+            )
+            ->get();
+
+        $scoreboard = Submission::join("schedules", "schedules.id", "=", "submissions.schedule_id")
+            ->join("problems", "problems.id", "=", "submissions.problem_id")
+            ->join("users", "users.id", "=", "submissions.user_id")
+            ->where('course_id', '=', $course_id)
+            ->select(
+                "problems.id as problem_id",
+                "problems.title",
+                "schedules.start_date",
+                "schedules.end_date",
+                "submissions.*",
+                "users.name",
+                "users.username"
+            )
+            ->get();
+
+        return response()->json(
+            [
+                'success' => true,
+                'payload' =>  $scoreboard,
+                'payload2' =>  $schedule,
+            ]
+        );
+    }
+
     public function getSubmission(Request $request)
     {
         $schedule = Submission::where('user_id', '=',  auth()->user()->id)
@@ -44,14 +91,11 @@ class SubmissionController extends Controller
             ->where('course_id', '=', $request->input('course_id'))
             ->first();
 
-
         // if ($passdue->end_date <= $now) {
         //     return response()->json([
         //         "message" => "The submission of this task is no longer allowed! +_+"
         //     ], 200);
         // }
-
-
 
         if ($request->hasFile('sourcefile')) {
             $submission = new Submission;

@@ -35,11 +35,9 @@
                             <v-col>
                               <v-rating
                                 v-model="item.level"
-                                background-color="white"
                                 color="yellow accent-4"
+                                background-color="grey darken-1"
                                 dense
-                                half-increments
-                                hover
                                 size="18"
                               ></v-rating>
                             </v-col>
@@ -74,9 +72,7 @@
                           </v-expansion-panel-content>
                         </v-col>
                         <v-col cols="8" class="d-flex align-center">
-                          <v-expansion-panel-content>
-                            {{ item.question }}
-                          </v-expansion-panel-content>
+                          <div v-html="item.question"></div>
                         </v-col>
                       </v-row>
 
@@ -137,6 +133,7 @@
                           <input
                             type="file"
                             class="form-control"
+                            :accept="item.type"
                             v-on:change="onFileChange"
                           />
                         </v-col>
@@ -163,12 +160,16 @@
                     {{ item.title }}
 
                     <template v-slot:actions>
-                      <v-icon color="teal"> mdi-check </v-icon>
+                      <div v-if="item.message == 'waiting'">
+                        <v-icon color="primary">
+                          mdi-checkbox-blank-circle-outline
+                        </v-icon>
+                      </div>
+                      <div v-else>
+                        <v-icon color="teal"> mdi-check </v-icon>
+                      </div>
                     </template>
                   </v-expansion-panel-header>
-                  <v-expansion-panel-content>
-                    {{ item.message }}
-                  </v-expansion-panel-content>
                 </v-expansion-panel>
               </v-expansion-panels>
             </div>
@@ -197,6 +198,7 @@ export default {
       file: null,
       course_id: 0,
       missionPass: [],
+      customToolbar: [["clean"]],
     };
   },
   async created() {},
@@ -263,9 +265,8 @@ export default {
       }
       this.loading = false;
     },
-    async fetchItemSubmission(course_id) {
+    async fetchItemSubmission() {
       this.loading = true;
-      console.log("asda", course_id);
       await axios
         .get("/api/submission", {
           params: {

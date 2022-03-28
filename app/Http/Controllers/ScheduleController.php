@@ -14,17 +14,18 @@ class ScheduleController extends Controller
     {
         $course_id = $request->course_id;
 
-        $now = Carbon::now()->toDateTimeString();
-
         $schedule = Schedule::where('course_id', '=',  $course_id)
-            ->leftJoin("problems", "problems.id", "=", "schedules.problem_id")
+            ->join("problems", "problems.id", "=", "schedules.problem_id")
+            ->join("languages", "languages.id", "=", "problems.language_id")
             ->select(
                 "schedules.id",
                 "problems.title",
                 "problems.question",
                 "problems.level",
                 "problems.score",
-                "problems.language",
+                "languages.id as languageId",
+                "languages.lang as language",
+                "languages.type",
                 "problems.file",
                 "schedules.start_date",
                 "schedules.end_date",

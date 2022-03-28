@@ -38,6 +38,11 @@ const routes = [
     },
     // Mission
     {
+        path: "/manage-mission-classroom",
+        name: "manage-mission-classroom",
+        component: () => import("../components/Mission/ManageMissionClassroom.vue")
+    },
+    {
         path: "/manage-mission",
         name: "manage-mission",
         component: () => import("../components/Mission/ManageMission.vue")

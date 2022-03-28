@@ -49,6 +49,11 @@ class ClassroomController extends Controller
 
     public function updateClassrooms(Request $request, $id)
     {
+        $user = User::find($id);
+
+        $user->save();
+
+
         if (Classroom::where('id', $id)->exists()) {
             $item = Classroom::where("id", $id)->first();
 
@@ -56,15 +61,28 @@ class ClassroomController extends Controller
 
             $user = User::where("id",  $item->user_id)->first();
 
-
             User::where("id",  $user->id)->update([
                 'role_ta' =>  $request->role === 'ta' ? 1 : $user->role_ta,
                 'role_student' =>  $request->role === 'student' ? 1 : $user->role_student,
-                'role' =>  $request->role,
             ]);
 
+            if ($user->role == null || $user->role == "") {
+                $user->update(['role' => $request->role]);
+            }
+
+            // if ($request->role == 'ta') {
+            //     $user->role_ta = 1;
+            // } else if ($request->role == 'student') {
+            //     $user->role_student = 1;
+            // } else if ($request->role == 'teacher') {
+            //     $user->role_teacher = 1;
+            // }
+            // if ($user->role == null || $user->role == "") {
+            //     $user->role = $request->role;
+            // }
+
             return response()->json([
-                "message" => "records updated successfully"
+                "message" => "records updated successfully",
             ], 200);
         } else {
             return response()->json([

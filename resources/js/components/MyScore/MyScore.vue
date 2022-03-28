@@ -1,53 +1,121 @@
-
 <template>
-  <v-row justify="center">
-    <!-- <h1>{{ this.$store.state.data.manageClassroom.className }}</h1> -->
-    <v-col>
-      <v-card>
-        <v-data-table
-          :headers="headers"
-          :items="myscore"
-          :items-per-page="5"
-          class="elevation-1"
-        ></v-data-table>
-      </v-card>
+  <v-row>
+    <Loading :loading="this.loading" />
+    <v-col cols="2">
+      <Navigation :onClick="fatchItemSchedule" />
+    </v-col>
+    <v-col cols="10">
+      <div v-if="!this.$store.state.data.loading">
+        <v-row justify="center">
+          <v-expansion-panels>
+            <v-expansion-panel v-for="(item, i) in myScore" :key="i">
+              <v-expansion-panel-header disable-icon-rotate>
+                <v-row no-gutters>
+                  <v-col cols="4">
+                    <v-fade-transition leave-absolute>
+                      <v-row no-gutters style="width: 100%">
+                        <v-col cols="6">
+                          {{ item.title }}
+                        </v-col>
+                        <v-col cols="6">
+                          Score : {{ item.score.toFixed(2) }}
+                        </v-col>
+                      </v-row>
+                    </v-fade-transition>
+                  </v-col>
+
+                  <v-col cols="8" class="text--secondary">
+                    <v-fade-transition leave-absolute>
+                      <v-row no-gutters style="width: 100%">
+                        <v-col cols="6">
+                          Start date:
+                          {{ invalidDate(item.start_date) || "NOT SET" }}
+                        </v-col>
+                        <v-col cols="6">
+                          End date:
+                          {{ invalidDate(item.end_date) || "NOT SET" }}
+                        </v-col>
+                      </v-row>
+                    </v-fade-transition>
+                  </v-col>
+                </v-row>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-data-table
+                  :headers="headers"
+                  :items="analyses.filter((e) => e.submission_id == item.id)"
+                  :items-per-page="5"
+                  class="elevation-1"
+                ></v-data-table>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+        </v-row>
+      </div>
     </v-col>
   </v-row>
 </template>
 
+
 <script>
+import dayjs from "dayjs";
+import Navigation from "../Navigation/Navigation.vue";
+import Loading from "../Loading/Loading.vue";
 export default {
-  data() {
+  components: {
+    Navigation,
+    Loading,
+  },
+  data: function () {
     return {
+      loading: false,
+      myScore: [],
+      analyses: [],
       headers: [
         {
-          text: "วิชา",
-          align: "start",
+          text: "Input",
+          align: "center",
           sortable: false,
-          value: "subject",
+          value: "input",
         },
-        { text: "รายชื่องาน", value: "work" },
-        { text: "คะแนน", value: "score" },
-        { text: "วันที่ส่ง", value: "datesent" },
-      ],
-      myscore: [
-        {
-          subject: "CS000",
-          work: 1,
-          score: 6.0,
-          datesent: 24,
-        },
-        {
-          subject: "CS001",
-          work: 1,
-          score: 6.0,
-          datesent: 24,
-        },
+        { text: "Your Output", value: "output", align: "center" },
+        { text: "Correct Output", value: "testcase_output", align: "center" },
+        { text: "Message", value: "message", align: "center" },
       ],
     };
+  },
+  async created() {},
+  computed: {},
+  methods: {
+    dayjs,
+    invalidDate(item) {
+      return item ? dayjs(item).format("MMMM D, YYYY hh:mm A") : "-";
+    },
+    async fatchItemSchedule(item) {
+      this.loading = true;
+      this.course_id = item.courseId;
+      if (item) {
+        let items = [];
+        let items2 = [];
+        await axios
+          .get("/api/score", {
+            params: {
+              course_id: item.courseId,
+            },
+          })
+          .then((response) => {
+            if (response.data.success == true) {
+              items = response.data.payload;
+              items2 = response.data.payload2;
+            }
+          });
+        this.myScore = items;
+        this.analyses = items2;
+      }
+      console.log("analyses", this.analyses);
+      this.loading = false;
+    },
   },
 };
 </script>
 
-<style>
-</style>

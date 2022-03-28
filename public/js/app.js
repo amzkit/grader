@@ -5401,6 +5401,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, {
           text: "Manage Mission",
           to: "/manage-mission"
+        }, {
+          text: "Manage Mission Classroom",
+          to: "/manage-mission-classroom"
         }]
       }, {
         icon: "mdi-pencil",
@@ -5885,6 +5888,12 @@ var routes = [{
   }
 }, // Mission
 {
+  path: "/manage-mission-classroom",
+  name: "manage-mission-classroom",
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ "resources_js_components_Mission_ManageMissionClassroom_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Mission/ManageMissionClassroom.vue */ "./resources/js/components/Mission/ManageMissionClassroom.vue"));
+  }
+}, {
   path: "/manage-mission",
   name: "manage-mission",
   component: function component() {
@@ -43974,7 +43983,7 @@ var render = function() {
                               )
                             : _vm._e(),
                           _vm._v(" "),
-                          this.$store.state.data.user.std_id !== null
+                          this.$store.state.data.user.role_student === 1
                             ? _c(
                                 "v-list-item",
                                 {
@@ -106354,7 +106363,7 @@ var index = {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_components_Admin_UserImport_vue":1,"resources_js_components_Admin_ManageUser_vue":1,"resources_js_auth_ChangePassword_vue":1,"resources_js_components_Mission_ManageMission_vue":1,"resources_js_components_Mission_NewMission_vue":1,"resources_js_components_Mission_Mission_vue":1,"resources_js_components_TestMission_NewTest_vue":1,"resources_js_components_Classroom_ManageClassroom_vue":1,"resources_js_pages_ClassRoomPage_vue":1,"resources_js_components_Classroom_NewClassroom_vue":1,"resources_js_pages_MyScorePage_vue":1,"resources_js_pages_ScoreBoardPage_vue":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_components_Admin_UserImport_vue":1,"resources_js_components_Admin_ManageUser_vue":1,"resources_js_auth_ChangePassword_vue":1,"resources_js_components_Mission_ManageMissionClassroom_vue":1,"resources_js_components_Mission_ManageMission_vue":1,"resources_js_components_Mission_NewMission_vue":1,"resources_js_components_Mission_Mission_vue":1,"resources_js_components_TestMission_NewTest_vue":1,"resources_js_components_Classroom_ManageClassroom_vue":1,"resources_js_pages_ClassRoomPage_vue":1,"resources_js_components_Classroom_NewClassroom_vue":1,"resources_js_pages_MyScorePage_vue":1,"resources_js_pages_ScoreBoardPage_vue":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};

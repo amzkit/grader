@@ -5,17 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Problem extends Model
+class Analyses extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'id',
-        'title',
-        'question',
-        'level',
-        'score',
-        "language_id",
-        "file",
-        "tolerant"
+        "id",
+        "submission_id",
+        "testcase_id",
+        "message",
+        "output",
+        "created_at", 
+        "updated_at"
     ];
 }

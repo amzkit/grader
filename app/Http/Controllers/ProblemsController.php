@@ -37,5 +37,27 @@ class ProblemsController extends Controller
         return response()->json(['success' => true, 'payload' =>  $problem]);
     }
 
-    
+    public function updateProblem(Request $request)
+    {
+        $problem = Problem::where("id", $request->input('id'))->first();
+
+        // if (isset($request->file) && $request->file != '') {
+        //     $originalName = $request->file('file')->getClientOriginalName();
+        //     $path = $request->file('file')->storeAs('problem_file', $originalName);
+        //     $problem->file = $path;
+        // }
+
+        // $problem->update(
+        //     [
+        //         'title' => $request->title,
+        //         'question' => $request->question,
+        //         'score' => $request->score,
+        //         'tolerant' => $request->tolerant,
+        //         'level' => $request->level,
+        //         'language_id' => $request->language_id,
+        //         'file' => $problem->file
+        //     ]
+        // );
+        return response()->json(['success' => true, 'payload' => $request]);
+    }
 }
