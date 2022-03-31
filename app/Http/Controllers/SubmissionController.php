@@ -80,6 +80,27 @@ class SubmissionController extends Controller
         return response()->json(['success' => true, 'payload' =>  $schedule]);
     }
 
+    public function getSubmissionById($id)
+    {
+        if (Submission::find($id)) {
+            $submission = Submission::find($id)
+                ->join("users", "users.id", "=", "submissions.user_id")
+                ->join('problems', 'submissions.problem_id', '=', 'problems.id')
+                ->join("languages", "languages.id", "=", "problems.language_id")
+                ->select(
+                    "submissions.*",
+                    "users.name",
+                    "users.username",
+                    "problems.title",
+                    "problems.question",
+                    "problems.score",
+                    "languages.lang"
+                )->first();
+            return response()->json(['success' => true, 'payload' => $submission]);
+        }
+        return response()->json(['message' => 'Not Found!!']);
+    }
+
 
     public function submission(Request $request)
     {
@@ -105,6 +126,7 @@ class SubmissionController extends Controller
             $submission->user_id = auth()->user()->id;
             $submission->IP = \Request::ip();
             $submission->score = 0.0;
+            $submission->output = "";
             $submission->message = "waiting";
             $submission->compiler_message = "waiting";
             $submission->fname = $request->file('sourcefile')->getClientOriginalName();

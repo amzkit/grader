@@ -450,7 +450,7 @@ export default {
       await axios
         .delete("api/manage/example/" + this.editedItem.id)
         .then(function (response) {
-          console.log(response.data.payload);
+          console.log(response.data.message);
         })
         .catch(function (error) {
           console.log(error);

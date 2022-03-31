@@ -21,6 +21,7 @@ class AnalysesController extends Controller
         $submissions = Submission::join("schedules", "schedules.id", "=", "submissions.schedule_id")
             ->join("problems", "problems.id", "=", "submissions.problem_id")
             ->where('course_id', '=', $course_id)
+            ->where('user_id', '=', auth()->user()->id)
             ->select(
                 "problems.id as problem_id",
                 "problems.title",

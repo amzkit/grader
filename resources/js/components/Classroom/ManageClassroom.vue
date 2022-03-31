@@ -9,7 +9,7 @@
         <v-col>
           <v-data-table
             :headers="headers"
-            :items="desserts"
+            :items="desserts.filter((e) => e.role != 'teacher')"
             sort-by="calories"
             class="elevation-1"
             :search="search"
@@ -146,13 +146,26 @@
                                   v-model="editedItem.semester"
                                   label="Semester"
                                 ></v-text-field>
-                                <v-select
-                                  v-model="editedItem.role"
-                                  :items="['student', 'ta']"
-                                  single-line
-                                  auto
-                                  label="Role"
-                                ></v-select>
+                                <v-row>
+                                  <v-col cols="4">
+                                    <v-checkbox
+                                      v-model="editedItem.teacher"
+                                      label="Teacher"
+                                    ></v-checkbox>
+                                  </v-col>
+                                  <v-col cols="4">
+                                    <v-checkbox
+                                      v-model="editedItem.ta"
+                                      label="TA"
+                                    ></v-checkbox>
+                                  </v-col>
+                                  <v-col cols="4">
+                                    <v-checkbox
+                                      v-model="editedItem.student"
+                                      label="Student"
+                                    ></v-checkbox>
+                                  </v-col>
+                                </v-row>
                               </v-col>
                             </v-card-text>
                           </v-card>
@@ -178,13 +191,26 @@
                                   v-model="editedItem.semester"
                                   label="Semester"
                                 ></v-text-field>
-                                <v-select
-                                  v-model="editedItem.role"
-                                  :items="['student', 'ta']"
-                                  single-line
-                                  auto
-                                  label="Role"
-                                ></v-select>
+                                <v-row>
+                                  <v-col cols="4">
+                                    <v-checkbox
+                                      v-model="editedItem.teacher"
+                                      label="Teacher"
+                                    ></v-checkbox>
+                                  </v-col>
+                                  <v-col cols="4">
+                                    <v-checkbox
+                                      v-model="editedItem.ta"
+                                      label="TA"
+                                    ></v-checkbox>
+                                  </v-col>
+                                  <v-col cols="4">
+                                    <v-checkbox
+                                      v-model="editedItem.student"
+                                      label="Student"
+                                    ></v-checkbox>
+                                  </v-col>
+                                </v-row>
                               </v-col>
                             </v-card-text>
                           </v-row>
@@ -224,6 +250,20 @@
                   </v-card>
                 </v-dialog>
               </v-toolbar>
+            </template>
+            <template v-slot:[`item.section`]="{ item }">
+              {{ item.section ? item.section : "-" }}
+            </template>
+            <template v-slot:[`item.semester`]="{ item }">
+              {{ item.semester ? item.semester : "-" }}
+            </template>
+            <template v-slot:[`item.year`]="{ item }">
+              {{ item.year ? item.year : "-" }}
+            </template>
+            <template v-slot:[`item.role`]="{ item }">
+              {{ item.teacher == 1 ? "Teacher," : "" }}
+              {{ item.ta == 1 ? "TA," : "" }}
+              {{ item.student == 1 ? "Student," : "" }}
             </template>
             <template v-slot:[`item.start_datetime`]="{ item }">
               {{ invalidDate(item.start_datetime) }}
@@ -288,6 +328,9 @@ export default {
       start_datetime: "",
       end_datetime: "",
       role: "",
+      ta: "",
+      teacher: "",
+      student: "",
     },
     defaultItem: {
       name: "",
@@ -297,6 +340,9 @@ export default {
       start_datetime: "",
       end_datetime: "",
       role: "",
+      ta: "",
+      teacher: "",
+      student: "",
     },
     start_date: "",
     end_date: "",
@@ -396,9 +442,7 @@ export default {
       if (this.editedIndex > -1) {
         this.loading = true;
         Object.assign(this.desserts[this.editedIndex], this.editedItem);
-        await axios.put("/api/manage/classroom/" + this.editedItem.id, {
-          role: this.editedItem.role,
-        });
+        await axios.put(`/api/manage/classroom`, this.editedItem);
         this.loading = false;
       } else {
         this.loading = true;

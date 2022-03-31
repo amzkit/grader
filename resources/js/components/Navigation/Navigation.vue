@@ -7,7 +7,8 @@
           <div
             v-if="
               this.$store.state.data.user.role === 'admin' ||
-              this.$store.state.data.user.role === 'teacher'
+              (this.$store.state.data.user.role === 'teacher' &&
+                $route.fullPath == '/manage-classroom')
             "
           >
             <v-list-item-content>
@@ -50,28 +51,9 @@
             </v-list-item-content>
           </div>
           <div>
-            <div
-              v-if="
-                this.$store.state.data.user.role === 'admin' ||
-                this.$store.state.data.user.role === 'teacher'
-              "
-            >
+            <div>
               <v-list-item
                 v-for="item in this.$store.state.data.courses"
-                :key="item.id"
-                link
-                @click="onClick(item)"
-              >
-                <v-list-item-content>
-                  <v-list-item-title>{{ item.course_name }}</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </div>
-            <div v-else>
-              <v-list-item
-                v-for="item in this.$store.state.data.courses.filter(
-                  (e) => e.role === this.$store.state.data.user.role
-                )"
                 :key="item.id"
                 link
                 @click="onClick(item)"
@@ -127,18 +109,11 @@ export default {
     },
     async classroom() {
       this.loading = true;
-      await axios
-        .get("api/classroom", {
-          params: {
-            studentid: this.$store.state.data.user.username,
-          },
-        })
-        .then((response) => {
-          if (response.data.success == true) {
-            this.$store.commit("data/SET_COURSES", response.data.payload);
-            console.log(response.data.payload);
-          }
-        });
+      await axios.get("api/classroom").then((response) => {
+        if (response.data.success == true) {
+          this.$store.commit("data/SET_COURSES", response.data.payload);
+        }
+      });
       this.loading = false;
     },
     async new_course() {

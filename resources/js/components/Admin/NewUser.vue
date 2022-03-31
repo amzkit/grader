@@ -13,27 +13,10 @@
                 <v-col cols="6">
                   <v-radio-group v-model="status" row>
                     <v-radio label="Teacher" value="teacher"></v-radio>
-                    <v-radio label="Student" value="student"></v-radio>
                   </v-radio-group>
                 </v-col>
               </v-row>
-              <div v-if="this.status === 'student'">
-                <v-row align="center">
-                  <v-col cols="4">
-                    <v-subheader> ImportFile </v-subheader>
-                  </v-col>
-                  <v-col cols="6">
-                    <div>
-                      <input
-                        type="file"
-                        class="form-control"
-                        v-on:change="onFileChange"
-                      />
-                    </div>
-                  </v-col>
-                </v-row>
-              </div>
-              <div v-else-if="this.status === 'teacher'">
+              <div v-if="this.status === 'teacher'">
                 <v-row align="center">
                   <v-col cols="4">
                     <v-subheader> Username </v-subheader>
@@ -78,7 +61,7 @@
                     <v-text-field
                       v-model="password"
                       :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                      :rules="[rules.required, rules.min]"
+                      :rules="[rules.required]"
                       :type="showPassword ? 'text' : 'password'"
                       label="Password"
                       hint="At least 8 characters"
@@ -103,7 +86,7 @@ export default {
   data: function () {
     return {
       file: "",
-      status: "",
+      status: "teacher",
       username: "",
       name: "",
       email: "",
@@ -111,7 +94,7 @@ export default {
       showPassword: false,
       rules: {
         required: (value) => !!value || "Required.",
-        min: (v) => v.length >= 8 || "Min 8 characters.",
+        // min: (v) => v.length >= 8 || "Min 8 characters.",
         email: (v) => /.+@.+/.test(v) || "Invalid e-mail.",
       },
     };
@@ -133,13 +116,13 @@ export default {
         formData.append("name", this.name);
         formData.append("email", this.email);
         formData.append("password", this.password);
-      } else {
-        formData.append("import_file", this.file);
       }
       await axios
         .post("/api/user/file/upload", formData, config)
         .then(function (response) {
-          console.log("Uploaded", response);
+          if (response.data.success === true) {
+            window.location.href = "/manage-user";
+          }
         })
         .catch(function (error) {
           console.log(error);

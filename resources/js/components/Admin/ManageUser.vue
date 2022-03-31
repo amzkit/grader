@@ -7,7 +7,7 @@
           <v-data-table
             :headers="headers"
             :items="
-              user.filter((e) => {
+              desserts.filter((e) => {
                 if (this.status === 'student') {
                   if (e.role_student === 1) {
                     return e;
@@ -48,6 +48,14 @@
                   hide-details
                 >
                 </v-text-field>
+                <v-btn
+                  color="primary"
+                  dark
+                  class="mb-2 ml-3"
+                  @click="$router.push('/new-user')"
+                >
+                  New Teacher
+                </v-btn>
               </v-toolbar>
             </template>
 
@@ -67,10 +75,8 @@
 export default {
   data: function () {
     return {
-      user: [],
+      desserts: [],
       status: "all",
-      dialog: false,
-      dialogDelete: false,
       search: "",
       headers: [
         {
@@ -81,39 +87,9 @@ export default {
         },
         { text: "Email", value: "email" },
         { text: "Username", value: "username" },
-        { text: "Role last active", value: "role" },
         { text: "Action", value: "action" },
       ],
-      editedIndex: -1,
-      editedItem: {
-        name: "",
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
-      },
-      defaultItem: {
-        name: "",
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
-      },
     };
-  },
-  computed: {
-    formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
-    },
-  },
-
-  watch: {
-    dialog(val) {
-      val || this.close();
-    },
-    dialogDelete(val) {
-      val || this.closeDelete();
-    },
   },
 
   created() {
@@ -122,59 +98,14 @@ export default {
 
   methods: {
     async getUser() {
-      const getuser = [];
-      await axios
-        .get("/api/manage/user")
-        .then(function (response) {
-          if (response.data.success === true) {
-            getuser.push(response.data.payload);
-          }
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-      this.user = getuser[0];
-    },
-    editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
-    },
-
-    deleteItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialogDelete = true;
-    },
-
-    deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1);
-      this.closeDelete();
-    },
-
-    close() {
-      this.dialog = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
+      this.loading = true;
+      await axios.get("/api/manage/user").then((response) => {
+        if (response.data.success == true) {
+          this.desserts = response.data.payload;
+        }
       });
-    },
-
-    closeDelete() {
-      this.dialogDelete = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      });
-    },
-
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
-      } else {
-        this.desserts.push(this.editedItem);
-      }
-      this.close();
+      console.log(this.desserts);
+      this.loading = false;
     },
   },
 };

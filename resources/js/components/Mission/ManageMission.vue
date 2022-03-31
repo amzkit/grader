@@ -1,131 +1,214 @@
 <template>
   <v-row>
-    <v-col cols="12">
-      <div v-if="!this.$store.state.data.loading">
-        <v-row justify="center">
-          <h1>Manage Mission</h1>
-          <v-card>
-            <v-container fluid>
-              <v-row align="center">
-                <v-col cols="4">
-                  <v-subheader> Title </v-subheader>
-                </v-col>
-                <v-col cols="6">
-                  <v-combobox
-                    v-model="project"
-                    :items="problemList"
-                    label="Language"
-                    item-text="title"
-                    item-value="id"
-                  ></v-combobox>
-                </v-col>
-              </v-row>
+    <Loading :loading="this.loading" />
+    <v-row justify="center">
+      <v-col>
+        <v-data-table
+          :headers="headers"
+          :items="desserts"
+          sort-by="calories"
+          class="elevation-1"
+          :search="search"
+        >
+          <template v-slot:top>
+            <v-toolbar flat>
+              <v-toolbar-title>Manage Mission</v-toolbar-title>
+              <v-divider class="mx-4" inset vertical></v-divider>
+              <v-spacer></v-spacer>
+              <v-text-field
+                v-model="search"
+                append-icon="mdi-magnify"
+                label="Search"
+                hide-details
+                class="mr-5"
+              ></v-text-field>
+              <v-btn
+                color="primary"
+                dark
+                class="mb-2"
+                @click="$router.push('/new-mission')"
+              >
+                New Problem
+              </v-btn>
+            </v-toolbar>
+            <v-dialog v-model="dialog" max-width="800px">
+              <v-card>
+                <v-card-title>
+                  <span class="text-h5">{{ formTitle }}</span>
+                </v-card-title>
+                <v-card-text>
+                  <v-container>
+                    <v-row>
+                      <v-col cols="4">
+                        <v-text-field v-model="editedItem.title" label="Title">
+                        </v-text-field>
+                      </v-col>
+                      <v-col cols="4">
+                        <v-autocomplete
+                          v-model="editedItem.language_id"
+                          :items="languages"
+                          label="Language"
+                          item-text="lang"
+                          item-value="id"
+                        >
+                        </v-autocomplete>
+                      </v-col>
 
-              <v-row align="center">
-                <v-col cols="4">
-                  <v-subheader> Question </v-subheader>
-                </v-col>
-                <v-col cols="6">
-                  <VueEditor
-                    v-model="question"
-                    :editorToolbar="customToolbar"
-                  />
-                  <template>
-                    <input
-                      type="file"
-                      class="form-control mt-3"
-                      v-on:change="onFileChange"
-                    />
-                  </template>
-                </v-col>
-              </v-row>
+                      <v-col cols="4">
+                        <div class="text-center">
+                          <v-rating
+                            v-model="editedItem.level"
+                            color="yellow darken-3"
+                            background-color="grey darken-1"
+                            empty-icon="$ratingFull"
+                            half-increments
+                            hover
+                          ></v-rating>
+                          <div>
+                            <span class="text-caption text-uppercase"
+                              >level:</span
+                            >
+                            <span class="font-weight-bold">
+                              {{ editedItem.level }}
+                            </span>
+                          </div>
+                        </div>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="3">
+                        <v-text-field
+                          type="number"
+                          v-model="editedItem.score"
+                          onfocus="this.select()"
+                          label="Score"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="3">
+                        <v-text-field
+                          prefix="$"
+                          v-model="editedItem.tolerant"
+                          onfocus="this.select()"
+                          label="Tolerant"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="6">
+                        <input
+                          type="file"
+                          class="form-control mt-3"
+                          v-on:change="onFileChange"
+                        />
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="12">
+                        <VueEditor
+                          v-model="editedItem.question"
+                          :editorToolbar="customToolbar"
+                        />
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-card-text>
 
-              <v-row align="center">
-                <v-col cols="4">
-                  <v-subheader> Level </v-subheader>
-                </v-col>
-                <v-col cols="6">
-                  <div class="text-center">
-                    <v-rating
-                      v-model="level"
-                      color="yellow darken-3"
-                      background-color="grey darken-1"
-                      empty-icon="$ratingFull"
-                      half-increments
-                      hover
-                      large
-                    ></v-rating>
-                    <div>
-                      <span class="text-caption text-uppercase">level:</span>
-                      <span class="font-weight-bold">
-                        {{ level }}
-                      </span>
-                    </div>
-                  </div>
-                </v-col>
-                <v-col cols="4">
-                  <v-subheader> Tolerant </v-subheader>
-                </v-col>
-                <v-col cols="6">
-                  <v-text-field
-                    prefix="$"
-                    v-model="tolerant"
-                    onfocus="this.select()"
-                    label="Tolerant"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="4">
-                  <v-subheader> Score </v-subheader>
-                </v-col>
-                <v-col cols="6">
-                  <v-text-field
-                    type="number"
-                    v-model="score"
-                    onfocus="this.select()"
-                    label="Score"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="4">
-                  <v-subheader> Language </v-subheader>
-                </v-col>
-                <v-col cols="6">
-                  <v-combobox
-                    v-model="lang"
-                    :items="languages"
-                    label="Language"
-                    item-text="lang"
-                    item-value="id"
-                  ></v-combobox>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-card>
-          <v-btn @click="formSubmit" color="primary"> Save </v-btn>
-        </v-row>
-      </div>
-    </v-col>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue darken-1" text @click="close">
+                    Cancel
+                  </v-btn>
+                  <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+            <v-dialog v-model="dialogDelete" max-width="500px">
+              <v-card>
+                <v-card-title class="text-h5"
+                  >Are you sure you want to delete this item?</v-card-title
+                >
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue darken-1" text @click="closeDelete"
+                    >Cancel</v-btn
+                  >
+                  <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+                    >OK</v-btn
+                  >
+                  <v-spacer></v-spacer>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </template>
+          <template v-slot:[`item.question`]="{ item }">
+            {{ convertToPlain(item.question) }}
+          </template>
+          <template v-slot:[`item.file`]="{ item }">
+            <div v-if="item.file">
+              <v-icon small class="mr-2" @click="download(item)">
+                mdi-file-download
+              </v-icon>
+            </div>
+            <div v-else>-</div>
+          </template>
+          <template v-slot:[`item.tolerant`]="{ item }">
+            {{
+              item.tolerant.replace("$", "") != ""
+                ? item.tolerant.replace("$", "")
+                : "-"
+            }}
+          </template>
+          <template v-slot:[`item.action`]="{ item }">
+            <v-icon small class="mr-2" @click="editItem(item)">
+              mdi-pencil
+            </v-icon>
+            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+          </template>
+        </v-data-table>
+      </v-col>
+    </v-row>
   </v-row>
 </template>
 
+
 <script>
-import Navigation from "../Navigation/Navigation.vue";
+import dayjs from "dayjs";
+import Loading from "../Loading/Loading.vue";
 import { VueEditor } from "vue2-editor";
 export default {
   components: {
-    Navigation,
+    Loading,
     VueEditor,
   },
   data: function () {
     return {
-      id: 0,
-      title: "",
-      question: "",
-      score: 0,
-      lang: "",
-      file: "",
-      level: 0.0,
-      tolerant: "",
+      loading: false,
+      search: "",
+      dialog: false,
+      dialogDelete: false,
       languages: [],
+      headers: [
+        {
+          text: "Title",
+          align: "start",
+          sortable: true,
+          value: "title",
+        },
+        { text: "Question", value: "question" },
+        { text: "Language", value: "language" },
+        { text: "Score", value: "score" },
+        { text: "File", value: "file" },
+        {
+          text: "Level",
+          value: "level",
+        },
+        {
+          text: "Tolerant",
+          value: "tolerant",
+        },
+        {
+          text: "Action",
+          value: "action",
+        },
+      ],
       customToolbar: [
         [{ header: [false, 1, 2, 3, 4, 5, 6] }],
         ["bold", "italic", "underline"],
@@ -141,45 +224,72 @@ export default {
         [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
         [{ color: [] }, { background: [] }], // dropdown with defaults from theme
       ],
-      problemList: [],
+      desserts: [],
+      editedIndex: -1,
+      editedItem: {
+        title: "",
+        question: "",
+        language: "",
+        score: "",
+        file: "",
+        level: "",
+        tolerant: "",
+      },
+      defaultItem: {
+        title: "",
+        question: "",
+        language: "",
+        score: "",
+        file: "",
+        level: "",
+        tolerant: "",
+      },
     };
   },
-  created() {
-    this.getLanguage();
+  async created() {
     this.getProblems();
+    this.getLanguage();
   },
   computed: {
-    project: {
-      get() {
-        return this.title;
-      },
-      set(val) {
-        const lng = this.languages.find((e) => e.id == val.language_id);
-        this.file = val.file;
-        this.id = val.id;
-        this.lang = lng;
-        this.level = val.level;
-        this.question = val.question;
-        this.score = val.score;
-        this.title = val.title;
-        this.tolerant = val.tolerant.replace("$", "");
-      },
+    formTitle() {
+      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+    },
+  },
+  watch: {
+    dialog(val) {
+      val || this.close();
+    },
+    dialogDelete(val) {
+      val || this.closeDelete();
     },
   },
   methods: {
+    dayjs,
     onFileChange(e) {
-      this.file = e.target.files[0];
+      this.editedItem.file = e.target.files[0];
     },
-    resetForm() {
-      this.id = 0;
-      this.title = null;
-      this.question = "";
-      this.score = null;
-      this.lang = null;
-      this.file = "";
-      this.level = 0;
-      this.tolerant = "";
+    download(item) {
+      window.location.href = `api/schedule/download${item.file.replace(
+        "problem_file",
+        ""
+      )}`;
     },
+    convertToPlain(html) {
+      var tempDivElement = document.createElement("div");
+      tempDivElement.innerHTML = html;
+      return tempDivElement.textContent || tempDivElement.innerText || "";
+    },
+    async getProblems() {
+      this.loading = true;
+      await axios.get("/api/problem").then((response) => {
+        if (response.data.success == true) {
+          this.desserts = response.data.payload;
+        }
+      });
+      console.log(this.desserts);
+      this.loading = false;
+    },
+
     async getLanguage() {
       let language = [];
       await axios
@@ -192,44 +302,89 @@ export default {
         });
       this.languages = language;
     },
-    async getProblems() {
+
+    async delateProblems() {
       this.loading = true;
-      await axios.get("/api/problem").then((response) => {
-        if (response.data.success == true) {
-          this.problemList = response.data.payload;
-        }
-      });
-      console.log(this.problemList);
+      await axios
+        .delete("api/problem/" + this.editedItem.id)
+        .then(function (response) {
+          console.log(response.data.message);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
       this.loading = false;
     },
-    async formSubmit(e) {
-      e.preventDefault();
-      console.log(this.lang);
+
+    async putProblem() {
       const config = {
         headers: { "content-type": "multipart/form-data" },
       };
       let formData = new FormData();
-      formData.append("id", this.id);
-      formData.append("title", this.title);
-      formData.append("question", this.question);
-      formData.append("score", this.score);
-      formData.append("language_id", this.lang.id);
-      formData.append("file", this.file);
-      formData.append("level", this.level);
-      formData.append("tolerant", this.tolerant != "" ? this.tolerant : "$");
+      formData.append("id", this.editedItem.id);
+      formData.append("title", this.editedItem.title);
+      formData.append("question", this.editedItem.question);
+      formData.append("score", this.editedItem.score);
+      formData.append("language_id", this.editedItem.language_id);
+      formData.append("file", this.editedItem.file ? this.editedItem.file : "");
+      formData.append("level", this.editedItem.level);
+      formData.append(
+        "tolerant",
+        this.editedItem.tolerant != "" ? this.editedItem.tolerant : "$"
+      );
       await axios
-        .put("/api/problem", formData, config)
+        .post("/api/problem/update", formData, config)
         .then(function (response) {
           console.log(response);
         })
         .catch(function (error) {
           console.log(error);
         });
-      this.resetForm();
+    },
+
+    editItem(item) {
+      this.editedIndex = this.desserts.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+
+    deleteItem(item) {
+      this.editedIndex = this.desserts.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialogDelete = true;
+    },
+
+    deleteItemConfirm() {
+      this.desserts.splice(this.editedIndex, 1);
+      this.delateProblems();
+      this.closeDelete();
+    },
+
+    close() {
+      this.dialog = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+
+    closeDelete() {
+      this.dialogDelete = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+
+    save() {
+      if (this.editedIndex > -1) {
+        this.putProblem();
+        Object.assign(this.desserts[this.editedIndex], this.editedItem);
+      }
+      this.close();
     },
   },
 };
 </script>
 
-<style>
-</style>
+

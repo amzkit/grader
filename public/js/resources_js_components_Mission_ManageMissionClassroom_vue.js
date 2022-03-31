@@ -547,7 +547,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this6.loading = true;
                 _context4.next = 3;
                 return axios["delete"]("api/manage/example/" + _this6.editedItem.id).then(function (response) {
-                  console.log(response.data.payload);
+                  console.log(response.data.message);
                 })["catch"](function (error) {
                   console.log(error);
                 });
@@ -726,24 +726,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Navigation",
@@ -826,15 +808,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _this3.loading = true;
                 _context3.next = 3;
-                return axios.get("api/classroom", {
-                  params: {
-                    studentid: _this3.$store.state.data.user.username
-                  }
-                }).then(function (response) {
+                return axios.get("api/classroom").then(function (response) {
                   if (response.data.success == true) {
                     _this3.$store.commit("data/SET_COURSES", response.data.payload);
-
-                    console.log(response.data.payload);
                   }
                 });
 
@@ -2106,7 +2082,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
 var render = function() {
-  var this$1 = this
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -2137,7 +2112,8 @@ var render = function() {
                 },
                 [
                   this.$store.state.data.user.role === "admin" ||
-                  this.$store.state.data.user.role === "teacher"
+                  (this.$store.state.data.user.role === "teacher" &&
+                    _vm.$route.fullPath == "/manage-classroom")
                     ? _c(
                         "div",
                         [
@@ -2329,77 +2305,36 @@ var render = function() {
                     : _vm._e(),
                   _vm._v(" "),
                   _c("div", [
-                    this.$store.state.data.user.role === "admin" ||
-                    this.$store.state.data.user.role === "teacher"
-                      ? _c(
-                          "div",
-                          _vm._l(this.$store.state.data.courses, function(
-                            item
-                          ) {
-                            return _c(
-                              "v-list-item",
-                              {
-                                key: item.id,
-                                attrs: { link: "" },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.onClick(item)
-                                  }
-                                }
-                              },
+                    _c(
+                      "div",
+                      _vm._l(this.$store.state.data.courses, function(item) {
+                        return _c(
+                          "v-list-item",
+                          {
+                            key: item.id,
+                            attrs: { link: "" },
+                            on: {
+                              click: function($event) {
+                                return _vm.onClick(item)
+                              }
+                            }
+                          },
+                          [
+                            _c(
+                              "v-list-item-content",
                               [
-                                _c(
-                                  "v-list-item-content",
-                                  [
-                                    _c("v-list-item-title", [
-                                      _vm._v(_vm._s(item.course_name))
-                                    ])
-                                  ],
-                                  1
-                                )
+                                _c("v-list-item-title", [
+                                  _vm._v(_vm._s(item.course_name))
+                                ])
                               ],
                               1
                             )
-                          }),
+                          ],
                           1
                         )
-                      : _c(
-                          "div",
-                          _vm._l(
-                            this.$store.state.data.courses.filter(function(e) {
-                              return (
-                                e.role === this$1.$store.state.data.user.role
-                              )
-                            }),
-                            function(item) {
-                              return _c(
-                                "v-list-item",
-                                {
-                                  key: item.id,
-                                  attrs: { link: "" },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.onClick(item)
-                                    }
-                                  }
-                                },
-                                [
-                                  _c(
-                                    "v-list-item-content",
-                                    [
-                                      _c("v-list-item-title", [
-                                        _vm._v(_vm._s(item.course_name))
-                                      ])
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            }
-                          ),
-                          1
-                        )
+                      }),
+                      1
+                    )
                   ])
                 ]
               )

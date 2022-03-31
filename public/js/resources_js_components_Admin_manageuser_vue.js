@@ -84,13 +84,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      user: [],
+      desserts: [],
       status: "all",
-      dialog: false,
-      dialogDelete: false,
       search: "",
       headers: [{
         text: "Name",
@@ -104,41 +110,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         text: "Username",
         value: "username"
       }, {
-        text: "Role last active",
-        value: "role"
-      }, {
         text: "Action",
         value: "action"
-      }],
-      editedIndex: -1,
-      editedItem: {
-        name: "",
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0
-      },
-      defaultItem: {
-        name: "",
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0
-      }
+      }]
     };
-  },
-  computed: {
-    formTitle: function formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
-    }
-  },
-  watch: {
-    dialog: function dialog(val) {
-      val || this.close();
-    },
-    dialogDelete: function dialogDelete(val) {
-      val || this.closeDelete();
-    }
   },
   created: function created() {
     this.getUser();
@@ -148,72 +123,29 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var getuser;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                getuser = [];
+                _this.loading = true;
                 _context.next = 3;
                 return axios.get("/api/manage/user").then(function (response) {
-                  if (response.data.success === true) {
-                    getuser.push(response.data.payload);
+                  if (response.data.success == true) {
+                    _this.desserts = response.data.payload;
                   }
-                })["catch"](function (error) {
-                  console.log(error);
                 });
 
               case 3:
-                _this.user = getuser[0];
+                console.log(_this.desserts);
+                _this.loading = false;
 
-              case 4:
+              case 5:
               case "end":
                 return _context.stop();
             }
           }
         }, _callee);
       }))();
-    },
-    editItem: function editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
-    },
-    deleteItem: function deleteItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialogDelete = true;
-    },
-    deleteItemConfirm: function deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1);
-      this.closeDelete();
-    },
-    close: function close() {
-      var _this2 = this;
-
-      this.dialog = false;
-      this.$nextTick(function () {
-        _this2.editedItem = Object.assign({}, _this2.defaultItem);
-        _this2.editedIndex = -1;
-      });
-    },
-    closeDelete: function closeDelete() {
-      var _this3 = this;
-
-      this.dialogDelete = false;
-      this.$nextTick(function () {
-        _this3.editedItem = Object.assign({}, _this3.defaultItem);
-        _this3.editedIndex = -1;
-      });
-    },
-    save: function save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
-      } else {
-        this.desserts.push(this.editedItem);
-      }
-
-      this.close();
     }
   }
 });
@@ -327,7 +259,7 @@ var render = function() {
                     staticClass: "elevation-1",
                     attrs: {
                       headers: _vm.headers,
-                      items: _vm.user.filter(function(e) {
+                      items: _vm.desserts.filter(function(e) {
                         if (this$1.status === "student") {
                           if (e.role_student === 1) {
                             return e
@@ -421,7 +353,25 @@ var render = function() {
                                       },
                                       expression: "search"
                                     }
-                                  })
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-btn",
+                                    {
+                                      staticClass: "mb-2 ml-3",
+                                      attrs: { color: "primary", dark: "" },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.$router.push("/new-user")
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                New Teacher\n              "
+                                      )
+                                    ]
+                                  )
                                 ],
                                 1
                               )

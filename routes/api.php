@@ -27,7 +27,8 @@ Route::post('changePassword', 'App\Http\Controllers\Auth\ChangePasswordControlle
 
 Route::get('problem', 'App\Http\Controllers\ProblemsController@getProblem');
 Route::post('problem', 'App\Http\Controllers\ProblemsController@insert');
-Route::put('problem', 'App\Http\Controllers\ProblemsController@updateProblem');
+Route::post('problem/update', 'App\Http\Controllers\ProblemsController@updateProblem');
+Route::delete('problem/{id}', 'App\Http\Controllers\ProblemsController@delProblem');
 
 Route::get('classroom', 'App\Http\Controllers\ClassroomController@getClassrooms');
 Route::get('schedule', 'App\Http\Controllers\ScheduleController@getSchedule');
@@ -37,7 +38,7 @@ Route::get('manage/user', 'App\Http\Controllers\UserController@getUser');
 
 Route::get('manage/classroom', 'App\Http\Controllers\ClassroomController@getManageClassrooms');
 
-Route::put('manage/classroom/{id}', 'App\Http\Controllers\ClassroomController@updateClassrooms');
+Route::put('manage/classroom', 'App\Http\Controllers\ClassroomController@updateClassrooms');
 
 Route::delete('manage/classroom/{id}', 'App\Http\Controllers\ClassroomController@delClassrooms');
 
@@ -51,6 +52,7 @@ Route::post('course', 'App\Http\Controllers\CourseController@insert');
 
 Route::post('submission', 'App\Http\Controllers\SubmissionController@submission');
 Route::get('submission', 'App\Http\Controllers\SubmissionController@getSubmission');
+Route::get('submission/{id}', 'App\Http\Controllers\SubmissionController@getSubmissionById');
 
 Route::get('language', 'App\Http\Controllers\LanguageController@getLanguage');
 Route::post('language', 'App\Http\Controllers\LanguageController@insert');
@@ -58,3 +60,5 @@ Route::post('language', 'App\Http\Controllers\LanguageController@insert');
 Route::get('score', 'App\Http\Controllers\AnalysesController@getScore');
 
 Route::get('scoreboard', 'App\Http\Controllers\SubmissionController@getScoreBoard');
+
+Route::post('comment', 'App\Http\Controllers\CommentController@insertComment');

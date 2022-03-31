@@ -24,7 +24,7 @@ const routes = [
     {
         path: "/new-user",
         name: "new-user",
-        component: () => import("../components/Admin/UserImport.vue")
+        component: () => import("../components/Admin/NewUser.vue")
     },
     {
         path: "/manage-user",
@@ -40,7 +40,8 @@ const routes = [
     {
         path: "/manage-mission-classroom",
         name: "manage-mission-classroom",
-        component: () => import("../components/Mission/ManageMissionClassroom.vue")
+        component: () =>
+            import("../components/Mission/ManageMissionClassroom.vue")
     },
     {
         path: "/manage-mission",
@@ -90,6 +91,11 @@ const routes = [
         path: "/scoreboard",
         name: "scoreboard",
         component: () => import("../pages/ScoreBoardPage.vue")
+    },
+    {
+        path: "/comment",
+        name: "comment",
+        component: () => import("../components/Scoreboard/Comment.vue")
     }
 ];
 

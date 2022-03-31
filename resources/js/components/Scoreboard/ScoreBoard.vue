@@ -39,14 +39,27 @@
                 </v-row>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-data-table
-                  :headers="headers"
-                  :items="
-                    scoreboard.filter((e) => e.problem_id == item.problemsId)
-                  "
-                  :items-per-page="5"
-                  class="elevation-1"
-                ></v-data-table>
+                <div v-if="$store.state.data.user.role == 'ta'">
+                  <v-data-table
+                    :headers="headers"
+                    :items="
+                      scoreboard.filter((e) => e.problem_id == item.problemsId)
+                    "
+                    :items-per-page="5"
+                    class="elevation-1"
+                    @click:row="Item($event)"
+                  ></v-data-table>
+                </div>
+                <div v-else>
+                  <v-data-table
+                    :headers="headers"
+                    :items="
+                      scoreboard.filter((e) => e.problem_id == item.problemsId)
+                    "
+                    :items-per-page="5"
+                    class="elevation-1"
+                  ></v-data-table>
+                </div>
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
@@ -89,6 +102,13 @@ export default {
     dayjs,
     invalidDate(item) {
       return item ? dayjs(item).format("MMMM D, YYYY hh:mm A") : "-";
+    },
+    Item(val) {
+      // this.$router.push({ name: "comment", params: { data: val } });
+      this.$router.push({
+        path: "comment",
+        query: { submission_id: val.id },
+      });
     },
     async fatchItemSchedule(item) {
       this.loading = true;

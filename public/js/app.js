@@ -5395,14 +5395,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         subLinks: [{
           to: "/mission",
           text: "Mission"
-        }, {
-          text: "New Mission",
-          to: "/new-mission"
-        }, {
-          text: "Manage Mission",
+        }, // {
+        //   text: "New Mission",
+        //   to: "/new-mission",
+        // },
+        {
+          text: "Mission",
           to: "/manage-mission"
         }, {
-          text: "Manage Mission Classroom",
+          text: "Mission Classroom",
           to: "/manage-mission-classroom"
         }]
       }, {
@@ -5444,12 +5445,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         icon: "mdi-view-dashboard",
         text: "Mission"
       }, {
-        icon: "mdi-pencil",
-        text: "Manage",
-        subLinks: [{
-          text: "New Classroom",
-          to: "/new-classroom"
-        }]
+        to: "/my-score",
+        icon: "mdi-view-dashboard",
+        text: "My Score"
+      }, {
+        to: "/scoreboard",
+        icon: "mdi-view-dashboard",
+        text: "Scoreboard"
       }],
       ta: [{
         to: "/",
@@ -5458,35 +5460,50 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, {
         to: "/classroom",
         icon: "mdi-view-dashboard",
-        text: "Classroom"
+        text: "Mission"
       }, {
-        icon: "mdi-pencil",
-        text: "Manage",
-        subLinks: [{
-          text: "Manage Classroom",
-          to: "/manage-classroom"
-        }, {
-          text: "Manage Example",
-          to: "/manage-example"
-        }]
+        to: "/scoreboard",
+        icon: "mdi-view-dashboard",
+        text: "Scoreboard"
       }],
       teacher: [{
         to: "/",
         icon: "mdi-home",
         text: "Home"
       }, {
-        to: "/classroom",
-        icon: "mdi-view-dashboard",
-        text: "Classroom"
-      }, {
         icon: "mdi-pencil",
-        text: "Manage",
+        text: "Classroom",
         subLinks: [{
           text: "Manage Classroom",
           to: "/manage-classroom"
+        }]
+      }, {
+        icon: "mdi-pencil",
+        text: "Mission",
+        subLinks: [{
+          text: "Mission",
+          to: "/manage-mission"
         }, {
-          text: "Manage Example",
-          to: "/manage-example"
+          text: "Mission Classroom",
+          to: "/manage-mission-classroom"
+        }]
+      }, {
+        to: "/scoreboard",
+        icon: "mdi-view-dashboard",
+        text: "Scoreboard"
+      }, {
+        to: "/new-test",
+        icon: "mdi-view-dashboard",
+        text: "New Test"
+      }, {
+        icon: "mdi-pencil",
+        text: "User",
+        subLinks: [{
+          text: "New User",
+          to: "/new-user"
+        }, {
+          text: "Manage User",
+          to: "/manage-user"
         }]
       }]
     };
@@ -5872,7 +5889,7 @@ var routes = [{
   path: "/new-user",
   name: "new-user",
   component: function component() {
-    return __webpack_require__.e(/*! import() */ "resources_js_components_Admin_UserImport_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Admin/UserImport.vue */ "./resources/js/components/Admin/UserImport.vue"));
+    return __webpack_require__.e(/*! import() */ "resources_js_components_Admin_NewUser_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Admin/NewUser.vue */ "./resources/js/components/Admin/NewUser.vue"));
   }
 }, {
   path: "/manage-user",
@@ -5950,6 +5967,12 @@ var routes = [{
   name: "scoreboard",
   component: function component() {
     return __webpack_require__.e(/*! import() */ "resources_js_pages_ScoreBoardPage_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/ScoreBoardPage.vue */ "./resources/js/pages/ScoreBoardPage.vue"));
+  }
+}, {
+  path: "/comment",
+  name: "comment",
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ "resources_js_components_Scoreboard_Comment_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Scoreboard/Comment.vue */ "./resources/js/components/Scoreboard/Comment.vue"));
   }
 }];
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (routes);
@@ -106363,7 +106386,7 @@ var index = {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_components_Admin_UserImport_vue":1,"resources_js_components_Admin_ManageUser_vue":1,"resources_js_auth_ChangePassword_vue":1,"resources_js_components_Mission_ManageMissionClassroom_vue":1,"resources_js_components_Mission_ManageMission_vue":1,"resources_js_components_Mission_NewMission_vue":1,"resources_js_components_Mission_Mission_vue":1,"resources_js_components_TestMission_NewTest_vue":1,"resources_js_components_Classroom_ManageClassroom_vue":1,"resources_js_pages_ClassRoomPage_vue":1,"resources_js_components_Classroom_NewClassroom_vue":1,"resources_js_pages_MyScorePage_vue":1,"resources_js_pages_ScoreBoardPage_vue":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_components_Admin_NewUser_vue":1,"resources_js_components_Admin_ManageUser_vue":1,"resources_js_auth_ChangePassword_vue":1,"resources_js_components_Mission_ManageMissionClassroom_vue":1,"resources_js_components_Mission_ManageMission_vue":1,"resources_js_components_Mission_NewMission_vue":1,"resources_js_components_Mission_Mission_vue":1,"resources_js_components_TestMission_NewTest_vue":1,"resources_js_components_Classroom_ManageClassroom_vue":1,"resources_js_pages_ClassRoomPage_vue":1,"resources_js_components_Classroom_NewClassroom_vue":1,"resources_js_pages_MyScorePage_vue":1,"resources_js_pages_ScoreBoardPage_vue":1,"resources_js_components_Scoreboard_Comment_vue":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};

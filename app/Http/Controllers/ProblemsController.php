@@ -33,31 +33,53 @@ class ProblemsController extends Controller
 
     public function getProblem()
     {
-        $problem = Problem::get();
+        $problem = Problem::join("languages", "languages.id", "=", "problems.language_id")
+            ->select(
+                "problems.*",
+                "languages.lang as language",
+                "languages.type",
+            )
+            ->get();
         return response()->json(['success' => true, 'payload' =>  $problem]);
+    }
+
+    public function delProblem($id)
+    {
+        if (Problem::where('id', $id)->exists()) {
+            Problem::find($id)->delete();
+            return response()->json([
+                "message" => "records delete successfully"
+            ], 200);
+        } else {
+            return response()->json([
+                "message" => "not found"
+            ], 404);
+        }
     }
 
     public function updateProblem(Request $request)
     {
-        $problem = Problem::where("id", $request->input('id'))->first();
+        $problem = Problem::where("id", $request->id)->first();
 
-        // if (isset($request->file) && $request->file != '') {
-        //     $originalName = $request->file('file')->getClientOriginalName();
-        //     $path = $request->file('file')->storeAs('problem_file', $originalName);
-        //     $problem->file = $path;
-        // }
+        if (isset($request->file) && $request->file != "") {
+            if ($problem->file !== $request->file) {
+                $originalName = $request->file('file')->getClientOriginalName();
+                $path = $request->file('file')->storeAs('problem_file', $originalName);
+                $problem->file = $path;
+            }
+        }
 
-        // $problem->update(
-        //     [
-        //         'title' => $request->title,
-        //         'question' => $request->question,
-        //         'score' => $request->score,
-        //         'tolerant' => $request->tolerant,
-        //         'level' => $request->level,
-        //         'language_id' => $request->language_id,
-        //         'file' => $problem->file
-        //     ]
-        // );
-        return response()->json(['success' => true, 'payload' => $request]);
+        $problem->update(
+            [
+                'title' => $request->title,
+                'question' => $request->question,
+                'score' => $request->score,
+                'tolerant' => $request->tolerant,
+                'level' => $request->level,
+                'language_id' => $request->language_id,
+                'file' => $problem->file
+            ]
+        );
+        return response()->json(['success' => true, 'payload' => $problem]);
     }
 }

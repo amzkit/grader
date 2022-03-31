@@ -234,16 +234,16 @@ export default {
               to: "/mission",
               text: "Mission",
             },
+            // {
+            //   text: "New Mission",
+            //   to: "/new-mission",
+            // },
             {
-              text: "New Mission",
-              to: "/new-mission",
-            },
-            {
-              text: "Manage Mission",
+              text: "Mission",
               to: "/manage-mission",
             },
             {
-              text: "Manage Mission Classroom",
+              text: "Mission Classroom",
               to: "/manage-mission-classroom",
             },
           ],
@@ -300,14 +300,14 @@ export default {
           text: "Mission",
         },
         {
-          icon: "mdi-pencil",
-          text: "Manage",
-          subLinks: [
-            {
-              text: "New Classroom",
-              to: "/new-classroom",
-            },
-          ],
+          to: "/my-score",
+          icon: "mdi-view-dashboard",
+          text: "My Score",
+        },
+        {
+          to: "/scoreboard",
+          icon: "mdi-view-dashboard",
+          text: "Scoreboard",
         },
       ],
       ta: [
@@ -319,21 +319,12 @@ export default {
         {
           to: "/classroom",
           icon: "mdi-view-dashboard",
-          text: "Classroom",
+          text: "Mission",
         },
         {
-          icon: "mdi-pencil",
-          text: "Manage",
-          subLinks: [
-            {
-              text: "Manage Classroom",
-              to: "/manage-classroom",
-            },
-            {
-              text: "Manage Example",
-              to: "/manage-example",
-            },
-          ],
+          to: "/scoreboard",
+          icon: "mdi-view-dashboard",
+          text: "Scoreboard",
         },
       ],
       teacher: [
@@ -343,21 +334,50 @@ export default {
           text: "Home",
         },
         {
-          to: "/classroom",
-          icon: "mdi-view-dashboard",
-          text: "Classroom",
-        },
-        {
           icon: "mdi-pencil",
-          text: "Manage",
+          text: "Classroom",
           subLinks: [
             {
               text: "Manage Classroom",
               to: "/manage-classroom",
             },
+          ],
+        },
+        {
+          icon: "mdi-pencil",
+          text: "Mission",
+          subLinks: [
             {
-              text: "Manage Example",
-              to: "/manage-example",
+              text: "Mission",
+              to: "/manage-mission",
+            },
+            {
+              text: "Mission Classroom",
+              to: "/manage-mission-classroom",
+            },
+          ],
+        },
+        {
+          to: "/scoreboard",
+          icon: "mdi-view-dashboard",
+          text: "Scoreboard",
+        },
+        {
+          to: "/new-test",
+          icon: "mdi-view-dashboard",
+          text: "New Test",
+        },
+        {
+          icon: "mdi-pencil",
+          text: "User",
+          subLinks: [
+            {
+              text: "New User",
+              to: "/new-user",
+            },
+            {
+              text: "Manage User",
+              to: "/manage-user",
             },
           ],
         },

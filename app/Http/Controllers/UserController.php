@@ -35,6 +35,27 @@ class UserController extends Controller
 
     public function import(Request $request)
     {
+        if ($request->role === 'teacher') {
+
+            if (User::where('username', $request->username)->first()) {
+                return response()->json(['message' =>  "username duplicate"]);
+            }
+
+            $userWhere = [
+                'username'  => $request->username
+            ];
+            $userData = [
+                'email' =>  $request->email,
+                'password' => Hash::make($request->password),
+                'name'  =>  $request->name,
+                'role_teacher' =>  $request->role === 'teacher' && 1,
+                'role' =>  $request->role,
+                'username' => $request->username
+            ];
+            $userDB = User::updateOrCreate($userWhere, $userData);
+
+            return response()->json(['success' => true, 'payload' =>  $request]);
+        }
 
         if ($request->role === 'student' || $request->role === 'ta') {
 
@@ -68,11 +89,12 @@ class UserController extends Controller
             $classroomData = [
                 'section'   =>  $request->section,
                 'year'      =>  $request->year,
-                "role"      =>  $request->role,
+                "ta"      =>  $request->role == "ta" ? 1 : 0,
+                "student"      =>  $request->role == "student" ? 1 : 0,
                 'semester'  =>  $request->semester
             ];
 
-            $classroomDB = Classroom::updateOrCreate($classroomWhere, $classroomData);
+            Classroom::updateOrCreate($classroomWhere, $classroomData);
             return response()->json(['success' => true, 'payload' =>  $request]);
         }
 
@@ -153,7 +175,7 @@ class UserController extends Controller
                 $classroomData = [
                     'section'   =>  $section,
                     'year'      =>  $year,
-                    "role"      =>  "student",
+                    "student"      =>  1,
                     'semester'  =>  $semester
                 ];
 

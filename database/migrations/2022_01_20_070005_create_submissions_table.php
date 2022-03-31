@@ -20,6 +20,7 @@ class CreateSubmissionsTable extends Migration
             $table->bigInteger('schedule_id')->unsigned();
             $table->bigInteger('user_id');
             $table->longText('code');
+            $table->longText('output');
             $table->boolean('graded')->default(false);
             $table->float('score');
             $table->string('message', 100);

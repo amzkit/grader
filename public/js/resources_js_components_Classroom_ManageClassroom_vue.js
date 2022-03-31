@@ -270,6 +270,46 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -329,7 +369,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         year: "",
         start_datetime: "",
         end_datetime: "",
-        role: ""
+        role: "",
+        ta: "",
+        teacher: "",
+        student: ""
       },
       defaultItem: {
         name: "",
@@ -338,7 +381,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         year: "",
         start_datetime: "",
         end_datetime: "",
-        role: ""
+        role: "",
+        ta: "",
+        teacher: "",
+        student: ""
       },
       start_date: "",
       end_date: "",
@@ -481,9 +527,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this5.loading = true;
                 Object.assign(_this5.desserts[_this5.editedIndex], _this5.editedItem);
                 _context3.next = 6;
-                return axios.put("/api/manage/classroom/" + _this5.editedItem.id, {
-                  role: _this5.editedItem.role
-                });
+                return axios.put("/api/manage/classroom", _this5.editedItem);
 
               case 6:
                 _this5.loading = false;
@@ -759,24 +803,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Navigation",
@@ -859,15 +885,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _this3.loading = true;
                 _context3.next = 3;
-                return axios.get("api/classroom", {
-                  params: {
-                    studentid: _this3.$store.state.data.user.username
-                  }
-                }).then(function (response) {
+                return axios.get("api/classroom").then(function (response) {
                   if (response.data.success == true) {
                     _this3.$store.commit("data/SET_COURSES", response.data.payload);
-
-                    console.log(response.data.payload);
                   }
                 });
 
@@ -1258,7 +1278,9 @@ var render = function() {
                     staticClass: "elevation-1",
                     attrs: {
                       headers: _vm.headers,
-                      items: _vm.desserts,
+                      items: _vm.desserts.filter(function(e) {
+                        return e.role != "teacher"
+                      }),
                       "sort-by": "calories",
                       search: _vm.search
                     },
@@ -1856,38 +1878,130 @@ var render = function() {
                                                                         " "
                                                                       ),
                                                                       _c(
-                                                                        "v-select",
-                                                                        {
-                                                                          attrs: {
-                                                                            items: [
-                                                                              "student",
-                                                                              "ta"
-                                                                            ],
-                                                                            "single-line":
-                                                                              "",
-                                                                            auto:
-                                                                              "",
-                                                                            label:
-                                                                              "Role"
-                                                                          },
-                                                                          model: {
-                                                                            value:
-                                                                              _vm
-                                                                                .editedItem
-                                                                                .role,
-                                                                            callback: function(
-                                                                              $$v
-                                                                            ) {
-                                                                              _vm.$set(
-                                                                                _vm.editedItem,
-                                                                                "role",
-                                                                                $$v
-                                                                              )
+                                                                        "v-row",
+                                                                        [
+                                                                          _c(
+                                                                            "v-col",
+                                                                            {
+                                                                              attrs: {
+                                                                                cols:
+                                                                                  "4"
+                                                                              }
                                                                             },
-                                                                            expression:
-                                                                              "editedItem.role"
-                                                                          }
-                                                                        }
+                                                                            [
+                                                                              _c(
+                                                                                "v-checkbox",
+                                                                                {
+                                                                                  attrs: {
+                                                                                    label:
+                                                                                      "Teacher"
+                                                                                  },
+                                                                                  model: {
+                                                                                    value:
+                                                                                      _vm
+                                                                                        .editedItem
+                                                                                        .teacher,
+                                                                                    callback: function(
+                                                                                      $$v
+                                                                                    ) {
+                                                                                      _vm.$set(
+                                                                                        _vm.editedItem,
+                                                                                        "teacher",
+                                                                                        $$v
+                                                                                      )
+                                                                                    },
+                                                                                    expression:
+                                                                                      "editedItem.teacher"
+                                                                                  }
+                                                                                }
+                                                                              )
+                                                                            ],
+                                                                            1
+                                                                          ),
+                                                                          _vm._v(
+                                                                            " "
+                                                                          ),
+                                                                          _c(
+                                                                            "v-col",
+                                                                            {
+                                                                              attrs: {
+                                                                                cols:
+                                                                                  "4"
+                                                                              }
+                                                                            },
+                                                                            [
+                                                                              _c(
+                                                                                "v-checkbox",
+                                                                                {
+                                                                                  attrs: {
+                                                                                    label:
+                                                                                      "TA"
+                                                                                  },
+                                                                                  model: {
+                                                                                    value:
+                                                                                      _vm
+                                                                                        .editedItem
+                                                                                        .ta,
+                                                                                    callback: function(
+                                                                                      $$v
+                                                                                    ) {
+                                                                                      _vm.$set(
+                                                                                        _vm.editedItem,
+                                                                                        "ta",
+                                                                                        $$v
+                                                                                      )
+                                                                                    },
+                                                                                    expression:
+                                                                                      "editedItem.ta"
+                                                                                  }
+                                                                                }
+                                                                              )
+                                                                            ],
+                                                                            1
+                                                                          ),
+                                                                          _vm._v(
+                                                                            " "
+                                                                          ),
+                                                                          _c(
+                                                                            "v-col",
+                                                                            {
+                                                                              attrs: {
+                                                                                cols:
+                                                                                  "4"
+                                                                              }
+                                                                            },
+                                                                            [
+                                                                              _c(
+                                                                                "v-checkbox",
+                                                                                {
+                                                                                  attrs: {
+                                                                                    label:
+                                                                                      "Student"
+                                                                                  },
+                                                                                  model: {
+                                                                                    value:
+                                                                                      _vm
+                                                                                        .editedItem
+                                                                                        .student,
+                                                                                    callback: function(
+                                                                                      $$v
+                                                                                    ) {
+                                                                                      _vm.$set(
+                                                                                        _vm.editedItem,
+                                                                                        "student",
+                                                                                        $$v
+                                                                                      )
+                                                                                    },
+                                                                                    expression:
+                                                                                      "editedItem.student"
+                                                                                  }
+                                                                                }
+                                                                              )
+                                                                            ],
+                                                                            1
+                                                                          )
+                                                                        ],
+                                                                        1
                                                                       )
                                                                     ],
                                                                     1
@@ -2021,38 +2135,130 @@ var render = function() {
                                                                         " "
                                                                       ),
                                                                       _c(
-                                                                        "v-select",
-                                                                        {
-                                                                          attrs: {
-                                                                            items: [
-                                                                              "student",
-                                                                              "ta"
-                                                                            ],
-                                                                            "single-line":
-                                                                              "",
-                                                                            auto:
-                                                                              "",
-                                                                            label:
-                                                                              "Role"
-                                                                          },
-                                                                          model: {
-                                                                            value:
-                                                                              _vm
-                                                                                .editedItem
-                                                                                .role,
-                                                                            callback: function(
-                                                                              $$v
-                                                                            ) {
-                                                                              _vm.$set(
-                                                                                _vm.editedItem,
-                                                                                "role",
-                                                                                $$v
-                                                                              )
+                                                                        "v-row",
+                                                                        [
+                                                                          _c(
+                                                                            "v-col",
+                                                                            {
+                                                                              attrs: {
+                                                                                cols:
+                                                                                  "4"
+                                                                              }
                                                                             },
-                                                                            expression:
-                                                                              "editedItem.role"
-                                                                          }
-                                                                        }
+                                                                            [
+                                                                              _c(
+                                                                                "v-checkbox",
+                                                                                {
+                                                                                  attrs: {
+                                                                                    label:
+                                                                                      "Teacher"
+                                                                                  },
+                                                                                  model: {
+                                                                                    value:
+                                                                                      _vm
+                                                                                        .editedItem
+                                                                                        .teacher,
+                                                                                    callback: function(
+                                                                                      $$v
+                                                                                    ) {
+                                                                                      _vm.$set(
+                                                                                        _vm.editedItem,
+                                                                                        "teacher",
+                                                                                        $$v
+                                                                                      )
+                                                                                    },
+                                                                                    expression:
+                                                                                      "editedItem.teacher"
+                                                                                  }
+                                                                                }
+                                                                              )
+                                                                            ],
+                                                                            1
+                                                                          ),
+                                                                          _vm._v(
+                                                                            " "
+                                                                          ),
+                                                                          _c(
+                                                                            "v-col",
+                                                                            {
+                                                                              attrs: {
+                                                                                cols:
+                                                                                  "4"
+                                                                              }
+                                                                            },
+                                                                            [
+                                                                              _c(
+                                                                                "v-checkbox",
+                                                                                {
+                                                                                  attrs: {
+                                                                                    label:
+                                                                                      "TA"
+                                                                                  },
+                                                                                  model: {
+                                                                                    value:
+                                                                                      _vm
+                                                                                        .editedItem
+                                                                                        .ta,
+                                                                                    callback: function(
+                                                                                      $$v
+                                                                                    ) {
+                                                                                      _vm.$set(
+                                                                                        _vm.editedItem,
+                                                                                        "ta",
+                                                                                        $$v
+                                                                                      )
+                                                                                    },
+                                                                                    expression:
+                                                                                      "editedItem.ta"
+                                                                                  }
+                                                                                }
+                                                                              )
+                                                                            ],
+                                                                            1
+                                                                          ),
+                                                                          _vm._v(
+                                                                            " "
+                                                                          ),
+                                                                          _c(
+                                                                            "v-col",
+                                                                            {
+                                                                              attrs: {
+                                                                                cols:
+                                                                                  "4"
+                                                                              }
+                                                                            },
+                                                                            [
+                                                                              _c(
+                                                                                "v-checkbox",
+                                                                                {
+                                                                                  attrs: {
+                                                                                    label:
+                                                                                      "Student"
+                                                                                  },
+                                                                                  model: {
+                                                                                    value:
+                                                                                      _vm
+                                                                                        .editedItem
+                                                                                        .student,
+                                                                                    callback: function(
+                                                                                      $$v
+                                                                                    ) {
+                                                                                      _vm.$set(
+                                                                                        _vm.editedItem,
+                                                                                        "student",
+                                                                                        $$v
+                                                                                      )
+                                                                                    },
+                                                                                    expression:
+                                                                                      "editedItem.student"
+                                                                                  }
+                                                                                }
+                                                                              )
+                                                                            ],
+                                                                            1
+                                                                          )
+                                                                        ],
+                                                                        1
                                                                       )
                                                                     ],
                                                                     1
@@ -2192,6 +2398,62 @@ var render = function() {
                             ]
                           },
                           proxy: true
+                        },
+                        {
+                          key: "item.section",
+                          fn: function(ref) {
+                            var item = ref.item
+                            return [
+                              _vm._v(
+                                "\n            " +
+                                  _vm._s(item.section ? item.section : "-") +
+                                  "\n          "
+                              )
+                            ]
+                          }
+                        },
+                        {
+                          key: "item.semester",
+                          fn: function(ref) {
+                            var item = ref.item
+                            return [
+                              _vm._v(
+                                "\n            " +
+                                  _vm._s(item.semester ? item.semester : "-") +
+                                  "\n          "
+                              )
+                            ]
+                          }
+                        },
+                        {
+                          key: "item.year",
+                          fn: function(ref) {
+                            var item = ref.item
+                            return [
+                              _vm._v(
+                                "\n            " +
+                                  _vm._s(item.year ? item.year : "-") +
+                                  "\n          "
+                              )
+                            ]
+                          }
+                        },
+                        {
+                          key: "item.role",
+                          fn: function(ref) {
+                            var item = ref.item
+                            return [
+                              _vm._v(
+                                "\n            " +
+                                  _vm._s(item.teacher == 1 ? "Teacher," : "") +
+                                  "\n            " +
+                                  _vm._s(item.ta == 1 ? "TA," : "") +
+                                  "\n            " +
+                                  _vm._s(item.student == 1 ? "Student," : "") +
+                                  "\n          "
+                              )
+                            ]
+                          }
                         },
                         {
                           key: "item.start_datetime",
@@ -2424,7 +2686,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
 var render = function() {
-  var this$1 = this
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -2455,7 +2716,8 @@ var render = function() {
                 },
                 [
                   this.$store.state.data.user.role === "admin" ||
-                  this.$store.state.data.user.role === "teacher"
+                  (this.$store.state.data.user.role === "teacher" &&
+                    _vm.$route.fullPath == "/manage-classroom")
                     ? _c(
                         "div",
                         [
@@ -2647,77 +2909,36 @@ var render = function() {
                     : _vm._e(),
                   _vm._v(" "),
                   _c("div", [
-                    this.$store.state.data.user.role === "admin" ||
-                    this.$store.state.data.user.role === "teacher"
-                      ? _c(
-                          "div",
-                          _vm._l(this.$store.state.data.courses, function(
-                            item
-                          ) {
-                            return _c(
-                              "v-list-item",
-                              {
-                                key: item.id,
-                                attrs: { link: "" },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.onClick(item)
-                                  }
-                                }
-                              },
+                    _c(
+                      "div",
+                      _vm._l(this.$store.state.data.courses, function(item) {
+                        return _c(
+                          "v-list-item",
+                          {
+                            key: item.id,
+                            attrs: { link: "" },
+                            on: {
+                              click: function($event) {
+                                return _vm.onClick(item)
+                              }
+                            }
+                          },
+                          [
+                            _c(
+                              "v-list-item-content",
                               [
-                                _c(
-                                  "v-list-item-content",
-                                  [
-                                    _c("v-list-item-title", [
-                                      _vm._v(_vm._s(item.course_name))
-                                    ])
-                                  ],
-                                  1
-                                )
+                                _c("v-list-item-title", [
+                                  _vm._v(_vm._s(item.course_name))
+                                ])
                               ],
                               1
                             )
-                          }),
+                          ],
                           1
                         )
-                      : _c(
-                          "div",
-                          _vm._l(
-                            this.$store.state.data.courses.filter(function(e) {
-                              return (
-                                e.role === this$1.$store.state.data.user.role
-                              )
-                            }),
-                            function(item) {
-                              return _c(
-                                "v-list-item",
-                                {
-                                  key: item.id,
-                                  attrs: { link: "" },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.onClick(item)
-                                    }
-                                  }
-                                },
-                                [
-                                  _c(
-                                    "v-list-item-content",
-                                    [
-                                      _c("v-list-item-title", [
-                                        _vm._v(_vm._s(item.course_name))
-                                      ])
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            }
-                          ),
-                          1
-                        )
+                      }),
+                      1
+                    )
                   ])
                 ]
               )

@@ -10,13 +10,15 @@ use App\Models\User;
 class ClassroomController extends Controller
 {
     //
-    public function getClassrooms(Request $request)
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    public function getClassrooms()
     {
 
-        $studentId = $request->studentid;
-        $item = User::where('username', '=', $studentId)->first();
-
-        if ($item->role !== 'ta' && $item->role !== 'student') {
+        if (auth()->user()->role == 'admin') {
             $classroom = Course::select(
                 "courses.id as courseId",
                 "courses.course_name",
@@ -26,8 +28,9 @@ class ClassroomController extends Controller
                 "classrooms.id as classroomId",
                 "courses.id as courseId",
                 "courses.course_name",
-                "classrooms.role",
-            )->leftJoin("courses", "courses.id", "=", "classrooms.course_id")->where('user_id', '=',  $item->id)->get();
+            )->leftJoin("courses", "courses.id", "=", "classrooms.course_id")
+                ->where('user_id', '=', auth()->user()->id)
+                ->get();
         }
 
         return response()->json(['success' => true, 'payload' =>  $classroom]);
@@ -42,53 +45,43 @@ class ClassroomController extends Controller
             ->select('classrooms.*', 'users.name')
             ->get();
 
-
-
         return response()->json(['success' => true, 'payload' =>  $item]);
     }
 
-    public function updateClassrooms(Request $request, $id)
+    public function updateClassrooms(Request $request)
     {
-        $user = User::find($id);
+        $classroom = Classroom::find($request->id);
 
-        $user->save();
+        if ($classroom) {
+            $classroom->update(
+                [
+                    'ta' => $request->ta,
+                    'teacher' => $request->teacher,
+                    'student' => $request->student,
+                    'section' => $request->section,
+                    'semester' => $request->semester
+                ]
+            );
+            $user = User::find($classroom->user_id);
 
+            $checkRole = Classroom::where('user_id', '=', $user->id);
 
-        if (Classroom::where('id', $id)->exists()) {
-            $item = Classroom::where("id", $id)->first();
+            $classroomLengthRoleTA =  $checkRole->where('ta', '=', 1)->count();
+            $classroomLengthRoleTC =  $checkRole->where('teacher', '=', 1)->count();
+            $classroomLengthRoleSTD =  $checkRole->where('student', '=', 1)->count();
 
-            $item->update(['role' => $request->role]);
-
-            $user = User::where("id",  $item->user_id)->first();
-
-            User::where("id",  $user->id)->update([
-                'role_ta' =>  $request->role === 'ta' ? 1 : $user->role_ta,
-                'role_student' =>  $request->role === 'student' ? 1 : $user->role_student,
+            $user->update([
+                'role_ta' =>  $request->ta ? 1 : $classroomLengthRoleTA > 0 && $user->role_ta,
+                'role_teacher' => $request->teacher ? 1 : $classroomLengthRoleTC > 0 && $user->role_teacher,
+                'role_student' =>  $request->student ? 1 : $classroomLengthRoleSTD > 0 && $user->role_student,
             ]);
 
-            if ($user->role == null || $user->role == "") {
-                $user->update(['role' => $request->role]);
-            }
-
-            // if ($request->role == 'ta') {
-            //     $user->role_ta = 1;
-            // } else if ($request->role == 'student') {
-            //     $user->role_student = 1;
-            // } else if ($request->role == 'teacher') {
-            //     $user->role_teacher = 1;
-            // }
             // if ($user->role == null || $user->role == "") {
-            //     $user->role = $request->role;
+            //     $user->update(['role' => $request->role]);
             // }
-
-            return response()->json([
-                "message" => "records updated successfully",
-            ], 200);
-        } else {
-            return response()->json([
-                "message" => "Student not found"
-            ], 404);
+            return response()->json(['success' => true, 'payload' => $classroom]);
         }
+        return response()->json(["message" => "Student not found"]);
     }
 
     public function delClassrooms($id)
