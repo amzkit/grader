@@ -23,6 +23,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::put('user/{user_id}', 'App\Http\Controllers\UserController@update');
 Route::post('user/file/upload', 'App\Http\Controllers\UserController@import');
+Route::get('manage/user', 'App\Http\Controllers\UserController@getUser');
+Route::put('manage/user', 'App\Http\Controllers\UserController@editUser');
+
 Route::post('changePassword', 'App\Http\Controllers\Auth\ChangePasswordController@changePassword');
 
 Route::get('problem', 'App\Http\Controllers\ProblemsController@getProblem');
@@ -31,10 +34,10 @@ Route::post('problem/update', 'App\Http\Controllers\ProblemsController@updatePro
 Route::delete('problem/{id}', 'App\Http\Controllers\ProblemsController@delProblem');
 
 Route::get('classroom', 'App\Http\Controllers\ClassroomController@getClassrooms');
+Route::get('classrooms', 'App\Http\Controllers\ClassroomController@getClassroomsAll');
+
 Route::get('schedule', 'App\Http\Controllers\ScheduleController@getSchedule');
 Route::get('schedule/download/{file_name}', 'App\Http\Controllers\ProblemsController@download');
-
-Route::get('manage/user', 'App\Http\Controllers\UserController@getUser');
 
 Route::get('manage/classroom', 'App\Http\Controllers\ClassroomController@getManageClassrooms');
 
@@ -52,13 +55,14 @@ Route::post('course', 'App\Http\Controllers\CourseController@insert');
 
 Route::post('submission', 'App\Http\Controllers\SubmissionController@submission');
 Route::get('submission', 'App\Http\Controllers\SubmissionController@getSubmission');
-Route::get('submission/{id}', 'App\Http\Controllers\SubmissionController@getSubmissionById');
+Route::get('submission/scoreboard', 'App\Http\Controllers\SubmissionController@getSubmissionById');
 
 Route::get('language', 'App\Http\Controllers\LanguageController@getLanguage');
 Route::post('language', 'App\Http\Controllers\LanguageController@insert');
 
 Route::get('score', 'App\Http\Controllers\AnalysesController@getScore');
 
-Route::get('scoreboard', 'App\Http\Controllers\SubmissionController@getScoreBoard');
+Route::get('scoreboard/{id}', 'App\Http\Controllers\SubmissionController@getScoreBoard');
 
 Route::post('comment', 'App\Http\Controllers\CommentController@insertComment');
+Route::get('comment', 'App\Http\Controllers\CommentController@getComment');

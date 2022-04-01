@@ -6,9 +6,9 @@
         <v-list-item-group v-model="model" mandatory>
           <div
             v-if="
-              this.$store.state.data.user.role === 'admin' ||
-              (this.$store.state.data.user.role === 'teacher' &&
-                $route.fullPath == '/manage-classroom')
+              (this.$store.state.data.user.role === 'admin' ||
+                this.$store.state.data.user.role === 'teacher') &&
+              $route.fullPath === '/manage-classroom'
             "
           >
             <v-list-item-content>

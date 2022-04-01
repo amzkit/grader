@@ -56,16 +56,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Navigation_Navigation_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Navigation/Navigation.vue */ "./resources/js/components/Navigation/Navigation.vue");
 /* harmony import */ var _Loading_Loading_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Loading/Loading.vue */ "./resources/js/components/Loading/Loading.vue");
+var _methods;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-//
-//
-//
-//
 //
 //
 //
@@ -133,23 +133,33 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     return {
       loading: false,
       myScore: [],
-      analyses: [],
+      comment: [],
       headers: [{
-        text: "Input",
+        text: "#",
         align: "center",
         sortable: false,
-        value: "input"
+        value: "index"
       }, {
-        text: "Your Output",
-        value: "output",
+        text: "Title",
+        align: "center",
+        sortable: false,
+        value: "title"
+      }, {
+        text: "Detail",
+        value: "detail",
+        align: "center",
+        width: 450
+      }, {
+        text: "Score",
+        value: "score",
         align: "center"
       }, {
-        text: "Correct Output",
-        value: "testcase_output",
+        text: "Comment Code",
+        value: "comment_count",
         align: "center"
       }, {
-        text: "Message",
-        value: "message",
+        text: "Date Submission",
+        value: "created_at",
         align: "center"
       }]
     };
@@ -168,59 +178,67 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }))();
   },
   computed: {},
-  methods: {
+  methods: (_methods = {
     dayjs: (dayjs__WEBPACK_IMPORTED_MODULE_1___default()),
     invalidDate: function invalidDate(item) {
       return item ? dayjs__WEBPACK_IMPORTED_MODULE_1___default()(item).format("MMMM D, YYYY hh:mm A") : "-";
-    },
-    fatchItemSchedule: function fatchItemSchedule(item) {
-      var _this = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        var items, items2;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _this.loading = true;
-                _this.course_id = item.courseId;
-
-                if (!item) {
-                  _context2.next = 9;
-                  break;
-                }
-
-                items = [];
-                items2 = [];
-                _context2.next = 7;
-                return axios.get("/api/score", {
-                  params: {
-                    course_id: item.courseId
-                  }
-                }).then(function (response) {
-                  if (response.data.success == true) {
-                    items = response.data.payload;
-                    items2 = response.data.payload2;
-                  }
-                });
-
-              case 7:
-                _this.myScore = items;
-                _this.analyses = items2;
-
-              case 9:
-                console.log("analyses", _this.analyses);
-                _this.loading = false;
-
-              case 11:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
     }
-  }
+  }, _defineProperty(_methods, "invalidDate", function invalidDate(item) {
+    return item ? dayjs__WEBPACK_IMPORTED_MODULE_1___default()(item).format("MMMM D, YYYY hh:mm A") : "-";
+  }), _defineProperty(_methods, "Item", function Item(val) {
+    this.$router.push({
+      path: "my-score-mission",
+      query: {
+        submission_id: val.id,
+        course_id: this.course_id
+      }
+    });
+  }), _defineProperty(_methods, "fatchItemSchedule", function fatchItemSchedule(item) {
+    var _this = this;
+
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+      var items, items2;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _this.loading = true;
+              _this.course_id = item.courseId;
+
+              if (!item) {
+                _context2.next = 9;
+                break;
+              }
+
+              items = [];
+              items2 = [];
+              _context2.next = 7;
+              return axios.get("/api/score", {
+                params: {
+                  course_id: item.courseId
+                }
+              }).then(function (response) {
+                if (response.data.success == true) {
+                  items = response.data.payload;
+                  items2 = response.data.comment;
+                }
+              });
+
+            case 7:
+              _this.myScore = items;
+              _this.comment = items2;
+
+            case 9:
+              _this.loading = false;
+
+            case 10:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    }))();
+  }), _methods)
 });
 
 /***/ }),
@@ -861,158 +879,119 @@ var render = function() {
                   "v-row",
                   { attrs: { justify: "center" } },
                   [
-                    _c(
-                      "v-expansion-panels",
-                      _vm._l(_vm.myScore, function(item, i) {
-                        return _c(
-                          "v-expansion-panel",
-                          { key: i },
-                          [
-                            _c(
-                              "v-expansion-panel-header",
-                              { attrs: { "disable-icon-rotate": "" } },
-                              [
+                    _c("v-data-table", {
+                      staticClass: "elevation-1",
+                      attrs: { headers: _vm.headers, items: _vm.myScore },
+                      on: {
+                        "click:row": function($event) {
+                          return _vm.Item($event)
+                        }
+                      },
+                      scopedSlots: _vm._u(
+                        [
+                          {
+                            key: "item.index",
+                            fn: function(ref) {
+                              var index = ref.index
+                              return [
+                                _vm._v(
+                                  "\n            " +
+                                    _vm._s(index + 1) +
+                                    "\n          "
+                                )
+                              ]
+                            }
+                          },
+                          {
+                            key: "item.detail",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
                                 _c(
-                                  "v-row",
-                                  { attrs: { "no-gutters": "" } },
-                                  [
-                                    _c(
-                                      "v-col",
-                                      { attrs: { cols: "4" } },
-                                      [
-                                        _c(
-                                          "v-fade-transition",
-                                          { attrs: { "leave-absolute": "" } },
-                                          [
-                                            _c(
-                                              "v-row",
-                                              {
-                                                staticStyle: { width: "100%" },
-                                                attrs: { "no-gutters": "" }
-                                              },
-                                              [
-                                                _c(
-                                                  "v-col",
-                                                  { attrs: { cols: "6" } },
-                                                  [
-                                                    _vm._v(
-                                                      "\n                        " +
-                                                        _vm._s(item.title) +
-                                                        "\n                      "
-                                                    )
-                                                  ]
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "v-col",
-                                                  { attrs: { cols: "6" } },
-                                                  [
-                                                    _vm._v(
-                                                      "\n                        Score : " +
-                                                        _vm._s(
-                                                          item.score.toFixed(2)
-                                                        ) +
-                                                        "\n                      "
-                                                    )
-                                                  ]
-                                                )
-                                              ],
-                                              1
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      ],
-                                      1
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-col",
+                                  "v-col",
+                                  _vm._l(item.message.match(/[A-Z]/g), function(
+                                    i,
+                                    n
+                                  ) {
+                                    return _c(
+                                      "v-chip",
                                       {
-                                        staticClass: "text--secondary",
-                                        attrs: { cols: "8" }
+                                        key: n,
+                                        attrs: {
+                                          color: i == "Y" ? "green" : "red",
+                                          "text-color": "white"
+                                        }
                                       },
                                       [
-                                        _c(
-                                          "v-fade-transition",
-                                          { attrs: { "leave-absolute": "" } },
-                                          [
-                                            _c(
-                                              "v-row",
-                                              {
-                                                staticStyle: { width: "100%" },
-                                                attrs: { "no-gutters": "" }
-                                              },
-                                              [
-                                                _c(
-                                                  "v-col",
-                                                  { attrs: { cols: "6" } },
-                                                  [
-                                                    _vm._v(
-                                                      "\n                        Start date:\n                        " +
-                                                        _vm._s(
-                                                          _vm.invalidDate(
-                                                            item.start_date
-                                                          ) || "NOT SET"
-                                                        ) +
-                                                        "\n                      "
-                                                    )
-                                                  ]
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "v-col",
-                                                  { attrs: { cols: "6" } },
-                                                  [
-                                                    _vm._v(
-                                                      "\n                        End date:\n                        " +
-                                                        _vm._s(
-                                                          _vm.invalidDate(
-                                                            item.end_date
-                                                          ) || "NOT SET"
-                                                        ) +
-                                                        "\n                      "
-                                                    )
-                                                  ]
-                                                )
-                                              ],
-                                              1
-                                            )
-                                          ],
-                                          1
+                                        _vm._v(
+                                          "\n                " +
+                                            _vm._s(i) +
+                                            "\n              "
                                         )
-                                      ],
-                                      1
+                                      ]
                                     )
-                                  ],
+                                  }),
                                   1
                                 )
-                              ],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "v-expansion-panel-content",
-                              [
-                                _c("v-data-table", {
-                                  staticClass: "elevation-1",
-                                  attrs: {
-                                    headers: _vm.headers,
-                                    items: _vm.analyses.filter(function(e) {
-                                      return e.submission_id == item.id
-                                    }),
-                                    "items-per-page": 5
-                                  }
-                                })
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        )
-                      }),
-                      1
-                    )
+                              ]
+                            }
+                          },
+                          {
+                            key: "item.score",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                _c(
+                                  "v-chip",
+                                  { attrs: { color: "primary", dark: "" } },
+                                  [
+                                    _vm._v(
+                                      "\n              " +
+                                        _vm._s(item.score) +
+                                        "\n            "
+                                    )
+                                  ]
+                                )
+                              ]
+                            }
+                          },
+                          {
+                            key: "item.comment_count",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                _vm._v(
+                                  "\n            " +
+                                    _vm._s(
+                                      _vm.comment.reduce(function(n, e) {
+                                        return item.id == e.submission_id
+                                          ? n + 1
+                                          : n
+                                      }, 0) + " Comment"
+                                    ) +
+                                    "\n          "
+                                )
+                              ]
+                            }
+                          },
+                          {
+                            key: "item.created_at",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                _vm._v(
+                                  "\n            " +
+                                    _vm._s(_vm.invalidDate(item.created_at)) +
+                                    "\n          "
+                                )
+                              ]
+                            }
+                          }
+                        ],
+                        null,
+                        true
+                      )
+                    })
                   ],
                   1
                 )
@@ -1074,9 +1053,9 @@ var render = function() {
                   }
                 },
                 [
-                  this.$store.state.data.user.role === "admin" ||
-                  (this.$store.state.data.user.role === "teacher" &&
-                    _vm.$route.fullPath == "/manage-classroom")
+                  (this.$store.state.data.user.role === "admin" ||
+                    this.$store.state.data.user.role === "teacher") &&
+                  _vm.$route.fullPath === "/manage-classroom"
                     ? _c(
                         "div",
                         [

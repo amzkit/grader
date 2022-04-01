@@ -76,7 +76,13 @@ export default {
     async getScoreboard() {
       this.loading = true;
       await axios
-        .get(`/api/submission/${this.$route.query.submission_id}`)
+        .get(`/api/submission/scoreboard`, {
+          params: {
+            user_id: this.$route.query.user_id,
+            problem_id: this.$route.query.problem_id,
+            schedule_id: this.$route.query.schedule_id,
+          },
+        })
         .then((response) => {
           if (response.data.success == true) {
             this.item = response.data.payload;
@@ -86,11 +92,15 @@ export default {
     },
     async insertComment() {
       this.loading = true;
-      await axios.post("/api/comment", {
-        submission_id: this.item.id,
-        comment: this.comment,
-        user_id: this.item.user_id,
-      });
+      await axios
+        .post("/api/comment", {
+          submission_id: this.item.id,
+          comment: this.comment,
+          user_id: this.item.user_id,
+        })
+        .then(() => {
+          window.location.href = "/scoreboard";
+        });
       this.loading = false;
     },
   },

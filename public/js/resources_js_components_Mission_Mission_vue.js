@@ -56,6 +56,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Navigation_Navigation_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Navigation/Navigation.vue */ "./resources/js/components/Navigation/Navigation.vue");
 /* harmony import */ var _Loading_Loading_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Loading/Loading.vue */ "./resources/js/components/Loading/Loading.vue");
+/* harmony import */ var _Snackbar_Snackbar_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Snackbar/Snackbar.vue */ "./resources/js/components/Snackbar/Snackbar.vue");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -240,24 +241,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
+
 
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     Navigation: _Navigation_Navigation_vue__WEBPACK_IMPORTED_MODULE_2__.default,
-    Loading: _Loading_Loading_vue__WEBPACK_IMPORTED_MODULE_3__.default
+    Loading: _Loading_Loading_vue__WEBPACK_IMPORTED_MODULE_3__.default,
+    Snackbar: _Snackbar_Snackbar_vue__WEBPACK_IMPORTED_MODULE_4__.default
   },
   data: function data() {
     return {
+      snackbar: false,
+      text: "",
       loading: false,
-      loader: null,
-      loadingDownload: false,
       file: null,
       course_id: 0,
       missionPass: [],
@@ -284,9 +282,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   methods: {
     dayjs: (dayjs__WEBPACK_IMPORTED_MODULE_1___default()),
-    err: function err(item) {
-      console.log(item);
-    },
     download: function download(item) {
       window.location.href = "api/schedule/download".concat(item.replace("problem_file", ""));
     },
@@ -305,6 +300,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
+                _this.loading = true;
                 config = {
                   headers: {
                     "content-type": "multipart/form-data"
@@ -315,14 +311,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 formData.append("Lang", item.language);
                 formData.append("problem_id", item.problemsId);
                 formData.append("course_id", _this.course_id);
-                _context2.next = 8;
+                _context2.next = 9;
                 return axios.post("/api/submission", formData, config).then(function (response) {
                   location.reload();
                 })["catch"](function (error) {
-                  console.log(error);
+                  this.snackbar = true;
+                  this.text = error;
                 });
 
-              case 8:
+              case 9:
+                _this.loading = true;
+
+              case 10:
               case "end":
                 return _context2.stop();
             }
@@ -330,7 +330,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2);
       }))();
     },
-    fatchItemSchedule: function fatchItemSchedule(item) {
+    fetchItemSchedule: function fetchItemSchedule(item) {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
@@ -356,6 +356,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 }).then(function (response) {
                   if (response.data.success == true) {
                     _this2.$store.commit("data/SET_SCHEDULES_ALL", response.data.payload);
+
+                    if (response.data.payload == "") {
+                      _this2.snackbar = true;
+                      _this2.text = "You don't have a mission";
+                    }
                   }
                 });
 
@@ -632,6 +637,48 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Snackbar/Snackbar.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Snackbar/Snackbar.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: "Snackbar",
+  props: ["snackbar", "text"],
+  computed: {
+    open: {
+      get: function get() {
+        return this.snackbar;
+      },
+      set: function set() {
+        open;
+      }
+    }
+  },
+  data: function data() {
+    return {
+      timeout: 4000
+    };
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/dayjs/dayjs.min.js":
 /*!*****************************************!*\
   !*** ./node_modules/dayjs/dayjs.min.js ***!
@@ -759,6 +806,45 @@ component.options.__file = "resources/js/components/Navigation/Navigation.vue"
 
 /***/ }),
 
+/***/ "./resources/js/components/Snackbar/Snackbar.vue":
+/*!*******************************************************!*\
+  !*** ./resources/js/components/Snackbar/Snackbar.vue ***!
+  \*******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Snackbar_vue_vue_type_template_id_37e7d894___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Snackbar.vue?vue&type=template&id=37e7d894& */ "./resources/js/components/Snackbar/Snackbar.vue?vue&type=template&id=37e7d894&");
+/* harmony import */ var _Snackbar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Snackbar.vue?vue&type=script&lang=js& */ "./resources/js/components/Snackbar/Snackbar.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _Snackbar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _Snackbar_vue_vue_type_template_id_37e7d894___WEBPACK_IMPORTED_MODULE_0__.render,
+  _Snackbar_vue_vue_type_template_id_37e7d894___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Snackbar/Snackbar.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/Loading/Loading.vue?vue&type=script&lang=js&":
 /*!******************************************************************************!*\
   !*** ./resources/js/components/Loading/Loading.vue?vue&type=script&lang=js& ***!
@@ -804,6 +890,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Navigation_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Navigation.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Navigation/Navigation.vue?vue&type=script&lang=js&");
  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Navigation_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
+/***/ "./resources/js/components/Snackbar/Snackbar.vue?vue&type=script&lang=js&":
+/*!********************************************************************************!*\
+  !*** ./resources/js/components/Snackbar/Snackbar.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Snackbar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Snackbar.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Snackbar/Snackbar.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Snackbar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
 
 /***/ }),
 
@@ -854,6 +956,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Navigation_vue_vue_type_template_id_22b6f834___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Navigation_vue_vue_type_template_id_22b6f834___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Navigation.vue?vue&type=template&id=22b6f834& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Navigation/Navigation.vue?vue&type=template&id=22b6f834&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Snackbar/Snackbar.vue?vue&type=template&id=37e7d894&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/Snackbar/Snackbar.vue?vue&type=template&id=37e7d894& ***!
+  \**************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Snackbar_vue_vue_type_template_id_37e7d894___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Snackbar_vue_vue_type_template_id_37e7d894___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Snackbar_vue_vue_type_template_id_37e7d894___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Snackbar.vue?vue&type=template&id=37e7d894& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Snackbar/Snackbar.vue?vue&type=template&id=37e7d894&");
 
 
 /***/ }),
@@ -925,622 +1044,562 @@ var render = function() {
   return _c(
     "v-row",
     [
-      _c("Loading", { attrs: { loading: this.loading } }),
+      _c("Loading", { attrs: { loading: _vm.loading } }),
+      _vm._v(" "),
+      _c("Snackbar", { attrs: { snackbar: _vm.snackbar, text: _vm.text } }),
       _vm._v(" "),
       _c(
         "v-col",
         { attrs: { cols: "2" } },
-        [_c("Navigation", { attrs: { onClick: _vm.fatchItemSchedule } })],
+        [_c("Navigation", { attrs: { onClick: _vm.fetchItemSchedule } })],
         1
       ),
       _vm._v(" "),
-      _c("v-col", { attrs: { cols: "10" } }, [
-        !this.$store.state.data.loading
-          ? _c(
-              "div",
-              [
+      _c(
+        "v-col",
+        { attrs: { cols: "10" } },
+        [
+          _c(
+            "v-row",
+            { attrs: { justify: "center" } },
+            [
+              _c("v-col", [
                 _c(
-                  "v-row",
-                  { attrs: { justify: "center" } },
+                  "div",
                   [
-                    _c("v-col", [
-                      _c(
-                        "div",
-                        [
-                          _c(
-                            "v-expansion-panels",
-                            { staticClass: "mb-6" },
-                            _vm._l(
-                              this.$store.state.data.schedule_all.filter(
-                                function(e) {
-                                  var missionSend = _vm.missionPass.find(
-                                    function(p) {
-                                      return p.schedule_id == e.id
-                                    }
-                                  )
-                                  if (missionSend) {
-                                    return null
-                                  }
-                                  return e
-                                }
-                              ),
-                              function(item, i) {
-                                return _c(
-                                  "v-expansion-panel",
-                                  { key: i },
-                                  [
-                                    _c(
-                                      "v-expansion-panel-header",
-                                      {
-                                        attrs: {
-                                          "expand-icon": "mdi-menu-down"
-                                        }
-                                      },
-                                      [
-                                        _c(
-                                          "v-row",
-                                          { attrs: { "no-gutters": "" } },
-                                          [
-                                            _c(
-                                              "v-col",
-                                              { attrs: { cols: "4" } },
-                                              [
-                                                _c(
-                                                  "v-fade-transition",
-                                                  {
-                                                    attrs: {
-                                                      "leave-absolute": ""
-                                                    }
-                                                  },
-                                                  [
-                                                    _c(
-                                                      "v-row",
-                                                      {
-                                                        staticStyle: {
-                                                          width: "100%"
-                                                        },
-                                                        attrs: {
-                                                          "no-gutters": ""
-                                                        }
-                                                      },
-                                                      [
-                                                        _c(
-                                                          "v-col",
-                                                          {
-                                                            attrs: { cols: "6" }
-                                                          },
-                                                          [
-                                                            _vm._v(
-                                                              "\n                            " +
-                                                                _vm._s(
-                                                                  item.title
-                                                                ) +
-                                                                "\n                          "
-                                                            )
-                                                          ]
-                                                        ),
-                                                        _vm._v(" "),
-                                                        _c(
-                                                          "v-col",
-                                                          [
-                                                            _c("v-rating", {
-                                                              attrs: {
-                                                                color:
-                                                                  "yellow accent-4",
-                                                                "background-color":
-                                                                  "grey darken-1",
-                                                                dense: "",
-                                                                size: "18"
-                                                              },
-                                                              model: {
-                                                                value:
-                                                                  item.level,
-                                                                callback: function(
-                                                                  $$v
-                                                                ) {
-                                                                  _vm.$set(
-                                                                    item,
-                                                                    "level",
-                                                                    $$v
-                                                                  )
-                                                                },
-                                                                expression:
-                                                                  "item.level"
-                                                              }
-                                                            })
-                                                          ],
-                                                          1
-                                                        )
-                                                      ],
-                                                      1
-                                                    )
-                                                  ],
-                                                  1
-                                                )
-                                              ],
-                                              1
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-col",
-                                              {
-                                                staticClass: "text--secondary",
-                                                attrs: { cols: "8" }
-                                              },
-                                              [
-                                                _c(
-                                                  "v-fade-transition",
-                                                  {
-                                                    attrs: {
-                                                      "leave-absolute": ""
-                                                    }
-                                                  },
-                                                  [
-                                                    _c(
-                                                      "v-row",
-                                                      {
-                                                        staticStyle: {
-                                                          width: "100%"
-                                                        },
-                                                        attrs: {
-                                                          "no-gutters": ""
-                                                        }
-                                                      },
-                                                      [
-                                                        _c(
-                                                          "v-col",
-                                                          {
-                                                            attrs: { cols: "6" }
-                                                          },
-                                                          [
-                                                            _vm._v(
-                                                              "\n                            Start date:\n                            " +
-                                                                _vm._s(
-                                                                  _vm.invalidDate(
-                                                                    item.start_date
-                                                                  ) || "NOT SET"
-                                                                ) +
-                                                                "\n                          "
-                                                            )
-                                                          ]
-                                                        ),
-                                                        _vm._v(" "),
-                                                        _c(
-                                                          "v-col",
-                                                          {
-                                                            attrs: { cols: "6" }
-                                                          },
-                                                          [
-                                                            _vm._v(
-                                                              "\n                            End date:\n                            " +
-                                                                _vm._s(
-                                                                  _vm.invalidDate(
-                                                                    item.end_date
-                                                                  ) || "NOT SET"
-                                                                ) +
-                                                                "\n                          "
-                                                            )
-                                                          ]
-                                                        )
-                                                      ],
-                                                      1
-                                                    )
-                                                  ],
-                                                  1
-                                                )
-                                              ],
-                                              1
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      ],
-                                      1
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-expansion-panel-content",
-                                      [
-                                        _c(
-                                          "v-row",
-                                          { attrs: { "no-gutters": "" } },
-                                          [
-                                            _c("v-spacer"),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-row",
-                                              [
-                                                _c(
-                                                  "v-col",
-                                                  {
-                                                    staticClass:
-                                                      "d-flex align-center",
-                                                    attrs: { cols: "4" }
-                                                  },
-                                                  [
-                                                    _c(
-                                                      "v-expansion-panel-content",
-                                                      [
-                                                        _vm._v(
-                                                          "\n                          Question\n                        "
-                                                        )
-                                                      ]
-                                                    )
-                                                  ],
-                                                  1
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "v-col",
-                                                  {
-                                                    staticClass:
-                                                      "d-flex align-center",
-                                                    attrs: { cols: "8" }
-                                                  },
-                                                  [
-                                                    _c("div", {
-                                                      domProps: {
-                                                        innerHTML: _vm._s(
-                                                          item.question
-                                                        )
-                                                      }
-                                                    })
-                                                  ]
-                                                )
-                                              ],
-                                              1
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-row",
-                                              [
-                                                _c(
-                                                  "v-col",
-                                                  {
-                                                    staticClass:
-                                                      "d-flex align-center",
-                                                    attrs: { cols: "4" }
-                                                  },
-                                                  [
-                                                    _c(
-                                                      "v-expansion-panel-content",
-                                                      [
-                                                        _vm._v(
-                                                          "\n                          Language\n                        "
-                                                        )
-                                                      ]
-                                                    )
-                                                  ],
-                                                  1
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "v-col",
-                                                  {
-                                                    staticClass:
-                                                      "d-flex align-center",
-                                                    attrs: { cols: "8" }
-                                                  },
-                                                  [
-                                                    _c(
-                                                      "v-expansion-panel-content",
-                                                      [
-                                                        _vm._v(
-                                                          "\n                          " +
-                                                            _vm._s(
-                                                              item.language
-                                                            ) +
-                                                            "\n                        "
-                                                        )
-                                                      ]
-                                                    )
-                                                  ],
-                                                  1
-                                                )
-                                              ],
-                                              1
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-row",
-                                              [
-                                                _c(
-                                                  "v-col",
-                                                  {
-                                                    staticClass:
-                                                      "d-flex align-center",
-                                                    attrs: { cols: "4" }
-                                                  },
-                                                  [
-                                                    _c(
-                                                      "v-expansion-panel-content",
-                                                      [
-                                                        _vm._v(
-                                                          "\n                          Score\n                        "
-                                                        )
-                                                      ]
-                                                    )
-                                                  ],
-                                                  1
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "v-col",
-                                                  {
-                                                    staticClass:
-                                                      "d-flex align-center",
-                                                    attrs: { cols: "8" }
-                                                  },
-                                                  [
-                                                    _c(
-                                                      "v-expansion-panel-content",
-                                                      [
-                                                        _vm._v(
-                                                          "\n                          " +
-                                                            _vm._s(item.score) +
-                                                            "\n                        "
-                                                        )
-                                                      ]
-                                                    )
-                                                  ],
-                                                  1
-                                                )
-                                              ],
-                                              1
-                                            ),
-                                            _vm._v(" "),
-                                            item.file
-                                              ? _c(
-                                                  "v-row",
-                                                  [
-                                                    _c(
-                                                      "v-col",
-                                                      {
-                                                        staticClass:
-                                                          "d-flex align-center",
-                                                        attrs: { cols: "4" }
-                                                      },
-                                                      [
-                                                        _c(
-                                                          "v-expansion-panel-content",
-                                                          [
-                                                            _vm._v(
-                                                              "\n                          Download File Question\n                        "
-                                                            )
-                                                          ]
-                                                        )
-                                                      ],
-                                                      1
-                                                    ),
-                                                    _vm._v(" "),
-                                                    _c(
-                                                      "v-col",
-                                                      {
-                                                        staticClass:
-                                                          "d-flex align-center",
-                                                        attrs: { cols: "8" }
-                                                      },
-                                                      [
-                                                        _c(
-                                                          "v-expansion-panel-content",
-                                                          [
-                                                            _c(
-                                                              "v-btn",
-                                                              {
-                                                                key: "0",
-                                                                attrs: {
-                                                                  small: "",
-                                                                  color:
-                                                                    "primary",
-                                                                  dark: ""
-                                                                },
-                                                                on: {
-                                                                  click: function(
-                                                                    $event
-                                                                  ) {
-                                                                    return _vm.download(
-                                                                      item.file
-                                                                    )
-                                                                  }
-                                                                }
-                                                              },
-                                                              [
-                                                                _vm._v(
-                                                                  "\n                            Download File\n                          "
-                                                                )
-                                                              ]
-                                                            )
-                                                          ],
-                                                          1
-                                                        )
-                                                      ],
-                                                      1
-                                                    )
-                                                  ],
-                                                  1
-                                                )
-                                              : _vm._e(),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-row",
-                                              [
-                                                _c(
-                                                  "v-col",
-                                                  {
-                                                    staticClass:
-                                                      "d-flex align-center",
-                                                    attrs: { cols: "4" }
-                                                  },
-                                                  [
-                                                    _c(
-                                                      "v-expansion-panel-content",
-                                                      [
-                                                        _vm._v(
-                                                          "\n                          File Import\n                        "
-                                                        )
-                                                      ]
-                                                    )
-                                                  ],
-                                                  1
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "v-col",
-                                                  {
-                                                    staticClass:
-                                                      "d-flex align-center",
-                                                    attrs: { cols: "8" }
-                                                  },
-                                                  [
-                                                    _c("input", {
-                                                      staticClass:
-                                                        "form-control",
-                                                      attrs: {
-                                                        type: "file",
-                                                        accept: item.type
-                                                      },
-                                                      on: {
-                                                        change: _vm.onFileChange
-                                                      }
-                                                    })
-                                                  ]
-                                                )
-                                              ],
-                                              1
-                                            )
-                                          ],
-                                          1
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "v-card-actions",
-                                          [
-                                            _c("v-spacer"),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-btn",
-                                              {
-                                                attrs: {
-                                                  depressed: "",
-                                                  color: "primary"
-                                                },
-                                                on: {
-                                                  click: function($event) {
-                                                    return _vm.sendMission(item)
-                                                  }
-                                                }
-                                              },
-                                              [
-                                                _vm._v(
-                                                  "\n                      SEND MISSION\n                    "
-                                                )
-                                              ]
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      ],
-                                      1
-                                    )
-                                  ],
-                                  1
-                                )
-                              }
-                            ),
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-expansion-panels",
-                            _vm._l(_vm.missionPass, function(item, i) {
-                              return _c(
-                                "v-expansion-panel",
-                                { key: i },
+                    _c(
+                      "v-expansion-panels",
+                      { staticClass: "mb-6" },
+                      _vm._l(
+                        this.$store.state.data.schedule_all.filter(function(e) {
+                          var missionSend = _vm.missionPass.find(function(p) {
+                            return p.schedule_id == e.id
+                          })
+                          if (missionSend) {
+                            return null
+                          }
+                          return e
+                        }),
+                        function(item, i) {
+                          return _c(
+                            "v-expansion-panel",
+                            { key: i },
+                            [
+                              _c(
+                                "v-expansion-panel-header",
+                                { attrs: { "expand-icon": "mdi-menu-down" } },
                                 [
                                   _c(
-                                    "v-expansion-panel-header",
-                                    {
-                                      attrs: { "disable-icon-rotate": "" },
-                                      scopedSlots: _vm._u(
-                                        [
-                                          {
-                                            key: "actions",
-                                            fn: function() {
-                                              return [
-                                                item.message == "waiting"
-                                                  ? _c(
-                                                      "div",
-                                                      [
-                                                        _c(
-                                                          "v-icon",
-                                                          {
-                                                            attrs: {
-                                                              color: "primary"
-                                                            }
-                                                          },
-                                                          [
-                                                            _vm._v(
-                                                              "\n                        mdi-checkbox-blank-circle-outline\n                      "
-                                                            )
-                                                          ]
-                                                        )
-                                                      ],
-                                                      1
-                                                    )
-                                                  : _c(
-                                                      "div",
-                                                      [
-                                                        _c(
-                                                          "v-icon",
-                                                          {
-                                                            attrs: {
-                                                              color: "teal"
-                                                            }
-                                                          },
-                                                          [
-                                                            _vm._v(
-                                                              " mdi-check "
-                                                            )
-                                                          ]
-                                                        )
-                                                      ],
-                                                      1
-                                                    )
-                                              ]
-                                            },
-                                            proxy: true
-                                          }
-                                        ],
-                                        null,
-                                        true
-                                      )
-                                    },
+                                    "v-row",
+                                    { attrs: { "no-gutters": "" } },
                                     [
-                                      _vm._v(
-                                        "\n                  " +
-                                          _vm._s(item.title) +
-                                          "\n\n                  "
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "4" } },
+                                        [
+                                          _c(
+                                            "v-fade-transition",
+                                            { attrs: { "leave-absolute": "" } },
+                                            [
+                                              _c(
+                                                "v-row",
+                                                {
+                                                  staticStyle: {
+                                                    width: "100%"
+                                                  },
+                                                  attrs: { "no-gutters": "" }
+                                                },
+                                                [
+                                                  _c(
+                                                    "v-col",
+                                                    { attrs: { cols: "6" } },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                          " +
+                                                          _vm._s(item.title) +
+                                                          "\n                        "
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "v-col",
+                                                    [
+                                                      _c("v-rating", {
+                                                        attrs: {
+                                                          color:
+                                                            "yellow accent-4",
+                                                          "background-color":
+                                                            "grey darken-1",
+                                                          dense: "",
+                                                          size: "18"
+                                                        },
+                                                        model: {
+                                                          value: item.level,
+                                                          callback: function(
+                                                            $$v
+                                                          ) {
+                                                            _vm.$set(
+                                                              item,
+                                                              "level",
+                                                              $$v
+                                                            )
+                                                          },
+                                                          expression:
+                                                            "item.level"
+                                                        }
+                                                      })
+                                                    ],
+                                                    1
+                                                  )
+                                                ],
+                                                1
+                                              )
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        {
+                                          staticClass: "text--secondary",
+                                          attrs: { cols: "8" }
+                                        },
+                                        [
+                                          _c(
+                                            "v-fade-transition",
+                                            { attrs: { "leave-absolute": "" } },
+                                            [
+                                              _c(
+                                                "v-row",
+                                                {
+                                                  staticStyle: {
+                                                    width: "100%"
+                                                  },
+                                                  attrs: { "no-gutters": "" }
+                                                },
+                                                [
+                                                  _c(
+                                                    "v-col",
+                                                    { attrs: { cols: "6" } },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                          Start date:\n                          " +
+                                                          _vm._s(
+                                                            _vm.invalidDate(
+                                                              item.start_date
+                                                            ) || "NOT SET"
+                                                          ) +
+                                                          "\n                        "
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "v-col",
+                                                    { attrs: { cols: "6" } },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                          End date:\n                          " +
+                                                          _vm._s(
+                                                            _vm.invalidDate(
+                                                              item.end_date
+                                                            ) || "NOT SET"
+                                                          ) +
+                                                          "\n                        "
+                                                      )
+                                                    ]
+                                                  )
+                                                ],
+                                                1
+                                              )
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
                                       )
-                                    ]
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-expansion-panel-content",
+                                [
+                                  _c(
+                                    "v-row",
+                                    { attrs: { "no-gutters": "" } },
+                                    [
+                                      _c("v-spacer"),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-row",
+                                        [
+                                          _c(
+                                            "v-col",
+                                            {
+                                              staticClass:
+                                                "d-flex align-center",
+                                              attrs: { cols: "4" }
+                                            },
+                                            [
+                                              _c("v-expansion-panel-content", [
+                                                _vm._v(
+                                                  "\n                        Question\n                      "
+                                                )
+                                              ])
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-col",
+                                            {
+                                              staticClass:
+                                                "d-flex align-center",
+                                              attrs: { cols: "8" }
+                                            },
+                                            [
+                                              _c("div", {
+                                                domProps: {
+                                                  innerHTML: _vm._s(
+                                                    item.question
+                                                  )
+                                                }
+                                              })
+                                            ]
+                                          )
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-row",
+                                        [
+                                          _c(
+                                            "v-col",
+                                            {
+                                              staticClass:
+                                                "d-flex align-center",
+                                              attrs: { cols: "4" }
+                                            },
+                                            [
+                                              _c("v-expansion-panel-content", [
+                                                _vm._v(
+                                                  "\n                        Language\n                      "
+                                                )
+                                              ])
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-col",
+                                            {
+                                              staticClass:
+                                                "d-flex align-center",
+                                              attrs: { cols: "8" }
+                                            },
+                                            [
+                                              _c("v-expansion-panel-content", [
+                                                _vm._v(
+                                                  "\n                        " +
+                                                    _vm._s(item.language) +
+                                                    "\n                      "
+                                                )
+                                              ])
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-row",
+                                        [
+                                          _c(
+                                            "v-col",
+                                            {
+                                              staticClass:
+                                                "d-flex align-center",
+                                              attrs: { cols: "4" }
+                                            },
+                                            [
+                                              _c("v-expansion-panel-content", [
+                                                _vm._v(
+                                                  "\n                        Score\n                      "
+                                                )
+                                              ])
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-col",
+                                            {
+                                              staticClass:
+                                                "d-flex align-center",
+                                              attrs: { cols: "8" }
+                                            },
+                                            [
+                                              _c("v-expansion-panel-content", [
+                                                _vm._v(
+                                                  "\n                        " +
+                                                    _vm._s(item.score) +
+                                                    "\n                      "
+                                                )
+                                              ])
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      item.file
+                                        ? _c(
+                                            "v-row",
+                                            [
+                                              _c(
+                                                "v-col",
+                                                {
+                                                  staticClass:
+                                                    "d-flex align-center",
+                                                  attrs: { cols: "4" }
+                                                },
+                                                [
+                                                  _c(
+                                                    "v-expansion-panel-content",
+                                                    [
+                                                      _vm._v(
+                                                        "\n                        Download File Question\n                      "
+                                                      )
+                                                    ]
+                                                  )
+                                                ],
+                                                1
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "v-col",
+                                                {
+                                                  staticClass:
+                                                    "d-flex align-center",
+                                                  attrs: { cols: "8" }
+                                                },
+                                                [
+                                                  _c(
+                                                    "v-expansion-panel-content",
+                                                    [
+                                                      _c(
+                                                        "v-btn",
+                                                        {
+                                                          key: "0",
+                                                          attrs: {
+                                                            small: "",
+                                                            color: "primary",
+                                                            dark: ""
+                                                          },
+                                                          on: {
+                                                            click: function(
+                                                              $event
+                                                            ) {
+                                                              return _vm.download(
+                                                                item.file
+                                                              )
+                                                            }
+                                                          }
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            "\n                          Download File\n                        "
+                                                          )
+                                                        ]
+                                                      )
+                                                    ],
+                                                    1
+                                                  )
+                                                ],
+                                                1
+                                              )
+                                            ],
+                                            1
+                                          )
+                                        : _vm._e(),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-row",
+                                        [
+                                          _c(
+                                            "v-col",
+                                            {
+                                              staticClass:
+                                                "d-flex align-center",
+                                              attrs: { cols: "4" }
+                                            },
+                                            [
+                                              _c("v-expansion-panel-content", [
+                                                _vm._v(
+                                                  "\n                        File Import\n                      "
+                                                )
+                                              ])
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-col",
+                                            {
+                                              staticClass:
+                                                "d-flex align-center",
+                                              attrs: { cols: "8" }
+                                            },
+                                            [
+                                              _c("input", {
+                                                staticClass: "form-control",
+                                                attrs: {
+                                                  type: "file",
+                                                  accept: item.type
+                                                },
+                                                on: { change: _vm.onFileChange }
+                                              })
+                                            ]
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-card-actions",
+                                    [
+                                      _c("v-spacer"),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: {
+                                            depressed: "",
+                                            color: "primary"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.sendMission(item)
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                    SEND MISSION\n                  "
+                                          )
+                                        ]
+                                      )
+                                    ],
+                                    1
                                   )
                                 ],
                                 1
                               )
-                            }),
+                            ],
                             1
                           )
-                        ],
-                        1
-                      )
-                    ])
+                        }
+                      ),
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "v-expansion-panels",
+                      _vm._l(_vm.missionPass, function(item, i) {
+                        return _c(
+                          "v-expansion-panel",
+                          { key: i },
+                          [
+                            _c(
+                              "v-expansion-panel-header",
+                              {
+                                attrs: { "disable-icon-rotate": "" },
+                                scopedSlots: _vm._u(
+                                  [
+                                    {
+                                      key: "actions",
+                                      fn: function() {
+                                        return [
+                                          item.message == "waiting"
+                                            ? _c(
+                                                "div",
+                                                [
+                                                  _c(
+                                                    "v-icon",
+                                                    {
+                                                      attrs: {
+                                                        color: "primary"
+                                                      }
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                      mdi-checkbox-blank-circle-outline\n                    "
+                                                      )
+                                                    ]
+                                                  )
+                                                ],
+                                                1
+                                              )
+                                            : _c(
+                                                "div",
+                                                [
+                                                  _c(
+                                                    "v-icon",
+                                                    {
+                                                      attrs: { color: "teal" }
+                                                    },
+                                                    [_vm._v(" mdi-check ")]
+                                                  )
+                                                ],
+                                                1
+                                              )
+                                        ]
+                                      },
+                                      proxy: true
+                                    }
+                                  ],
+                                  null,
+                                  true
+                                )
+                              },
+                              [
+                                _vm._v(
+                                  "\n                " +
+                                    _vm._s(item.title) +
+                                    "\n\n                "
+                                )
+                              ]
+                            )
+                          ],
+                          1
+                        )
+                      }),
+                      1
+                    )
                   ],
                   1
                 )
-              ],
-              1
-            )
-          : _vm._e()
-      ])
+              ])
+            ],
+            1
+          )
+        ],
+        1
+      )
     ],
     1
   )
@@ -1594,9 +1653,9 @@ var render = function() {
                   }
                 },
                 [
-                  this.$store.state.data.user.role === "admin" ||
-                  (this.$store.state.data.user.role === "teacher" &&
-                    _vm.$route.fullPath == "/manage-classroom")
+                  (this.$store.state.data.user.role === "admin" ||
+                    this.$store.state.data.user.role === "teacher") &&
+                  _vm.$route.fullPath === "/manage-classroom"
                     ? _c(
                         "div",
                         [
@@ -1826,6 +1885,51 @@ var render = function() {
           )
         ],
         1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Snackbar/Snackbar.vue?vue&type=template&id=37e7d894&":
+/*!*****************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Snackbar/Snackbar.vue?vue&type=template&id=37e7d894& ***!
+  \*****************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "text-center" },
+    [
+      _c(
+        "v-snackbar",
+        {
+          attrs: { timeout: _vm.timeout },
+          model: {
+            value: _vm.open,
+            callback: function($$v) {
+              _vm.open = $$v
+            },
+            expression: "open"
+          }
+        },
+        [_vm._v("\n    " + _vm._s(this.text) + "\n  ")]
       )
     ],
     1

@@ -86,6 +86,11 @@ const routes = [
         name: "my-score",
         component: () => import("../pages/MyScorePage.vue")
     },
+    {
+        path: "/my-score-mission",
+        name: "my-score-mission",
+        component: () => import("../components/MyScore/MyScoreDetail.vue")
+    },
     // Scoreboard
     {
         path: "/scoreboard",
@@ -96,6 +101,12 @@ const routes = [
         path: "/comment",
         name: "comment",
         component: () => import("../components/Scoreboard/Comment.vue")
+    },
+    {
+        path: "/scoreboard-score",
+        name: "scoreboard-score",
+        component: () =>
+            import("../components/Scoreboard/MyScoreScoreboard.vue")
     }
 ];
 

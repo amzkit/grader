@@ -15,15 +15,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _Dialog_DeleteDialog_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Dialog/DeleteDialog.vue */ "./resources/js/components/Dialog/DeleteDialog.vue");
-/* harmony import */ var _Loading_Loading_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Loading/Loading.vue */ "./resources/js/components/Loading/Loading.vue");
-/* harmony import */ var _Navigation_Navigation_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Navigation/Navigation.vue */ "./resources/js/components/Navigation/Navigation.vue");
+/* harmony import */ var _Loading_Loading_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Loading/Loading.vue */ "./resources/js/components/Loading/Loading.vue");
+/* harmony import */ var _Navigation_Navigation_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Navigation/Navigation.vue */ "./resources/js/components/Navigation/Navigation.vue");
+/* harmony import */ var _Snackbar_Snackbar_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Snackbar/Snackbar.vue */ "./resources/js/components/Snackbar/Snackbar.vue");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
 //
 //
 //
@@ -317,12 +318,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "ManageClassroom",
   components: {
-    DeleteDialog: _Dialog_DeleteDialog_vue__WEBPACK_IMPORTED_MODULE_2__.default,
-    Loading: _Loading_Loading_vue__WEBPACK_IMPORTED_MODULE_3__.default,
-    Navigation: _Navigation_Navigation_vue__WEBPACK_IMPORTED_MODULE_4__.default
+    Loading: _Loading_Loading_vue__WEBPACK_IMPORTED_MODULE_2__.default,
+    Navigation: _Navigation_Navigation_vue__WEBPACK_IMPORTED_MODULE_3__.default,
+    Snackbar: _Snackbar_Snackbar_vue__WEBPACK_IMPORTED_MODULE_4__.default
   },
   data: function data() {
     return {
+      snackbar: false,
+      text: "",
       selectUser: "",
       addItem: {
         student_id: ""
@@ -423,23 +426,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var userItems;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                userItems = [];
+                _this.loading = true;
                 _context.next = 3;
                 return axios.get("/api/manage/user").then(function (response) {
                   if (response.data.success === true) {
-                    userItems = response.data.payload;
+                    _this.userItems = response.data.payload;
                   }
-                })["catch"](function (error) {
-                  console.log(error);
+                })["catch"](function () {
+                  _this.snackbar = true;
+                  _this.text = "Error";
                 });
 
               case 3:
-                _this.userItems = userItems;
+                _this.loading = false;
 
               case 4:
               case "end":
@@ -472,16 +475,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _this2.desserts.splice(_this2.editedIndex, 1);
 
+                _this2.deleteManageClassroom();
+
                 _this2.closeDelete();
 
-                _this2.loading = true;
-                _context2.next = 5;
-                return axios["delete"]("/api/manage/classroom/" + _this2.editedItem.id);
+                _this2.snackbar = false;
 
-              case 5:
-                _this2.loading = false;
-
-              case 6:
+              case 4:
               case "end":
                 return _context2.stop();
             }
@@ -507,72 +507,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         _this4.editedIndex = -1;
       });
     },
-    save: function save() {
+    deleteManageClassroom: function deleteManageClassroom() {
       var _this5 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-        var config, formData, _this5$userItems$find, _this5$userItems$find2;
-
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                _this5.close();
-
-                if (!(_this5.editedIndex > -1)) {
-                  _context3.next = 9;
-                  break;
-                }
-
                 _this5.loading = true;
-                Object.assign(_this5.desserts[_this5.editedIndex], _this5.editedItem);
-                _context3.next = 6;
-                return axios.put("/api/manage/classroom", _this5.editedItem);
-
-              case 6:
-                _this5.loading = false;
-                _context3.next = 15;
-                break;
-
-              case 9:
-                _this5.loading = true;
-                config = {
-                  headers: {
-                    "content-type": "multipart/form-data"
-                  }
-                };
-                formData = new FormData();
-
-                if (_this5.file != null) {
-                  formData.append("check_file", true);
-                  formData.append("import_file", _this5.file);
-                  formData.append("course_id", _this5.course_id);
-                  formData.append("start_date", _this5.start_date);
-                  formData.append("end_date", _this5.end_date);
-                } else if (_this5.editedItem.role === "ta" || _this5.editedItem.role === "student") {
-                  _this5.addItem.student_id = (_this5$userItems$find = (_this5$userItems$find2 = _this5.userItems.find(function (e) {
-                    return e.id === _this5.selectUser.id;
-                  })) === null || _this5$userItems$find2 === void 0 ? void 0 : _this5$userItems$find2.username) !== null && _this5$userItems$find !== void 0 ? _this5$userItems$find : _this5.addItem.student_id;
-                  formData.append("name", _this5.selectUser);
-                  formData.append("student_id", _this5.addItem.student_id);
-                  formData.append("year", _this5.editedItem.year);
-                  formData.append("section", _this5.editedItem.section);
-                  formData.append("semester", _this5.editedItem.semester);
-                  formData.append("role", _this5.editedItem.role);
-                  formData.append("course_id", _this5.course_id);
-                }
-
-                _context3.next = 15;
-                return axios.post("/api/user/file/upload", formData, config).then(function () {
-                  location.reload();
-                })["catch"](function (error) {
-                  console.log(error);
+                _context3.next = 3;
+                return axios["delete"]("/api/manage/classroom/".concat(_this5.editedItem.id)).then(function () {
+                  _this5.snackbar = true;
+                  _this5.text = "Successfuly";
+                })["catch"](function () {
+                  _this5.snackbar = true;
+                  _this5.text = "Error";
                 });
 
-              case 15:
+              case 3:
                 _this5.loading = false;
 
-              case 16:
+              case 4:
               case "end":
                 return _context3.stop();
             }
@@ -580,7 +536,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3);
       }))();
     },
-    fatchItemClassroom: function fatchItemClassroom(item) {
+    putManageClassroom: function putManageClassroom() {
       var _this6 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
@@ -589,83 +545,153 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context4.prev = _context4.next) {
               case 0:
                 _this6.loading = true;
-                _this6.course_id = item.courseId;
-
-                if (!item) {
-                  _context4.next = 5;
-                  break;
-                }
-
-                _context4.next = 5;
-                return axios.get("/api/manage/classroom", {
-                  params: {
-                    course_id: item.courseId
-                  }
-                }).then(function (response) {
-                  if (response.data.success == true) {
-                    _this6.desserts = response.data.payload;
-                  }
+                _context4.next = 3;
+                return axios.put("/api/manage/classroom", _this6.editedItem).then(function () {
+                  _this6.snackbar = true;
+                  _this6.text = "Successfuly";
+                })["catch"](function () {
+                  _this6.snackbar = true;
+                  _this6.text = "Error";
                 });
 
-              case 5:
+              case 3:
                 _this6.loading = false;
 
-              case 6:
+              case 4:
               case "end":
                 return _context4.stop();
             }
           }
         }, _callee4);
       }))();
-    }
-  }
-});
+    },
+    postManageClassroom: function postManageClassroom() {
+      var _this7 = this;
 
-/***/ }),
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
+        var config, formData, _this7$userItems$find, _this7$userItems$find2;
 
-/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Dialog/DeleteDialog.vue?vue&type=script&lang=js&":
-/*!**************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Dialog/DeleteDialog.vue?vue&type=script&lang=js& ***!
-  \**************************************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _this7.loading = true;
+                config = {
+                  headers: {
+                    "content-type": "multipart/form-data"
+                  }
+                };
+                formData = new FormData();
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "DeleteDialog",
-  props: ["message", "open", "onClose"],
-  data: function data() {
-    return {};
-  },
-  watch: {
-    open: function open(val) {
-      val || this.open();
-    }
-  },
-  mounted: function mounted() {},
-  created: function created() {},
-  methods: {
-    hadleClose: function hadleClose() {
-      onClose();
+                if (_this7.file != null) {
+                  formData.append("check_file", true);
+                  formData.append("import_file", _this7.file);
+                  formData.append("course_id", _this7.course_id);
+                  formData.append("start_date", _this7.start_date);
+                  formData.append("end_date", _this7.end_date);
+                } else if (_this7.editedItem.role === "ta" || _this7.editedItem.role === "student") {
+                  _this7.addItem.student_id = (_this7$userItems$find = (_this7$userItems$find2 = _this7.userItems.find(function (e) {
+                    return e.id === _this7.selectUser.id;
+                  })) === null || _this7$userItems$find2 === void 0 ? void 0 : _this7$userItems$find2.username) !== null && _this7$userItems$find !== void 0 ? _this7$userItems$find : _this7.addItem.student_id;
+                  formData.append("name", _this7.selectUser);
+                  formData.append("student_id", _this7.addItem.student_id);
+                  formData.append("year", _this7.editedItem.year);
+                  formData.append("section", _this7.editedItem.section);
+                  formData.append("semester", _this7.editedItem.semester);
+                  formData.append("role", _this7.editedItem.role);
+                  formData.append("course_id", _this7.course_id);
+                }
+
+                _context5.next = 6;
+                return axios.post("/api/user/file/upload", formData, config).then(function (response) {
+                  location.reload();
+                  console.log(response.data.payload);
+                })["catch"](function () {
+                  _this7.snackbar = true;
+                  _this7.text = "Error";
+                });
+
+              case 6:
+                _this7.loading = false;
+
+              case 7:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5);
+      }))();
+    },
+    save: function save() {
+      var _this8 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                _this8.close();
+
+                if (_this8.editedIndex > -1) {
+                  Object.assign(_this8.desserts[_this8.editedIndex], _this8.editedItem);
+
+                  _this8.putManageClassroom();
+
+                  _this8.snackbar = false;
+                } else {
+                  _this8.postManageClassroom();
+
+                  _this8.snackbar = false;
+                }
+
+              case 2:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6);
+      }))();
+    },
+    fetchItemClassroom: function fetchItemClassroom(item) {
+      var _this9 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee7$(_context7) {
+          while (1) {
+            switch (_context7.prev = _context7.next) {
+              case 0:
+                _this9.loading = true;
+                _this9.course_id = item.courseId;
+
+                if (!item) {
+                  _context7.next = 5;
+                  break;
+                }
+
+                _context7.next = 5;
+                return axios.get("/api/manage/classroom", {
+                  params: {
+                    course_id: item.courseId
+                  }
+                }).then(function (response) {
+                  if (response.data.success == true) {
+                    _this9.desserts = response.data.payload;
+                  }
+                })["catch"](function () {
+                  _this9.snackbar = true;
+                  _this9.text = "Error";
+                });
+
+              case 5:
+                _this9.loading = false;
+
+              case 6:
+              case "end":
+                return _context7.stop();
+            }
+          }
+        }, _callee7);
+      }))();
     }
   }
 });
@@ -937,6 +963,48 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Snackbar/Snackbar.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Snackbar/Snackbar.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: "Snackbar",
+  props: ["snackbar", "text"],
+  computed: {
+    open: {
+      get: function get() {
+        return this.snackbar;
+      },
+      set: function set() {
+        open;
+      }
+    }
+  },
+  data: function data() {
+    return {
+      timeout: 4000
+    };
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/dayjs/dayjs.min.js":
 /*!*****************************************!*\
   !*** ./node_modules/dayjs/dayjs.min.js ***!
@@ -982,45 +1050,6 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 /* hot reload */
 if (false) { var api; }
 component.options.__file = "resources/js/components/Classroom/ManageClassroom.vue"
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
-
-/***/ }),
-
-/***/ "./resources/js/components/Dialog/DeleteDialog.vue":
-/*!*********************************************************!*\
-  !*** ./resources/js/components/Dialog/DeleteDialog.vue ***!
-  \*********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _DeleteDialog_vue_vue_type_template_id_302f413f___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DeleteDialog.vue?vue&type=template&id=302f413f& */ "./resources/js/components/Dialog/DeleteDialog.vue?vue&type=template&id=302f413f&");
-/* harmony import */ var _DeleteDialog_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DeleteDialog.vue?vue&type=script&lang=js& */ "./resources/js/components/Dialog/DeleteDialog.vue?vue&type=script&lang=js&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-;
-var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
-  _DeleteDialog_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
-  _DeleteDialog_vue_vue_type_template_id_302f413f___WEBPACK_IMPORTED_MODULE_0__.render,
-  _DeleteDialog_vue_vue_type_template_id_302f413f___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/components/Dialog/DeleteDialog.vue"
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
@@ -1103,6 +1132,45 @@ component.options.__file = "resources/js/components/Navigation/Navigation.vue"
 
 /***/ }),
 
+/***/ "./resources/js/components/Snackbar/Snackbar.vue":
+/*!*******************************************************!*\
+  !*** ./resources/js/components/Snackbar/Snackbar.vue ***!
+  \*******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Snackbar_vue_vue_type_template_id_37e7d894___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Snackbar.vue?vue&type=template&id=37e7d894& */ "./resources/js/components/Snackbar/Snackbar.vue?vue&type=template&id=37e7d894&");
+/* harmony import */ var _Snackbar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Snackbar.vue?vue&type=script&lang=js& */ "./resources/js/components/Snackbar/Snackbar.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _Snackbar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _Snackbar_vue_vue_type_template_id_37e7d894___WEBPACK_IMPORTED_MODULE_0__.render,
+  _Snackbar_vue_vue_type_template_id_37e7d894___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Snackbar/Snackbar.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/Classroom/ManageClassroom.vue?vue&type=script&lang=js&":
 /*!****************************************************************************************!*\
   !*** ./resources/js/components/Classroom/ManageClassroom.vue?vue&type=script&lang=js& ***!
@@ -1116,22 +1184,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ManageClassroom_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ManageClassroom.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Classroom/ManageClassroom.vue?vue&type=script&lang=js&");
  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ManageClassroom_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
-
-/***/ }),
-
-/***/ "./resources/js/components/Dialog/DeleteDialog.vue?vue&type=script&lang=js&":
-/*!**********************************************************************************!*\
-  !*** ./resources/js/components/Dialog/DeleteDialog.vue?vue&type=script&lang=js& ***!
-  \**********************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DeleteDialog_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./DeleteDialog.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Dialog/DeleteDialog.vue?vue&type=script&lang=js&");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DeleteDialog_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
 
 /***/ }),
 
@@ -1167,6 +1219,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/Snackbar/Snackbar.vue?vue&type=script&lang=js&":
+/*!********************************************************************************!*\
+  !*** ./resources/js/components/Snackbar/Snackbar.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Snackbar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Snackbar.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Snackbar/Snackbar.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Snackbar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
 /***/ "./resources/js/components/Classroom/ManageClassroom.vue?vue&type=template&id=73063492&":
 /*!**********************************************************************************************!*\
   !*** ./resources/js/components/Classroom/ManageClassroom.vue?vue&type=template&id=73063492& ***!
@@ -1180,23 +1248,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ManageClassroom_vue_vue_type_template_id_73063492___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ManageClassroom_vue_vue_type_template_id_73063492___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ManageClassroom.vue?vue&type=template&id=73063492& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Classroom/ManageClassroom.vue?vue&type=template&id=73063492&");
-
-
-/***/ }),
-
-/***/ "./resources/js/components/Dialog/DeleteDialog.vue?vue&type=template&id=302f413f&":
-/*!****************************************************************************************!*\
-  !*** ./resources/js/components/Dialog/DeleteDialog.vue?vue&type=template&id=302f413f& ***!
-  \****************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DeleteDialog_vue_vue_type_template_id_302f413f___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DeleteDialog_vue_vue_type_template_id_302f413f___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
-/* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DeleteDialog_vue_vue_type_template_id_302f413f___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./DeleteDialog.vue?vue&type=template&id=302f413f& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Dialog/DeleteDialog.vue?vue&type=template&id=302f413f&");
 
 
 /***/ }),
@@ -1235,6 +1286,23 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/Snackbar/Snackbar.vue?vue&type=template&id=37e7d894&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/Snackbar/Snackbar.vue?vue&type=template&id=37e7d894& ***!
+  \**************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Snackbar_vue_vue_type_template_id_37e7d894___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Snackbar_vue_vue_type_template_id_37e7d894___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Snackbar_vue_vue_type_template_id_37e7d894___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Snackbar.vue?vue&type=template&id=37e7d894& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Snackbar/Snackbar.vue?vue&type=template&id=37e7d894&");
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Classroom/ManageClassroom.vue?vue&type=template&id=73063492&":
 /*!*************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Classroom/ManageClassroom.vue?vue&type=template&id=73063492& ***!
@@ -1254,12 +1322,14 @@ var render = function() {
   return _c(
     "v-row",
     [
-      _c("Loading", { attrs: { loading: this.loading } }),
+      _c("Loading", { attrs: { loading: _vm.loading } }),
+      _vm._v(" "),
+      _c("Snackbar", { attrs: { snackbar: _vm.snackbar, text: _vm.text } }),
       _vm._v(" "),
       _c(
         "v-col",
         { attrs: { cols: "2" } },
-        [_c("Navigation", { attrs: { onClick: _vm.fatchItemClassroom } })],
+        [_c("Navigation", { attrs: { onClick: _vm.fetchItemClassroom } })],
         1
       ),
       _vm._v(" "),
@@ -2544,87 +2614,6 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Dialog/DeleteDialog.vue?vue&type=template&id=302f413f&":
-/*!*******************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Dialog/DeleteDialog.vue?vue&type=template&id=302f413f& ***!
-  \*******************************************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render),
-/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
-/* harmony export */ });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "v-dialog",
-    {
-      attrs: { "max-width": "500px" },
-      model: {
-        value: this.open,
-        callback: function($$v) {
-          _vm.$set(this, "open", $$v)
-        },
-        expression: "this.open"
-      }
-    },
-    [
-      _c(
-        "v-card",
-        [
-          _c("v-card-title", { staticClass: "text-h5" }, [
-            _vm._v(_vm._s(this.message))
-          ]),
-          _vm._v(" "),
-          _c(
-            "v-card-actions",
-            [
-              _c("v-spacer"),
-              _vm._v(" "),
-              _c(
-                "v-btn",
-                {
-                  attrs: { color: "blue darken-1", text: "" },
-                  on: {
-                    click: function($event) {
-                      this.open = false
-                    }
-                  }
-                },
-                [_vm._v("Cancel")]
-              ),
-              _vm._v(" "),
-              _c(
-                "v-btn",
-                {
-                  attrs: { color: "blue darken-1", text: "" },
-                  on: { click: _vm.deleteItemConfirm }
-                },
-                [_vm._v("OK")]
-              ),
-              _vm._v(" "),
-              _c("v-spacer")
-            ],
-            1
-          )
-        ],
-        1
-      )
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Loading/Loading.vue?vue&type=template&id=0bb449a4&":
 /*!***************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Loading/Loading.vue?vue&type=template&id=0bb449a4& ***!
@@ -2715,9 +2704,9 @@ var render = function() {
                   }
                 },
                 [
-                  this.$store.state.data.user.role === "admin" ||
-                  (this.$store.state.data.user.role === "teacher" &&
-                    _vm.$route.fullPath == "/manage-classroom")
+                  (this.$store.state.data.user.role === "admin" ||
+                    this.$store.state.data.user.role === "teacher") &&
+                  _vm.$route.fullPath === "/manage-classroom"
                     ? _c(
                         "div",
                         [
@@ -2947,6 +2936,51 @@ var render = function() {
           )
         ],
         1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Snackbar/Snackbar.vue?vue&type=template&id=37e7d894&":
+/*!*****************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Snackbar/Snackbar.vue?vue&type=template&id=37e7d894& ***!
+  \*****************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "text-center" },
+    [
+      _c(
+        "v-snackbar",
+        {
+          attrs: { timeout: _vm.timeout },
+          model: {
+            value: _vm.open,
+            callback: function($$v) {
+              _vm.open = $$v
+            },
+            expression: "open"
+          }
+        },
+        [_vm._v("\n    " + _vm._s(this.text) + "\n  ")]
       )
     ],
     1

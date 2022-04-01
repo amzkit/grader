@@ -1,7 +1,7 @@
 
 <template>
   <div class="text-center">
-    <v-snackbar v-model="this.snackbar" :timeout="timeout">
+    <v-snackbar v-model="open" :timeout="timeout">
       {{ this.text }}
     </v-snackbar>
   </div>
@@ -11,8 +11,18 @@
 export default {
   name: "Snackbar",
   props: ["snackbar", "text"],
+  computed: {
+    open: {
+      get() {
+        return this.snackbar;
+      },
+      set() {
+        open;
+      },
+    },
+  },
   data: () => ({
-    timeout: 2000,
+    timeout: 4000,
   }),
 };
 </script>

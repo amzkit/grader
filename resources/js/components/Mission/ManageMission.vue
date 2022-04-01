@@ -1,6 +1,7 @@
 <template>
   <v-row>
-    <Loading :loading="this.loading" />
+    <Loading :loading="loading" />
+    <Snackbar :snackbar="snackbar" :text="text" />
     <v-row justify="center">
       <v-col>
         <v-data-table
@@ -173,13 +174,18 @@
 import dayjs from "dayjs";
 import Loading from "../Loading/Loading.vue";
 import { VueEditor } from "vue2-editor";
+import Snackbar from "../Snackbar/Snackbar.vue";
 export default {
   components: {
+    dayjs,
     Loading,
     VueEditor,
+    Snackbar,
   },
   data: function () {
     return {
+      snackbar: false,
+      text: "",
       loading: false,
       search: "",
       dialog: false,
@@ -221,8 +227,8 @@ export default {
         ],
         ["blockquote", "code-block"],
         [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
-        [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
-        [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+        [{ indent: "-1" }, { indent: "+1" }],
+        [{ color: [] }, { background: [] }],
       ],
       desserts: [],
       editedIndex: -1,
@@ -250,11 +256,13 @@ export default {
     this.getProblems();
     this.getLanguage();
   },
+
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
   },
+
   watch: {
     dialog(val) {
       val || this.close();
@@ -263,22 +271,26 @@ export default {
       val || this.closeDelete();
     },
   },
+
   methods: {
     dayjs,
     onFileChange(e) {
       this.editedItem.file = e.target.files[0];
     },
+
     download(item) {
       window.location.href = `api/schedule/download${item.file.replace(
         "problem_file",
         ""
       )}`;
     },
+
     convertToPlain(html) {
       var tempDivElement = document.createElement("div");
       tempDivElement.innerHTML = html;
       return tempDivElement.textContent || tempDivElement.innerText || "";
     },
+
     async getProblems() {
       this.loading = true;
       await axios.get("/api/problem").then((response) => {
@@ -291,32 +303,35 @@ export default {
     },
 
     async getLanguage() {
-      let language = [];
+      this.loading = true;
       await axios
         .get("/api/language")
-        .then(function (response) {
-          language = response.data.payload;
+        .then((response) => {
+          this.languages = response.data.payload;
         })
-        .catch(function (error) {
+        .catch((error) => {
           console.log(error);
         });
-      this.languages = language;
+      this.loading = false;
     },
 
     async delateProblems() {
       this.loading = true;
       await axios
         .delete("api/problem/" + this.editedItem.id)
-        .then(function (response) {
-          console.log(response.data.message);
+        .then(() => {
+          this.snackbar = true;
+          this.text = "Successfuly";
         })
-        .catch(function (error) {
-          console.log(error);
+        .catch(() => {
+          this.snackbar = true;
+          this.text = "Error";
         });
       this.loading = false;
     },
 
     async putProblem() {
+      this.loading = true;
       const config = {
         headers: { "content-type": "multipart/form-data" },
       };
@@ -334,12 +349,15 @@ export default {
       );
       await axios
         .post("/api/problem/update", formData, config)
-        .then(function (response) {
-          console.log(response);
+        .then(() => {
+          this.snackbar = true;
+          this.text = "Successfuly";
         })
-        .catch(function (error) {
-          console.log(error);
+        .catch(() => {
+          this.snackbar = true;
+          this.text = "Error";
         });
+      this.loading = false;
     },
 
     editItem(item) {
@@ -374,12 +392,14 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
+      this.snackbar = false;
     },
 
     save() {
       if (this.editedIndex > -1) {
         this.putProblem();
         Object.assign(this.desserts[this.editedIndex], this.editedItem);
+        this.snackbar = false;
       }
       this.close();
     },

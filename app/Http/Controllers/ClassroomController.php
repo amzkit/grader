@@ -36,6 +36,27 @@ class ClassroomController extends Controller
         return response()->json(['success' => true, 'payload' =>  $classroom]);
     }
 
+    public function getClassroomsAll()
+    {
+        if (auth()->user()->role == 'ta') {
+            $classroom = Classroom::select(
+                "classrooms.id as classroomId",
+                "courses.id as courseId",
+                "courses.course_name",
+            )
+                ->leftJoin("courses", "courses.id", "=", "classrooms.course_id")
+                ->where('user_id', '=', auth()->user()->id)
+                ->get();
+        } else {
+            $classroom = Course::select(
+                "courses.id as courseId",
+                "courses.course_name",
+            )->get();
+        }
+
+        return response()->json(['success' => true, 'payload' =>  $classroom]);
+    }
+
     public function getManageClassrooms(Request $request)
     {
         $courseId = $request->course_id;

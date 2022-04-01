@@ -7,49 +7,45 @@
     <v-col cols="10">
       <div v-if="!this.$store.state.data.loading">
         <v-row justify="center">
-          <v-expansion-panels>
-            <v-expansion-panel v-for="(item, i) in myScore" :key="i">
-              <v-expansion-panel-header disable-icon-rotate>
-                <v-row no-gutters>
-                  <v-col cols="4">
-                    <v-fade-transition leave-absolute>
-                      <v-row no-gutters style="width: 100%">
-                        <v-col cols="6">
-                          {{ item.title }}
-                        </v-col>
-                        <v-col cols="6">
-                          Score : {{ item.score.toFixed(2) }}
-                        </v-col>
-                      </v-row>
-                    </v-fade-transition>
-                  </v-col>
+          <v-data-table
+            :headers="headers"
+            :items="myScore"
+            class="elevation-1"
+            @click:row="Item($event)"
+          >
+            <template v-slot:[`item.index`]="{ index }">
+              {{ index + 1 }}
+            </template>
 
-                  <v-col cols="8" class="text--secondary">
-                    <v-fade-transition leave-absolute>
-                      <v-row no-gutters style="width: 100%">
-                        <v-col cols="6">
-                          Start date:
-                          {{ invalidDate(item.start_date) || "NOT SET" }}
-                        </v-col>
-                        <v-col cols="6">
-                          End date:
-                          {{ invalidDate(item.end_date) || "NOT SET" }}
-                        </v-col>
-                      </v-row>
-                    </v-fade-transition>
-                  </v-col>
-                </v-row>
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <v-data-table
-                  :headers="headers"
-                  :items="analyses.filter((e) => e.submission_id == item.id)"
-                  :items-per-page="5"
-                  class="elevation-1"
-                ></v-data-table>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
+            <template v-slot:[`item.detail`]="{ item }">
+              <v-col>
+                <v-chip
+                  v-for="(i, n) in item.message.match(/[A-Z]/g)"
+                  :key="n"
+                  :color="i == 'Y' ? 'green' : 'red'"
+                  text-color="white"
+                >
+                  {{ i }}
+                </v-chip>
+              </v-col>
+            </template>
+
+            <template v-slot:[`item.score`]="{ item }">
+              <v-chip color="primary" dark>
+                {{ item.score }}
+              </v-chip>
+            </template>
+            <template v-slot:[`item.comment_count`]="{ item }">
+              {{
+                `${comment.reduce((n, e) => {
+                  return item.id == e.submission_id ? n + 1 : n;
+                }, 0)} Comment`
+              }}
+            </template>
+            <template v-slot:[`item.created_at`]="{ item }">
+              {{ invalidDate(item.created_at) }}
+            </template>
+          </v-data-table>
         </v-row>
       </div>
     </v-col>
@@ -70,17 +66,24 @@ export default {
     return {
       loading: false,
       myScore: [],
-      analyses: [],
+      comment: [],
       headers: [
         {
-          text: "Input",
+          text: "#",
           align: "center",
           sortable: false,
-          value: "input",
+          value: "index",
         },
-        { text: "Your Output", value: "output", align: "center" },
-        { text: "Correct Output", value: "testcase_output", align: "center" },
-        { text: "Message", value: "message", align: "center" },
+        {
+          text: "Title",
+          align: "center",
+          sortable: false,
+          value: "title",
+        },
+        { text: "Detail", value: "detail", align: "center", width: 450 },
+        { text: "Score", value: "score", align: "center" },
+        { text: "Comment Code", value: "comment_count", align: "center" },
+        { text: "Date Submission", value: "created_at", align: "center" },
       ],
     };
   },
@@ -91,12 +94,22 @@ export default {
     invalidDate(item) {
       return item ? dayjs(item).format("MMMM D, YYYY hh:mm A") : "-";
     },
+    invalidDate(item) {
+      return item ? dayjs(item).format("MMMM D, YYYY hh:mm A") : "-";
+    },
+    Item(val) {
+      this.$router.push({
+        path: "my-score-mission",
+        query: { submission_id: val.id, course_id: this.course_id },
+      });
+    },
     async fatchItemSchedule(item) {
       this.loading = true;
       this.course_id = item.courseId;
       if (item) {
         let items = [];
         let items2 = [];
+
         await axios
           .get("/api/score", {
             params: {
@@ -106,13 +119,12 @@ export default {
           .then((response) => {
             if (response.data.success == true) {
               items = response.data.payload;
-              items2 = response.data.payload2;
+              items2 = response.data.comment;
             }
           });
         this.myScore = items;
-        this.analyses = items2;
+        this.comment = items2;
       }
-      console.log("analyses", this.analyses);
       this.loading = false;
     },
   },

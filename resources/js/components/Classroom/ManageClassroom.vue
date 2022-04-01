@@ -1,8 +1,9 @@
 <template>
   <v-row>
-    <Loading :loading="this.loading" />
+    <Loading :loading="loading" />
+    <Snackbar :snackbar="snackbar" :text="text" />
     <v-col cols="2">
-      <Navigation :onClick="fatchItemClassroom" />
+      <Navigation :onClick="fetchItemClassroom" />
     </v-col>
     <v-col cols="10">
       <v-row justify="center">
@@ -286,13 +287,15 @@
 
 <script>
 import dayjs from "dayjs";
-import DeleteDialog from "../Dialog/DeleteDialog.vue";
 import Loading from "../Loading/Loading.vue";
 import Navigation from "../Navigation/Navigation.vue";
+import Snackbar from "../Snackbar/Snackbar.vue";
 export default {
   name: "ManageClassroom",
-  components: { DeleteDialog, Loading, Navigation },
+  components: { Loading, Navigation, Snackbar },
   data: () => ({
+    snackbar: false,
+    text: "",
     selectUser: "",
     addItem: {
       student_id: "",
@@ -385,18 +388,19 @@ export default {
       return item ? dayjs(item).format("MMMM D, YYYY") : "-";
     },
     async getUser() {
-      var userItems = [];
+      this.loading = true;
       await axios
         .get("/api/manage/user")
-        .then(function (response) {
+        .then((response) => {
           if (response.data.success === true) {
-            userItems = response.data.payload;
+            this.userItems = response.data.payload;
           }
         })
-        .catch(function (error) {
-          console.log(error);
+        .catch(() => {
+          this.snackbar = true;
+          this.text = "Error";
         });
-      this.userItems = userItems;
+      this.loading = false;
     },
     onFileChange(e) {
       this.file = e.target.files[0];
@@ -415,10 +419,9 @@ export default {
 
     async deleteItemConfirm() {
       this.desserts.splice(this.editedIndex, 1);
+      this.deleteManageClassroom();
       this.closeDelete();
-      this.loading = true;
-      await axios.delete("/api/manage/classroom/" + this.editedItem.id);
-      this.loading = false;
+      this.snackbar = false;
     },
 
     close() {
@@ -437,53 +440,89 @@ export default {
       });
     },
 
-    async save() {
-      this.close();
-      if (this.editedIndex > -1) {
-        this.loading = true;
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
-        await axios.put(`/api/manage/classroom`, this.editedItem);
-        this.loading = false;
-      } else {
-        this.loading = true;
-        const config = {
-          headers: { "content-type": "multipart/form-data" },
-        };
-        let formData = new FormData();
-        if (this.file != null) {
-          formData.append("check_file", true);
-          formData.append("import_file", this.file);
-          formData.append("course_id", this.course_id);
-          formData.append("start_date", this.start_date);
-          formData.append("end_date", this.end_date);
-        } else if (
-          this.editedItem.role === "ta" ||
-          this.editedItem.role === "student"
-        ) {
-          this.addItem.student_id =
-            this.userItems.find((e) => e.id === this.selectUser.id)?.username ??
-            this.addItem.student_id;
-          formData.append("name", this.selectUser);
-          formData.append("student_id", this.addItem.student_id);
-          formData.append("year", this.editedItem.year);
-          formData.append("section", this.editedItem.section);
-          formData.append("semester", this.editedItem.semester);
-          formData.append("role", this.editedItem.role);
-          formData.append("course_id", this.course_id);
-        }
-        await axios
-          .post("/api/user/file/upload", formData, config)
-          .then(function () {
-            location.reload();
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-      }
+    async deleteManageClassroom() {
+      this.loading = true;
+      await axios
+        .delete(`/api/manage/classroom/${this.editedItem.id}`)
+        .then(() => {
+          this.snackbar = true;
+          this.text = "Successfuly";
+        })
+        .catch(() => {
+          this.snackbar = true;
+          this.text = "Error";
+        });
       this.loading = false;
     },
 
-    async fatchItemClassroom(item) {
+    async putManageClassroom() {
+      this.loading = true;
+      await axios
+        .put(`/api/manage/classroom`, this.editedItem)
+        .then(() => {
+          this.snackbar = true;
+          this.text = "Successfuly";
+        })
+        .catch(() => {
+          this.snackbar = true;
+          this.text = "Error";
+        });
+      this.loading = false;
+    },
+
+    async postManageClassroom() {
+      this.loading = true;
+      const config = {
+        headers: { "content-type": "multipart/form-data" },
+      };
+      let formData = new FormData();
+      if (this.file != null) {
+        formData.append("check_file", true);
+        formData.append("import_file", this.file);
+        formData.append("course_id", this.course_id);
+        formData.append("start_date", this.start_date);
+        formData.append("end_date", this.end_date);
+      } else if (
+        this.editedItem.role === "ta" ||
+        this.editedItem.role === "student"
+      ) {
+        this.addItem.student_id =
+          this.userItems.find((e) => e.id === this.selectUser.id)?.username ??
+          this.addItem.student_id;
+        formData.append("name", this.selectUser);
+        formData.append("student_id", this.addItem.student_id);
+        formData.append("year", this.editedItem.year);
+        formData.append("section", this.editedItem.section);
+        formData.append("semester", this.editedItem.semester);
+        formData.append("role", this.editedItem.role);
+        formData.append("course_id", this.course_id);
+      }
+      await axios
+        .post("/api/user/file/upload", formData, config)
+        .then((response) => {
+          location.reload();
+          console.log(response.data.payload);
+        })
+        .catch(() => {
+          this.snackbar = true;
+          this.text = "Error";
+        });
+      this.loading = false;
+    },
+
+    async save() {
+      this.close();
+      if (this.editedIndex > -1) {
+        Object.assign(this.desserts[this.editedIndex], this.editedItem);
+        this.putManageClassroom();
+        this.snackbar = false;
+      } else {
+        this.postManageClassroom();
+        this.snackbar = false;
+      }
+    },
+
+    async fetchItemClassroom(item) {
       this.loading = true;
       this.course_id = item.courseId;
       if (item) {
@@ -497,6 +536,10 @@ export default {
             if (response.data.success == true) {
               this.desserts = response.data.payload;
             }
+          })
+          .catch(() => {
+            this.snackbar = true;
+            this.text = "Error";
           });
       }
       this.loading = false;

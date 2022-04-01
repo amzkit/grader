@@ -1,17 +1,23 @@
 <template>
   <v-row>
+    <Snackbar :snackbar="snackbar" :text="text" />
+    <Loading :loading="loading" />
     <v-col cols="12">
-      <div v-if="!this.$store.state.data.loading">
-        <v-row justify="center">
-          <h1>New Mission</h1>
-          <v-card>
-            <v-container fluid>
+      <v-row justify="center">
+        <h1>New Mission</h1>
+        <v-card>
+          <v-container fluid>
+            <v-form ref="form" v-model="rules.valid" lazy-validation>
               <v-row align="center">
                 <v-col cols="4">
                   <v-subheader> Title </v-subheader>
                 </v-col>
                 <v-col cols="6">
-                  <v-text-field v-model="title" label="Title"></v-text-field>
+                  <v-text-field
+                    v-model="title"
+                    :rules="[rules.required]"
+                    label="Title"
+                  ></v-text-field>
                 </v-col>
               </v-row>
 
@@ -74,6 +80,7 @@
                 <v-col cols="6">
                   <v-text-field
                     type="number"
+                    :rules="[rules.required]"
                     v-model="score"
                     onfocus="this.select()"
                     label="Score"
@@ -86,6 +93,7 @@
                   <v-autocomplete
                     v-model="lang"
                     :items="languages"
+                    :rules="[rules.required]"
                     label="Language"
                     item-text="lang"
                     item-value="id"
@@ -93,11 +101,11 @@
                   </v-autocomplete>
                 </v-col>
               </v-row>
-            </v-container>
-          </v-card>
-          <v-btn @click="formSubmit" color="primary"> Save </v-btn>
-        </v-row>
-      </div>
+            </v-form>
+          </v-container>
+        </v-card>
+        <v-btn @click="submit" color="primary"> Save </v-btn>
+      </v-row>
     </v-col>
   </v-row>
 </template>
@@ -105,13 +113,24 @@
 <script>
 import Navigation from "../Navigation/Navigation.vue";
 import { VueEditor } from "vue2-editor";
+import Snackbar from "../Snackbar/Snackbar.vue";
+import Loading from "../Loading/Loading.vue";
 export default {
   components: {
     Navigation,
     VueEditor,
+    Snackbar,
+    Loading,
   },
   data: function () {
     return {
+      rules: {
+        valid: true,
+        required: (value) => !!value || "Required.",
+      },
+      snackbar: false,
+      loading: false,
+      text: "",
       title: "",
       question: "",
       score: 0,
@@ -132,8 +151,8 @@ export default {
         ],
         ["blockquote", "code-block"],
         [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
-        [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
-        [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+        [{ indent: "-1" }, { indent: "+1" }],
+        [{ color: [] }, { background: [] }],
       ],
     };
   },
@@ -144,29 +163,26 @@ export default {
     onFileChange(e) {
       this.file = e.target.files[0];
     },
-    resetForm() {
-      this.title = null;
-      this.question = "";
-      this.score = null;
-      this.lang = null;
-      this.file = "";
-      this.level = 0;
-      this.tolerant = "";
-    },
+
     async getLanguage() {
-      let language = [];
+      this.loading = true;
       await axios
         .get("/api/language")
-        .then(function (response) {
-          language = response.data.payload;
+        .then((response) => {
+          this.languages = response.data.payload;
         })
-        .catch(function (error) {
-          console.log(error);
+        .catch((error) => {
+          this.snackbar = true;
+          this.text = error;
         });
-      this.languages = language;
+      this.loading = false;
     },
-    async formSubmit(e) {
-      e.preventDefault();
+
+    async submit() {
+      if (this.$refs.form.validate() == false) {
+        this.$refs.form.validate();
+      }
+      this.loading = true;
       const config = {
         headers: { "content-type": "multipart/form-data" },
       };
@@ -178,15 +194,17 @@ export default {
       formData.append("file", this.file);
       formData.append("level", this.level);
       formData.append("tolerant", this.tolerant != "" ? this.tolerant : "$");
-      await axios
-        .post("/api/problem", formData, config)
-        .then(function () {
-          window.location.href = "/manage-mission";
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-      this.resetForm();
+      if (this.title && this.question && this.lang && this.score) {
+        await axios
+          .post("/api/problem", formData, config)
+          .then(function () {
+            window.location.href = "/manage-mission";
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
+      this.loading = false;
     },
   },
 };

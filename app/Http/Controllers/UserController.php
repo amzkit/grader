@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function update(Request $request, $id)
     {
         $user = User::find($id);
@@ -20,16 +25,24 @@ class UserController extends Controller
         return $request->input('role');
     }
 
-    public function editUser(Request $request, $id)
+    public function editUser(Request $request)
     {
-        $user = User::find($id);
-        // $user->save();
-        return $user;
+        if (auth()->user()->role == 'teacher' || auth()->user()->role == 'admin') {
+            $user = User::find($request->id);
+            $user->name = $request->name;
+            if ($request->resetPassword != "" || $request->resetPassword != null) {
+                $user->password = Hash::make($request->resetPassword);
+            }
+            $user->save();
+            return response()->json(['success' => true, 'payload' =>  $user]);
+        }
+        return response()->json(['message' => "Your don't Teacher"]);
     }
 
     public function getUser()
     {
-        $user = User::get();
+
+        $user = User::where('role_admin', '!=', 1)->where('id', '!=', auth()->user()->id)->get();
         return response()->json(['success' => true, 'payload' =>  $user]);
     }
 

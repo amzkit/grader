@@ -1,72 +1,81 @@
-<template>
-  <v-row>
-    <Loading :loading="this.loading" />
-    <v-col cols="2">
-      <Navigation :onClick="fatchItemSchedule" />
-    </v-col>
-    <v-col cols="10">
-      <div v-if="!this.$store.state.data.loading">
-        <v-row justify="center">
-          <v-expansion-panels>
-            <v-expansion-panel v-for="(item, i) in schedule" :key="i">
-              <v-expansion-panel-header disable-icon-rotate>
-                <v-row no-gutters>
-                  <v-col cols="4">
-                    <v-fade-transition leave-absolute>
-                      <v-row no-gutters style="width: 100%">
-                        <v-col cols="6">
-                          {{ item.title }}
-                        </v-col>
-                        <v-col cols="6"> Score : {{ item.score }} </v-col>
-                      </v-row>
-                    </v-fade-transition>
-                  </v-col>
 
-                  <v-col cols="8" class="text--secondary">
-                    <v-fade-transition leave-absolute>
-                      <v-row no-gutters style="width: 100%">
-                        <v-col cols="6">
-                          Start date:
-                          {{ invalidDate(item.start_date) || "NOT SET" }}
-                        </v-col>
-                        <v-col cols="6">
-                          End date:
-                          {{ invalidDate(item.end_date) || "NOT SET" }}
-                        </v-col>
-                      </v-row>
-                    </v-fade-transition>
-                  </v-col>
-                </v-row>
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <div v-if="$store.state.data.user.role == 'ta'">
-                  <v-data-table
-                    :headers="headers"
-                    :items="
-                      scoreboard.filter((e) => e.problem_id == item.problemsId)
-                    "
-                    :items-per-page="5"
-                    class="elevation-1"
-                    @click:row="Item($event)"
-                  ></v-data-table>
-                </div>
-                <div v-else>
-                  <v-data-table
-                    :headers="headers"
-                    :items="
-                      scoreboard.filter((e) => e.problem_id == item.problemsId)
-                    "
-                    :items-per-page="5"
-                    class="elevation-1"
-                  ></v-data-table>
-                </div>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
+<template>
+  <v-container>
+    <Snackbar :snackbar="snackbar" :text="text" />
+    <Loading :loading="loading" />
+    <v-row justify="space-between">
+      <v-col md="4">
+        <v-autocomplete
+          v-model="classroom"
+          :items="items"
+          label="Classroom"
+          item-text="course_name"
+          item-value="courseId"
+        >
+        </v-autocomplete>
+      </v-col>
+      <v-col md="4">
+        <v-row justify="end" align="center">
+          <v-chip class="ma-2" label>
+            Number of student : {{ data.student_count }} in:
+            {{ data.classroom_name }}
+          </v-chip>
         </v-row>
-      </div>
-    </v-col>
-  </v-row>
+      </v-col>
+    </v-row>
+    <div>
+      <v-card>
+        <v-card-title>
+          <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+            hide-details
+          ></v-text-field>
+        </v-card-title>
+        <v-data-table
+          :headers="headers"
+          :items="data.classroom"
+          class="elevation-1"
+          :search="search"
+          @click:row="
+            $store.state.data.user.role == 'ta' ||
+            $store.state.data.user.role == 'teacher'
+              ? item($event)
+              : null
+          "
+        >
+          <template v-slot:[`item.index`]="{ index }">
+            {{ index + 1 }}
+          </template>
+          <template v-slot:[`item.mission`]="{ item }">
+            {{
+              `${data.submission.reduce(
+                (n, e) => (e.user_id === item.user_id ? n + 1 : n),
+                0
+              )}/${data.schedules_count}`
+            }}
+          </template>
+          <template v-slot:[`item.score`]="{ item }">
+            {{
+              data.submission.reduce((n, e) => {
+                if (e.user_id === item.user_id) {
+                  return n + e.score;
+                }
+              }, 0) > 0
+                ? data.submission.reduce((n, e) => {
+                    if (e.user_id === item.user_id) {
+                      return n + e.score;
+                    }
+                  }, 0)
+                : 0
+            }}
+          </template>
+        </v-data-table>
+      </v-card>
+    </div>
+  </v-container>
 </template>
 
 
@@ -74,65 +83,96 @@
 import dayjs from "dayjs";
 import Navigation from "../Navigation/Navigation.vue";
 import Loading from "../Loading/Loading.vue";
+import Snackbar from "../Snackbar/Snackbar.vue";
 export default {
   components: {
     Navigation,
     Loading,
+    Snackbar,
   },
   data: function () {
     return {
       loading: false,
-      scoreboard: [],
-      schedule: [],
-      analyses: [],
+      snackbar: false,
+      text: "",
+      items: [],
+      data: [],
+      search: "",
       headers: [
         {
-          text: "Name",
+          text: "#",
+          align: "center",
           sortable: false,
-          value: "name",
+          value: "index",
         },
         { text: "Student ID", value: "username" },
+        { text: "Name", value: "name" },
+        {
+          text: "Mission",
+          sortable: false,
+          value: "mission",
+        },
         { text: "Score", value: "score" },
       ],
     };
   },
-  async created() {},
-  computed: {},
-  methods: {
-    dayjs,
-    invalidDate(item) {
-      return item ? dayjs(item).format("MMMM D, YYYY hh:mm A") : "-";
-    },
-    Item(val) {
-      // this.$router.push({ name: "comment", params: { data: val } });
-      this.$router.push({
-        path: "comment",
-        query: { submission_id: val.id },
-      });
-    },
-    async fatchItemSchedule(item) {
-      this.loading = true;
-      this.course_id = item.courseId;
-      if (item) {
-        let items = [];
-        let items2 = [];
+  async created() {
+    this.getClassrooms();
+  },
+  computed: {
+    classroom: {
+      get() {
+        this.text = "Please select a classroom !!";
+        this.snackbar = true;
+      },
+      async set(value) {
+        this.loading = true;
         await axios
-          .get("/api/scoreboard", {
-            params: {
-              course_id: item.courseId,
-            },
-          })
+          .get(`/api/scoreboard/${value}`)
           .then((response) => {
             if (response.data.success == true) {
-              items = response.data.payload;
-              items2 = response.data.payload2;
+              this.data = response.data.payload;
             }
+          })
+          .catch((error) => {
+            console.log(error);
           });
-        this.scoreboard = items;
-        this.schedule = items2;
-      }
-      console.log("analyses", this.analyses);
+        this.loading = false;
+      },
+    },
+  },
+  methods: {
+    dayjs,
+    async getClassrooms() {
+      this.loading = true;
+      await axios.get("/api/classrooms").then((response) => {
+        if (response.data.success == true) {
+          this.items = response.data.payload;
+        }
+      });
       this.loading = false;
+    },
+    async getScoreboard(item) {
+      this.loading = true;
+      if (item) {
+        await axios
+          .get(`/api/scoreboard/${item}`)
+          .then((response) => {
+            if (response.data.success == true) {
+              this.data = response.data.payload;
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+      this.loading = false;
+    },
+    item(val) {
+      this.$router.push({
+        path: "/scoreboard-score",
+        query: { course_id: val.course_id, user_id: val.user_id },
+      });
     },
   },
 };

@@ -54,7 +54,7 @@
             <v-list-item
               v-for="sublink in link.subLinks"
               :to="sublink.to"
-              :key="sublink.text"
+              :key="sublink.to"
               link
             >
               <v-list dense>
@@ -191,7 +191,7 @@
               </v-list-item>
             </v-list-group>
             <div class="pa-1">
-              <v-btn color="primary" block @click="redirect('/changepassword')">
+              <v-btn color="primary" block @click="redirect('/change-password')">
                 Change Password
               </v-btn>
             </div>
@@ -231,19 +231,15 @@ export default {
           text: "Mission",
           subLinks: [
             {
+              text: "Mission",
               to: "/mission",
-              text: "Mission",
             },
-            // {
-            //   text: "New Mission",
-            //   to: "/new-mission",
-            // },
             {
-              text: "Mission",
+              text: "Manage Mission",
               to: "/manage-mission",
             },
             {
-              text: "Mission Classroom",
+              text: "Manage Mission Classroom",
               to: "/manage-mission-classroom",
             },
           ],
@@ -297,7 +293,7 @@ export default {
         {
           to: "/mission",
           icon: "mdi-view-dashboard",
-          text: "Mission",
+          text: "Classroom",
         },
         {
           to: "/my-score",
@@ -355,6 +351,11 @@ export default {
               text: "Mission Classroom",
               to: "/manage-mission-classroom",
             },
+            {
+              to: "/new-test",
+              icon: "mdi-view-dashboard",
+              text: "New Test",
+            },
           ],
         },
         {
@@ -363,18 +364,9 @@ export default {
           text: "Scoreboard",
         },
         {
-          to: "/new-test",
-          icon: "mdi-view-dashboard",
-          text: "New Test",
-        },
-        {
           icon: "mdi-pencil",
           text: "User",
           subLinks: [
-            {
-              text: "New User",
-              to: "/new-user",
-            },
             {
               text: "Manage User",
               to: "/manage-user",

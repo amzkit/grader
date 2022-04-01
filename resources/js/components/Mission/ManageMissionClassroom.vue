@@ -1,8 +1,9 @@
 <template>
   <v-row>
-    <Loading :loading="this.loading" />
+    <Loading :loading="loading" />
+    <Snackbar :snackbar="snackbar" :text="text" />
     <v-col cols="2">
-      <Navigation :onClick="fatchItemSchedule" />
+      <Navigation :onClick="fetchItemSchedule" />
     </v-col>
     <v-col cols="10">
       <v-row justify="center">
@@ -243,37 +244,41 @@
 import dayjs from "dayjs";
 import Navigation from "../Navigation/Navigation.vue";
 import Loading from "../Loading/Loading.vue";
+import Snackbar from "../Snackbar/Snackbar.vue";
 export default {
   components: {
     Navigation,
     Loading,
+    Snackbar,
   },
   data: function () {
     return {
+      snackbar: false,
+      text: "",
+      loading: false,
       problemList: [],
       selectedExamplesId: [],
       roomId: 0,
       roomName: "",
       search: "",
-      loading: false,
       dialog: false,
       headers: [
         {
-          text: "ชื่องาน",
+          text: "Title",
           align: "start",
           sortable: true,
           value: "title",
         },
-        { text: "ชื่อเรื่อง", value: "question" },
-        { text: "ภาษา", value: "language" },
-        { text: "คะแนน", value: "score" },
-        { text: "ไฟล์", value: "file" },
+        { text: "Question", value: "question" },
+        { text: "Language", value: "language" },
+        { text: "Score", value: "score" },
+        { text: "File", value: "file" },
         {
-          text: "วันที่ส่ง",
+          text: "Start Date",
           value: "start_date",
         },
         {
-          text: "ครบกำหนดส่ง",
+          text: "End Date",
           value: "end_date",
         },
         {
@@ -347,9 +352,11 @@ export default {
       tempDivElement.innerHTML = html;
       return tempDivElement.textContent || tempDivElement.innerText || "";
     },
+
     invalidDate(item) {
       return item ? dayjs(item).format("MMMM D, YYYY hh:mm A") : "-";
     },
+
     download(item) {
       window.location.href = `api/schedule/download${item.file.replace(
         "problem_file",
@@ -413,11 +420,12 @@ export default {
             "MM-DD-YYYY hh:mm A"
           ),
         })
-        .then(function () {
+        .then(() => {
           location.reload();
         })
-        .catch(function (error) {
-          console.log(error);
+        .catch(() => {
+          this.snackbar = true;
+          this.text = "Error";
         });
       this.dialog = false;
       this.loading = false;
@@ -435,11 +443,12 @@ export default {
             "MM-DD-YYYY hh:mm A"
           ),
         })
-        .then(function () {
+        .then(() => {
           location.reload();
         })
-        .catch(function (error) {
-          console.log(error);
+        .catch(() => {
+          this.snackbar = true;
+          this.text = "Error";
         });
       this.dialog = false;
       this.loading = false;
@@ -449,11 +458,13 @@ export default {
       this.loading = true;
       await axios
         .delete("api/manage/example/" + this.editedItem.id)
-        .then(function (response) {
-          console.log(response.data.message);
+        .then(() => {
+          this.snackbar = true;
+          this.text = "Successfuly";
         })
-        .catch(function (error) {
-          console.log(error);
+        .catch(() => {
+          this.snackbar = true;
+          this.text = "Error";
         });
       this.loading = false;
     },
@@ -468,7 +479,7 @@ export default {
       this.loading = false;
     },
 
-    async fatchItemSchedule(item) {
+    async fetchItemSchedule(item) {
       this.loading = true;
       if (item) {
         this.roomId = item.courseId;
@@ -481,7 +492,6 @@ export default {
           .then((response) => {
             if (response.data.success == true) {
               this.desserts = response.data.payload;
-              console.log("desserts", this.desserts);
             }
           });
       }

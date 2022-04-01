@@ -14,7 +14,7 @@ class CreateSubmissionsTable extends Migration
     public function up()
     {
         Schema::create('submissions', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->timestamps();
             $table->bigInteger('problem_id')->unsigned();
             $table->bigInteger('schedule_id')->unsigned();
@@ -31,7 +31,6 @@ class CreateSubmissionsTable extends Migration
 
             $table->foreign('schedule_id')->references('id')->on('schedules')->onDelete('cascade');
             $table->foreign('problem_id')->references('id')->on('problems')->onDelete('cascade');
-
         });
     }
 

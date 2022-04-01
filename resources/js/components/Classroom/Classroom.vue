@@ -13,10 +13,9 @@
               :items="this.$store.state.data.schedule_all"
               class="elevation-1"
             >
-              <!-- @click:row="rowClick"  -->
-              <!-- <template slot="items" slot-scope="props">
-                <tr @click="rowClicked(props.item)"></tr>
-              </template> -->
+              <template v-slot:[`item.question`]="{ item }">
+                {{ convertToPlain(item.question) }}
+              </template>
               <template v-slot:[`item.file`]="{ item }">
                 <div v-if="item.file">
                   <v-icon small class="mr-2" @click="download(item)">
@@ -86,6 +85,11 @@ export default {
     },
     invalidDate(item) {
       return item ? dayjs(item).format("MMMM D, YYYY") : "-";
+    },
+    convertToPlain(html) {
+      var tempDivElement = document.createElement("div");
+      tempDivElement.innerHTML = html;
+      return tempDivElement.textContent || tempDivElement.innerText || "";
     },
     async fatchItemSchedule(item) {
       this.loading = true;

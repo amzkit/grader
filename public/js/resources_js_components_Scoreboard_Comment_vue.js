@@ -144,7 +144,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _this.loading = true;
                 _context.next = 3;
-                return axios.get("/api/submission/".concat(_this.$route.query.submission_id)).then(function (response) {
+                return axios.get("/api/submission/scoreboard", {
+                  params: {
+                    user_id: _this.$route.query.user_id,
+                    problem_id: _this.$route.query.problem_id,
+                    schedule_id: _this.$route.query.schedule_id
+                  }
+                }).then(function (response) {
                   if (response.data.success == true) {
                     _this.item = response.data.payload;
                   }
@@ -175,6 +181,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   submission_id: _this2.item.id,
                   comment: _this2.comment,
                   user_id: _this2.item.user_id
+                }).then(function () {
+                  window.location.href = "/scoreboard";
                 });
 
               case 3:

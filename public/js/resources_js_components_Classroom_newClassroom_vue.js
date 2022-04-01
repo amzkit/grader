@@ -1090,9 +1090,9 @@ var render = function() {
                   }
                 },
                 [
-                  this.$store.state.data.user.role === "admin" ||
-                  (this.$store.state.data.user.role === "teacher" &&
-                    _vm.$route.fullPath == "/manage-classroom")
+                  (this.$store.state.data.user.role === "admin" ||
+                    this.$store.state.data.user.role === "teacher") &&
+                  _vm.$route.fullPath === "/manage-classroom"
                     ? _c(
                         "div",
                         [

@@ -63,7 +63,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
 
 
 
@@ -122,6 +121,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     },
     invalidDate: function invalidDate(item) {
       return item ? dayjs__WEBPACK_IMPORTED_MODULE_1___default()(item).format("MMMM D, YYYY") : "-";
+    },
+    convertToPlain: function convertToPlain(html) {
+      var tempDivElement = document.createElement("div");
+      tempDivElement.innerHTML = html;
+      return tempDivElement.textContent || tempDivElement.innerText || "";
     },
     fatchItemSchedule: function fatchItemSchedule(item) {
       var _this = this;
@@ -802,6 +806,21 @@ var render = function() {
                           scopedSlots: _vm._u(
                             [
                               {
+                                key: "item.question",
+                                fn: function(ref) {
+                                  var item = ref.item
+                                  return [
+                                    _vm._v(
+                                      "\n              " +
+                                        _vm._s(
+                                          _vm.convertToPlain(item.question)
+                                        ) +
+                                        "\n            "
+                                    )
+                                  ]
+                                }
+                              },
+                              {
                                 key: "item.file",
                                 fn: function(ref) {
                                   var item = ref.item
@@ -979,9 +998,9 @@ var render = function() {
                   }
                 },
                 [
-                  this.$store.state.data.user.role === "admin" ||
-                  (this.$store.state.data.user.role === "teacher" &&
-                    _vm.$route.fullPath == "/manage-classroom")
+                  (this.$store.state.data.user.role === "admin" ||
+                    this.$store.state.data.user.role === "teacher") &&
+                  _vm.$route.fullPath === "/manage-classroom"
                     ? _c(
                         "div",
                         [

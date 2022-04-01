@@ -23,51 +23,74 @@ class SubmissionController extends Controller
         $this->middleware('auth');
     }
 
-    public function getScoreBoard(Request $request)
+    public function getScoreBoard($id)
     {
-        $course_id = $request->course_id;
 
-        $schedule = Schedule::where('course_id', '=',  $course_id)
-            ->join("problems", "problems.id", "=", "schedules.problem_id")
-            ->join("languages", "languages.id", "=", "problems.language_id")
-            ->select(
-                "schedules.id",
-                "problems.title",
-                "problems.question",
-                "problems.level",
-                "problems.score",
-                "languages.id as languageId",
-                "languages.lang as language",
-                "languages.type",
-                "problems.file",
-                "schedules.start_date",
-                "schedules.end_date",
-                "problems.id as problemsId",
-            )
+        $classroom = Classroom::join('users', 'users.id', 'classrooms.user_id')
+            ->where('course_id', '=', $id)
+            ->where('student', '=', 1)
+            ->select('classrooms.*', 'users.id as user_id', 'users.name', 'users.username')
             ->get();
+        $schedules = Schedule::where('course_id', '=', $id)->get();
+        $submission = Submission::join('schedules', 'schedules.id', 'submissions.schedule_id')
+            ->where('course_id', '=', $id)->get();
 
-        $scoreboard = Submission::join("schedules", "schedules.id", "=", "submissions.schedule_id")
-            ->join("problems", "problems.id", "=", "submissions.problem_id")
-            ->join("users", "users.id", "=", "submissions.user_id")
-            ->where('course_id', '=', $course_id)
-            ->select(
-                "problems.id as problem_id",
-                "problems.title",
-                "schedules.start_date",
-                "schedules.end_date",
-                "submissions.*",
-                "users.name",
-                "users.username"
-            )
-            ->get();
+        $course_name = Course::where('id', '=', $id)->first();
 
-        return response()->json(
-            [
-                'success' => true,
-                'payload' =>  $scoreboard,
-                'payload2' =>  $schedule,
-            ]
-        );
+        $scoreboard = [
+            'student_count' => $classroom->count(),
+            'schedules_count' => $schedules->count(),
+            'classroom_name' => $course_name->course_name,
+            'classroom' => $classroom,
+            'submission' => $submission,
+            'schedules' => $schedules
+        ];
+
+        return response()->json(['success' => true, 'payload' => $scoreboard]);
+
+        // $course_id = $request->course_id;
+
+        // $schedule = Schedule::where('course_id', '=',  $course_id)
+        //     ->join("problems", "problems.id", "=", "schedules.problem_id")
+        //     ->join("languages", "languages.id", "=", "problems.language_id")
+        //     ->select(
+        //         "schedules.id",
+        //         "problems.title",
+        //         "problems.question",
+        //         "problems.level",
+        //         "problems.score",
+        //         "languages.id as languageId",
+        //         "languages.lang as language",
+        //         "languages.type",
+        //         "problems.file",
+        //         "schedules.start_date",
+        //         "schedules.end_date",
+        //         "problems.id as problemsId",
+        //     )
+        //     ->get();
+
+        // $scoreboard = Submission::join("schedules", "schedules.id", "=", "submissions.schedule_id")
+        //     ->join("problems", "problems.id", "=", "submissions.problem_id")
+        //     ->join("users", "users.id", "=", "submissions.user_id")
+        //     ->where('course_id', '=', $course_id)
+        //     ->select(
+        //         "problems.id as problem_id",
+        //         "problems.title",
+        //         "schedules.start_date",
+        //         "schedules.end_date",
+        //         "submissions.*",
+        //         "users.name",
+        //         "users.username"
+        //     )
+        //     ->get();
+
+        // return response()->json(
+        //     [
+        //         'success' => true,
+        //         'payload' =>  $scoreboard,
+        //         'payload2' =>  $schedule,
+        //     ]
+        // );
     }
 
     public function getSubmission(Request $request)
@@ -80,10 +103,15 @@ class SubmissionController extends Controller
         return response()->json(['success' => true, 'payload' =>  $schedule]);
     }
 
-    public function getSubmissionById($id)
+    public function getSubmissionById(Request $request)
     {
-        if (Submission::find($id)) {
-            $submission = Submission::find($id)
+        if (Submission::where('problem_id', '=',  $request->problem_id)
+            ->where('user_id', '=',  $request->user_id)
+            ->where('schedule_id', '=',  $request->schedule_id)
+        ) {
+            $submission = Submission::where('problem_id', '=',  $request->problem_id)
+                ->where('user_id', '=',  $request->user_id)
+                ->where('schedule_id', '=',  $request->schedule_id)
                 ->join("users", "users.id", "=", "submissions.user_id")
                 ->join('problems', 'submissions.problem_id', '=', 'problems.id')
                 ->join("languages", "languages.id", "=", "problems.language_id")
@@ -94,8 +122,8 @@ class SubmissionController extends Controller
                     "problems.title",
                     "problems.question",
                     "problems.score",
-                    "languages.lang"
-                )->first();
+                )
+                ->first();
             return response()->json(['success' => true, 'payload' => $submission]);
         }
         return response()->json(['message' => 'Not Found!!']);

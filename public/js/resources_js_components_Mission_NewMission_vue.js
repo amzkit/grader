@@ -54,6 +54,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Navigation_Navigation_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Navigation/Navigation.vue */ "./resources/js/components/Navigation/Navigation.vue");
 /* harmony import */ var vue2_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue2-editor */ "./node_modules/vue2-editor/dist/vue2-editor.esm.js");
+/* harmony import */ var _Snackbar_Snackbar_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Snackbar/Snackbar.vue */ "./resources/js/components/Snackbar/Snackbar.vue");
+/* harmony import */ var _Loading_Loading_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Loading/Loading.vue */ "./resources/js/components/Loading/Loading.vue");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -164,15 +166,36 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     Navigation: _Navigation_Navigation_vue__WEBPACK_IMPORTED_MODULE_1__.default,
-    VueEditor: vue2_editor__WEBPACK_IMPORTED_MODULE_2__.VueEditor
+    VueEditor: vue2_editor__WEBPACK_IMPORTED_MODULE_2__.VueEditor,
+    Snackbar: _Snackbar_Snackbar_vue__WEBPACK_IMPORTED_MODULE_3__.default,
+    Loading: _Loading_Loading_vue__WEBPACK_IMPORTED_MODULE_4__.default
   },
   data: function data() {
     return {
+      rules: {
+        valid: true,
+        required: function required(value) {
+          return !!value || "Required.";
+        }
+      },
+      snackbar: false,
+      loading: false,
+      text: "",
       title: "",
       question: "",
       score: 0,
@@ -205,13 +228,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         indent: "-1"
       }, {
         indent: "+1"
-      }], // outdent/indent
-      [{
+      }], [{
         color: []
       }, {
         background: []
-      }] // dropdown with defaults from theme
-      ]
+      }]]
     };
   },
   created: function created() {
@@ -221,34 +242,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     onFileChange: function onFileChange(e) {
       this.file = e.target.files[0];
     },
-    resetForm: function resetForm() {
-      this.title = null;
-      this.question = "";
-      this.score = null;
-      this.lang = null;
-      this.file = "";
-      this.level = 0;
-      this.tolerant = "";
-    },
     getLanguage: function getLanguage() {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var language;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                language = [];
+                _this.loading = true;
                 _context.next = 3;
                 return axios.get("/api/language").then(function (response) {
-                  language = response.data.payload;
+                  _this.languages = response.data.payload;
                 })["catch"](function (error) {
-                  console.log(error);
+                  _this.snackbar = true;
+                  _this.text = error;
                 });
 
               case 3:
-                _this.languages = language;
+                _this.loading = false;
 
               case 4:
               case "end":
@@ -258,7 +270,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee);
       }))();
     },
-    formSubmit: function formSubmit(e) {
+    submit: function submit() {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
@@ -267,7 +279,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                e.preventDefault();
+                if (_this2.$refs.form.validate() == false) {
+                  _this2.$refs.form.validate();
+                }
+
+                _this2.loading = true;
                 config = {
                   headers: {
                     "content-type": "multipart/form-data"
@@ -281,17 +297,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 formData.append("file", _this2.file);
                 formData.append("level", _this2.level);
                 formData.append("tolerant", _this2.tolerant != "" ? _this2.tolerant : "$");
-                _context2.next = 12;
+
+                if (!(_this2.title && _this2.question && _this2.lang && _this2.score)) {
+                  _context2.next = 14;
+                  break;
+                }
+
+                _context2.next = 14;
                 return axios.post("/api/problem", formData, config).then(function () {
                   window.location.href = "/manage-mission";
                 })["catch"](function (error) {
                   console.log(error);
                 });
 
-              case 12:
-                _this2.resetForm();
+              case 14:
+                _this2.loading = false;
 
-              case 13:
+              case 15:
               case "end":
                 return _context2.stop();
             }
@@ -525,6 +547,48 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee4);
       }))();
     }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Snackbar/Snackbar.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Snackbar/Snackbar.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: "Snackbar",
+  props: ["snackbar", "text"],
+  computed: {
+    open: {
+      get: function get() {
+        return this.snackbar;
+      },
+      set: function set() {
+        open;
+      }
+    }
+  },
+  data: function data() {
+    return {
+      timeout: 4000
+    };
   }
 });
 
@@ -14285,6 +14349,45 @@ component.options.__file = "resources/js/components/Navigation/Navigation.vue"
 
 /***/ }),
 
+/***/ "./resources/js/components/Snackbar/Snackbar.vue":
+/*!*******************************************************!*\
+  !*** ./resources/js/components/Snackbar/Snackbar.vue ***!
+  \*******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Snackbar_vue_vue_type_template_id_37e7d894___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Snackbar.vue?vue&type=template&id=37e7d894& */ "./resources/js/components/Snackbar/Snackbar.vue?vue&type=template&id=37e7d894&");
+/* harmony import */ var _Snackbar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Snackbar.vue?vue&type=script&lang=js& */ "./resources/js/components/Snackbar/Snackbar.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _Snackbar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _Snackbar_vue_vue_type_template_id_37e7d894___WEBPACK_IMPORTED_MODULE_0__.render,
+  _Snackbar_vue_vue_type_template_id_37e7d894___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Snackbar/Snackbar.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/Loading/Loading.vue?vue&type=script&lang=js&":
 /*!******************************************************************************!*\
   !*** ./resources/js/components/Loading/Loading.vue?vue&type=script&lang=js& ***!
@@ -14330,6 +14433,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Navigation_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Navigation.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Navigation/Navigation.vue?vue&type=script&lang=js&");
  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Navigation_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
+/***/ "./resources/js/components/Snackbar/Snackbar.vue?vue&type=script&lang=js&":
+/*!********************************************************************************!*\
+  !*** ./resources/js/components/Snackbar/Snackbar.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Snackbar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Snackbar.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Snackbar/Snackbar.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Snackbar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
 
 /***/ }),
 
@@ -14380,6 +14499,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Navigation_vue_vue_type_template_id_22b6f834___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Navigation_vue_vue_type_template_id_22b6f834___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Navigation.vue?vue&type=template&id=22b6f834& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Navigation/Navigation.vue?vue&type=template&id=22b6f834&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Snackbar/Snackbar.vue?vue&type=template&id=37e7d894&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/Snackbar/Snackbar.vue?vue&type=template&id=37e7d894& ***!
+  \**************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Snackbar_vue_vue_type_template_id_37e7d894___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Snackbar_vue_vue_type_template_id_37e7d894___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Snackbar_vue_vue_type_template_id_37e7d894___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Snackbar.vue?vue&type=template&id=37e7d894& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Snackbar/Snackbar.vue?vue&type=template&id=37e7d894&");
 
 
 /***/ }),
@@ -14451,272 +14587,290 @@ var render = function() {
   return _c(
     "v-row",
     [
-      _c("v-col", { attrs: { cols: "12" } }, [
-        !this.$store.state.data.loading
-          ? _c(
-              "div",
-              [
-                _c(
-                  "v-row",
-                  { attrs: { justify: "center" } },
-                  [
-                    _c("h1", [_vm._v("New Mission")]),
-                    _vm._v(" "),
-                    _c(
-                      "v-card",
-                      [
-                        _c(
-                          "v-container",
-                          { attrs: { fluid: "" } },
-                          [
-                            _c(
-                              "v-row",
-                              { attrs: { align: "center" } },
-                              [
-                                _c(
-                                  "v-col",
-                                  { attrs: { cols: "4" } },
-                                  [_c("v-subheader", [_vm._v(" Title ")])],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-col",
-                                  { attrs: { cols: "6" } },
+      _c("Snackbar", { attrs: { snackbar: _vm.snackbar, text: _vm.text } }),
+      _vm._v(" "),
+      _c("Loading", { attrs: { loading: _vm.loading } }),
+      _vm._v(" "),
+      _c(
+        "v-col",
+        { attrs: { cols: "12" } },
+        [
+          _c(
+            "v-row",
+            { attrs: { justify: "center" } },
+            [
+              _c("h1", [_vm._v("New Mission")]),
+              _vm._v(" "),
+              _c(
+                "v-card",
+                [
+                  _c(
+                    "v-container",
+                    { attrs: { fluid: "" } },
+                    [
+                      _c(
+                        "v-form",
+                        {
+                          ref: "form",
+                          attrs: { "lazy-validation": "" },
+                          model: {
+                            value: _vm.rules.valid,
+                            callback: function($$v) {
+                              _vm.$set(_vm.rules, "valid", $$v)
+                            },
+                            expression: "rules.valid"
+                          }
+                        },
+                        [
+                          _c(
+                            "v-row",
+                            { attrs: { align: "center" } },
+                            [
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "4" } },
+                                [_c("v-subheader", [_vm._v(" Title ")])],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "6" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      rules: [_vm.rules.required],
+                                      label: "Title"
+                                    },
+                                    model: {
+                                      value: _vm.title,
+                                      callback: function($$v) {
+                                        _vm.title = $$v
+                                      },
+                                      expression: "title"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            { attrs: { align: "center" } },
+                            [
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "4" } },
+                                [_c("v-subheader", [_vm._v(" Question ")])],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "6" } },
+                                [
+                                  _c("VueEditor", {
+                                    attrs: { editorToolbar: _vm.customToolbar },
+                                    model: {
+                                      value: _vm.question,
+                                      callback: function($$v) {
+                                        _vm.question = $$v
+                                      },
+                                      expression: "question"
+                                    }
+                                  }),
+                                  _vm._v(" "),
                                   [
-                                    _c("v-text-field", {
-                                      attrs: { label: "Title" },
-                                      model: {
-                                        value: _vm.title,
-                                        callback: function($$v) {
-                                          _vm.title = $$v
-                                        },
-                                        expression: "title"
-                                      }
+                                    _c("input", {
+                                      staticClass: "form-control mt-3",
+                                      attrs: { type: "file" },
+                                      on: { change: _vm.onFileChange }
                                     })
-                                  ],
-                                  1
-                                )
-                              ],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "v-row",
-                              { attrs: { align: "center" } },
-                              [
+                                  ]
+                                ],
+                                2
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            { attrs: { align: "center" } },
+                            [
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "4" } },
+                                [_c("v-subheader", [_vm._v(" Level ")])],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c("v-col", { attrs: { cols: "6" } }, [
                                 _c(
-                                  "v-col",
-                                  { attrs: { cols: "4" } },
-                                  [_c("v-subheader", [_vm._v(" Question ")])],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-col",
-                                  { attrs: { cols: "6" } },
+                                  "div",
+                                  { staticClass: "text-center" },
                                   [
-                                    _c("VueEditor", {
+                                    _c("v-rating", {
                                       attrs: {
-                                        editorToolbar: _vm.customToolbar
+                                        color: "yellow darken-3",
+                                        "background-color": "grey darken-1",
+                                        "empty-icon": "$ratingFull",
+                                        "half-increments": "",
+                                        hover: "",
+                                        large: ""
                                       },
                                       model: {
-                                        value: _vm.question,
+                                        value: _vm.level,
                                         callback: function($$v) {
-                                          _vm.question = $$v
+                                          _vm.level = $$v
                                         },
-                                        expression: "question"
+                                        expression: "level"
                                       }
                                     }),
                                     _vm._v(" "),
-                                    [
-                                      _c("input", {
-                                        staticClass: "form-control mt-3",
-                                        attrs: { type: "file" },
-                                        on: { change: _vm.onFileChange }
-                                      })
-                                    ]
-                                  ],
-                                  2
-                                )
-                              ],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "v-row",
-                              { attrs: { align: "center" } },
-                              [
-                                _c(
-                                  "v-col",
-                                  { attrs: { cols: "4" } },
-                                  [_c("v-subheader", [_vm._v(" Level ")])],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c("v-col", { attrs: { cols: "6" } }, [
-                                  _c(
-                                    "div",
-                                    { staticClass: "text-center" },
-                                    [
-                                      _c("v-rating", {
-                                        attrs: {
-                                          color: "yellow darken-3",
-                                          "background-color": "grey darken-1",
-                                          "empty-icon": "$ratingFull",
-                                          "half-increments": "",
-                                          hover: "",
-                                          large: ""
+                                    _c("div", [
+                                      _c(
+                                        "span",
+                                        {
+                                          staticClass:
+                                            "text-caption text-uppercase"
                                         },
-                                        model: {
-                                          value: _vm.level,
-                                          callback: function($$v) {
-                                            _vm.level = $$v
-                                          },
-                                          expression: "level"
-                                        }
-                                      }),
+                                        [_vm._v("level:")]
+                                      ),
                                       _vm._v(" "),
-                                      _c("div", [
-                                        _c(
-                                          "span",
-                                          {
-                                            staticClass:
-                                              "text-caption text-uppercase"
-                                          },
-                                          [_vm._v("level:")]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "span",
-                                          { staticClass: "font-weight-bold" },
-                                          [
-                                            _vm._v(
-                                              "\n                      " +
-                                                _vm._s(_vm.level) +
-                                                "\n                    "
-                                            )
-                                          ]
-                                        )
-                                      ])
-                                    ],
-                                    1
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c(
-                                  "v-col",
-                                  { attrs: { cols: "4" } },
-                                  [_c("v-subheader", [_vm._v(" Tolerant ")])],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-col",
-                                  { attrs: { cols: "6" } },
-                                  [
-                                    _c("v-text-field", {
-                                      attrs: {
-                                        prefix: "$",
-                                        onfocus: "this.select()",
-                                        label: "Tolerant"
-                                      },
-                                      model: {
-                                        value: _vm.tolerant,
-                                        callback: function($$v) {
-                                          _vm.tolerant = $$v
-                                        },
-                                        expression: "tolerant"
-                                      }
-                                    })
-                                  ],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-col",
-                                  { attrs: { cols: "4" } },
-                                  [_c("v-subheader", [_vm._v(" Score ")])],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-col",
-                                  { attrs: { cols: "6" } },
-                                  [
-                                    _c("v-text-field", {
-                                      attrs: {
-                                        type: "number",
-                                        onfocus: "this.select()",
-                                        label: "Score"
-                                      },
-                                      model: {
-                                        value: _vm.score,
-                                        callback: function($$v) {
-                                          _vm.score = $$v
-                                        },
-                                        expression: "score"
-                                      }
-                                    })
-                                  ],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-col",
-                                  { attrs: { cols: "4" } },
-                                  [_c("v-subheader", [_vm._v(" Language ")])],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-col",
-                                  { attrs: { cols: "6" } },
-                                  [
-                                    _c("v-autocomplete", {
-                                      attrs: {
-                                        items: _vm.languages,
-                                        label: "Language",
-                                        "item-text": "lang",
-                                        "item-value": "id"
-                                      },
-                                      model: {
-                                        value: _vm.lang,
-                                        callback: function($$v) {
-                                          _vm.lang = $$v
-                                        },
-                                        expression: "lang"
-                                      }
-                                    })
+                                      _c(
+                                        "span",
+                                        { staticClass: "font-weight-bold" },
+                                        [
+                                          _vm._v(
+                                            "\n                      " +
+                                              _vm._s(_vm.level) +
+                                              "\n                    "
+                                          )
+                                        ]
+                                      )
+                                    ])
                                   ],
                                   1
                                 )
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        )
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "v-btn",
-                      {
-                        attrs: { color: "primary" },
-                        on: { click: _vm.formSubmit }
-                      },
-                      [_vm._v(" Save ")]
-                    )
-                  ],
-                  1
-                )
-              ],
-              1
-            )
-          : _vm._e()
-      ])
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "4" } },
+                                [_c("v-subheader", [_vm._v(" Tolerant ")])],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "6" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      prefix: "$",
+                                      onfocus: "this.select()",
+                                      label: "Tolerant"
+                                    },
+                                    model: {
+                                      value: _vm.tolerant,
+                                      callback: function($$v) {
+                                        _vm.tolerant = $$v
+                                      },
+                                      expression: "tolerant"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "4" } },
+                                [_c("v-subheader", [_vm._v(" Score ")])],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "6" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      type: "number",
+                                      rules: [_vm.rules.required],
+                                      onfocus: "this.select()",
+                                      label: "Score"
+                                    },
+                                    model: {
+                                      value: _vm.score,
+                                      callback: function($$v) {
+                                        _vm.score = $$v
+                                      },
+                                      expression: "score"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "4" } },
+                                [_c("v-subheader", [_vm._v(" Language ")])],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "6" } },
+                                [
+                                  _c("v-autocomplete", {
+                                    attrs: {
+                                      items: _vm.languages,
+                                      rules: [_vm.rules.required],
+                                      label: "Language",
+                                      "item-text": "lang",
+                                      "item-value": "id"
+                                    },
+                                    model: {
+                                      value: _vm.lang,
+                                      callback: function($$v) {
+                                        _vm.lang = $$v
+                                      },
+                                      expression: "lang"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                { attrs: { color: "primary" }, on: { click: _vm.submit } },
+                [_vm._v(" Save ")]
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
     ],
     1
   )
@@ -14770,9 +14924,9 @@ var render = function() {
                   }
                 },
                 [
-                  this.$store.state.data.user.role === "admin" ||
-                  (this.$store.state.data.user.role === "teacher" &&
-                    _vm.$route.fullPath == "/manage-classroom")
+                  (this.$store.state.data.user.role === "admin" ||
+                    this.$store.state.data.user.role === "teacher") &&
+                  _vm.$route.fullPath === "/manage-classroom"
                     ? _c(
                         "div",
                         [
@@ -15002,6 +15156,51 @@ var render = function() {
           )
         ],
         1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Snackbar/Snackbar.vue?vue&type=template&id=37e7d894&":
+/*!*****************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Snackbar/Snackbar.vue?vue&type=template&id=37e7d894& ***!
+  \*****************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "text-center" },
+    [
+      _c(
+        "v-snackbar",
+        {
+          attrs: { timeout: _vm.timeout },
+          model: {
+            value: _vm.open,
+            callback: function($$v) {
+              _vm.open = $$v
+            },
+            expression: "open"
+          }
+        },
+        [_vm._v("\n    " + _vm._s(this.text) + "\n  ")]
       )
     ],
     1

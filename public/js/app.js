@@ -5393,17 +5393,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         icon: "mdi-pencil",
         text: "Mission",
         subLinks: [{
-          to: "/mission",
-          text: "Mission"
-        }, // {
-        //   text: "New Mission",
-        //   to: "/new-mission",
-        // },
-        {
           text: "Mission",
+          to: "/mission"
+        }, {
+          text: "Manage Mission",
           to: "/manage-mission"
         }, {
-          text: "Mission Classroom",
+          text: "Manage Mission Classroom",
           to: "/manage-mission-classroom"
         }]
       }, {
@@ -5443,7 +5439,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, {
         to: "/mission",
         icon: "mdi-view-dashboard",
-        text: "Mission"
+        text: "Classroom"
       }, {
         to: "/my-score",
         icon: "mdi-view-dashboard",
@@ -5486,22 +5482,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, {
           text: "Mission Classroom",
           to: "/manage-mission-classroom"
+        }, {
+          to: "/new-test",
+          icon: "mdi-view-dashboard",
+          text: "New Test"
         }]
       }, {
         to: "/scoreboard",
         icon: "mdi-view-dashboard",
         text: "Scoreboard"
       }, {
-        to: "/new-test",
-        icon: "mdi-view-dashboard",
-        text: "New Test"
-      }, {
         icon: "mdi-pencil",
         text: "User",
         subLinks: [{
-          text: "New User",
-          to: "/new-user"
-        }, {
           text: "Manage User",
           to: "/manage-user"
         }]
@@ -5961,6 +5954,12 @@ var routes = [{
   component: function component() {
     return __webpack_require__.e(/*! import() */ "resources_js_pages_MyScorePage_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/MyScorePage.vue */ "./resources/js/pages/MyScorePage.vue"));
   }
+}, {
+  path: "/my-score-mission",
+  name: "my-score-mission",
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ "resources_js_components_MyScore_MyScoreDetail_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/MyScore/MyScoreDetail.vue */ "./resources/js/components/MyScore/MyScoreDetail.vue"));
+  }
 }, // Scoreboard
 {
   path: "/scoreboard",
@@ -5973,6 +5972,12 @@ var routes = [{
   name: "comment",
   component: function component() {
     return __webpack_require__.e(/*! import() */ "resources_js_components_Scoreboard_Comment_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Scoreboard/Comment.vue */ "./resources/js/components/Scoreboard/Comment.vue"));
+  }
+}, {
+  path: "/scoreboard-score",
+  name: "scoreboard-score",
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ "resources_js_components_Scoreboard_MyScoreScoreboard_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Scoreboard/MyScoreScoreboard.vue */ "./resources/js/components/Scoreboard/MyScoreScoreboard.vue"));
   }
 }];
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (routes);
@@ -43709,7 +43714,7 @@ var render = function() {
                               return _c(
                                 "v-list-item",
                                 {
-                                  key: sublink.text,
+                                  key: sublink.to,
                                   attrs: { to: sublink.to, link: "" }
                                 },
                                 [
@@ -44103,7 +44108,7 @@ var render = function() {
                               attrs: { color: "primary", block: "" },
                               on: {
                                 click: function($event) {
-                                  return _vm.redirect("/changepassword")
+                                  return _vm.redirect("/change-password")
                                 }
                               }
                             },
@@ -106386,7 +106391,7 @@ var index = {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_components_Admin_NewUser_vue":1,"resources_js_components_Admin_ManageUser_vue":1,"resources_js_auth_ChangePassword_vue":1,"resources_js_components_Mission_ManageMissionClassroom_vue":1,"resources_js_components_Mission_ManageMission_vue":1,"resources_js_components_Mission_NewMission_vue":1,"resources_js_components_Mission_Mission_vue":1,"resources_js_components_TestMission_NewTest_vue":1,"resources_js_components_Classroom_ManageClassroom_vue":1,"resources_js_pages_ClassRoomPage_vue":1,"resources_js_components_Classroom_NewClassroom_vue":1,"resources_js_pages_MyScorePage_vue":1,"resources_js_pages_ScoreBoardPage_vue":1,"resources_js_components_Scoreboard_Comment_vue":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_components_Admin_NewUser_vue":1,"resources_js_components_Admin_ManageUser_vue":1,"resources_js_auth_ChangePassword_vue":1,"resources_js_components_Mission_ManageMissionClassroom_vue":1,"resources_js_components_Mission_ManageMission_vue":1,"resources_js_components_Mission_NewMission_vue":1,"resources_js_components_Mission_Mission_vue":1,"resources_js_components_TestMission_NewTest_vue":1,"resources_js_components_Classroom_ManageClassroom_vue":1,"resources_js_pages_ClassRoomPage_vue":1,"resources_js_components_Classroom_NewClassroom_vue":1,"resources_js_pages_MyScorePage_vue":1,"resources_js_components_MyScore_MyScoreDetail_vue":1,"resources_js_pages_ScoreBoardPage_vue":1,"resources_js_components_Scoreboard_Comment_vue":1,"resources_js_components_Scoreboard_MyScoreScoreboard_vue":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};
