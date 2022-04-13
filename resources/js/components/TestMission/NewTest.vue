@@ -7,11 +7,11 @@
           <v-container fluid>
             <v-row align="center">
               <v-col cols="4">
-                <v-subheader> Mission Name </v-subheader>
+                <v-subheader> Problem Name </v-subheader>
               </v-col>
               <v-col cols="6">
                 <v-autocomplete
-                  label="Mission Name"
+                  label="Problem Name"
                   v-model="missionId"
                   :items="problems"
                   item-text="title"
@@ -66,6 +66,7 @@ export default {
     this.fetchItemProblem();
   },
   created() {},
+
   methods: {
     async fetchItemProblem() {
       this.loading = true;
@@ -78,13 +79,23 @@ export default {
     },
     async addTestCase() {
       this.loading = true;
-      console.log(this.missionId, this.input, this.output);
-      await axios.post("/api/test-case", {
+      await axios
+        .post("/api/test-case", {
           missionId: this.missionId,
           input: this.input,
           output: this.output,
-      });
+        })
+        .then((response) => {
+          this.resetFrom();
+          console.log(response.data.payload);
+        });
+
       this.loading = false;
+    },
+
+    resetFrom() {
+      this.output = "";
+      this.input = "";
     },
   },
 };

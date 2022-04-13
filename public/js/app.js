@@ -5377,6 +5377,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -5391,16 +5395,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         text: "Home"
       }, {
         icon: "mdi-pencil",
-        text: "Mission",
+        text: "Problem",
         subLinks: [{
-          text: "Mission",
-          to: "/mission"
+          text: "Problem",
+          to: "/problem"
         }, {
-          text: "Manage Mission",
-          to: "/manage-mission"
+          text: "Manage Problem",
+          to: "/manage-problem"
         }, {
-          text: "Manage Mission Classroom",
-          to: "/manage-mission-classroom"
+          text: "Manage Problem Classroom",
+          to: "/manage-problem-classroom"
         }]
       }, {
         icon: "mdi-pencil",
@@ -5437,7 +5441,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         icon: "mdi-home",
         text: "Home"
       }, {
-        to: "/mission",
+        to: "/problem",
         icon: "mdi-view-dashboard",
         text: "Classroom"
       }, {
@@ -5456,7 +5460,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, {
         to: "/classroom",
         icon: "mdi-view-dashboard",
-        text: "Mission"
+        text: "Problem"
       }, {
         to: "/scoreboard",
         icon: "mdi-view-dashboard",
@@ -5475,13 +5479,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }]
       }, {
         icon: "mdi-pencil",
-        text: "Mission",
+        text: "Problem",
         subLinks: [{
-          text: "Mission",
-          to: "/manage-mission"
+          text: "Problem",
+          to: "/manage-problem"
         }, {
-          text: "Mission Classroom",
-          to: "/manage-mission-classroom"
+          text: "Problem Classroom",
+          to: "/manage-problem-classroom"
         }, {
           to: "/new-test",
           icon: "mdi-view-dashboard",
@@ -5898,26 +5902,26 @@ var routes = [{
   }
 }, // Mission
 {
-  path: "/manage-mission-classroom",
-  name: "manage-mission-classroom",
+  path: "/manage-problem-classroom",
+  name: "manage-problem-classroom",
   component: function component() {
     return __webpack_require__.e(/*! import() */ "resources_js_components_Mission_ManageMissionClassroom_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Mission/ManageMissionClassroom.vue */ "./resources/js/components/Mission/ManageMissionClassroom.vue"));
   }
 }, {
-  path: "/manage-mission",
-  name: "manage-mission",
+  path: "/manage-problem",
+  name: "manage-problem",
   component: function component() {
     return __webpack_require__.e(/*! import() */ "resources_js_components_Mission_ManageMission_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Mission/ManageMission.vue */ "./resources/js/components/Mission/ManageMission.vue"));
   }
 }, {
-  path: "/new-mission",
-  name: "new-mission",
+  path: "/new-problem",
+  name: "new-problem",
   component: function component() {
     return __webpack_require__.e(/*! import() */ "resources_js_components_Mission_NewMission_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Mission/NewMission.vue */ "./resources/js/components/Mission/NewMission.vue"));
   }
 }, {
-  path: "/mission",
-  name: "mission",
+  path: "/problem",
+  name: "problem",
   component: function component() {
     return __webpack_require__.e(/*! import() */ "resources_js_components_Mission_Mission_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Mission/Mission.vue */ "./resources/js/components/Mission/Mission.vue"));
   }

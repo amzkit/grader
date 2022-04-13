@@ -304,7 +304,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
 
 
 
@@ -317,8 +316,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   data: function data() {
     return {
-      snackbar: false,
-      text: "",
       loading: false,
       problemList: [],
       selectedExamplesId: [],
@@ -494,9 +491,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   end_date: dayjs__WEBPACK_IMPORTED_MODULE_1___default()("".concat(_this4.end_date, " ").concat(_this4.end_time)).format("MM-DD-YYYY hh:mm A")
                 }).then(function () {
                   location.reload();
-                })["catch"](function () {
-                  _this4.snackbar = true;
-                  _this4.text = "Error";
+                })["catch"](function (error) {
+                  console.log(error);
                 });
 
               case 3:
@@ -520,23 +516,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context3.prev = _context3.next) {
               case 0:
                 _this5.loading = true;
-                _context3.next = 3;
+
+                if (!(_this5.start_date && _this5.start_time && _this5.end_date && _this5.end_time)) {
+                  _context3.next = 4;
+                  break;
+                }
+
+                _context3.next = 4;
                 return axios.put("/api/manage/example", {
                   id: item.id,
                   start_date: dayjs__WEBPACK_IMPORTED_MODULE_1___default()("".concat(_this5.start_date, " ").concat(_this5.start_time)).format("MM-DD-YYYY hh:mm A"),
                   end_date: dayjs__WEBPACK_IMPORTED_MODULE_1___default()("".concat(_this5.end_date, " ").concat(_this5.end_time)).format("MM-DD-YYYY hh:mm A")
                 }).then(function () {
                   location.reload();
-                })["catch"](function () {
-                  _this5.snackbar = true;
-                  _this5.text = "Error";
+                })["catch"](function (error) {
+                  console.error(error);
                 });
 
-              case 3:
+              case 4:
                 _this5.dialog = false;
                 _this5.loading = false;
 
-              case 5:
+              case 6:
               case "end":
                 return _context3.stop();
             }
@@ -557,9 +558,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return axios["delete"]("api/manage/example/" + _this6.editedItem.id).then(function () {
                   _this6.snackbar = true;
                   _this6.text = "Successfuly";
-                })["catch"](function () {
-                  _this6.snackbar = true;
-                  _this6.text = "Error";
+                })["catch"](function (error) {
+                  console.error(error);
                 });
 
               case 3:
@@ -772,6 +772,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               return _this.onClick(_this.$store.state.data.courses.length > 0 ? _this.$store.state.data.courses[0] : 0);
 
             case 6:
+              console.log(_this.$store.state.data.courses);
+
+            case 7:
             case "end":
               return _context.stop();
           }
@@ -848,7 +851,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   course_name: _this4.course_name
                 }).then(function (response) {
                   if (response.data.success == true) {
-                    _this4.$store.state.data.courses.push(response.data.payload);
+                    _this4.$store.state.data.courses.push({
+                      courseId: response.data.payload.id,
+                      course_name: response.data.payload.course_name
+                    });
                   }
                 });
 
@@ -1277,8 +1283,6 @@ var render = function() {
     "v-row",
     [
       _c("Loading", { attrs: { loading: _vm.loading } }),
-      _vm._v(" "),
-      _c("Snackbar", { attrs: { snackbar: _vm.snackbar, text: _vm.text } }),
       _vm._v(" "),
       _c(
         "v-col",

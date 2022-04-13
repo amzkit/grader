@@ -305,7 +305,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _context2.next = 14;
                 return axios.post("/api/problem", formData, config).then(function () {
-                  window.location.href = "/manage-mission";
+                  window.location.href = "/manage-problem";
                 })["catch"](function (error) {
                   console.log(error);
                 });
@@ -455,6 +455,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               return _this.onClick(_this.$store.state.data.courses.length > 0 ? _this.$store.state.data.courses[0] : 0);
 
             case 6:
+              console.log(_this.$store.state.data.courses);
+
+            case 7:
             case "end":
               return _context.stop();
           }
@@ -531,7 +534,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   course_name: _this4.course_name
                 }).then(function (response) {
                   if (response.data.success == true) {
-                    _this4.$store.state.data.courses.push(response.data.payload);
+                    _this4.$store.state.data.courses.push({
+                      courseId: response.data.payload.id,
+                      course_name: response.data.payload.course_name
+                    });
                   }
                 });
 
@@ -14599,7 +14605,7 @@ var render = function() {
             "v-row",
             { attrs: { justify: "center" } },
             [
-              _c("h1", [_vm._v("New Mission")]),
+              _c("h1", [_vm._v("New Problem")]),
               _vm._v(" "),
               _c(
                 "v-card",

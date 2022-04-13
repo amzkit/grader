@@ -14557,7 +14557,7 @@ var render = function() {
                             "v-toolbar",
                             { attrs: { flat: "" } },
                             [
-                              _c("v-toolbar-title", [_vm._v("Manage Mission")]),
+                              _c("v-toolbar-title", [_vm._v("Manage Problem")]),
                               _vm._v(" "),
                               _c("v-divider", {
                                 staticClass: "mx-4",
@@ -14589,7 +14589,7 @@ var render = function() {
                                   attrs: { color: "primary", dark: "" },
                                   on: {
                                     click: function($event) {
-                                      return _vm.$router.push("/new-mission")
+                                      return _vm.$router.push("/new-problem")
                                     }
                                   }
                                 },

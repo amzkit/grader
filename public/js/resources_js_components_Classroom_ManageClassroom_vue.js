@@ -866,6 +866,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               return _this.onClick(_this.$store.state.data.courses.length > 0 ? _this.$store.state.data.courses[0] : 0);
 
             case 6:
+              console.log(_this.$store.state.data.courses);
+
+            case 7:
             case "end":
               return _context.stop();
           }
@@ -942,7 +945,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   course_name: _this4.course_name
                 }).then(function (response) {
                   if (response.data.success == true) {
-                    _this4.$store.state.data.courses.push(response.data.payload);
+                    _this4.$store.state.data.courses.push({
+                      courseId: response.data.payload.id,
+                      course_name: response.data.payload.course_name
+                    });
                   }
                 });
 

@@ -6,8 +6,19 @@
         <v-data-table
           :headers="headers"
           :items="myScore"
-          class="elevation-1"
-          @click:row="$store.state.data.user.role == 'ta' ? Item($event) : null"
+          :class="[
+            'elevation-1',
+            $store.state.data.user.role == 'ta' ||
+            $store.state.data.user.role == 'teacher'
+              ? 'row-pointer'
+              : null,
+          ]"
+          @click:row="
+            $store.state.data.user.role == 'ta' ||
+            $store.state.data.user.role == 'teacher'
+              ? item($event)
+              : null
+          "
         >
           <template v-slot:[`item.index`]="{ index }">
             {{ index + 1 }}
@@ -16,8 +27,8 @@
           <template v-slot:[`item.detail`]="{ item }">
             <v-col>
               <v-chip
-                v-for="i in item.message.match(/[A-Z]/g)"
-                :key="i"
+                v-for="(i, index) in item.message.match(/[A-Z]/g)"
+                :key="index"
                 :color="i == 'Y' ? 'green' : 'red'"
                 text-color="white"
               >
@@ -82,7 +93,7 @@ export default {
     invalidDate(item) {
       return item ? dayjs(item).format("MMMM D, YYYY hh:mm A") : "-";
     },
-    Item(val) {
+    item(val) {
       this.$router.push({
         path: "/comment",
         query: {
@@ -113,4 +124,11 @@ export default {
   },
 };
 </script>
+
+<style lang="css" scoped>
+.row-pointer >>> tbody tr :hover {
+  cursor: pointer;
+}
+</style>
+
 

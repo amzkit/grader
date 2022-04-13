@@ -1,177 +1,163 @@
 <template>
   <v-row>
     <Loading :loading="loading" />
-    <Snackbar :snackbar="snackbar" :text="text" />
     <v-col cols="2">
       <Navigation :onClick="fetchItemSchedule" />
     </v-col>
     <v-col cols="10">
-      <v-row justify="center">
-        <v-col>
-          <div>
-            <v-expansion-panels class="mb-6">
-              <v-expansion-panel
-                v-for="(item, i) in this.$store.state.data.schedule_all.filter(
-                  (e) => {
-                    const missionSend = missionPass.find(
-                      (p) => p.schedule_id == e.id
-                    );
-                    if (missionSend) {
-                      return null;
-                    }
-                    return e;
-                  }
-                )"
-                :key="i"
+      <v-card
+        class="mx-auto mb-4"
+        max-width="100%"
+        v-for="(item, i) in this.$store.state.data.schedule_all.filter((e) => {
+          const missionSend = missionPass.find((p) => p.schedule_id == e.id);
+          if (missionSend) {
+            return null;
+          }
+          return e;
+        })"
+        :key="i"
+      >
+        <v-list-item two-line>
+          <v-list-item-content>
+            <v-list-item-title class="text-h5">
+              {{ item.title }}
+            </v-list-item-title>
+            <v-list-item-subtitle>
+              <v-rating
+                :value="item.level"
+                dense
+                half-increments
+                readonly
+                size="14"
+              ></v-rating>
+            </v-list-item-subtitle>
+            <v-divider class="mx-4"></v-divider>
+            <v-card-title>Schedule</v-card-title>
+
+            <v-card-text>
+              <v-chip-group
+                v-model="selection"
+                active-class="deep-purple accent-4 white--text"
+                column
               >
-                <v-expansion-panel-header expand-icon="mdi-menu-down">
-                  <v-row no-gutters>
-                    <v-col cols="4">
-                      <v-fade-transition leave-absolute>
-                        <v-row no-gutters style="width: 100%">
-                          <v-col cols="6">
-                            {{ item.title }}
-                          </v-col>
-                          <v-col>
-                            <v-rating
-                              v-model="item.level"
-                              color="yellow accent-4"
-                              background-color="grey darken-1"
-                              dense
-                              size="18"
-                            ></v-rating>
-                          </v-col>
-                        </v-row>
-                      </v-fade-transition>
-                    </v-col>
+                <v-chip>
+                  {{ invalidDate(item.start_date) || "NOT SET" }}
+                  -
+                  {{ invalidDate(item.end_date) || "NOT SET" }}
+                </v-chip>
+              </v-chip-group>
+            </v-card-text>
+          </v-list-item-content>
+        </v-list-item>
 
-                    <v-col cols="8" class="text--secondary">
-                      <v-fade-transition leave-absolute>
-                        <v-row no-gutters style="width: 100%">
-                          <v-col cols="6">
-                            Start date:
-                            {{ invalidDate(item.start_date) || "NOT SET" }}
-                          </v-col>
-                          <v-col cols="6">
-                            End date:
-                            {{ invalidDate(item.end_date) || "NOT SET" }}
-                          </v-col>
-                        </v-row>
-                      </v-fade-transition>
-                    </v-col>
-                  </v-row>
-                </v-expansion-panel-header>
-                <v-expansion-panel-content>
-                  <v-row no-gutters>
-                    <v-spacer></v-spacer>
-
-                    <v-row>
-                      <v-col cols="4" class="d-flex align-center">
-                        <v-expansion-panel-content>
-                          Question
-                        </v-expansion-panel-content>
-                      </v-col>
-                      <v-col cols="8" class="d-flex align-center">
-                        <div v-html="item.question"></div>
-                      </v-col>
-                    </v-row>
-
-                    <v-row>
-                      <v-col cols="4" class="d-flex align-center">
-                        <v-expansion-panel-content>
-                          Language
-                        </v-expansion-panel-content>
-                      </v-col>
-                      <v-col cols="8" class="d-flex align-center">
-                        <v-expansion-panel-content>
-                          {{ item.language }}
-                        </v-expansion-panel-content>
-                      </v-col>
-                    </v-row>
-
-                    <v-row>
-                      <v-col cols="4" class="d-flex align-center">
-                        <v-expansion-panel-content>
-                          Score
-                        </v-expansion-panel-content>
-                      </v-col>
-                      <v-col cols="8" class="d-flex align-center">
-                        <v-expansion-panel-content>
-                          {{ item.score }}
-                        </v-expansion-panel-content>
-                      </v-col>
-                    </v-row>
-
-                    <v-row v-if="item.file">
-                      <v-col cols="4" class="d-flex align-center">
-                        <v-expansion-panel-content>
-                          Download File Question
-                        </v-expansion-panel-content>
-                      </v-col>
-                      <v-col cols="8" class="d-flex align-center">
-                        <v-expansion-panel-content>
-                          <v-btn
-                            key="0"
-                            small
-                            color="primary"
-                            dark
-                            @click="download(item.file)"
-                          >
-                            Download File
-                          </v-btn>
-                        </v-expansion-panel-content>
-                      </v-col>
-                    </v-row>
-
-                    <v-row>
-                      <v-col cols="4" class="d-flex align-center">
-                        <v-expansion-panel-content>
-                          File Import
-                        </v-expansion-panel-content>
-                      </v-col>
-                      <v-col cols="8" class="d-flex align-center">
-                        <input
-                          type="file"
-                          class="form-control"
-                          :accept="item.type"
-                          v-on:change="onFileChange"
-                        />
-                      </v-col>
-                    </v-row>
-                  </v-row>
-
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn depressed color="primary" @click="sendMission(item)">
-                      SEND MISSION
-                    </v-btn>
-                  </v-card-actions>
-                </v-expansion-panel-content>
-              </v-expansion-panel>
-            </v-expansion-panels>
-
-            <v-expansion-panels>
-              <v-expansion-panel v-for="(item, i) in missionPass" :key="i">
-                <v-expansion-panel-header disable-icon-rotate>
-                  {{ item.title }}
-
-                  <template v-slot:actions>
-                    <div v-if="item.message == 'waiting'">
-                      <v-icon color="primary">
-                        mdi-checkbox-blank-circle-outline
-                      </v-icon>
-                    </div>
-                    <div v-else>
-                      <v-icon color="teal"> mdi-check </v-icon>
-                    </div>
-                  </template>
-                </v-expansion-panel-header>
-              </v-expansion-panel>
-            </v-expansion-panels>
-          </div>
-        </v-col>
-      </v-row>
+        <v-card-actions>
+          <v-btn
+            color="primary"
+            text
+            @click="
+              () => {
+                problem.title = item.title;
+                problem.question = item.question;
+                problem.score = item.score;
+                problem.file = item.file;
+                problem.start_date = item.start_date;
+                problem.end_date = item.end_date;
+                problem.language.language = item.language;
+                problem.language.type = item.type;
+                problem.problem_id = item.problemsId;
+                dialog = true;
+              }
+            "
+          >
+            SHOW MORE
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+      <v-expansion-panels>
+        <v-expansion-panel v-for="(item, i) in missionPass" :key="i">
+          <v-expansion-panel-header disable-icon-rotate>
+            {{ item.title }}
+            <template v-slot:actions>
+              <div v-if="item.message == 'waiting'">
+                <v-icon color="primary">
+                  mdi-checkbox-blank-circle-outline
+                </v-icon>
+              </div>
+              <div v-else>
+                <v-icon color="teal"> mdi-check </v-icon>
+              </div>
+            </template>
+          </v-expansion-panel-header>
+        </v-expansion-panel>
+      </v-expansion-panels>
     </v-col>
+
+    <v-dialog v-model="dialog" persistent max-width="800">
+      <v-card>
+        <v-card-title class="text-h5"> {{ problem.title }} </v-card-title>
+        <v-card-subtitle>
+          {{ invalidDate(problem.start_date) || "NOT SET" }}
+          -
+          {{ invalidDate(problem.end_date) || "NOT SET" }}
+        </v-card-subtitle>
+        <v-card-text>
+          <v-row>
+            <v-col cols="4"> Question </v-col>
+            <v-col cols="8">
+              <div v-html="problem.question"></div>
+            </v-col>
+          </v-row>
+          <v-row class="mb-3">
+            <v-col cols="4"> Score </v-col>
+            <v-col cols="8">
+              {{ problem.score }}
+            </v-col>
+          </v-row>
+          <v-row v-if="problem.file" class="mb-3">
+            <v-col cols="4"> Download File Question </v-col>
+            <v-col cols="8">
+              <v-btn small color="primary" dark @click="download(item.file)">
+                Download File
+              </v-btn>
+            </v-col>
+          </v-row>
+          <v-row class="mb-3">
+            <v-col cols="4"> Language </v-col>
+            <v-col cols="8">
+              {{ problem.language.language }}
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="4"> File Import </v-col>
+            <v-col cols="8">
+              <input
+                type="file"
+                class="form-control"
+                ref="file_upload"
+                :accept="problem.language.type"
+                v-on:change="onFileChange"
+              />
+            </v-col>
+          </v-row>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="
+              () => {
+                $refs.file_upload.value = null;
+                dialog = false;
+              }
+            "
+          >
+            Close
+          </v-btn>
+          <v-btn color="green darken-1" text @click="submit()"> Submit </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-row>
 </template>
 
@@ -180,33 +166,72 @@
 import dayjs from "dayjs";
 import Navigation from "../Navigation/Navigation.vue";
 import Loading from "../Loading/Loading.vue";
-import Snackbar from "../Snackbar/Snackbar.vue";
+
 export default {
   components: {
     Navigation,
     Loading,
-    Snackbar,
   },
   data: function () {
     return {
+      dialog: false,
       snackbar: false,
       text: "",
       loading: false,
-      file: null,
       course_id: 0,
       missionPass: [],
-      customToolbar: [["clean"]],
+      problem: {
+        problem_id: 0,
+        title: "",
+        question: "",
+        score: 0,
+        file: "",
+        sendFile: null,
+        start_date: "",
+        end_date: "",
+        language: {
+          language: "",
+          type: "",
+        },
+      },
     };
   },
-  async created() {},
 
   computed: {
     getDateTime() {
       return dayjs(new Date()).format("MM-DD-YYYY hh:mm A");
     },
   },
+
   methods: {
     dayjs,
+
+    async submit() {
+      if (!this.problem.sendFile) {
+        return console.log("NO");
+      }
+      this.loading = true;
+      this.dialog = false;
+      const config = {
+        headers: { "content-type": "multipart/form-data" },
+      };
+      let formData = new FormData();
+      formData.append("sourcefile", this.problem.sendFile);
+      formData.append("Lang", this.problem.language.language);
+      formData.append("problem_id", this.problem.problem_id);
+      formData.append("course_id", this.course_id);
+      await axios
+        .post("/api/submission", formData, config)
+        .then((response) => {
+          if (response.data.success) {
+            window.location.reload();
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      this.loading = false;
+    },
 
     download(item) {
       window.location.href = `api/schedule/download${item.replace(
@@ -220,29 +245,7 @@ export default {
     },
 
     onFileChange(e) {
-      this.file = e.target.files[0];
-    },
-
-    async sendMission(item) {
-      this.loading = true;
-      const config = {
-        headers: { "content-type": "multipart/form-data" },
-      };
-      let formData = new FormData();
-      formData.append("sourcefile", this.file);
-      formData.append("Lang", item.language);
-      formData.append("problem_id", item.problemsId);
-      formData.append("course_id", this.course_id);
-      await axios
-        .post("/api/submission", formData, config)
-        .then(function (response) {
-          location.reload();
-        })
-        .catch(function (error) {
-          this.snackbar = true;
-          this.text = error;
-        });
-      this.loading = true;
+      this.problem.sendFile = e.target.files[0];
     },
 
     async fetchItemSchedule(item) {
@@ -262,15 +265,12 @@ export default {
                 "data/SET_SCHEDULES_ALL",
                 response.data.payload
               );
-              if (response.data.payload == "") {
-                this.snackbar = true;
-                this.text = "You don't have a mission";
-              }
             }
           });
       }
       this.loading = false;
     },
+
     async fetchItemSubmission() {
       this.loading = true;
       await axios

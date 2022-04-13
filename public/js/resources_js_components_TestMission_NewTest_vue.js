@@ -123,24 +123,31 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context2.prev = _context2.next) {
               case 0:
                 _this2.loading = true;
-                console.log(_this2.missionId, _this2.input, _this2.output);
-                _context2.next = 4;
+                _context2.next = 3;
                 return axios.post("/api/test-case", {
                   missionId: _this2.missionId,
                   input: _this2.input,
                   output: _this2.output
+                }).then(function (response) {
+                  _this2.resetFrom();
+
+                  console.log(response.data.payload);
                 });
 
-              case 4:
+              case 3:
                 _this2.loading = false;
 
-              case 5:
+              case 4:
               case "end":
                 return _context2.stop();
             }
           }
         }, _callee2);
       }))();
+    },
+    resetFrom: function resetFrom() {
+      this.output = "";
+      this.input = "";
     }
   }
 });
@@ -262,7 +269,7 @@ var render = function() {
                           _c(
                             "v-col",
                             { attrs: { cols: "4" } },
-                            [_c("v-subheader", [_vm._v(" Mission Name ")])],
+                            [_c("v-subheader", [_vm._v(" Problem Name ")])],
                             1
                           ),
                           _vm._v(" "),
@@ -272,7 +279,7 @@ var render = function() {
                             [
                               _c("v-autocomplete", {
                                 attrs: {
-                                  label: "Mission Name",
+                                  label: "Problem Name",
                                   items: _vm.problems,
                                   "item-text": "title",
                                   "item-value": "id",

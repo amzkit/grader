@@ -13,7 +13,7 @@
         >
           <template v-slot:top>
             <v-toolbar flat>
-              <v-toolbar-title>Manage Mission</v-toolbar-title>
+              <v-toolbar-title>Manage Problem</v-toolbar-title>
               <v-divider class="mx-4" inset vertical></v-divider>
               <v-spacer></v-spacer>
               <v-text-field
@@ -27,7 +27,7 @@
                 color="primary"
                 dark
                 class="mb-2"
-                @click="$router.push('/new-mission')"
+                @click="$router.push('/new-problem')"
               >
                 New Problem
               </v-btn>

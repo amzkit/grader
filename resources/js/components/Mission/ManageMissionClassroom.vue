@@ -1,7 +1,6 @@
 <template>
   <v-row>
     <Loading :loading="loading" />
-    <Snackbar :snackbar="snackbar" :text="text" />
     <v-col cols="2">
       <Navigation :onClick="fetchItemSchedule" />
     </v-col>
@@ -253,8 +252,6 @@ export default {
   },
   data: function () {
     return {
-      snackbar: false,
-      text: "",
       loading: false,
       problemList: [],
       selectedExamplesId: [],
@@ -423,9 +420,8 @@ export default {
         .then(() => {
           location.reload();
         })
-        .catch(() => {
-          this.snackbar = true;
-          this.text = "Error";
+        .catch((error) => {
+          console.log(error);
         });
       this.dialog = false;
       this.loading = false;
@@ -433,23 +429,29 @@ export default {
 
     async updateExample(item) {
       this.loading = true;
-      await axios
-        .put("/api/manage/example", {
-          id: item.id,
-          start_date: dayjs(`${this.start_date} ${this.start_time}`).format(
-            "MM-DD-YYYY hh:mm A"
-          ),
-          end_date: dayjs(`${this.end_date} ${this.end_time}`).format(
-            "MM-DD-YYYY hh:mm A"
-          ),
-        })
-        .then(() => {
-          location.reload();
-        })
-        .catch(() => {
-          this.snackbar = true;
-          this.text = "Error";
-        });
+      if (
+        this.start_date &&
+        this.start_time &&
+        this.end_date &&
+        this.end_time
+      ) {
+        await axios
+          .put("/api/manage/example", {
+            id: item.id,
+            start_date: dayjs(`${this.start_date} ${this.start_time}`).format(
+              "MM-DD-YYYY hh:mm A"
+            ),
+            end_date: dayjs(`${this.end_date} ${this.end_time}`).format(
+              "MM-DD-YYYY hh:mm A"
+            ),
+          })
+          .then(() => {
+            location.reload();
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
       this.dialog = false;
       this.loading = false;
     },
@@ -462,9 +464,8 @@ export default {
           this.snackbar = true;
           this.text = "Successfuly";
         })
-        .catch(() => {
-          this.snackbar = true;
-          this.text = "Error";
+        .catch((error) => {
+          console.error(error);
         });
       this.loading = false;
     },

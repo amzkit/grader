@@ -96,6 +96,7 @@ export default {
         ? this.$store.state.data.courses[0]
         : 0
     );
+    console.log(this.$store.state.data.courses);
   },
   methods: {
     async check_user() {
@@ -124,7 +125,10 @@ export default {
         })
         .then((response) => {
           if (response.data.success == true) {
-            this.$store.state.data.courses.push(response.data.payload);
+            this.$store.state.data.courses.push({
+              courseId: response.data.payload.id,
+              course_name: response.data.payload.course_name,
+            });
           }
         });
       this.loading = false;

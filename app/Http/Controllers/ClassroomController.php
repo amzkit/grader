@@ -25,7 +25,6 @@ class ClassroomController extends Controller
             )->get();
         } else {
             $classroom = Classroom::select(
-                "classrooms.id as classroomId",
                 "courses.id as courseId",
                 "courses.course_name",
             )->leftJoin("courses", "courses.id", "=", "classrooms.course_id")

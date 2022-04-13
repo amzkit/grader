@@ -4,7 +4,7 @@
     <Loading :loading="loading" />
     <v-col cols="12">
       <v-row justify="center">
-        <h1>New Mission</h1>
+        <h1>New Problem</h1>
         <v-card>
           <v-container fluid>
             <v-form ref="form" v-model="rules.valid" lazy-validation>
@@ -198,7 +198,7 @@ export default {
         await axios
           .post("/api/problem", formData, config)
           .then(function () {
-            window.location.href = "/manage-mission";
+            window.location.href = "/manage-problem";
           })
           .catch(function (error) {
             console.log(error);

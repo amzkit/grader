@@ -191,7 +191,11 @@
               </v-list-item>
             </v-list-group>
             <div class="pa-1">
-              <v-btn color="primary" block @click="redirect('/change-password')">
+              <v-btn
+                color="primary"
+                block
+                @click="redirect('/change-password')"
+              >
                 Change Password
               </v-btn>
             </div>
@@ -228,19 +232,19 @@ export default {
         },
         {
           icon: "mdi-pencil",
-          text: "Mission",
+          text: "Problem",
           subLinks: [
             {
-              text: "Mission",
-              to: "/mission",
+              text: "Problem",
+              to: "/problem",
             },
             {
-              text: "Manage Mission",
-              to: "/manage-mission",
+              text: "Manage Problem",
+              to: "/manage-problem",
             },
             {
-              text: "Manage Mission Classroom",
-              to: "/manage-mission-classroom",
+              text: "Manage Problem Classroom",
+              to: "/manage-problem-classroom",
             },
           ],
         },
@@ -291,7 +295,7 @@ export default {
           text: "Home",
         },
         {
-          to: "/mission",
+          to: "/problem",
           icon: "mdi-view-dashboard",
           text: "Classroom",
         },
@@ -315,7 +319,7 @@ export default {
         {
           to: "/classroom",
           icon: "mdi-view-dashboard",
-          text: "Mission",
+          text: "Problem",
         },
         {
           to: "/scoreboard",
@@ -341,15 +345,15 @@ export default {
         },
         {
           icon: "mdi-pencil",
-          text: "Mission",
+          text: "Problem",
           subLinks: [
             {
-              text: "Mission",
-              to: "/manage-mission",
+              text: "Problem",
+              to: "/manage-problem",
             },
             {
-              text: "Mission Classroom",
-              to: "/manage-mission-classroom",
+              text: "Problem Classroom",
+              to: "/manage-problem-classroom",
             },
             {
               to: "/new-test",

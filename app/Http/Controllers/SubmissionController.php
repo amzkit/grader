@@ -167,7 +167,7 @@ class SubmissionController extends Controller
             $waitinglist->save();
 
             return response()->json([
-                'success', 'Scccessfully uploaded!'
+                'success' => true
             ], 200);
         } else {
             return response()->json([

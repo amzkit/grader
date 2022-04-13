@@ -26,7 +26,7 @@ class CreateSubmissionsTable extends Migration
             $table->string('message', 100);
             $table->string('IP', 50);
             $table->string('Lang', 50);
-            $table->string('fname', 240);
+            $table->string('fname', 240); // File Name
             $table->longText('compiler_message');
 
             $table->foreign('schedule_id')->references('id')->on('schedules')->onDelete('cascade');

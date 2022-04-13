@@ -38,24 +38,24 @@ const routes = [
     },
     // Mission
     {
-        path: "/manage-mission-classroom",
-        name: "manage-mission-classroom",
+        path: "/manage-problem-classroom",
+        name: "manage-problem-classroom",
         component: () =>
             import("../components/Mission/ManageMissionClassroom.vue")
     },
     {
-        path: "/manage-mission",
-        name: "manage-mission",
+        path: "/manage-problem",
+        name: "manage-problem",
         component: () => import("../components/Mission/ManageMission.vue")
     },
     {
-        path: "/new-mission",
-        name: "new-mission",
+        path: "/new-problem",
+        name: "new-problem",
         component: () => import("../components/Mission/NewMission.vue")
     },
     {
-        path: "/mission",
-        name: "mission",
+        path: "/problem",
+        name: "problem",
         component: () => import("../components/Mission/Mission.vue")
     },
     // Test Mission

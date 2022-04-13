@@ -37,7 +37,13 @@
         <v-data-table
           :headers="headers"
           :items="data.classroom"
-          class="elevation-1"
+          :class="[
+            'elevation-1',
+            $store.state.data.user.role == 'ta' ||
+            $store.state.data.user.role == 'teacher'
+              ? 'row-pointer'
+              : null,
+          ]"
           :search="search"
           @click:row="
             $store.state.data.user.role == 'ta' ||
@@ -108,7 +114,7 @@ export default {
         { text: "Student ID", value: "username" },
         { text: "Name", value: "name" },
         {
-          text: "Mission",
+          text: "Problem",
           sortable: false,
           value: "mission",
         },
@@ -177,4 +183,10 @@ export default {
   },
 };
 </script>
+
+<style lang="css" scoped>
+.row-pointer >>> tbody tr :hover {
+  cursor: pointer;
+}
+</style>
 
