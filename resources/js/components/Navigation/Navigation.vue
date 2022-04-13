@@ -34,6 +34,16 @@
                             ></v-text-field>
                           </v-col>
                         </v-row>
+                        <div
+                          v-if="this.$store.state.data.user.role === 'admin'"
+                        >
+                          <div
+                            class="text-no-wrap red lighten-1"
+                            style="width: 14rem"
+                          >
+                            Only teachers can add classrooms.
+                          </div>
+                        </div>
                       </v-container>
                     </v-card-text>
                     <v-card-actions>

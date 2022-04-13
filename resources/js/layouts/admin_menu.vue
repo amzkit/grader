@@ -3,7 +3,11 @@
     <v-navigation-drawer v-model="drawer" absolute temporary>
       <v-list-item>
         <v-list-item-avatar>
-          <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
+          <v-avatar color="red">
+            <span class="white--text text-h5">
+              {{ this.$store.state.data.user.name[0] }}</span
+            >
+          </v-avatar>
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title v-if="this.$store.state.data.user !== null">{{
@@ -107,9 +111,11 @@
           <v-list>
             <v-list-item>
               <v-list-item-avatar>
-                <v-img
-                  src="https://randomuser.me/api/portraits/men/78.jpg"
-                ></v-img>
+                <v-avatar color="red">
+                  <span class="white--text text-h5">{{
+                    this.$store.state.data.user.name[0]
+                  }}</span>
+                </v-avatar>
               </v-list-item-avatar>
 
               <v-list-item-content>
@@ -258,11 +264,11 @@ export default {
             },
           ],
         },
-        {
-          to: "/my-score",
-          icon: "mdi-view-dashboard",
-          text: "My Score",
-        },
+        // {
+        //   to: "/my-score",
+        //   icon: "mdi-view-dashboard",
+        //   text: "My Score",
+        // },
         {
           to: "/scoreboard",
           icon: "mdi-view-dashboard",

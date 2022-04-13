@@ -10,7 +10,7 @@
           <v-data-table
             :headers="headers"
             :items="myScore"
-            class="elevation-1"
+            class="elevation-1 row-pointer"
             @click:row="Item($event)"
           >
             <template v-slot:[`item.index`]="{ index }">
@@ -130,4 +130,10 @@ export default {
   },
 };
 </script>
+
+<style lang="css" scoped>
+.row-pointer >>> tbody tr :hover {
+  cursor: pointer;
+}
+</style>
 

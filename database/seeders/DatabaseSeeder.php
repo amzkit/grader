@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use App\Models\Language;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,8 +18,10 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call('Database\Seeders\UserTableSeeder');
-
         $this->command->info('User table seeded!');
+
+        $this->call('Database\Seeders\LanguageTableSeeder');
+        $this->command->info('Language table seeded!');
     }
 }
 class UserTableSeeder extends Seeder
@@ -35,5 +38,32 @@ class UserTableSeeder extends Seeder
             'role_admin' => 1,
             'role' => 'admin',
         ]);
+    }
+}
+
+class LanguageTableSeeder extends Seeder
+{
+
+    public function run()
+    {
+        DB::table('languages')->delete();
+        Language::create(
+            [
+                'lang' => "PYTHON",
+                'type' => ".py",
+            ],
+            [
+                'lang' => "C",
+                'type' => ".c",
+            ],
+            [
+                'lang' => "C++",
+                'type' => ".c++",
+            ],
+            [
+                'lang' => "JAVA",
+                'type' => ".jar",
+            ],
+        );
     }
 }

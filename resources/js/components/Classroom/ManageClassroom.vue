@@ -51,7 +51,7 @@
                         </v-tab>
                         <v-tab>
                           <v-icon left> mdi-lock </v-icon>
-                          Add Student
+                          Add
                         </v-tab>
                         <v-tab-item>
                           <v-card flat>

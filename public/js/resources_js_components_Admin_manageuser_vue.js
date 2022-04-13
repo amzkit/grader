@@ -399,7 +399,7 @@ var render = function() {
                     "v-toolbar",
                     { attrs: { flat: "" } },
                     [
-                      _c("v-toolbar-title", [_vm._v("Manage User")]),
+                      _c("v-toolbar-title", [_vm._v("Manage Users")]),
                       _vm._v(" "),
                       _c("v-divider", {
                         staticClass: "mx-4",

@@ -40,9 +40,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      loading: true,
+      items: [{
+        src: "https://mindphp.com/images/knowledge/software-computer-code-1940x900_35196.jpg"
+      }, {
+        src: "https://code.org/shared/images/social-media/codeorg2020_social.png"
+      }]
+    };
+  },
   components: {
     GuestTopBar: _layouts_guest_top_bar_vue__WEBPACK_IMPORTED_MODULE_0__.default
   },
@@ -140,8 +149,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-app",
-    { attrs: { id: "app", "data-app": "" } },
+    "div",
     [
       _c("guest-top-bar"),
       _vm._v(" "),
@@ -149,45 +157,41 @@ var render = function() {
         "v-main",
         [
           _c(
-            "v-container",
-            {
-              staticClass: "mx-auto",
-              staticStyle: { width: "100%", "max-width": "784px" },
-              attrs: { "fill-height": "", fluid: "" }
-            },
+            "v-row",
+            { attrs: { justify: "center" } },
             [
               _c(
-                "v-row",
-                { attrs: { justify: "center" } },
-                [
-                  _c(
-                    "v-col",
-                    [
-                      _c(
-                        "v-card",
-                        [
-                          _c("v-card-title", [
-                            _c("span", {}, [_vm._v("Guest Index Page")])
-                          ]),
-                          _vm._v(" "),
-                          _c("v-card-text", [
-                            _vm._v(
-                              "\n              I'm a Guest Index component from "
-                            ),
-                            _c("br"),
-                            _vm._v(
-                              "\n              /resources/js/pages/guest.vue\n            "
-                            )
-                          ])
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
+                "v-carousel",
+                {
+                  attrs: {
+                    cycle: "",
+                    height: "500",
+                    "hide-delimiter-background": "",
+                    "show-arrows-on-hover": ""
+                  }
+                },
+                _vm._l(_vm.items, function(item, i) {
+                  return _c("v-carousel-item", {
+                    key: i,
+                    attrs: {
+                      src: item.src,
+                      "reverse-transition": "fade-transition",
+                      transition: "fade-transition"
+                    }
+                  })
+                }),
                 1
-              )
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "mt-4" }, [
+                _c("h1", { staticClass: "text-center , font-weight-black" }, [
+                  _vm._v("SOURCE CODE GRADER")
+                ]),
+                _vm._v(" "),
+                _c("h5", { staticClass: "text-center" }, [
+                  _vm._v("Computer Science Maejo University")
+                ])
+              ])
             ],
             1
           )

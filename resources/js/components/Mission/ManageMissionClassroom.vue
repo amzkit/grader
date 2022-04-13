@@ -16,7 +16,7 @@
           >
             <template v-slot:top>
               <v-toolbar flat>
-                <v-toolbar-title>Manage Example</v-toolbar-title>
+                <v-toolbar-title>Manage Problems Classroom</v-toolbar-title>
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <v-spacer></v-spacer>
                 <v-text-field
@@ -35,13 +35,13 @@
                       v-bind="attrs"
                       v-on="on"
                     >
-                      New Item
+                      ADD PROBLEMS
                     </v-btn>
                   </template>
 
                   <v-card>
                     <v-card-title>
-                      <span class="text-h5">{{ formTitle }}</span>
+                      <span class="text-h5">Add Problems</span>
                     </v-card-title>
 
                     <v-card-text>
@@ -318,9 +318,6 @@ export default {
     await this.getProblems();
   },
   computed: {
-    formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
-    },
     computedDateFormattedStartDate() {
       return this.start_date
         ? dayjs(this.start_date).format("dddd, MMMM D, YYYY")

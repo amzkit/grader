@@ -401,9 +401,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }))();
   },
   computed: {
-    formTitle: function formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
-    },
     computedDateFormattedStartDate: function computedDateFormattedStartDate() {
       return this.start_date ? dayjs__WEBPACK_IMPORTED_MODULE_1___default()(this.start_date).format("dddd, MMMM D, YYYY") : "";
     },
@@ -663,6 +660,16 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1321,7 +1328,7 @@ var render = function() {
                                 { attrs: { flat: "" } },
                                 [
                                   _c("v-toolbar-title", [
-                                    _vm._v("Manage Example")
+                                    _vm._v("Manage Problems Classroom")
                                   ]),
                                   _vm._v(" "),
                                   _c("v-divider", {
@@ -1377,7 +1384,7 @@ var render = function() {
                                                 ),
                                                 [
                                                   _vm._v(
-                                                    "\n                    New Item\n                  "
+                                                    "\n                    ADD PROBLEMS\n                  "
                                                   )
                                                 ]
                                               )
@@ -1402,7 +1409,7 @@ var render = function() {
                                             _c(
                                               "span",
                                               { staticClass: "text-h5" },
-                                              [_vm._v(_vm._s(_vm.formTitle))]
+                                              [_vm._v("Add Problems")]
                                             )
                                           ]),
                                           _vm._v(" "),
@@ -2361,7 +2368,28 @@ var render = function() {
                                                       )
                                                     ],
                                                     1
-                                                  )
+                                                  ),
+                                                  _vm._v(" "),
+                                                  this.$store.state.data.user
+                                                    .role === "admin"
+                                                    ? _c("div", [
+                                                        _c(
+                                                          "div",
+                                                          {
+                                                            staticClass:
+                                                              "text-no-wrap red lighten-1",
+                                                            staticStyle: {
+                                                              width: "14rem"
+                                                            }
+                                                          },
+                                                          [
+                                                            _vm._v(
+                                                              "\n                          Only teachers can add classrooms.\n                        "
+                                                            )
+                                                          ]
+                                                        )
+                                                      ])
+                                                    : _vm._e()
                                                 ],
                                                 1
                                               )

@@ -5381,6 +5381,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -5413,11 +5419,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           text: "Manage Classroom",
           to: "/manage-classroom"
         }]
-      }, {
-        to: "/my-score",
-        icon: "mdi-view-dashboard",
-        text: "My Score"
-      }, {
+      }, // {
+      //   to: "/my-score",
+      //   icon: "mdi-view-dashboard",
+      //   text: "My Score",
+      // },
+      {
         to: "/scoreboard",
         icon: "mdi-view-dashboard",
         text: "Scoreboard"
@@ -43600,11 +43607,14 @@ var render = function() {
               _c(
                 "v-list-item-avatar",
                 [
-                  _c("v-img", {
-                    attrs: {
-                      src: "https://randomuser.me/api/portraits/men/78.jpg"
-                    }
-                  })
+                  _c("v-avatar", { attrs: { color: "red" } }, [
+                    _c("span", { staticClass: "white--text text-h5" }, [
+                      _vm._v(
+                        "\n            " +
+                          _vm._s(this.$store.state.data.user.name[0])
+                      )
+                    ])
+                  ])
                 ],
                 1
               ),
@@ -43861,12 +43871,19 @@ var render = function() {
                           _c(
                             "v-list-item-avatar",
                             [
-                              _c("v-img", {
-                                attrs: {
-                                  src:
-                                    "https://randomuser.me/api/portraits/men/78.jpg"
-                                }
-                              })
+                              _c("v-avatar", { attrs: { color: "red" } }, [
+                                _c(
+                                  "span",
+                                  { staticClass: "white--text text-h5" },
+                                  [
+                                    _vm._v(
+                                      _vm._s(
+                                        this.$store.state.data.user.name[0]
+                                      )
+                                    )
+                                  ]
+                                )
+                              ])
                             ],
                             1
                           ),
@@ -44266,19 +44283,6 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("v-spacer"),
-      _vm._v(" "),
-      _c(
-        "v-btn",
-        {
-          staticClass: "secondary pr-4 mr-2",
-          on: {
-            click: function($event) {
-              return _vm.redirect("/register")
-            }
-          }
-        },
-        [_vm._v("\n    Register\n  ")]
-      ),
       _vm._v(" "),
       _c(
         "v-btn",
