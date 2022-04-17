@@ -36,7 +36,7 @@
                       v-bind="attrs"
                       v-on="on"
                     >
-                      New Item
+                      New Users
                     </v-btn>
                   </template>
                   <v-card>
@@ -192,26 +192,28 @@
                                   v-model="editedItem.semester"
                                   label="Semester"
                                 ></v-text-field>
-                                <v-row>
-                                  <v-col cols="4">
+                                <div v-if="!editedItem.teacher">
+                                  <v-row>
+                                    <!-- <v-col cols="4">
                                     <v-checkbox
                                       v-model="editedItem.teacher"
                                       label="Teacher"
                                     ></v-checkbox>
-                                  </v-col>
-                                  <v-col cols="4">
-                                    <v-checkbox
-                                      v-model="editedItem.ta"
-                                      label="TA"
-                                    ></v-checkbox>
-                                  </v-col>
-                                  <v-col cols="4">
-                                    <v-checkbox
-                                      v-model="editedItem.student"
-                                      label="Student"
-                                    ></v-checkbox>
-                                  </v-col>
-                                </v-row>
+                                  </v-col> -->
+                                    <v-col cols="6">
+                                      <v-checkbox
+                                        v-model="editedItem.ta"
+                                        label="TA"
+                                      ></v-checkbox>
+                                    </v-col>
+                                    <v-col cols="6">
+                                      <v-checkbox
+                                        v-model="editedItem.student"
+                                        label="Student"
+                                      ></v-checkbox>
+                                    </v-col>
+                                  </v-row>
+                                </div>
                               </v-col>
                             </v-card-text>
                           </v-row>
@@ -355,7 +357,7 @@ export default {
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      return this.editedIndex === -1 ? "New Users" : "Edit User";
     },
     computedDateFormattedStartDate() {
       return this.start_date

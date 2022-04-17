@@ -311,6 +311,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 
 
 
@@ -397,7 +399,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   computed: {
     formTitle: function formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      return this.editedIndex === -1 ? "New Users" : "Edit User";
     },
     computedDateFormattedStartDate: function computedDateFormattedStartDate() {
       return this.start_date ? dayjs__WEBPACK_IMPORTED_MODULE_1___default()(this.start_date).format("dddd, MMMM D, YYYY") : "";
@@ -1437,7 +1439,7 @@ var render = function() {
                                                 ),
                                                 [
                                                   _vm._v(
-                                                    "\n                    New Item\n                  "
+                                                    "\n                    New Users\n                  "
                                                   )
                                                 ]
                                               )
@@ -2220,132 +2222,101 @@ var render = function() {
                                                                       _vm._v(
                                                                         " "
                                                                       ),
-                                                                      _c(
-                                                                        "v-row",
-                                                                        [
-                                                                          _c(
-                                                                            "v-col",
-                                                                            {
-                                                                              attrs: {
-                                                                                cols:
-                                                                                  "4"
-                                                                              }
-                                                                            },
+                                                                      !_vm
+                                                                        .editedItem
+                                                                        .teacher
+                                                                        ? _c(
+                                                                            "div",
                                                                             [
                                                                               _c(
-                                                                                "v-checkbox",
-                                                                                {
-                                                                                  attrs: {
-                                                                                    label:
-                                                                                      "Teacher"
-                                                                                  },
-                                                                                  model: {
-                                                                                    value:
-                                                                                      _vm
-                                                                                        .editedItem
-                                                                                        .teacher,
-                                                                                    callback: function(
-                                                                                      $$v
-                                                                                    ) {
-                                                                                      _vm.$set(
-                                                                                        _vm.editedItem,
-                                                                                        "teacher",
-                                                                                        $$v
-                                                                                      )
+                                                                                "v-row",
+                                                                                [
+                                                                                  _c(
+                                                                                    "v-col",
+                                                                                    {
+                                                                                      attrs: {
+                                                                                        cols:
+                                                                                          "6"
+                                                                                      }
                                                                                     },
-                                                                                    expression:
-                                                                                      "editedItem.teacher"
-                                                                                  }
-                                                                                }
-                                                                              )
-                                                                            ],
-                                                                            1
-                                                                          ),
-                                                                          _vm._v(
-                                                                            " "
-                                                                          ),
-                                                                          _c(
-                                                                            "v-col",
-                                                                            {
-                                                                              attrs: {
-                                                                                cols:
-                                                                                  "4"
-                                                                              }
-                                                                            },
-                                                                            [
-                                                                              _c(
-                                                                                "v-checkbox",
-                                                                                {
-                                                                                  attrs: {
-                                                                                    label:
-                                                                                      "TA"
-                                                                                  },
-                                                                                  model: {
-                                                                                    value:
-                                                                                      _vm
-                                                                                        .editedItem
-                                                                                        .ta,
-                                                                                    callback: function(
-                                                                                      $$v
-                                                                                    ) {
-                                                                                      _vm.$set(
-                                                                                        _vm.editedItem,
-                                                                                        "ta",
-                                                                                        $$v
+                                                                                    [
+                                                                                      _c(
+                                                                                        "v-checkbox",
+                                                                                        {
+                                                                                          attrs: {
+                                                                                            label:
+                                                                                              "TA"
+                                                                                          },
+                                                                                          model: {
+                                                                                            value:
+                                                                                              _vm
+                                                                                                .editedItem
+                                                                                                .ta,
+                                                                                            callback: function(
+                                                                                              $$v
+                                                                                            ) {
+                                                                                              _vm.$set(
+                                                                                                _vm.editedItem,
+                                                                                                "ta",
+                                                                                                $$v
+                                                                                              )
+                                                                                            },
+                                                                                            expression:
+                                                                                              "editedItem.ta"
+                                                                                          }
+                                                                                        }
                                                                                       )
+                                                                                    ],
+                                                                                    1
+                                                                                  ),
+                                                                                  _vm._v(
+                                                                                    " "
+                                                                                  ),
+                                                                                  _c(
+                                                                                    "v-col",
+                                                                                    {
+                                                                                      attrs: {
+                                                                                        cols:
+                                                                                          "6"
+                                                                                      }
                                                                                     },
-                                                                                    expression:
-                                                                                      "editedItem.ta"
-                                                                                  }
-                                                                                }
-                                                                              )
-                                                                            ],
-                                                                            1
-                                                                          ),
-                                                                          _vm._v(
-                                                                            " "
-                                                                          ),
-                                                                          _c(
-                                                                            "v-col",
-                                                                            {
-                                                                              attrs: {
-                                                                                cols:
-                                                                                  "4"
-                                                                              }
-                                                                            },
-                                                                            [
-                                                                              _c(
-                                                                                "v-checkbox",
-                                                                                {
-                                                                                  attrs: {
-                                                                                    label:
-                                                                                      "Student"
-                                                                                  },
-                                                                                  model: {
-                                                                                    value:
-                                                                                      _vm
-                                                                                        .editedItem
-                                                                                        .student,
-                                                                                    callback: function(
-                                                                                      $$v
-                                                                                    ) {
-                                                                                      _vm.$set(
-                                                                                        _vm.editedItem,
-                                                                                        "student",
-                                                                                        $$v
+                                                                                    [
+                                                                                      _c(
+                                                                                        "v-checkbox",
+                                                                                        {
+                                                                                          attrs: {
+                                                                                            label:
+                                                                                              "Student"
+                                                                                          },
+                                                                                          model: {
+                                                                                            value:
+                                                                                              _vm
+                                                                                                .editedItem
+                                                                                                .student,
+                                                                                            callback: function(
+                                                                                              $$v
+                                                                                            ) {
+                                                                                              _vm.$set(
+                                                                                                _vm.editedItem,
+                                                                                                "student",
+                                                                                                $$v
+                                                                                              )
+                                                                                            },
+                                                                                            expression:
+                                                                                              "editedItem.student"
+                                                                                          }
+                                                                                        }
                                                                                       )
-                                                                                    },
-                                                                                    expression:
-                                                                                      "editedItem.student"
-                                                                                  }
-                                                                                }
+                                                                                    ],
+                                                                                    1
+                                                                                  )
+                                                                                ],
+                                                                                1
                                                                               )
                                                                             ],
                                                                             1
                                                                           )
-                                                                        ],
-                                                                        1
-                                                                      )
+                                                                        : _vm._e()
                                                                     ],
                                                                     1
                                                                   )

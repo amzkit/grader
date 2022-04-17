@@ -304,6 +304,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
 
 
@@ -1409,7 +1412,17 @@ var render = function() {
                                             _c(
                                               "span",
                                               { staticClass: "text-h5" },
-                                              [_vm._v("Add Problems")]
+                                              [
+                                                _vm._v(
+                                                  "\n                      " +
+                                                    _vm._s(
+                                                      _vm.editedIndex === -1
+                                                        ? "Add Problems"
+                                                        : "Edit Problems"
+                                                    ) +
+                                                    "\n                    "
+                                                )
+                                              ]
                                             )
                                           ]),
                                           _vm._v(" "),
@@ -1588,134 +1601,6 @@ var render = function() {
                                                           _c(
                                                             "v-menu",
                                                             {
-                                                              ref: "menu",
-                                                              attrs: {
-                                                                "close-on-content-click": false,
-                                                                "nudge-right": 40,
-                                                                "return-value":
-                                                                  _vm.start_time,
-                                                                transition:
-                                                                  "scale-transition",
-                                                                "offset-y": "",
-                                                                "max-width":
-                                                                  "290px",
-                                                                "min-width":
-                                                                  "290px"
-                                                              },
-                                                              on: {
-                                                                "update:returnValue": function(
-                                                                  $event
-                                                                ) {
-                                                                  _vm.start_time = $event
-                                                                },
-                                                                "update:return-value": function(
-                                                                  $event
-                                                                ) {
-                                                                  _vm.start_time = $event
-                                                                }
-                                                              },
-                                                              scopedSlots: _vm._u(
-                                                                [
-                                                                  {
-                                                                    key:
-                                                                      "activator",
-                                                                    fn: function(
-                                                                      ref
-                                                                    ) {
-                                                                      var on =
-                                                                        ref.on
-                                                                      var attrs =
-                                                                        ref.attrs
-                                                                      return [
-                                                                        _c(
-                                                                          "v-text-field",
-                                                                          _vm._g(
-                                                                            _vm._b(
-                                                                              {
-                                                                                attrs: {
-                                                                                  label:
-                                                                                    "Picker in menu",
-                                                                                  readonly:
-                                                                                    ""
-                                                                                },
-                                                                                model: {
-                                                                                  value:
-                                                                                    _vm.start_time,
-                                                                                  callback: function(
-                                                                                    $$v
-                                                                                  ) {
-                                                                                    _vm.start_time = $$v
-                                                                                  },
-                                                                                  expression:
-                                                                                    "start_time"
-                                                                                }
-                                                                              },
-                                                                              "v-text-field",
-                                                                              attrs,
-                                                                              false
-                                                                            ),
-                                                                            on
-                                                                          )
-                                                                        )
-                                                                      ]
-                                                                    }
-                                                                  }
-                                                                ]
-                                                              ),
-                                                              model: {
-                                                                value:
-                                                                  _vm.menu2,
-                                                                callback: function(
-                                                                  $$v
-                                                                ) {
-                                                                  _vm.menu2 = $$v
-                                                                },
-                                                                expression:
-                                                                  "menu2"
-                                                              }
-                                                            },
-                                                            [
-                                                              _vm._v(" "),
-                                                              _vm.menu2
-                                                                ? _c(
-                                                                    "v-time-picker",
-                                                                    {
-                                                                      attrs: {
-                                                                        format:
-                                                                          "24hr",
-                                                                        "full-width":
-                                                                          ""
-                                                                      },
-                                                                      on: {
-                                                                        "click:minute": function(
-                                                                          $event
-                                                                        ) {
-                                                                          return _vm.$refs.menu.save(
-                                                                            _vm.start_time
-                                                                          )
-                                                                        }
-                                                                      },
-                                                                      model: {
-                                                                        value:
-                                                                          _vm.start_time,
-                                                                        callback: function(
-                                                                          $$v
-                                                                        ) {
-                                                                          _vm.start_time = $$v
-                                                                        },
-                                                                        expression:
-                                                                          "start_time"
-                                                                      }
-                                                                    }
-                                                                  )
-                                                                : _vm._e()
-                                                            ],
-                                                            1
-                                                          ),
-                                                          _vm._v(" "),
-                                                          _c(
-                                                            "v-menu",
-                                                            {
                                                               attrs: {
                                                                 "close-on-content-click": false,
                                                                 "max-width":
@@ -1813,6 +1698,134 @@ var render = function() {
                                                           _c(
                                                             "v-menu",
                                                             {
+                                                              ref: "menu",
+                                                              attrs: {
+                                                                "close-on-content-click": false,
+                                                                "nudge-right": 40,
+                                                                "return-value":
+                                                                  _vm.start_time,
+                                                                transition:
+                                                                  "scale-transition",
+                                                                "offset-y": "",
+                                                                "max-width":
+                                                                  "290px",
+                                                                "min-width":
+                                                                  "290px"
+                                                              },
+                                                              on: {
+                                                                "update:returnValue": function(
+                                                                  $event
+                                                                ) {
+                                                                  _vm.start_time = $event
+                                                                },
+                                                                "update:return-value": function(
+                                                                  $event
+                                                                ) {
+                                                                  _vm.start_time = $event
+                                                                }
+                                                              },
+                                                              scopedSlots: _vm._u(
+                                                                [
+                                                                  {
+                                                                    key:
+                                                                      "activator",
+                                                                    fn: function(
+                                                                      ref
+                                                                    ) {
+                                                                      var on =
+                                                                        ref.on
+                                                                      var attrs =
+                                                                        ref.attrs
+                                                                      return [
+                                                                        _c(
+                                                                          "v-text-field",
+                                                                          _vm._g(
+                                                                            _vm._b(
+                                                                              {
+                                                                                attrs: {
+                                                                                  label:
+                                                                                    "Start Time",
+                                                                                  readonly:
+                                                                                    ""
+                                                                                },
+                                                                                model: {
+                                                                                  value:
+                                                                                    _vm.start_time,
+                                                                                  callback: function(
+                                                                                    $$v
+                                                                                  ) {
+                                                                                    _vm.start_time = $$v
+                                                                                  },
+                                                                                  expression:
+                                                                                    "start_time"
+                                                                                }
+                                                                              },
+                                                                              "v-text-field",
+                                                                              attrs,
+                                                                              false
+                                                                            ),
+                                                                            on
+                                                                          )
+                                                                        )
+                                                                      ]
+                                                                    }
+                                                                  }
+                                                                ]
+                                                              ),
+                                                              model: {
+                                                                value:
+                                                                  _vm.menu2,
+                                                                callback: function(
+                                                                  $$v
+                                                                ) {
+                                                                  _vm.menu2 = $$v
+                                                                },
+                                                                expression:
+                                                                  "menu2"
+                                                              }
+                                                            },
+                                                            [
+                                                              _vm._v(" "),
+                                                              _vm.menu2
+                                                                ? _c(
+                                                                    "v-time-picker",
+                                                                    {
+                                                                      attrs: {
+                                                                        format:
+                                                                          "24hr",
+                                                                        "full-width":
+                                                                          ""
+                                                                      },
+                                                                      on: {
+                                                                        "click:minute": function(
+                                                                          $event
+                                                                        ) {
+                                                                          return _vm.$refs.menu.save(
+                                                                            _vm.start_time
+                                                                          )
+                                                                        }
+                                                                      },
+                                                                      model: {
+                                                                        value:
+                                                                          _vm.start_time,
+                                                                        callback: function(
+                                                                          $$v
+                                                                        ) {
+                                                                          _vm.start_time = $$v
+                                                                        },
+                                                                        expression:
+                                                                          "start_time"
+                                                                      }
+                                                                    }
+                                                                  )
+                                                                : _vm._e()
+                                                            ],
+                                                            1
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "v-menu",
+                                                            {
                                                               ref: "menu2",
                                                               attrs: {
                                                                 "close-on-content-click": false,
@@ -1859,7 +1872,7 @@ var render = function() {
                                                                               {
                                                                                 attrs: {
                                                                                   label:
-                                                                                    "Picker in menu",
+                                                                                    "End Time",
                                                                                   readonly:
                                                                                     ""
                                                                                 },

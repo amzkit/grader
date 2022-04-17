@@ -41,7 +41,11 @@
 
                   <v-card>
                     <v-card-title>
-                      <span class="text-h5">Add Problems</span>
+                      <span class="text-h5">
+                        {{
+                          editedIndex === -1 ? "Add Problems" : "Edit Problems"
+                        }}
+                      </span>
                     </v-card-title>
 
                     <v-card-text>
@@ -93,35 +97,6 @@
                                 @change="menu1 = false"
                               ></v-date-picker>
                             </v-menu>
-                            <v-menu
-                              ref="menu"
-                              v-model="menu2"
-                              :close-on-content-click="false"
-                              :nudge-right="40"
-                              :return-value.sync="start_time"
-                              transition="scale-transition"
-                              offset-y
-                              max-width="290px"
-                              min-width="290px"
-                            >
-                              <template v-slot:activator="{ on, attrs }">
-                                <v-text-field
-                                  v-model="start_time"
-                                  label="Picker in menu"
-                                  readonly
-                                  v-bind="attrs"
-                                  v-on="on"
-                                ></v-text-field>
-                              </template>
-                              <v-time-picker
-                                v-if="menu2"
-                                format="24hr"
-                                v-model="start_time"
-                                full-width
-                                @click:minute="$refs.menu.save(start_time)"
-                              ></v-time-picker>
-                            </v-menu>
-
                             <!-- DATE TIME 2 -->
                             <v-menu
                               v-model="menu3"
@@ -145,6 +120,34 @@
                               ></v-date-picker>
                             </v-menu>
                             <v-menu
+                              ref="menu"
+                              v-model="menu2"
+                              :close-on-content-click="false"
+                              :nudge-right="40"
+                              :return-value.sync="start_time"
+                              transition="scale-transition"
+                              offset-y
+                              max-width="290px"
+                              min-width="290px"
+                            >
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-text-field
+                                  v-model="start_time"
+                                  label="Start Time"
+                                  readonly
+                                  v-bind="attrs"
+                                  v-on="on"
+                                ></v-text-field>
+                              </template>
+                              <v-time-picker
+                                v-if="menu2"
+                                format="24hr"
+                                v-model="start_time"
+                                full-width
+                                @click:minute="$refs.menu.save(start_time)"
+                              ></v-time-picker>
+                            </v-menu>
+                            <v-menu
                               ref="menu2"
                               v-model="menu4"
                               :close-on-content-click="false"
@@ -158,7 +161,7 @@
                               <template v-slot:activator="{ on, attrs }">
                                 <v-text-field
                                   v-model="end_time"
-                                  label="Picker in menu"
+                                  label="End Time"
                                   readonly
                                   v-bind="attrs"
                                   v-on="on"
