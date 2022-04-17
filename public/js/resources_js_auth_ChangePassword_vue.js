@@ -82,6 +82,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -359,22 +360,26 @@ var render = function() {
                       ),
                       _vm._v(" "),
                       _c(
-                        "v-card-actions",
+                        "v-layout",
+                        { attrs: { "justify-center": "" } },
                         [
-                          _c("v-spacer"),
-                          _vm._v(" "),
-                          _c(
-                            "div",
-                            { staticClass: "text-center" },
-                            [
-                              _c(
-                                "v-btn",
-                                { on: { click: _vm.changePassword } },
-                                [_vm._v("Submit")]
-                              )
-                            ],
-                            1
-                          )
+                          _c("v-card-actions", { staticClass: "mb-4" }, [
+                            _c(
+                              "div",
+                              { staticClass: "text-center" },
+                              [
+                                _c(
+                                  "v-btn",
+                                  {
+                                    attrs: { color: "primary" },
+                                    on: { click: _vm.changePassword }
+                                  },
+                                  [_vm._v("SUBMIT")]
+                                )
+                              ],
+                              1
+                            )
+                          ])
                         ],
                         1
                       )

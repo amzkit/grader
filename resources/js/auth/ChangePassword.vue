@@ -47,12 +47,13 @@
                 required
               ></v-text-field>
             </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <div class="text-center">
-                <v-btn @click="changePassword">Submit</v-btn>
-              </div>
-            </v-card-actions>
+            <v-layout justify-center>
+              <v-card-actions class="mb-4">
+                <div class="text-center">
+                  <v-btn color="primary" @click="changePassword">SUBMIT</v-btn>
+                </div>
+              </v-card-actions>
+            </v-layout>
           </v-card>
         </v-flex>
       </v-layout>

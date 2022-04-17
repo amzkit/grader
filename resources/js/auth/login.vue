@@ -2,53 +2,56 @@
   <v-app>
     <GuestTopBar></GuestTopBar>
     <v-main>
-      <v-container class="pa-md-8 mx-auto" style="width: 100%" fluid>
-        <v-layout align-center justify-center>
-          <v-flex xs12 sm10 md6>
-            <v-card class="elevation-12">
-              <v-toolbar dark color="primary">
-                <v-toolbar-title>Log In</v-toolbar-title>
-                <v-spacer></v-spacer>
-              </v-toolbar>
-              <v-card-text>
-                <v-form ref="form" id="form" method="POST" action="/login">
-                  <v-text-field
-                    prepend-icon="person"
-                    v-model="email"
-                    name="email"
-                    label="Email"
-                    type="text"
-                    placeholder=" "
-                    persistent-placeholder
-                  ></v-text-field>
-                  <v-text-field
-                    id="password"
-                    v-model="password"
-                    prepend-icon="lock"
-                    name="password"
-                    label="Password"
-                    type="password"
-                    placeholder=" "
-                    persistent-placeholder
-                  ></v-text-field>
-                  <v-text-field
-                    v-show="false"
-                    name="_token"
-                    :value="csrf"
-                  ></v-text-field>
-                </v-form>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <div class="text-center">
-                  <v-btn color="primary" type="submit" form="form"
-                    >Log in</v-btn
-                  >
-                </div>
-              </v-card-actions>
-            </v-card>
-          </v-flex>
-        </v-layout>
+      <v-container fill-height fluid>
+        <v-row align="center" justify="center">
+          <v-layout align-center justify-center>
+            <v-flex xs12 sm10 md6>
+              <v-card class="elevation-12">
+                <v-toolbar dark color="primary">
+                  <v-toolbar-title>Log In</v-toolbar-title>
+                  <v-spacer></v-spacer>
+                </v-toolbar>
+                <v-card-text>
+                  <v-form ref="form" id="form" method="POST" action="/login">
+                    <v-text-field
+                      prepend-icon="person"
+                      v-model="email"
+                      name="email"
+                      label="Email"
+                      type="text"
+                      placeholder=" "
+                      persistent-placeholder
+                    ></v-text-field>
+                    <v-text-field
+                      id="password"
+                      v-model="password"
+                      prepend-icon="lock"
+                      name="password"
+                      label="Password"
+                      type="password"
+                      placeholder=" "
+                      persistent-placeholder
+                    ></v-text-field>
+                    <v-text-field
+                      v-show="false"
+                      name="_token"
+                      :value="csrf"
+                    ></v-text-field>
+                  </v-form>
+                </v-card-text>
+                <v-layout justify-center>
+                  <v-card-actions class="mb-4">
+                    <div class="text-center">
+                      <v-btn color="primary" type="submit" form="form"
+                        >Log in</v-btn
+                      >
+                    </div>
+                  </v-card-actions>
+                </v-layout>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-row>
       </v-container>
     </v-main>
   </v-app>

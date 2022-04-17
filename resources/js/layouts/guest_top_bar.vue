@@ -6,14 +6,16 @@
     style="width: 100%"
   >
     <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
-      <button @click="redirect('/')" class="-hidden-sm-and-down">Guest</button>
+      <button @click="redirect('/')" class="-hidden-sm-and-down">Grader</button>
     </v-toolbar-title>
 
     <v-spacer></v-spacer>
     <!-- <v-btn class="secondary pr-4 mr-2" @click="redirect('/register')">
       Register
     </v-btn> -->
-    <v-btn class="primary pr-4" @click="redirect('/login')"> Login </v-btn>
+    <div v-if="$route.fullPath !== '/login'">
+      <v-btn class="primary pr-4" @click="redirect('/login')"> Login </v-btn>
+    </div>
   </v-app-bar>
 </template>
 

@@ -104,7 +104,9 @@
         offset-x
       >
         <template v-slot:activator="{ on, attrs }">
-          <v-btn color="indigo" dark v-bind="attrs" v-on="on"> Menu </v-btn>
+          <v-btn color="blue accent-2" dark v-bind="attrs" v-on="on">
+            PROFILE
+          </v-btn>
         </template>
 
         <v-card>

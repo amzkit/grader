@@ -5018,6 +5018,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -5164,6 +5167,8 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
 //
 //
 //
@@ -5665,6 +5670,8 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
 //
 //
 //
@@ -43211,123 +43218,134 @@ var render = function() {
         [
           _c(
             "v-container",
-            {
-              staticClass: "pa-md-8 mx-auto",
-              staticStyle: { width: "100%" },
-              attrs: { fluid: "" }
-            },
+            { attrs: { "fill-height": "", fluid: "" } },
             [
               _c(
-                "v-layout",
-                { attrs: { "align-center": "", "justify-center": "" } },
+                "v-row",
+                { attrs: { align: "center", justify: "center" } },
                 [
                   _c(
-                    "v-flex",
-                    { attrs: { xs12: "", sm10: "", md6: "" } },
+                    "v-layout",
+                    { attrs: { "align-center": "", "justify-center": "" } },
                     [
                       _c(
-                        "v-card",
-                        { staticClass: "elevation-12" },
+                        "v-flex",
+                        { attrs: { xs12: "", sm10: "", md6: "" } },
                         [
                           _c(
-                            "v-toolbar",
-                            { attrs: { dark: "", color: "primary" } },
-                            [
-                              _c("v-toolbar-title", [_vm._v("Log In")]),
-                              _vm._v(" "),
-                              _c("v-spacer")
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-card-text",
+                            "v-card",
+                            { staticClass: "elevation-12" },
                             [
                               _c(
-                                "v-form",
-                                {
-                                  ref: "form",
-                                  attrs: {
-                                    id: "form",
-                                    method: "POST",
-                                    action: "/login"
-                                  }
-                                },
+                                "v-toolbar",
+                                { attrs: { dark: "", color: "primary" } },
                                 [
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      "prepend-icon": "person",
-                                      name: "email",
-                                      label: "Email",
-                                      type: "text",
-                                      placeholder: " ",
-                                      "persistent-placeholder": ""
-                                    },
-                                    model: {
-                                      value: _vm.email,
-                                      callback: function($$v) {
-                                        _vm.email = $$v
-                                      },
-                                      expression: "email"
-                                    }
-                                  }),
+                                  _c("v-toolbar-title", [_vm._v("Log In")]),
                                   _vm._v(" "),
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      id: "password",
-                                      "prepend-icon": "lock",
-                                      name: "password",
-                                      label: "Password",
-                                      type: "password",
-                                      placeholder: " ",
-                                      "persistent-placeholder": ""
-                                    },
-                                    model: {
-                                      value: _vm.password,
-                                      callback: function($$v) {
-                                        _vm.password = $$v
-                                      },
-                                      expression: "password"
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c("v-text-field", {
-                                    directives: [
-                                      {
-                                        name: "show",
-                                        rawName: "v-show",
-                                        value: false,
-                                        expression: "false"
-                                      }
-                                    ],
-                                    attrs: { name: "_token", value: _vm.csrf }
-                                  })
+                                  _c("v-spacer")
                                 ],
                                 1
-                              )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-card-actions",
-                            [
-                              _c("v-spacer"),
+                              ),
                               _vm._v(" "),
                               _c(
-                                "div",
-                                { staticClass: "text-center" },
+                                "v-card-text",
                                 [
                                   _c(
-                                    "v-btn",
+                                    "v-form",
                                     {
+                                      ref: "form",
                                       attrs: {
-                                        color: "primary",
-                                        type: "submit",
-                                        form: "form"
+                                        id: "form",
+                                        method: "POST",
+                                        action: "/login"
                                       }
                                     },
-                                    [_vm._v("Log in")]
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          "prepend-icon": "person",
+                                          name: "email",
+                                          label: "Email",
+                                          type: "text",
+                                          placeholder: " ",
+                                          "persistent-placeholder": ""
+                                        },
+                                        model: {
+                                          value: _vm.email,
+                                          callback: function($$v) {
+                                            _vm.email = $$v
+                                          },
+                                          expression: "email"
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          id: "password",
+                                          "prepend-icon": "lock",
+                                          name: "password",
+                                          label: "Password",
+                                          type: "password",
+                                          placeholder: " ",
+                                          "persistent-placeholder": ""
+                                        },
+                                        model: {
+                                          value: _vm.password,
+                                          callback: function($$v) {
+                                            _vm.password = $$v
+                                          },
+                                          expression: "password"
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("v-text-field", {
+                                        directives: [
+                                          {
+                                            name: "show",
+                                            rawName: "v-show",
+                                            value: false,
+                                            expression: "false"
+                                          }
+                                        ],
+                                        attrs: {
+                                          name: "_token",
+                                          value: _vm.csrf
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-layout",
+                                { attrs: { "justify-center": "" } },
+                                [
+                                  _c(
+                                    "v-card-actions",
+                                    { staticClass: "mb-4" },
+                                    [
+                                      _c(
+                                        "div",
+                                        { staticClass: "text-center" },
+                                        [
+                                          _c(
+                                            "v-btn",
+                                            {
+                                              attrs: {
+                                                color: "primary",
+                                                type: "submit",
+                                                form: "form"
+                                              }
+                                            },
+                                            [_vm._v("Log in")]
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    ]
                                   )
                                 ],
                                 1
@@ -43836,14 +43854,14 @@ var render = function() {
                         "v-btn",
                         _vm._g(
                           _vm._b(
-                            { attrs: { color: "indigo", dark: "" } },
+                            { attrs: { color: "blue accent-2", dark: "" } },
                             "v-btn",
                             attrs,
                             false
                           ),
                           on
                         ),
-                        [_vm._v(" Menu ")]
+                        [_vm._v("\n          PROFILE\n        ")]
                       )
                     ]
                   }
@@ -44277,25 +44295,33 @@ var render = function() {
                 }
               }
             },
-            [_vm._v("Guest")]
+            [_vm._v("Grader")]
           )
         ]
       ),
       _vm._v(" "),
       _c("v-spacer"),
       _vm._v(" "),
-      _c(
-        "v-btn",
-        {
-          staticClass: "primary pr-4",
-          on: {
-            click: function($event) {
-              return _vm.redirect("/login")
-            }
-          }
-        },
-        [_vm._v(" Login ")]
-      )
+      _vm.$route.fullPath !== "/login"
+        ? _c(
+            "div",
+            [
+              _c(
+                "v-btn",
+                {
+                  staticClass: "primary pr-4",
+                  on: {
+                    click: function($event) {
+                      return _vm.redirect("/login")
+                    }
+                  }
+                },
+                [_vm._v(" Login ")]
+              )
+            ],
+            1
+          )
+        : _vm._e()
     ],
     1
   )
