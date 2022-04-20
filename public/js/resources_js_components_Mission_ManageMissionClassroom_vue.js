@@ -335,9 +335,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         text: "Question",
         value: "question"
       }, {
-        text: "Language",
-        value: "language"
-      }, {
         text: "Score",
         value: "score"
       }, {
@@ -617,11 +614,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this8.roomId = item.courseId;
                 _context6.next = 5;
-                return axios.get("/api/schedule", {
-                  params: {
-                    course_id: item.courseId
-                  }
-                }).then(function (response) {
+                return axios.get("/api/schedule/" + item.courseId).then(function (response) {
                   if (response.data.success == true) {
                     _this8.desserts = response.data.payload;
                   }

@@ -14,7 +14,6 @@ class Problem extends Model
         'question',
         'level',
         'score',
-        "language_id",
         "file",
         "tolerant"
     ];

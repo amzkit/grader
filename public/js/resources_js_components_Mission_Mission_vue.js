@@ -226,6 +226,30 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -236,6 +260,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   data: function data() {
     return {
+      languages: [],
+      schedule_room: [],
+      course_room: [],
+      search: "",
       dialog: false,
       snackbar: false,
       text: "",
@@ -251,22 +279,47 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         sendFile: null,
         start_date: "",
         end_date: "",
-        language: {
-          language: "",
-          type: ""
-        }
+        languageId: 0
       }
     };
+  },
+  created: function created() {
+    this.fetchItemSchedule();
+    this.getLanguage();
+    this.fetchItemScheduleById();
+    this.fetchItemSubmission();
   },
   computed: {
     getDateTime: function getDateTime() {
       return dayjs__WEBPACK_IMPORTED_MODULE_1___default()(new Date()).format("MM-DD-YYYY hh:mm A");
+    },
+    filteredItems: function filteredItems() {
+      var _this = this;
+
+      return _.orderBy(this.course_room.filter(function (item) {
+        return item.course_name.toLowerCase().includes(_this.search.toLowerCase());
+      }), "headline");
+    },
+    filterCourseRoom: function filterCourseRoom() {
+      var _this2 = this;
+
+      return this.schedule_room.filter(function (e) {
+        var missionSend = _this2.missionPass.find(function (p) {
+          return p.schedule_id == e.id;
+        });
+
+        if (missionSend) {
+          return null;
+        }
+
+        return e;
+      });
     }
   },
   methods: {
     dayjs: (dayjs__WEBPACK_IMPORTED_MODULE_1___default()),
     submit: function submit() {
-      var _this = this;
+      var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
         var config, formData;
@@ -274,7 +327,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                if (_this.problem.sendFile) {
+                if (_this3.problem.sendFile) {
                   _context.next = 2;
                   break;
                 }
@@ -282,18 +335,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", console.log("NO"));
 
               case 2:
-                _this.loading = true;
-                _this.dialog = false;
+                _this3.loading = true;
+                _this3.dialog = false;
                 config = {
                   headers: {
                     "content-type": "multipart/form-data"
                   }
                 };
                 formData = new FormData();
-                formData.append("sourcefile", _this.problem.sendFile);
-                formData.append("Lang", _this.problem.language.language);
-                formData.append("problem_id", _this.problem.problem_id);
-                formData.append("course_id", _this.course_id);
+                formData.append("sourcefile", _this3.problem.sendFile);
+                formData.append("Lang", _this3.languages.find(function (e) {
+                  return e.id = _this3.problem.languageId;
+                }).lang);
+                formData.append("problem_id", _this3.problem.problem_id);
+                formData.append("course_id", _this3.$route.query.course_id);
                 _context.next = 12;
                 return axios.post("/api/submission", formData, config).then(function (response) {
                   if (response.data.success) {
@@ -304,7 +359,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 });
 
               case 12:
-                _this.loading = false;
+                _this3.loading = false;
 
               case 13:
               case "end":
@@ -323,39 +378,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     onFileChange: function onFileChange(e) {
       this.problem.sendFile = e.target.files[0];
     },
-    fetchItemSchedule: function fetchItemSchedule(item) {
-      var _this2 = this;
+    fetchItemSchedule: function fetchItemSchedule() {
+      var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _this2.loading = true;
-                _this2.course_id = item.courseId;
-
-                _this2.fetchItemSubmission(item.courseId);
-
-                if (!item) {
-                  _context2.next = 6;
-                  break;
-                }
-
-                _context2.next = 6;
-                return axios.get("/api/schedule", {
-                  params: {
-                    course_id: item.courseId
-                  }
-                }).then(function (response) {
+                _this4.loading = true;
+                _context2.next = 3;
+                return axios.get("/api/schedule").then(function (response) {
                   if (response.data.success == true) {
-                    _this2.$store.commit("data/SET_SCHEDULES_ALL", response.data.payload);
+                    _this4.course_room = response.data.payload;
                   }
                 });
 
-              case 6:
-                _this2.loading = false;
+              case 3:
+                _this4.loading = false;
 
-              case 7:
+              case 4:
               case "end":
                 return _context2.stop();
             }
@@ -363,28 +405,34 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2);
       }))();
     },
-    fetchItemSubmission: function fetchItemSubmission() {
-      var _this3 = this;
+    fetchRoom: function fetchRoom(val) {
+      this.$router.push({
+        path: "/problem",
+        query: {
+          course_id: val
+        }
+      })["catch"](function () {});
+      this.fetchItemScheduleById();
+      this.fetchItemSubmission();
+    },
+    fetchItemScheduleById: function fetchItemScheduleById() {
+      var _this5 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                _this3.loading = true;
+                _this5.loading = true;
                 _context3.next = 3;
-                return axios.get("/api/submission", {
-                  params: {
-                    course_id: _this3.course_id
-                  }
-                }).then(function (response) {
+                return axios.get("/api/schedule/" + _this5.$route.query.course_id).then(function (response) {
                   if (response.data.success == true) {
-                    _this3.missionPass = response.data.payload;
+                    _this5.schedule_room = response.data.payload;
                   }
                 });
 
               case 3:
-                _this3.loading = false;
+                _this5.loading = false;
 
               case 4:
               case "end":
@@ -392,6 +440,64 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             }
           }
         }, _callee3);
+      }))();
+    },
+    fetchItemSubmission: function fetchItemSubmission() {
+      var _this6 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _this6.loading = true;
+                _context4.next = 3;
+                return axios.get("/api/submission", {
+                  params: {
+                    course_id: _this6.$route.query.course_id
+                  }
+                }).then(function (response) {
+                  if (response.data.success == true) {
+                    _this6.missionPass = response.data.payload;
+                  }
+                });
+
+              case 3:
+                _this6.loading = false;
+
+              case 4:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }))();
+    },
+    getLanguage: function getLanguage() {
+      var _this7 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _this7.loading = true;
+                _context5.next = 3;
+                return axios.get("/api/language").then(function (response) {
+                  _this7.languages = response.data.payload;
+                })["catch"](function (error) {
+                  console.log(error);
+                });
+
+              case 3:
+                _this7.loading = false;
+
+              case 4:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5);
       }))();
     }
   }
@@ -938,149 +1044,201 @@ var render = function() {
       _vm._v(" "),
       _c(
         "v-col",
-        { attrs: { cols: "2" } },
-        [_c("Navigation", { attrs: { onClick: _vm.fetchItemSchedule } })],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-col",
-        { attrs: { cols: "10" } },
+        { attrs: { cols: "3" } },
         [
-          _vm._l(
-            this.$store.state.data.schedule_all.filter(function(e) {
-              var missionSend = _vm.missionPass.find(function(p) {
-                return p.schedule_id == e.id
-              })
-              if (missionSend) {
-                return null
-              }
-              return e
-            }),
-            function(item, i) {
-              return _c(
-                "v-card",
-                {
-                  key: i,
-                  staticClass: "mx-auto mb-4",
-                  attrs: { "max-width": "100%" }
-                },
+          _c(
+            "v-card",
+            { staticClass: "mx-auto", attrs: { "max-width": "300", tile: "" } },
+            [
+              _c(
+                "v-list",
+                { attrs: { dense: "" } },
                 [
+                  _c("v-subheader", [_vm._v("Problems")]),
+                  _vm._v(" "),
+                  _c("v-text-field", {
+                    staticClass: "mx-3",
+                    attrs: {
+                      label: "Search",
+                      "prepend-inner-icon": "search",
+                      clearable: "",
+                      solo: "",
+                      dense: ""
+                    },
+                    model: {
+                      value: _vm.search,
+                      callback: function($$v) {
+                        _vm.search = $$v
+                      },
+                      expression: "search"
+                    }
+                  }),
+                  _vm._v(" "),
                   _c(
-                    "v-list-item",
-                    { attrs: { "two-line": "" } },
-                    [
-                      _c(
-                        "v-list-item-content",
+                    "v-list-item-group",
+                    _vm._l(_vm.filteredItems, function(item, i) {
+                      return _c(
+                        "v-list-item",
+                        {
+                          key: i,
+                          on: {
+                            click: function($event) {
+                              return _vm.fetchRoom(item.id)
+                            }
+                          }
+                        },
                         [
-                          _c("v-list-item-title", { staticClass: "text-h5" }, [
-                            _vm._v(
-                              "\n            " +
-                                _vm._s(item.title) +
-                                "\n          "
-                            )
-                          ]),
-                          _vm._v(" "),
                           _c(
-                            "v-list-item-subtitle",
+                            "v-list-item-content",
                             [
-                              _c("v-rating", {
-                                attrs: {
-                                  value: item.level,
-                                  dense: "",
-                                  "half-increments": "",
-                                  readonly: "",
-                                  size: "14"
+                              _c("v-list-item-title", {
+                                domProps: {
+                                  textContent: _vm._s(item.course_name)
                                 }
                               })
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c("v-divider", { staticClass: "mx-4" }),
-                          _vm._v(" "),
-                          _c("v-card-title", [_vm._v("Schedule")]),
-                          _vm._v(" "),
-                          _c(
-                            "v-card-text",
-                            [
-                              _c(
-                                "v-chip-group",
-                                {
-                                  attrs: {
-                                    "active-class":
-                                      "deep-purple accent-4 white--text",
-                                    column: ""
-                                  },
-                                  model: {
-                                    value: _vm.selection,
-                                    callback: function($$v) {
-                                      _vm.selection = $$v
-                                    },
-                                    expression: "selection"
-                                  }
-                                },
-                                [
-                                  _c("v-chip", [
-                                    _vm._v(
-                                      "\n                " +
-                                        _vm._s(
-                                          _vm.invalidDate(item.start_date) ||
-                                            "NOT SET"
-                                        ) +
-                                        "\n                -\n                " +
-                                        _vm._s(
-                                          _vm.invalidDate(item.end_date) ||
-                                            "NOT SET"
-                                        ) +
-                                        "\n              "
-                                    )
-                                  ])
-                                ],
-                                1
-                              )
                             ],
                             1
                           )
                         ],
                         1
                       )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-card-actions",
-                    [
-                      _c(
-                        "v-btn",
-                        {
-                          attrs: { color: "primary", text: "" },
-                          on: {
-                            click: function() {
-                              _vm.problem.title = item.title
-                              _vm.problem.question = item.question
-                              _vm.problem.score = item.score
-                              _vm.problem.file = item.file
-                              _vm.problem.start_date = item.start_date
-                              _vm.problem.end_date = item.end_date
-                              _vm.problem.language.language = item.language
-                              _vm.problem.language.type = item.type
-                              _vm.problem.problem_id = item.problemsId
-                              _vm.dialog = true
-                            }
-                          }
-                        },
-                        [_vm._v("\n          SHOW MORE\n        ")]
-                      )
-                    ],
+                    }),
                     1
                   )
                 ],
                 1
               )
-            }
-          ),
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-col",
+        { attrs: { cols: "1" } },
+        [_c("v-divider", { attrs: { vertical: "" } })],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-col",
+        [
+          _vm._l(_vm.filterCourseRoom, function(item, i) {
+            return _c(
+              "v-card",
+              {
+                key: i,
+                staticClass: "mx-auto mb-4",
+                attrs: { "max-width": "100%" }
+              },
+              [
+                _c(
+                  "v-list-item",
+                  { attrs: { "two-line": "" } },
+                  [
+                    _c(
+                      "v-list-item-content",
+                      [
+                        _c("v-list-item-title", { staticClass: "text-h5" }, [
+                          _vm._v(
+                            "\n            " +
+                              _vm._s(item.title) +
+                              "\n          "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "v-list-item-subtitle",
+                          [
+                            _c("v-rating", {
+                              attrs: {
+                                value: item.level,
+                                dense: "",
+                                "half-increments": "",
+                                readonly: "",
+                                size: "14"
+                              }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c("v-divider", { staticClass: "mx-4" }),
+                        _vm._v(" "),
+                        _c("v-card-title", [_vm._v("Schedule")]),
+                        _vm._v(" "),
+                        _c(
+                          "v-card-text",
+                          [
+                            _c(
+                              "v-chip-group",
+                              {
+                                attrs: {
+                                  "active-class":
+                                    "deep-purple accent-4 white--text",
+                                  column: ""
+                                }
+                              },
+                              [
+                                _c("v-chip", [
+                                  _vm._v(
+                                    "\n                " +
+                                      _vm._s(
+                                        _vm.invalidDate(item.start_date) ||
+                                          "NOT SET"
+                                      ) +
+                                      "\n                -\n                " +
+                                      _vm._s(
+                                        _vm.invalidDate(item.end_date) ||
+                                          "NOT SET"
+                                      ) +
+                                      "\n              "
+                                  )
+                                ])
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "v-card-actions",
+                  [
+                    _c(
+                      "v-btn",
+                      {
+                        attrs: { color: "primary", text: "" },
+                        on: {
+                          click: function() {
+                            _vm.problem.title = item.title
+                            _vm.problem.question = item.question
+                            _vm.problem.score = item.score
+                            _vm.problem.file = item.file
+                            _vm.problem.start_date = item.start_date
+                            _vm.problem.end_date = item.end_date
+                            _vm.problem.problem_id = item.problemsId
+                            _vm.dialog = true
+                          }
+                        }
+                      },
+                      [_vm._v("\n          SHOW MORE\n        ")]
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          }),
           _vm._v(" "),
           _c(
             "v-expansion-panels",
@@ -1266,17 +1424,34 @@ var render = function() {
                     "v-row",
                     { staticClass: "mb-3" },
                     [
-                      _c("v-col", { attrs: { cols: "4" } }, [
-                        _vm._v(" Language ")
-                      ]),
+                      _c(
+                        "v-col",
+                        { staticClass: "mt-6", attrs: { cols: "4" } },
+                        [_vm._v(" Language ")]
+                      ),
                       _vm._v(" "),
-                      _c("v-col", { attrs: { cols: "8" } }, [
-                        _vm._v(
-                          "\n            " +
-                            _vm._s(_vm.problem.language.language) +
-                            "\n          "
-                        )
-                      ])
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "8" } },
+                        [
+                          _c("v-autocomplete", {
+                            attrs: {
+                              items: _vm.languages,
+                              label: "Language",
+                              "item-text": "lang",
+                              "item-value": "id"
+                            },
+                            model: {
+                              value: _vm.problem.languageId,
+                              callback: function($$v) {
+                                _vm.$set(_vm.problem, "languageId", $$v)
+                              },
+                              expression: "problem.languageId"
+                            }
+                          })
+                        ],
+                        1
+                      )
                     ],
                     1
                   ),
@@ -1292,10 +1467,7 @@ var render = function() {
                         _c("input", {
                           ref: "file_upload",
                           staticClass: "form-control",
-                          attrs: {
-                            type: "file",
-                            accept: _vm.problem.language.type
-                          },
+                          attrs: { type: "file" },
                           on: { change: _vm.onFileChange }
                         })
                       ])

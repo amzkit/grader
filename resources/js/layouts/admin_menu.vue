@@ -5,7 +5,10 @@
         <v-list-item-avatar>
           <v-avatar color="red">
             <span class="white--text text-h5">
-              {{ this.$store.state.data.user.name[0] }}</span
+              {{
+                this.$store.state.data.user.name &&
+                this.$store.state.data.user.name[0]
+              }}</span
             >
           </v-avatar>
         </v-list-item-avatar>
@@ -115,6 +118,7 @@
               <v-list-item-avatar>
                 <v-avatar color="red">
                   <span class="white--text text-h5">{{
+                    this.$store.state.data.user.name &&
                     this.$store.state.data.user.name[0]
                   }}</span>
                 </v-avatar>

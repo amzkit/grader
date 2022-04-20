@@ -40,19 +40,9 @@
                 <v-card-text>
                   <v-container>
                     <v-row>
-                      <v-col cols="4">
+                      <v-col cols="8">
                         <v-text-field v-model="editedItem.title" label="Title">
                         </v-text-field>
-                      </v-col>
-                      <v-col cols="4">
-                        <v-autocomplete
-                          v-model="editedItem.language_id"
-                          :items="languages"
-                          label="Language"
-                          item-text="lang"
-                          item-value="id"
-                        >
-                        </v-autocomplete>
                       </v-col>
 
                       <v-col cols="4">
@@ -190,7 +180,6 @@ export default {
       search: "",
       dialog: false,
       dialogDelete: false,
-      languages: [],
       headers: [
         {
           text: "Title",
@@ -199,7 +188,6 @@ export default {
           value: "title",
         },
         { text: "Question", value: "question" },
-        { text: "Language", value: "language" },
         { text: "Score", value: "score" },
         { text: "File", value: "file" },
         {
@@ -235,7 +223,6 @@ export default {
       editedItem: {
         title: "",
         question: "",
-        language: "",
         score: "",
         file: "",
         level: "",
@@ -244,7 +231,6 @@ export default {
       defaultItem: {
         title: "",
         question: "",
-        language: "",
         score: "",
         file: "",
         level: "",
@@ -254,7 +240,6 @@ export default {
   },
   async created() {
     this.getProblems();
-    this.getLanguage();
   },
 
   computed: {
@@ -302,19 +287,6 @@ export default {
       this.loading = false;
     },
 
-    async getLanguage() {
-      this.loading = true;
-      await axios
-        .get("/api/language")
-        .then((response) => {
-          this.languages = response.data.payload;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      this.loading = false;
-    },
-
     async delateProblems() {
       this.loading = true;
       await axios
@@ -340,7 +312,6 @@ export default {
       formData.append("title", this.editedItem.title);
       formData.append("question", this.editedItem.question);
       formData.append("score", this.editedItem.score);
-      formData.append("language_id", this.editedItem.language_id);
       formData.append("file", this.editedItem.file ? this.editedItem.file : "");
       formData.append("level", this.editedItem.level);
       formData.append(

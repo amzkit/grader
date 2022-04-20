@@ -86,20 +86,6 @@
                     label="Score"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="4">
-                  <v-subheader> Language </v-subheader>
-                </v-col>
-                <v-col cols="6">
-                  <v-autocomplete
-                    v-model="lang"
-                    :items="languages"
-                    :rules="[rules.required]"
-                    label="Language"
-                    item-text="lang"
-                    item-value="id"
-                  >
-                  </v-autocomplete>
-                </v-col>
               </v-row>
             </v-form>
           </v-container>
@@ -156,26 +142,10 @@ export default {
       ],
     };
   },
-  created() {
-    this.getLanguage();
-  },
+
   methods: {
     onFileChange(e) {
       this.file = e.target.files[0];
-    },
-
-    async getLanguage() {
-      this.loading = true;
-      await axios
-        .get("/api/language")
-        .then((response) => {
-          this.languages = response.data.payload;
-        })
-        .catch((error) => {
-          this.snackbar = true;
-          this.text = error;
-        });
-      this.loading = false;
     },
 
     async submit() {
@@ -190,11 +160,10 @@ export default {
       formData.append("title", this.title);
       formData.append("question", this.question);
       formData.append("score", this.score);
-      formData.append("language_id", this.lang);
       formData.append("file", this.file);
       formData.append("level", this.level);
       formData.append("tolerant", this.tolerant != "" ? this.tolerant : "$");
-      if (this.title && this.question && this.lang && this.score) {
+      if (this.title && this.question && this.score) {
         await axios
           .post("/api/problem", formData, config)
           .then(function () {

@@ -1,20 +1,41 @@
 <template>
   <v-row>
     <Loading :loading="loading" />
-    <v-col cols="2">
-      <Navigation :onClick="fetchItemSchedule" />
+    <v-col cols="3">
+      <v-card class="mx-auto" max-width="300" tile>
+        <v-list dense>
+          <v-subheader>Problems</v-subheader>
+          <v-text-field
+            class="mx-3"
+            label="Search"
+            prepend-inner-icon="search"
+            v-model="search"
+            clearable
+            solo
+            dense
+          ></v-text-field>
+          <v-list-item-group>
+            <v-list-item
+              v-for="(item, i) in filteredItems"
+              :key="i"
+              @click="fetchRoom(item.id)"
+            >
+              <v-list-item-content>
+                <v-list-item-title
+                  v-text="item.course_name"
+                ></v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </v-card>
     </v-col>
-    <v-col cols="10">
+    <v-col cols="1"> <v-divider vertical></v-divider></v-col>
+    <v-col>
       <v-card
         class="mx-auto mb-4"
         max-width="100%"
-        v-for="(item, i) in this.$store.state.data.schedule_all.filter((e) => {
-          const missionSend = missionPass.find((p) => p.schedule_id == e.id);
-          if (missionSend) {
-            return null;
-          }
-          return e;
-        })"
+        v-for="(item, i) in filterCourseRoom"
         :key="i"
       >
         <v-list-item two-line>
@@ -36,7 +57,6 @@
 
             <v-card-text>
               <v-chip-group
-                v-model="selection"
                 active-class="deep-purple accent-4 white--text"
                 column
               >
@@ -62,8 +82,6 @@
                 problem.file = item.file;
                 problem.start_date = item.start_date;
                 problem.end_date = item.end_date;
-                problem.language.language = item.language;
-                problem.language.type = item.type;
                 problem.problem_id = item.problemsId;
                 dialog = true;
               }
@@ -122,9 +140,16 @@
             </v-col>
           </v-row>
           <v-row class="mb-3">
-            <v-col cols="4"> Language </v-col>
+            <v-col cols="4" class="mt-6"> Language </v-col>
             <v-col cols="8">
-              {{ problem.language.language }}
+              <v-autocomplete
+                v-model="problem.languageId"
+                :items="languages"
+                label="Language"
+                item-text="lang"
+                item-value="id"
+              >
+              </v-autocomplete>
             </v-col>
           </v-row>
           <v-row>
@@ -134,7 +159,6 @@
                 type="file"
                 class="form-control"
                 ref="file_upload"
-                :accept="problem.language.type"
                 v-on:change="onFileChange"
               />
             </v-col>
@@ -174,6 +198,10 @@ export default {
   },
   data: function () {
     return {
+      languages: [],
+      schedule_room: [],
+      course_room: [],
+      search: "",
       dialog: false,
       snackbar: false,
       text: "",
@@ -189,17 +217,40 @@ export default {
         sendFile: null,
         start_date: "",
         end_date: "",
-        language: {
-          language: "",
-          type: "",
-        },
+        languageId: 0,
       },
     };
+  },
+
+  created() {
+    this.fetchItemSchedule();
+    this.getLanguage();
+    this.fetchItemScheduleById();
+    this.fetchItemSubmission();
   },
 
   computed: {
     getDateTime() {
       return dayjs(new Date()).format("MM-DD-YYYY hh:mm A");
+    },
+    filteredItems() {
+      return _.orderBy(
+        this.course_room.filter((item) => {
+          return item.course_name
+            .toLowerCase()
+            .includes(this.search.toLowerCase());
+        }),
+        "headline"
+      );
+    },
+    filterCourseRoom() {
+      return this.schedule_room.filter((e) => {
+        const missionSend = this.missionPass.find((p) => p.schedule_id == e.id);
+        if (missionSend) {
+          return null;
+        }
+        return e;
+      });
     },
   },
 
@@ -217,9 +268,12 @@ export default {
       };
       let formData = new FormData();
       formData.append("sourcefile", this.problem.sendFile);
-      formData.append("Lang", this.problem.language.language);
+      formData.append(
+        "Lang",
+        this.languages.find((e) => (e.id = this.problem.languageId)).lang
+      );
       formData.append("problem_id", this.problem.problem_id);
-      formData.append("course_id", this.course_id);
+      formData.append("course_id", this.$route.query.course_id);
       await axios
         .post("/api/submission", formData, config)
         .then((response) => {
@@ -248,26 +302,39 @@ export default {
       this.problem.sendFile = e.target.files[0];
     },
 
-    async fetchItemSchedule(item) {
+    async fetchItemSchedule() {
       this.loading = true;
-      this.course_id = item.courseId;
-      this.fetchItemSubmission(item.courseId);
-      if (item) {
-        await axios
-          .get("/api/schedule", {
-            params: {
-              course_id: item.courseId,
-            },
-          })
-          .then((response) => {
-            if (response.data.success == true) {
-              this.$store.commit(
-                "data/SET_SCHEDULES_ALL",
-                response.data.payload
-              );
-            }
-          });
-      }
+      await axios.get("/api/schedule").then((response) => {
+        if (response.data.success == true) {
+          this.course_room = response.data.payload;
+        }
+      });
+      this.loading = false;
+    },
+
+    fetchRoom(val) {
+      this.$router
+        .push({
+          path: "/problem",
+          query: {
+            course_id: val,
+          },
+        })
+        .catch(() => {});
+      this.fetchItemScheduleById();
+      this.fetchItemSubmission();
+    },
+
+    async fetchItemScheduleById() {
+      this.loading = true;
+
+      await axios
+        .get("/api/schedule/" + this.$route.query.course_id)
+        .then((response) => {
+          if (response.data.success == true) {
+            this.schedule_room = response.data.payload;
+          }
+        });
       this.loading = false;
     },
 
@@ -276,13 +343,26 @@ export default {
       await axios
         .get("/api/submission", {
           params: {
-            course_id: this.course_id,
+            course_id: this.$route.query.course_id,
           },
         })
         .then((response) => {
           if (response.data.success == true) {
             this.missionPass = response.data.payload;
           }
+        });
+      this.loading = false;
+    },
+
+    async getLanguage() {
+      this.loading = true;
+      await axios
+        .get("/api/language")
+        .then((response) => {
+          this.languages = response.data.payload;
+        })
+        .catch((error) => {
+          console.log(error);
         });
       this.loading = false;
     },

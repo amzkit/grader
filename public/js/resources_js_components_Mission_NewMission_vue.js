@@ -160,20 +160,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -235,90 +221,58 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }]]
     };
   },
-  created: function created() {
-    this.getLanguage();
-  },
   methods: {
     onFileChange: function onFileChange(e) {
       this.file = e.target.files[0];
     },
-    getLanguage: function getLanguage() {
+    submit: function submit() {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var config, formData;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _this.loading = true;
-                _context.next = 3;
-                return axios.get("/api/language").then(function (response) {
-                  _this.languages = response.data.payload;
-                })["catch"](function (error) {
-                  _this.snackbar = true;
-                  _this.text = error;
-                });
-
-              case 3:
-                _this.loading = false;
-
-              case 4:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
-    },
-    submit: function submit() {
-      var _this2 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        var config, formData;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                if (_this2.$refs.form.validate() == false) {
-                  _this2.$refs.form.validate();
+                if (_this.$refs.form.validate() == false) {
+                  _this.$refs.form.validate();
                 }
 
-                _this2.loading = true;
+                _this.loading = true;
                 config = {
                   headers: {
                     "content-type": "multipart/form-data"
                   }
                 };
                 formData = new FormData();
-                formData.append("title", _this2.title);
-                formData.append("question", _this2.question);
-                formData.append("score", _this2.score);
-                formData.append("language_id", _this2.lang);
-                formData.append("file", _this2.file);
-                formData.append("level", _this2.level);
-                formData.append("tolerant", _this2.tolerant != "" ? _this2.tolerant : "$");
+                formData.append("title", _this.title);
+                formData.append("question", _this.question);
+                formData.append("score", _this.score);
+                formData.append("file", _this.file);
+                formData.append("level", _this.level);
+                formData.append("tolerant", _this.tolerant != "" ? _this.tolerant : "$");
 
-                if (!(_this2.title && _this2.question && _this2.lang && _this2.score)) {
-                  _context2.next = 14;
+                if (!(_this.title && _this.question && _this.score)) {
+                  _context.next = 13;
                   break;
                 }
 
-                _context2.next = 14;
+                _context.next = 13;
                 return axios.post("/api/problem", formData, config).then(function () {
                   window.location.href = "/manage-problem";
                 })["catch"](function (error) {
                   console.log(error);
                 });
 
-              case 14:
-                _this2.loading = false;
+              case 13:
+                _this.loading = false;
 
-              case 15:
+              case 14:
               case "end":
-                return _context2.stop();
+                return _context.stop();
             }
           }
-        }, _callee2);
+        }, _callee);
       }))();
     }
   }
@@ -14827,37 +14781,6 @@ var render = function() {
                                         _vm.score = $$v
                                       },
                                       expression: "score"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-col",
-                                { attrs: { cols: "4" } },
-                                [_c("v-subheader", [_vm._v(" Language ")])],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-col",
-                                { attrs: { cols: "6" } },
-                                [
-                                  _c("v-autocomplete", {
-                                    attrs: {
-                                      items: _vm.languages,
-                                      rules: [_vm.rules.required],
-                                      label: "Language",
-                                      "item-text": "lang",
-                                      "item-value": "id"
-                                    },
-                                    model: {
-                                      value: _vm.lang,
-                                      callback: function($$v) {
-                                        _vm.lang = $$v
-                                      },
-                                      expression: "lang"
                                     }
                                   })
                                 ],

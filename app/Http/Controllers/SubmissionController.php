@@ -114,7 +114,6 @@ class SubmissionController extends Controller
                 ->where('schedule_id', '=',  $request->schedule_id)
                 ->join("users", "users.id", "=", "submissions.user_id")
                 ->join('problems', 'submissions.problem_id', '=', 'problems.id')
-                ->join("languages", "languages.id", "=", "problems.language_id")
                 ->select(
                     "submissions.*",
                     "users.name",

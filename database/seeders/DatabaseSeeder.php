@@ -52,18 +52,6 @@ class LanguageTableSeeder extends Seeder
                 'lang' => "PYTHON",
                 'type' => ".py",
             ],
-            [
-                'lang' => "C",
-                'type' => ".c",
-            ],
-            [
-                'lang' => "C++",
-                'type' => ".c++",
-            ],
-            [
-                'lang' => "JAVA",
-                'type' => ".jar",
-            ],
         );
     }
 }

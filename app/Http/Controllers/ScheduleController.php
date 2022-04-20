@@ -6,26 +6,40 @@ use Illuminate\Http\Request;
 use App\Models\Schedule;
 use App\Models\Problem;
 use Carbon\Carbon;
+use App\Models\Classroom;
 
 class ScheduleController extends Controller
 {
     //
-    public function getSchedule(Request $request)
+    public function __construct()
     {
-        $course_id = $request->course_id;
+        $this->middleware('auth');
+    }
 
-        $schedule = Schedule::where('course_id', '=',  $course_id)
+    public function getSchedule()
+    {
+        // $course_id = $request->course_id;
+        $user_id = auth()->user()->id;
+
+        $classroom = Classroom::where('user_id', '=',  $user_id)
+            ->join("courses", "courses.id", "=", "classrooms.course_id")
+            ->select("courses.*")
+            ->get();
+
+        return response()->json(['success' => true, 'payload' =>  $classroom]);
+    }
+
+    public function getScheduleById($id)
+    {
+
+        $schedule = Schedule::where('course_id', '=',  $id)
             ->join("problems", "problems.id", "=", "schedules.problem_id")
-            ->join("languages", "languages.id", "=", "problems.language_id")
             ->select(
                 "schedules.id",
                 "problems.title",
                 "problems.question",
                 "problems.level",
                 "problems.score",
-                "languages.id as languageId",
-                "languages.lang as language",
-                "languages.type",
                 "problems.file",
                 "schedules.start_date",
                 "schedules.end_date",

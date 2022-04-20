@@ -270,7 +270,6 @@ export default {
           value: "title",
         },
         { text: "Question", value: "question" },
-        { text: "Language", value: "language" },
         { text: "Score", value: "score" },
         { text: "File", value: "file" },
         {
@@ -484,17 +483,11 @@ export default {
       this.loading = true;
       if (item) {
         this.roomId = item.courseId;
-        await axios
-          .get("/api/schedule", {
-            params: {
-              course_id: item.courseId,
-            },
-          })
-          .then((response) => {
-            if (response.data.success == true) {
-              this.desserts = response.data.payload;
-            }
-          });
+        await axios.get("/api/schedule/" + item.courseId).then((response) => {
+          if (response.data.success == true) {
+            this.desserts = response.data.payload;
+          }
+        });
       }
       this.loading = false;
     },

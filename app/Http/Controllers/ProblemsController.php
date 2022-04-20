@@ -33,11 +33,8 @@ class ProblemsController extends Controller
 
     public function getProblem()
     {
-        $problem = Problem::join("languages", "languages.id", "=", "problems.language_id")
-            ->select(
+        $problem = Problem::select(
                 "problems.*",
-                "languages.lang as language",
-                "languages.type",
             )
             ->get();
         return response()->json(['success' => true, 'payload' =>  $problem]);
@@ -76,7 +73,6 @@ class ProblemsController extends Controller
                 'score' => $request->score,
                 'tolerant' => $request->tolerant,
                 'level' => $request->level,
-                'language_id' => $request->language_id,
                 'file' => $problem->file
             ]
         );

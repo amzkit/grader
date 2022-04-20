@@ -37,6 +37,7 @@ Route::get('classroom', 'App\Http\Controllers\ClassroomController@getClassrooms'
 Route::get('classrooms', 'App\Http\Controllers\ClassroomController@getClassroomsAll');
 
 Route::get('schedule', 'App\Http\Controllers\ScheduleController@getSchedule');
+Route::get('schedule/{id}', 'App\Http\Controllers\ScheduleController@getScheduleById');
 Route::get('schedule/download/{file_name}', 'App\Http\Controllers\ProblemsController@download');
 
 Route::get('manage/classroom', 'App\Http\Controllers\ClassroomController@getManageClassrooms');
