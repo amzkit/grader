@@ -70,45 +70,41 @@ class UserController extends Controller
             return response()->json(['success' => true, 'payload' =>  $request]);
         }
 
-        if ($request->role === 'student' || $request->role === 'ta') {
+        if ($request->addItem == true) {
 
-            if (User::where('username', $request->student_id)->first()) {
-                $userDB = User::where('username', $request->student_id)->first();
-                $userDB->update([
-                    'role_ta' =>  $request->role === 'ta' ? 1 : $userDB->role_ta,
-                    'role_student' =>  $request->role === 'student' ? 1 : $userDB->role_student,
-                    'role' =>  $request->role,
-                ]);
-            } else {
-                $userWhere = [
-                    'username'  => $request->student_id
-                ];
-                $userData = [
-                    'email' =>  $request->student_id . "@mju.ac.th",
-                    'password' => Hash::make($request->student_id),
-                    'name'  =>  $request->name,
-                    'role_ta' =>  $request->role === 'ta' && 1,
-                    'role_student' =>  $request->role === 'student' && 1,
-                    'role' =>  $request->role,
-                ];
-                $userDB = User::updateOrCreate($userWhere, $userData);
-            }
+            $classroomFirst = Classroom::where('course_id', '=', $request->course_id)->first();
 
             $classroomWhere = [
-                'user_id'   =>  $userDB->id,
+                'user_id'   =>  $request->user_id,
                 'course_id' => $request->course_id,
             ];
 
             $classroomData = [
                 'section'   =>  $request->section,
                 'year'      =>  $request->year,
-                "ta"      =>  $request->role == "ta" ? 1 : 0,
-                "student"      =>  $request->role == "student" ? 1 : 0,
-                'semester'  =>  $request->semester
+                'semester'  =>  $request->semester,
+                'ta' => $request->ta,
+                'teacher' => $request->teacher,
+                'student' => $request->student,
+                "start_datetime" =>  $classroomFirst->start_datetime,
+                "end_datetime" =>  $classroomFirst->end_datetime,
             ];
 
             Classroom::updateOrCreate($classroomWhere, $classroomData);
-            return response()->json(['success' => true, 'payload' =>  $request]);
+
+            $user = User::find($request->user_id);
+
+            $checkRole = Classroom::where('user_id', '=', $user->id);
+
+            $classroomLengthRoleTA =  $checkRole->where('ta', '=', 1)->count();
+            $classroomLengthRoleTC =  $checkRole->where('teacher', '=', 1)->count();
+            $classroomLengthRoleSTD =  $checkRole->where('student', '=', 1)->count();
+
+            $user->update([
+                'role_ta' =>  $request->ta ? 1 : $classroomLengthRoleTA > 0 && $user->role_ta,
+                'role_teacher' => $request->teacher ? 1 : $classroomLengthRoleTC > 0 && $user->role_teacher,
+                'role_student' =>  $request->student ? 1 : $classroomLengthRoleSTD > 0 && $user->role_student,
+            ]);
         }
 
         if ($request->check_file == true) {

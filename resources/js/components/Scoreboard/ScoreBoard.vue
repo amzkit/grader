@@ -1,7 +1,6 @@
 
 <template>
   <v-container>
-    <Snackbar :snackbar="snackbar" :text="text" />
     <Loading :loading="loading" />
     <v-row justify="space-between">
       <v-col md="4">
@@ -89,18 +88,14 @@
 import dayjs from "dayjs";
 import Navigation from "../Navigation/Navigation.vue";
 import Loading from "../Loading/Loading.vue";
-import Snackbar from "../Snackbar/Snackbar.vue";
 export default {
   components: {
     Navigation,
     Loading,
-    Snackbar,
   },
   data: function () {
     return {
       loading: false,
-      snackbar: false,
-      text: "",
       items: [],
       data: [],
       search: "",
@@ -127,10 +122,6 @@ export default {
   },
   computed: {
     classroom: {
-      get() {
-        this.text = "Please select a classroom !!";
-        this.snackbar = true;
-      },
       async set(value) {
         this.loading = true;
         await axios

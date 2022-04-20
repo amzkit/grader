@@ -5396,6 +5396,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -5411,10 +5424,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, {
         icon: "mdi-pencil",
         text: "Problem",
-        subLinks: [{
-          text: "Problem",
-          to: "/problem"
-        }, {
+        subLinks: [// {
+        //   text: "Problem",
+        //   to: "/problem",
+        // },
+        {
           text: "Manage Problem",
           to: "/manage-problem"
         }, {
@@ -5428,12 +5442,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           text: "Manage Classroom",
           to: "/manage-classroom"
         }]
-      }, // {
-      //   to: "/my-score",
-      //   icon: "mdi-view-dashboard",
-      //   text: "My Score",
-      // },
-      {
+      }, {
         to: "/scoreboard",
         icon: "mdi-view-dashboard",
         text: "Scoreboard"
@@ -5451,36 +5460,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           text: "Manage User",
           to: "/manage-user"
         }]
-      }],
-      student: [{
-        to: "/",
-        icon: "mdi-home",
-        text: "Home"
-      }, {
-        to: "/problem",
-        icon: "mdi-view-dashboard",
-        text: "Classroom"
-      }, {
-        to: "/my-score",
-        icon: "mdi-view-dashboard",
-        text: "My Score"
-      }, {
-        to: "/scoreboard",
-        icon: "mdi-view-dashboard",
-        text: "Scoreboard"
-      }],
-      ta: [{
-        to: "/",
-        icon: "mdi-home",
-        text: "Home"
-      }, {
-        to: "/classroom",
-        icon: "mdi-view-dashboard",
-        text: "Problem"
-      }, {
-        to: "/scoreboard",
-        icon: "mdi-view-dashboard",
-        text: "Scoreboard"
       }],
       teacher: [{
         to: "/",
@@ -43663,13 +43642,9 @@ var render = function() {
             "v-list",
             { attrs: { dense: "" } },
             _vm._l(
-              _vm.role === "student"
-                ? _vm.student
-                : _vm.role === "ta"
-                ? _vm.ta
-                : _vm.role === "teacher"
+              _vm.role === "teacher"
                 ? _vm.teacher
-                : _vm.admin,
+                : _vm.role === "admin" && _vm.admin,
               function(link, i) {
                 return _c(
                   "div",
@@ -43812,14 +43787,25 @@ var render = function() {
           }
         },
         [
-          _c("v-app-bar-nav-icon", {
-            on: {
-              click: function($event) {
-                $event.stopPropagation()
-                return _vm.$store.commit("top_bar/SET_DRAWER", !_vm.drawer)
-              }
-            }
-          }),
+          _vm.role === "admin" || _vm.role === "teacher"
+            ? _c(
+                "div",
+                [
+                  _c("v-app-bar-nav-icon", {
+                    on: {
+                      click: function($event) {
+                        $event.stopPropagation()
+                        return _vm.$store.commit(
+                          "top_bar/SET_DRAWER",
+                          !_vm.drawer
+                        )
+                      }
+                    }
+                  })
+                ],
+                1
+              )
+            : _vm._e(),
           _vm._v(" "),
           _c(
             "v-toolbar-title",
@@ -43839,6 +43825,52 @@ var render = function() {
               )
             ]
           ),
+          _vm._v(" "),
+          _c("v-spacer"),
+          _vm._v(" "),
+          _vm.role === "student"
+            ? _c(
+                "div",
+                [
+                  _c("v-btn", { attrs: { text: "", to: "/" } }, [
+                    _vm._v(" Home ")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-btn", { attrs: { text: "", to: "/problem" } }, [
+                    _vm._v(" Problems ")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-btn", { attrs: { text: "", to: "/my-score" } }, [
+                    _vm._v(" My Score ")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-btn", { attrs: { text: "", to: "/scoreboard" } }, [
+                    _vm._v(" Scoreboard ")
+                  ])
+                ],
+                1
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.role === "ta"
+            ? _c(
+                "div",
+                [
+                  _c("v-btn", { attrs: { text: "", to: "/" } }, [
+                    _vm._v(" Home ")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-btn", { attrs: { text: "", to: "/classroom" } }, [
+                    _vm._v(" Problems ")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-btn", { attrs: { text: "", to: "/scoreboard" } }, [
+                    _vm._v(" Scoreboard ")
+                  ])
+                ],
+                1
+              )
+            : _vm._e(),
           _vm._v(" "),
           _c("v-spacer"),
           _vm._v(" "),

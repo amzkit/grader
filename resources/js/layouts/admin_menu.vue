@@ -20,13 +20,9 @@
       </v-list-item>
       <v-list dense>
         <div
-          v-for="(link, i) in role === 'student'
-            ? student
-            : role === 'ta'
-            ? ta
-            : role === 'teacher'
+          v-for="(link, i) in role === 'teacher'
             ? teacher
-            : admin"
+            : role === 'admin' && admin"
           :key="i"
         >
           <v-list-item
@@ -90,14 +86,31 @@
       color="blue darken-3"
       dark
     >
-      <v-app-bar-nav-icon
-        @click.stop="$store.commit('top_bar/SET_DRAWER', !drawer)"
-      ></v-app-bar-nav-icon>
+      <div v-if="role === 'admin' || role === 'teacher'">
+        <v-app-bar-nav-icon
+          @click.stop="$store.commit('top_bar/SET_DRAWER', !drawer)"
+        ></v-app-bar-nav-icon>
+      </div>
       <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
         <button @click="redirect('/')" class="-hidden-sm-and-down">
           {{ title }}
         </button>
       </v-toolbar-title>
+      <v-spacer></v-spacer>
+
+      <div v-if="role === 'student'">
+        <v-btn text to="/"> Home </v-btn>
+        <v-btn text to="/problem"> Problems </v-btn>
+        <v-btn text to="/my-score"> My Score </v-btn>
+        <v-btn text to="/scoreboard"> Scoreboard </v-btn>
+      </div>
+
+      <div v-if="role === 'ta'">
+        <v-btn text to="/"> Home </v-btn>
+        <v-btn text to="/classroom"> Problems </v-btn>
+        <v-btn text to="/scoreboard"> Scoreboard </v-btn>
+      </div>
+
       <v-spacer></v-spacer>
 
       <v-menu
@@ -246,10 +259,10 @@ export default {
           icon: "mdi-pencil",
           text: "Problem",
           subLinks: [
-            {
-              text: "Problem",
-              to: "/problem",
-            },
+            // {
+            //   text: "Problem",
+            //   to: "/problem",
+            // },
             {
               text: "Manage Problem",
               to: "/manage-problem",
@@ -270,11 +283,6 @@ export default {
             },
           ],
         },
-        // {
-        //   to: "/my-score",
-        //   icon: "mdi-view-dashboard",
-        //   text: "My Score",
-        // },
         {
           to: "/scoreboard",
           icon: "mdi-view-dashboard",
@@ -298,45 +306,6 @@ export default {
               to: "/manage-user",
             },
           ],
-        },
-      ],
-      student: [
-        {
-          to: "/",
-          icon: "mdi-home",
-          text: "Home",
-        },
-        {
-          to: "/problem",
-          icon: "mdi-view-dashboard",
-          text: "Classroom",
-        },
-        {
-          to: "/my-score",
-          icon: "mdi-view-dashboard",
-          text: "My Score",
-        },
-        {
-          to: "/scoreboard",
-          icon: "mdi-view-dashboard",
-          text: "Scoreboard",
-        },
-      ],
-      ta: [
-        {
-          to: "/",
-          icon: "mdi-home",
-          text: "Home",
-        },
-        {
-          to: "/classroom",
-          icon: "mdi-view-dashboard",
-          text: "Problem",
-        },
-        {
-          to: "/scoreboard",
-          icon: "mdi-view-dashboard",
-          text: "Scoreboard",
         },
       ],
       teacher: [

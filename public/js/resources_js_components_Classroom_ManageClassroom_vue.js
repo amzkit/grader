@@ -300,19 +300,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -375,9 +362,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         start_datetime: "",
         end_datetime: "",
         role: "",
-        ta: "",
-        teacher: "",
-        student: ""
+        ta: false,
+        teacher: false,
+        student: false
       },
       defaultItem: {
         name: "",
@@ -387,9 +374,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         start_datetime: "",
         end_datetime: "",
         role: "",
-        ta: "",
-        teacher: "",
-        student: ""
+        ta: false,
+        teacher: false,
+        student: false
       },
       start_date: "",
       end_date: "",
@@ -551,10 +538,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return axios.put("/api/manage/classroom", _this6.editedItem).then(function () {
                   _this6.snackbar = true;
                   _this6.text = "Successfuly";
-                })["catch"](function () {
-                  _this6.snackbar = true;
-                  _this6.text = "Error";
-                });
+                })["catch"](function () {});
 
               case 3:
                 _this6.loading = false;
@@ -571,8 +555,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this7 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
-        var config, formData, _this7$userItems$find, _this7$userItems$find2;
-
+        var config, formData;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
@@ -591,27 +574,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   formData.append("course_id", _this7.course_id);
                   formData.append("start_date", _this7.start_date);
                   formData.append("end_date", _this7.end_date);
-                } else if (_this7.editedItem.role === "ta" || _this7.editedItem.role === "student") {
-                  _this7.addItem.student_id = (_this7$userItems$find = (_this7$userItems$find2 = _this7.userItems.find(function (e) {
-                    return e.id === _this7.selectUser.id;
-                  })) === null || _this7$userItems$find2 === void 0 ? void 0 : _this7$userItems$find2.username) !== null && _this7$userItems$find !== void 0 ? _this7$userItems$find : _this7.addItem.student_id;
-                  formData.append("name", _this7.selectUser);
-                  formData.append("student_id", _this7.addItem.student_id);
+                } else {
+                  formData.append("addItem", true);
+                  formData.append("user_id", _this7.selectUser);
                   formData.append("year", _this7.editedItem.year);
                   formData.append("section", _this7.editedItem.section);
                   formData.append("semester", _this7.editedItem.semester);
-                  formData.append("role", _this7.editedItem.role);
                   formData.append("course_id", _this7.course_id);
+                  formData.append("student", _this7.editedItem.student == true ? 1 : 0);
+                  formData.append("ta", _this7.editedItem.ta == true ? 1 : 0);
+                  formData.append("teacher", _this7.editedItem.teacher == true ? 1 : 0);
                 }
 
                 _context5.next = 6;
-                return axios.post("/api/user/file/upload", formData, config).then(function (response) {
-                  location.reload();
-                  console.log(response.data.payload);
-                })["catch"](function () {
-                  _this7.snackbar = true;
-                  _this7.text = "Error";
-                });
+                return axios.post("/api/user/file/upload", formData, config).then(function (response) {// location.reload();
+                })["catch"](function () {});
 
               case 6:
                 _this7.loading = false;
@@ -1800,7 +1777,7 @@ var render = function() {
                                                                     },
                                                                     [
                                                                       _c(
-                                                                        "v-combobox",
+                                                                        "v-autocomplete",
                                                                         {
                                                                           attrs: {
                                                                             items:
@@ -1808,7 +1785,9 @@ var render = function() {
                                                                             label:
                                                                               "Name",
                                                                             "item-text":
-                                                                              "name"
+                                                                              "name",
+                                                                            "item-value":
+                                                                              "id"
                                                                           },
                                                                           model: {
                                                                             value:
@@ -1823,56 +1802,6 @@ var render = function() {
                                                                           }
                                                                         }
                                                                       ),
-                                                                      _vm._v(
-                                                                        " "
-                                                                      ),
-                                                                      !_vm.userItems.find(
-                                                                        function(
-                                                                          e
-                                                                        ) {
-                                                                          return (
-                                                                            e.id ===
-                                                                            _vm
-                                                                              .selectUser
-                                                                              .id
-                                                                          )
-                                                                        }
-                                                                      )
-                                                                        ? _c(
-                                                                            "div",
-                                                                            [
-                                                                              _c(
-                                                                                "v-text-field",
-                                                                                {
-                                                                                  attrs: {
-                                                                                    label:
-                                                                                      "Student ID",
-                                                                                    type:
-                                                                                      "number"
-                                                                                  },
-                                                                                  model: {
-                                                                                    value:
-                                                                                      _vm
-                                                                                        .addItem
-                                                                                        .student_id,
-                                                                                    callback: function(
-                                                                                      $$v
-                                                                                    ) {
-                                                                                      _vm.$set(
-                                                                                        _vm.addItem,
-                                                                                        "student_id",
-                                                                                        $$v
-                                                                                      )
-                                                                                    },
-                                                                                    expression:
-                                                                                      "addItem.student_id"
-                                                                                  }
-                                                                                }
-                                                                              )
-                                                                            ],
-                                                                            1
-                                                                          )
-                                                                        : _vm._e(),
                                                                       _vm._v(
                                                                         " "
                                                                       ),

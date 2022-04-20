@@ -113,26 +113,13 @@
                           <v-card flat>
                             <v-card-text>
                               <v-col cols="12">
-                                <v-combobox
+                                <v-autocomplete
                                   v-model="selectUser"
                                   :items="userItems"
                                   label="Name"
                                   item-text="name"
-                                ></v-combobox>
-                                <div
-                                  v-if="
-                                    !userItems.find(
-                                      (e) => e.id === selectUser.id
-                                    )
-                                  "
-                                >
-                                  <v-text-field
-                                    v-model="addItem.student_id"
-                                    label="Student ID"
-                                    type="number"
-                                  ></v-text-field>
-                                </div>
-
+                                  item-value="id"
+                                ></v-autocomplete>
                                 <v-text-field
                                   v-model="editedItem.year"
                                   label="Year"
@@ -333,9 +320,9 @@ export default {
       start_datetime: "",
       end_datetime: "",
       role: "",
-      ta: "",
-      teacher: "",
-      student: "",
+      ta: false,
+      teacher: false,
+      student: false,
     },
     defaultItem: {
       name: "",
@@ -345,9 +332,9 @@ export default {
       start_datetime: "",
       end_datetime: "",
       role: "",
-      ta: "",
-      teacher: "",
-      student: "",
+      ta: false,
+      teacher: false,
+      student: false,
     },
     start_date: "",
     end_date: "",
@@ -465,10 +452,7 @@ export default {
           this.snackbar = true;
           this.text = "Successfuly";
         })
-        .catch(() => {
-          this.snackbar = true;
-          this.text = "Error";
-        });
+        .catch(() => {});
       this.loading = false;
     },
 
@@ -484,31 +468,23 @@ export default {
         formData.append("course_id", this.course_id);
         formData.append("start_date", this.start_date);
         formData.append("end_date", this.end_date);
-      } else if (
-        this.editedItem.role === "ta" ||
-        this.editedItem.role === "student"
-      ) {
-        this.addItem.student_id =
-          this.userItems.find((e) => e.id === this.selectUser.id)?.username ??
-          this.addItem.student_id;
-        formData.append("name", this.selectUser);
-        formData.append("student_id", this.addItem.student_id);
+      } else {
+        formData.append("addItem", true);
+        formData.append("user_id", this.selectUser);
         formData.append("year", this.editedItem.year);
         formData.append("section", this.editedItem.section);
         formData.append("semester", this.editedItem.semester);
-        formData.append("role", this.editedItem.role);
         formData.append("course_id", this.course_id);
+        formData.append("student", this.editedItem.student == true ? 1 : 0);
+        formData.append("ta", this.editedItem.ta == true ? 1 : 0);
+        formData.append("teacher", this.editedItem.teacher == true ? 1 : 0);
       }
       await axios
         .post("/api/user/file/upload", formData, config)
         .then((response) => {
-          location.reload();
-          console.log(response.data.payload);
+          // location.reload();
         })
-        .catch(() => {
-          this.snackbar = true;
-          this.text = "Error";
-        });
+        .catch(() => {});
       this.loading = false;
     },
 
