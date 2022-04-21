@@ -21,6 +21,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return response()->json(['success' => true, 'user' => $request->user()]);
 });
 
+Route::post('register', 'App\Http\Controllers\Auth\RegisterController@register');
+
 Route::put('user/{user_id}', 'App\Http\Controllers\UserController@update');
 Route::post('user/file/upload', 'App\Http\Controllers\UserController@import');
 Route::get('manage/user', 'App\Http\Controllers\UserController@getUser');

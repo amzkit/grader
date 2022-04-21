@@ -1,6 +1,7 @@
 <template>
   <div>
     <Loading :loading="this.loading" />
+    <Snackbar />
     <v-navigation-drawer absolute permanent left>
       <v-list dense nav>
         <v-list-item-group v-model="model" mandatory>
@@ -82,10 +83,13 @@
 
 <script>
 import Loading from "../Loading/Loading.vue";
+import Snackbar from "../Snackbar/Snackbar.vue";
+import { mapActions } from "vuex";
 export default {
   name: "Navigation",
   components: {
     Loading,
+    Snackbar,
   },
   props: {
     onClick: Function,
@@ -109,22 +113,40 @@ export default {
     console.log(this.$store.state.data.courses);
   },
   methods: {
+    ...mapActions("snackbar", ["showSnack"]),
+    snackBar(timeout = 3500, text = "Successfully", color = "success") {
+      this.showSnack({
+        text: text,
+        color: color,
+        timeout: timeout,
+      });
+    },
     async check_user() {
       this.loading = true;
-      await axios.get("/api/user").then((response) => {
-        if (response.data.success == true) {
-          this.$store.commit("data/SET_USER", response.data.user);
-        }
-      });
+      await axios
+        .get("/api/user")
+        .then((response) => {
+          if (response.data.success == true) {
+            this.$store.commit("data/SET_USER", response.data.user);
+          }
+        })
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
+        });
       this.loading = false;
     },
     async classroom() {
       this.loading = true;
-      await axios.get("api/classroom").then((response) => {
-        if (response.data.success == true) {
-          this.$store.commit("data/SET_COURSES", response.data.payload);
-        }
-      });
+      await axios
+        .get("api/classroom")
+        .then((response) => {
+          if (response.data.success == true) {
+            this.$store.commit("data/SET_COURSES", response.data.payload);
+          }
+        })
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
+        });
       this.loading = false;
     },
     async new_course() {
@@ -139,7 +161,11 @@ export default {
               courseId: response.data.payload.id,
               course_name: response.data.payload.course_name,
             });
+            this.snackBar();
           }
+        })
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
         });
       this.loading = false;
       this.dialog = false;

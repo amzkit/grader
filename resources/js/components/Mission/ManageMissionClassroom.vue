@@ -1,6 +1,7 @@
 <template>
   <v-row>
     <Loading :loading="loading" />
+    <Snackbar />
     <v-col cols="2">
       <Navigation :onClick="fetchItemSchedule" />
     </v-col>
@@ -247,6 +248,7 @@ import dayjs from "dayjs";
 import Navigation from "../Navigation/Navigation.vue";
 import Loading from "../Loading/Loading.vue";
 import Snackbar from "../Snackbar/Snackbar.vue";
+import { mapActions } from "vuex";
 export default {
   components: {
     Navigation,
@@ -343,6 +345,14 @@ export default {
 
   methods: {
     dayjs,
+    ...mapActions("snackbar", ["showSnack"]),
+    snackBar(timeout = 3500, text = "Successfully", color = "success") {
+      this.showSnack({
+        text: text,
+        color: color,
+        timeout: timeout,
+      });
+    },
     convertToPlain(html) {
       var tempDivElement = document.createElement("div");
       tempDivElement.innerHTML = html;
@@ -419,8 +429,8 @@ export default {
         .then(() => {
           location.reload();
         })
-        .catch((error) => {
-          console.log(error);
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
         });
       this.dialog = false;
       this.loading = false;
@@ -447,8 +457,8 @@ export default {
           .then(() => {
             location.reload();
           })
-          .catch((error) => {
-            console.error(error);
+          .catch((response) => {
+            this.snackBar(3500, response, "error");
           });
       }
       this.dialog = false;
@@ -460,22 +470,26 @@ export default {
       await axios
         .delete("api/manage/example/" + this.editedItem.id)
         .then(() => {
-          this.snackbar = true;
-          this.text = "Successfuly";
+          this.snackBar();
         })
-        .catch((error) => {
-          console.error(error);
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
         });
       this.loading = false;
     },
 
     async getProblems() {
       this.loading = true;
-      await axios.get("/api/problem").then((response) => {
-        if (response.data.success == true) {
-          this.problemList = response.data.payload;
-        }
-      });
+      await axios
+        .get("/api/problem")
+        .then((response) => {
+          if (response.data.success == true) {
+            this.problemList = response.data.payload;
+          }
+        })
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
+        });
       this.loading = false;
     },
 
@@ -483,11 +497,16 @@ export default {
       this.loading = true;
       if (item) {
         this.roomId = item.courseId;
-        await axios.get("/api/schedule/" + item.courseId).then((response) => {
-          if (response.data.success == true) {
-            this.desserts = response.data.payload;
-          }
-        });
+        await axios
+          .get("/api/schedule/" + item.courseId)
+          .then((response) => {
+            if (response.data.success == true) {
+              this.desserts = response.data.payload;
+            }
+          })
+          .catch((response) => {
+            this.snackBar(3500, response, "error");
+          });
       }
       this.loading = false;
     },

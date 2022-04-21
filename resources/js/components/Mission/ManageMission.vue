@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <Loading :loading="loading" />
-    <Snackbar :snackbar="snackbar" :text="text" />
+    <Snackbar />
     <v-row justify="center">
       <v-col>
         <v-data-table
@@ -165,6 +165,7 @@ import dayjs from "dayjs";
 import Loading from "../Loading/Loading.vue";
 import { VueEditor } from "vue2-editor";
 import Snackbar from "../Snackbar/Snackbar.vue";
+import { mapActions } from "vuex";
 export default {
   components: {
     dayjs,
@@ -174,8 +175,6 @@ export default {
   },
   data: function () {
     return {
-      snackbar: false,
-      text: "",
       loading: false,
       search: "",
       dialog: false,
@@ -259,6 +258,14 @@ export default {
 
   methods: {
     dayjs,
+    ...mapActions("snackbar", ["showSnack"]),
+    snackBar(timeout = 3500, text = "Successfully", color = "success") {
+      this.showSnack({
+        text: text,
+        color: color,
+        timeout: timeout,
+      });
+    },
     onFileChange(e) {
       this.editedItem.file = e.target.files[0];
     },
@@ -278,12 +285,16 @@ export default {
 
     async getProblems() {
       this.loading = true;
-      await axios.get("/api/problem").then((response) => {
-        if (response.data.success == true) {
-          this.desserts = response.data.payload;
-        }
-      });
-      console.log(this.desserts);
+      await axios
+        .get("/api/problem")
+        .then((response) => {
+          if (response.data.success == true) {
+            this.desserts = response.data.payload;
+          }
+        })
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
+        });
       this.loading = false;
     },
 
@@ -292,12 +303,10 @@ export default {
       await axios
         .delete("api/problem/" + this.editedItem.id)
         .then(() => {
-          this.snackbar = true;
-          this.text = "Successfuly";
+          this.snackBar();
         })
-        .catch(() => {
-          this.snackbar = true;
-          this.text = "Error";
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
         });
       this.loading = false;
     },
@@ -321,12 +330,10 @@ export default {
       await axios
         .post("/api/problem/update", formData, config)
         .then(() => {
-          this.snackbar = true;
-          this.text = "Successfuly";
+          this.snackBar();
         })
-        .catch(() => {
-          this.snackbar = true;
-          this.text = "Error";
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
         });
       this.loading = false;
     },

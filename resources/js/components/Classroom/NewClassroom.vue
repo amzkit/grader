@@ -1,6 +1,7 @@
 <template>
   <v-row>
     <Loading :loading="this.loading" />
+    <Snackbar />
     <v-col cols="12">
       <v-row justify="center">
         <h1>New Classroom</h1>
@@ -99,10 +100,13 @@
 import dayjs from "dayjs";
 import Navigation from "../Navigation/Navigation.vue";
 import Loading from "../Loading/Loading.vue";
+import Snackbar from "../Snackbar/Snackbar.vue";
+import { mapActions } from "vuex";
 export default {
   components: {
     Navigation,
     Loading,
+    Snackbar,
   },
   data: function () {
     return {
@@ -128,13 +132,20 @@ export default {
     },
   },
   methods: {
+    ...mapActions("snackbar", ["showSnack"]),
+    snackBar(timeout = 3500, text = "Successfully", color = "success") {
+      this.showSnack({
+        text: text,
+        color: color,
+        timeout: timeout,
+      });
+    },
     onFileChange(e) {
       this.file = e.target.files[0];
     },
     async formSubmit(e) {
       this.loading = true;
       e.preventDefault();
-
       const config = {
         headers: { "content-type": "multipart/form-data" },
       };
@@ -152,8 +163,8 @@ export default {
           window.location.href = "/manage-classroom";
           this.loading = false;
         })
-        .catch(function (error) {
-          console.log(error);
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
         });
       this.loading = false;
     },

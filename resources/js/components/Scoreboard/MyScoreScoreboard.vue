@@ -1,6 +1,7 @@
 <template>
   <v-row>
     <Loading :loading="this.loading" />
+    <Snackbar />
     <div v-if="!this.$store.state.data.loading">
       <v-row justify="center">
         <v-data-table
@@ -54,9 +55,12 @@
 <script>
 import dayjs from "dayjs";
 import Loading from "../Loading/Loading.vue";
+import Snackbar from "../Snackbar/Snackbar.vue";
+import { mapActions } from "vuex";
 export default {
   components: {
     Loading,
+    Snackbar,
   },
   data: function () {
     return {
@@ -84,9 +88,16 @@ export default {
   async created() {
     this.fatchItemSchedule();
   },
-  computed: {},
   methods: {
     dayjs,
+    ...mapActions("snackbar", ["showSnack"]),
+    snackBar(timeout = 3500, text = "Successfully", color = "success") {
+      this.showSnack({
+        text: text,
+        color: color,
+        timeout: timeout,
+      });
+    },
     invalidDate(item) {
       return item ? dayjs(item).format("MMMM D, YYYY hh:mm A") : "-";
     },
@@ -116,9 +127,11 @@ export default {
           if (response.data.success == true) {
             items = response.data.payload;
           }
+        })
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
         });
       this.myScore = items;
-
       this.loading = false;
     },
   },

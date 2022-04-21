@@ -6,6 +6,7 @@ const routes = [
             let user_role = document.head.querySelector(
                 'meta[name="user-role"]'
             ).content;
+            console.log(user_role);
             switch (user_role) {
                 case "admin":
                     return import("../pages/home.vue");
@@ -15,6 +16,8 @@ const routes = [
                     return import("../pages/home.vue");
                 case "teacher":
                     return import("../pages/home.vue");
+                // case "guest":
+                //     return import("../pages/home.vue");
                 default:
                     return import("../pages/guest.vue");
             }
@@ -71,9 +74,9 @@ const routes = [
         component: () => import("../components/Classroom/ManageClassroom.vue")
     },
     {
-        path: "/classroom",
-        name: "classroom",
-        component: () => import("../pages/ClassRoomPage.vue")
+        path: "/problems-view",
+        name: "problems-view",
+        component: () => import("../components/Mission/Problems.vue")
     },
     {
         path: "/new-classroom",

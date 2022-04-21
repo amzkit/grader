@@ -53,3 +53,4 @@ const app = new Vue({
     vuetify: new Vuetify(),
     components: { App }
 });
+

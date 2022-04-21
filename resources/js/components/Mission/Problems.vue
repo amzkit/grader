@@ -42,41 +42,49 @@
 import dayjs from "dayjs";
 import Navigation from "../Navigation/Navigation.vue";
 import Loading from "../Loading/Loading.vue";
+import Snackbar from "../Snackbar/Snackbar.vue";
+import { mapActions } from "vuex";
+
 export default {
   components: {
     Navigation,
     Loading,
+    Snackbar,
   },
   data: function () {
     return {
       loading: false,
       headers: [
         {
-          text: "ชื่องาน",
+          text: "Title",
           align: "start",
           sortable: true,
           value: "title",
         },
-        { text: "ชื่อเรื่อง", value: "question" },
-        { text: "ภาษา", value: "language" },
-        { text: "คะแนน", value: "score" },
-        { text: "ไฟล์", value: "file" },
+        { text: "Question", value: "question" },
+        { text: "Score", value: "score" },
+        { text: "File", value: "file" },
         {
-          text: "วันที่ส่ง",
+          text: "Start Date",
           value: "start_date",
         },
         {
-          text: "ครบกำหนดส่ง",
+          text: "End Date",
           value: "end_date",
         },
       ],
     };
   },
-  async created() {
-    // await this.check_user();
-  },
   methods: {
     dayjs,
+    ...mapActions("snackbar", ["showSnack"]),
+    snackBar(timeout = 3500, text = "Successfully", color = "success") {
+      this.showSnack({
+        text: text,
+        color: color,
+        timeout: timeout,
+      });
+    },
     download(item) {
       window.location.href = `api/schedule/download${item.file.replace(
         "problem_file",
@@ -95,11 +103,7 @@ export default {
       this.loading = true;
       if (item) {
         await axios
-          .get("/api/schedule", {
-            params: {
-              course_id: item.courseId,
-            },
-          })
+          .get("/api/schedule/" + item.courseId)
           .then((response) => {
             if (response.data.success == true) {
               this.$store.commit(
@@ -107,6 +111,9 @@ export default {
                 response.data.payload
               );
             }
+          })
+          .catch((response) => {
+            this.snackBar(3500, response, "error");
           });
       }
       this.loading = false;

@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <Snackbar :snackbar="snackbar" :text="text" />
+    <Snackbar />
     <Loading :loading="loading" />
     <v-col cols="12">
       <v-row justify="center">
@@ -101,6 +101,7 @@ import Navigation from "../Navigation/Navigation.vue";
 import { VueEditor } from "vue2-editor";
 import Snackbar from "../Snackbar/Snackbar.vue";
 import Loading from "../Loading/Loading.vue";
+import { mapActions } from "vuex";
 export default {
   components: {
     Navigation,
@@ -114,7 +115,6 @@ export default {
         valid: true,
         required: (value) => !!value || "Required.",
       },
-      snackbar: false,
       loading: false,
       text: "",
       title: "",
@@ -144,6 +144,14 @@ export default {
   },
 
   methods: {
+    ...mapActions("snackbar", ["showSnack"]),
+    snackBar(timeout = 3500, text = "Successfully", color = "success") {
+      this.showSnack({
+        text: text,
+        color: color,
+        timeout: timeout,
+      });
+    },
     onFileChange(e) {
       this.file = e.target.files[0];
     },
@@ -169,8 +177,8 @@ export default {
           .then(function () {
             window.location.href = "/manage-problem";
           })
-          .catch(function (error) {
-            console.log(error);
+          .catch((response) => {
+            this.snackBar(3500, response, "error");
           });
       }
       this.loading = false;

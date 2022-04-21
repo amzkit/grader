@@ -10,9 +10,9 @@
     </v-toolbar-title>
 
     <v-spacer></v-spacer>
-    <!-- <v-btn class="secondary pr-4 mr-2" @click="redirect('/register')">
+    <v-btn class="secondary pr-4 mr-2" @click="redirect('/register')">
       Register
-    </v-btn> -->
+    </v-btn>
     <div v-if="$route.fullPath !== '/login'">
       <v-btn class="primary pr-4" @click="redirect('/login')"> Login </v-btn>
     </div>

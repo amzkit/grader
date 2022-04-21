@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <Snackbar />
     <Loading :loading="this.loading" />
     <v-row>
       <v-row>
@@ -49,10 +50,13 @@
 <script>
 import Loading from "../Loading/Loading.vue";
 import { VueEditor } from "vue2-editor";
+import Snackbar from "../Snackbar/Snackbar.vue";
+import { mapActions } from "vuex";
 export default {
   components: {
     Loading,
     VueEditor,
+    Snackbar,
   },
   name: "Comment",
   data: function () {
@@ -63,11 +67,18 @@ export default {
       customToolbar: [{}],
     };
   },
-  mounted() {},
   created() {
     this.getScoreboard();
   },
   methods: {
+    ...mapActions("snackbar", ["showSnack"]),
+    snackBar(timeout = 3500, text = "Successfully", color = "success") {
+      this.showSnack({
+        text: text,
+        color: color,
+        timeout: timeout,
+      });
+    },
     convertToPlain(html) {
       var tempDivElement = document.createElement("div");
       tempDivElement.innerHTML = html;
@@ -87,6 +98,9 @@ export default {
           if (response.data.success == true) {
             this.item = response.data.payload;
           }
+        })
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
         });
       this.loading = false;
     },
@@ -100,6 +114,9 @@ export default {
         })
         .then(() => {
           window.location.href = "/scoreboard";
+        })
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
         });
       this.loading = false;
     },

@@ -1,5 +1,6 @@
 <template>
   <div class="text-center">
+    <Snackbar />
     <v-card v-if="comment != ''">
       <v-card-title>
         Comment
@@ -40,7 +41,12 @@
 
 
 <script>
+import Snackbar from "../Snackbar/Snackbar.vue";
+import { mapActions } from "vuex";
 export default {
+  components: {
+    Snackbar,
+  },
   data: function () {
     return {
       loading: false,
@@ -86,7 +92,6 @@ export default {
       ],
     };
   },
-  mounted() {},
 
   created() {
     this.myScore();
@@ -94,6 +99,14 @@ export default {
   },
 
   methods: {
+    ...mapActions("snackbar", ["showSnack"]),
+    snackBar(timeout = 3500, text = "Successfully", color = "success") {
+      this.showSnack({
+        text: text,
+        color: color,
+        timeout: timeout,
+      });
+    },
     async commentScore() {
       await axios
         .get("/api/comment", {
@@ -105,6 +118,9 @@ export default {
           if (response.data.success == true) {
             this.comment = response.data.payload;
           }
+        })
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
         });
     },
 
@@ -120,6 +136,9 @@ export default {
           if (response.data.success == true) {
             items = response.data.payload2;
           }
+        })
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
         });
       this.items = items.filter(
         (e) => e.submission_id == this.$route.query.submission_id

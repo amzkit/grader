@@ -107,7 +107,7 @@
 
       <div v-if="role === 'ta'">
         <v-btn text to="/"> Home </v-btn>
-        <v-btn text to="/classroom"> Problems </v-btn>
+        <v-btn text to="/problems-view"> Problems </v-btn>
         <v-btn text to="/scoreboard"> Scoreboard </v-btn>
       </div>
 
@@ -256,7 +256,7 @@ export default {
           text: "Home",
         },
         {
-          icon: "mdi-pencil",
+          icon: "mdi-calendar-check",
           text: "Problem",
           subLinks: [
             // {
@@ -274,7 +274,7 @@ export default {
           ],
         },
         {
-          icon: "mdi-pencil",
+          icon: "mdi-book",
           text: "Classroom",
           subLinks: [
             {
@@ -290,11 +290,11 @@ export default {
         },
         {
           to: "/new-test",
-          icon: "mdi-view-dashboard",
+          icon: "mdi-clipboard-edit",
           text: "New Test",
         },
         {
-          icon: "mdi-pencil",
+          icon: "mdi-account",
           text: "User",
           subLinks: [
             {
@@ -315,7 +315,7 @@ export default {
           text: "Home",
         },
         {
-          icon: "mdi-pencil",
+          icon: "mdi-book",
           text: "Classroom",
           subLinks: [
             {
@@ -325,7 +325,7 @@ export default {
           ],
         },
         {
-          icon: "mdi-pencil",
+          icon: "mdi-calendar-check",
           text: "Problem",
           subLinks: [
             {
@@ -349,7 +349,7 @@ export default {
           text: "Scoreboard",
         },
         {
-          icon: "mdi-pencil",
+          icon: "mdi-account",
           text: "User",
           subLinks: [
             {
@@ -399,11 +399,14 @@ export default {
       this.redirect("/");
     },
     async initialize() {
-      await axios.get("/api/user").then((response) => {
-        if (response.data.success == true) {
-          this.$store.commit("data/SET_USER", response.data.user);
-        }
-      });
+      await axios
+        .get("/api/user")
+        .then((response) => {
+          if (response.data.success == true) {
+            this.$store.commit("data/SET_USER", response.data.user);
+          }
+        })
+        .catch(() => {});
     },
   },
 };

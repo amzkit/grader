@@ -1,5 +1,6 @@
 <template>
   <v-row>
+    <Snackbar />
     <v-col cols="12">
       <v-row justify="center">
         <h1>Add Test Case</h1>
@@ -53,7 +54,12 @@
 </template>
 
 <script>
+import Snackbar from "../Snackbar/Snackbar.vue";
+import { mapActions } from "vuex";
 export default {
+  components: {
+    Snackbar,
+  },
   data: function () {
     return {
       problems: [],
@@ -65,16 +71,28 @@ export default {
   mounted() {
     this.fetchItemProblem();
   },
-  created() {},
 
   methods: {
+    ...mapActions("snackbar", ["showSnack"]),
+    snackBar(timeout = 3500, text = "Successfully", color = "success") {
+      this.showSnack({
+        text: text,
+        color: color,
+        timeout: timeout,
+      });
+    },
     async fetchItemProblem() {
       this.loading = true;
-      await axios.get("/api/problem").then((response) => {
-        if (response.data.success == true) {
-          this.problems = response.data.payload;
-        }
-      });
+      await axios
+        .get("/api/problem")
+        .then((response) => {
+          if (response.data.success == true) {
+            this.problems = response.data.payload;
+          }
+        })
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
+        });
       this.loading = false;
     },
     async addTestCase() {
@@ -85,9 +103,12 @@ export default {
           input: this.input,
           output: this.output,
         })
-        .then((response) => {
+        .then(() => {
+          this.snackBar();
           this.resetFrom();
-          console.log(response.data.payload);
+        })
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
         });
 
       this.loading = false;

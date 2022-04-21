@@ -1,6 +1,7 @@
 <template>
   <v-row>
     <Loading :loading="this.loading" />
+    <Snackbar />
     <v-col cols="2">
       <Navigation :onClick="fatchItemSchedule" />
     </v-col>
@@ -57,10 +58,13 @@
 import dayjs from "dayjs";
 import Navigation from "../Navigation/Navigation.vue";
 import Loading from "../Loading/Loading.vue";
+import Snackbar from "../Snackbar/Snackbar.vue";
+import { mapActions } from "vuex";
 export default {
   components: {
     Navigation,
     Loading,
+    Snackbar,
   },
   data: function () {
     return {
@@ -87,10 +91,16 @@ export default {
       ],
     };
   },
-  async created() {},
-  computed: {},
   methods: {
     dayjs,
+    ...mapActions("snackbar", ["showSnack"]),
+    snackBar(timeout = 3500, text = "Successfully", color = "success") {
+      this.showSnack({
+        text: text,
+        color: color,
+        timeout: timeout,
+      });
+    },
     invalidDate(item) {
       return item ? dayjs(item).format("MMMM D, YYYY hh:mm A") : "-";
     },
@@ -121,6 +131,9 @@ export default {
               items = response.data.payload;
               items2 = response.data.comment;
             }
+          })
+          .catch((response) => {
+            this.snackBar(3500, response, "error");
           });
         this.myScore = items;
         this.comment = items2;

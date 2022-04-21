@@ -2,62 +2,59 @@
   <v-app>
     <GuestTopBar></GuestTopBar>
     <v-main>
-      <v-container class="pa-md-8 mx-auto" style="width: 100%" fluid>
-        <v-layout align-center justify-center>
-          <v-flex xs12 sm10 md6>
-            <v-card class="elevation-12">
-              <v-toolbar dark color="primary">
-                <v-toolbar-title>Register</v-toolbar-title>
-                <v-spacer></v-spacer>
-              </v-toolbar>
-              <v-card-text>
-                <v-form ref="form" id="form" method="POST" action="/register">
+      <v-container fill-height fluid>
+        <v-row align="center" justify="center">
+          <v-layout align-center justify-center>
+            <v-flex xs12 sm10 md6>
+              <v-card class="elevation-12">
+                <v-toolbar dark color="primary">
+                  <v-toolbar-title>Register</v-toolbar-title>
+                  <v-spacer></v-spacer>
+                </v-toolbar>
+                <v-card-text>
                   <v-text-field
-                    prepend-icon="person"
+                    v-model="name"
                     name="name"
                     label="Name"
                     type="text"
                     required
                   ></v-text-field>
                   <v-text-field
-                    prepend-icon="person"
+                    v-model="username"
+                    label="Username"
+                    type="text"
+                    required
+                  ></v-text-field>
+                  <v-text-field
+                    v-model="email"
                     name="email"
                     label="Email"
                     type="email"
                     required
                   ></v-text-field>
                   <v-text-field
-                    prepend-icon="person"
-                    name="password"
+                    v-model="password"
                     label="Password"
                     type="password"
                     required
                   ></v-text-field>
                   <v-text-field
-                    prepend-icon="person"
-                    name="password_confirmation"
-                    label="password"
+                    v-model="password_confirmation"
+                    label="Password Confirmation"
                     type="password"
                     required
                   ></v-text-field>
-                  <v-text-field
-                    v-show="false"
-                    name="_token"
-                    :value="csrf"
-                  ></v-text-field>
-                </v-form>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <div class="text-center">
-                  <v-btn color="primary" type="submit" form="form"
-                    >Register</v-btn
-                  >
-                </div>
-              </v-card-actions>
-            </v-card>
-          </v-flex>
-        </v-layout>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <div class="text-center">
+                    <v-btn color="primary" @click="register">Register</v-btn>
+                  </div>
+                </v-card-actions>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-row>
       </v-container>
     </v-main>
   </v-app>
@@ -73,9 +70,31 @@ export default {
     csrf: document
       .querySelector('meta[name="csrf-token"]')
       .getAttribute("content"),
+    name: "",
+    username: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
   }),
-  props: {},
-  methods: {},
+  methods: {
+    redirect(url) {
+      window.location.href = url;
+    },
+    async register() {
+      if (this.password === this.password_confirmation) {
+        await axios
+          .post("/api/register", {
+            name: this.name,
+            username: this.username,
+            email: this.email,
+            password: this.password,
+          })
+          .then(() => {
+            this.redirect("/login");
+          });
+      }
+    },
+  },
 };
 </script>
 

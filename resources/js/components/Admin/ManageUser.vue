@@ -1,6 +1,7 @@
 
 <template>
   <v-row>
+    <Snackbar />
     <v-data-table
       :headers="headers"
       :search="search"
@@ -100,7 +101,12 @@
   </v-row>
 </template>
 <script>
+import Snackbar from "../Snackbar/Snackbar.vue";
+import { mapActions } from "vuex";
 export default {
+  components: {
+    Snackbar,
+  },
   data: function () {
     return {
       loader: null,
@@ -152,30 +158,50 @@ export default {
       setTimeout(() => {
         this[l] = false;
         this.resetPassword = this.editedItem.username;
+        this.updateUser();
       }, 1000);
       this.loader = null;
     },
   },
 
   methods: {
+    ...mapActions("snackbar", ["showSnack"]),
+    snackBar(timeout = 3500, text = "Successfully", color = "success") {
+      this.showSnack({
+        text: text,
+        color: color,
+        timeout: timeout,
+      });
+    },
     async getUser() {
       this.loading = true;
-      await axios.get("/api/manage/user").then((response) => {
-        if (response.data.success == true) {
-          this.desserts = response.data.payload;
-        }
-      });
+      await axios
+        .get("/api/manage/user")
+        .then((response) => {
+          if (response.data.success == true) {
+            this.desserts = response.data.payload;
+          }
+        })
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
+        });
       this.loading = false;
     },
 
     async updateUser() {
       this.loading = true;
-      console.log(this.editedItem, this.resetPassword);
-      await axios.put("/api/manage/user", {
-        id: this.editedItem.id,
-        resetPassword: this.resetPassword ? this.resetPassword : "",
-        name: this.editedItem.name,
-      });
+      await axios
+        .put("/api/manage/user", {
+          id: this.editedItem.id,
+          resetPassword: this.resetPassword ? this.resetPassword : "",
+          name: this.editedItem.name,
+        })
+        .then(() => {
+          this.snackBar();
+        })
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
+        });
 
       this.loading = false;
     },

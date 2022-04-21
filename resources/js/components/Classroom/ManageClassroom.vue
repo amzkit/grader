@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <Loading :loading="loading" />
-    <Snackbar :snackbar="snackbar" :text="text" />
+    <Snackbar />
     <v-col cols="2">
       <Navigation :onClick="fetchItemClassroom" />
     </v-col>
@@ -46,11 +46,11 @@
                     <div v-if="editedIndex === -1">
                       <v-tabs vertical>
                         <v-tab>
-                          <v-icon left> mdi-account </v-icon>
+                          <v-icon left> mdi-upload </v-icon>
                           Import File
                         </v-tab>
                         <v-tab>
-                          <v-icon left> mdi-lock </v-icon>
+                          <v-icon left> mdi-account-plus </v-icon>
                           Add
                         </v-tab>
                         <v-tab-item>
@@ -279,12 +279,11 @@ import dayjs from "dayjs";
 import Loading from "../Loading/Loading.vue";
 import Navigation from "../Navigation/Navigation.vue";
 import Snackbar from "../Snackbar/Snackbar.vue";
+import { mapActions } from "vuex";
 export default {
   name: "ManageClassroom",
   components: { Loading, Navigation, Snackbar },
   data: () => ({
-    snackbar: false,
-    text: "",
     selectUser: "",
     addItem: {
       student_id: "",
@@ -373,6 +372,14 @@ export default {
 
   methods: {
     dayjs,
+    ...mapActions("snackbar", ["showSnack"]),
+    snackBar(timeout = 3500, text = "Successfully", color = "success") {
+      this.showSnack({
+        text: text,
+        color: color,
+        timeout: timeout,
+      });
+    },
     invalidDate(item) {
       return item ? dayjs(item).format("MMMM D, YYYY") : "-";
     },
@@ -386,8 +393,7 @@ export default {
           }
         })
         .catch(() => {
-          this.snackbar = true;
-          this.text = "Error";
+          this.snackBar(3500, response, "error");
         });
       this.loading = false;
     },
@@ -434,12 +440,10 @@ export default {
       await axios
         .delete(`/api/manage/classroom/${this.editedItem.id}`)
         .then(() => {
-          this.snackbar = true;
-          this.text = "Successfuly";
+          this.snackBar();
         })
-        .catch(() => {
-          this.snackbar = true;
-          this.text = "Error";
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
         });
       this.loading = false;
     },
@@ -449,10 +453,11 @@ export default {
       await axios
         .put(`/api/manage/classroom`, this.editedItem)
         .then(() => {
-          this.snackbar = true;
-          this.text = "Successfuly";
+          this.snackBar();
         })
-        .catch(() => {});
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
+        });
       this.loading = false;
     },
 
@@ -481,10 +486,12 @@ export default {
       }
       await axios
         .post("/api/user/file/upload", formData, config)
-        .then((response) => {
-          // location.reload();
+        .then(() => {
+          location.reload();
         })
-        .catch(() => {});
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
+        });
       this.loading = false;
     },
 
@@ -493,10 +500,8 @@ export default {
       if (this.editedIndex > -1) {
         Object.assign(this.desserts[this.editedIndex], this.editedItem);
         this.putManageClassroom();
-        this.snackbar = false;
       } else {
         this.postManageClassroom();
-        this.snackbar = false;
       }
     },
 
@@ -515,9 +520,8 @@ export default {
               this.desserts = response.data.payload;
             }
           })
-          .catch(() => {
-            this.snackbar = true;
-            this.text = "Error";
+          .catch((response) => {
+            this.snackBar(3500, response, "error");
           });
       }
       this.loading = false;

@@ -1,5 +1,6 @@
 <template>
   <v-row>
+    <Snackbar />
     <Loading :loading="loading" />
     <v-col cols="3">
       <v-card class="mx-auto" max-width="300" tile>
@@ -190,11 +191,14 @@
 import dayjs from "dayjs";
 import Navigation from "../Navigation/Navigation.vue";
 import Loading from "../Loading/Loading.vue";
+import Snackbar from "../Snackbar/Snackbar.vue";
+import { mapActions } from "vuex";
 
 export default {
   components: {
     Navigation,
     Loading,
+    Snackbar,
   },
   data: function () {
     return {
@@ -256,7 +260,14 @@ export default {
 
   methods: {
     dayjs,
-
+    ...mapActions("snackbar", ["showSnack"]),
+    snackBar(timeout = 3500, text = "Successfully", color = "success") {
+      this.showSnack({
+        text: text,
+        color: color,
+        timeout: timeout,
+      });
+    },
     async submit() {
       if (!this.problem.sendFile) {
         return console.log("NO");
@@ -281,8 +292,8 @@ export default {
             window.location.reload();
           }
         })
-        .catch((error) => {
-          console.error(error);
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
         });
       this.loading = false;
     },
@@ -304,11 +315,16 @@ export default {
 
     async fetchItemSchedule() {
       this.loading = true;
-      await axios.get("/api/schedule").then((response) => {
-        if (response.data.success == true) {
-          this.course_room = response.data.payload;
-        }
-      });
+      await axios
+        .get("/api/schedule")
+        .then((response) => {
+          if (response.data.success == true) {
+            this.course_room = response.data.payload;
+          }
+        })
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
+        });
       this.loading = false;
     },
 
@@ -334,6 +350,9 @@ export default {
           if (response.data.success == true) {
             this.schedule_room = response.data.payload;
           }
+        })
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
         });
       this.loading = false;
     },
@@ -350,6 +369,9 @@ export default {
           if (response.data.success == true) {
             this.missionPass = response.data.payload;
           }
+        })
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
         });
       this.loading = false;
     },
@@ -361,8 +383,8 @@ export default {
         .then((response) => {
           this.languages = response.data.payload;
         })
-        .catch((error) => {
-          console.log(error);
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
         });
       this.loading = false;
     },

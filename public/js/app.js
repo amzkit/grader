@@ -5058,10 +5058,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _layouts_guest_top_bar_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../layouts/guest_top_bar.vue */ "./resources/js/layouts/guest_top_bar.vue");
-//
-//
-//
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _layouts_guest_top_bar_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../layouts/guest_top_bar.vue */ "./resources/js/layouts/guest_top_bar.vue");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -5128,15 +5133,54 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
-    GuestTopBar: _layouts_guest_top_bar_vue__WEBPACK_IMPORTED_MODULE_0__.default
+    GuestTopBar: _layouts_guest_top_bar_vue__WEBPACK_IMPORTED_MODULE_1__.default
   },
   data: function data() {
     return {
-      csrf: document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+      csrf: document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+      name: "",
+      username: "",
+      email: "",
+      password: "",
+      password_confirmation: ""
     };
   },
-  props: {},
-  methods: {}
+  methods: {
+    redirect: function redirect(url) {
+      window.location.href = url;
+    },
+    register: function register() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                if (!(_this.password === _this.password_confirmation)) {
+                  _context.next = 3;
+                  break;
+                }
+
+                _context.next = 3;
+                return axios.post("/api/register", {
+                  name: _this.name,
+                  username: _this.username,
+                  email: _this.email,
+                  password: _this.password
+                }).then(function () {
+                  _this.redirect("/login");
+                });
+
+              case 3:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    }
+  }
 });
 
 /***/ }),
@@ -5422,7 +5466,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         icon: "mdi-home",
         text: "Home"
       }, {
-        icon: "mdi-pencil",
+        icon: "mdi-calendar-check",
         text: "Problem",
         subLinks: [// {
         //   text: "Problem",
@@ -5436,7 +5480,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           to: "/manage-problem-classroom"
         }]
       }, {
-        icon: "mdi-pencil",
+        icon: "mdi-book",
         text: "Classroom",
         subLinks: [{
           text: "Manage Classroom",
@@ -5448,10 +5492,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         text: "Scoreboard"
       }, {
         to: "/new-test",
-        icon: "mdi-view-dashboard",
+        icon: "mdi-clipboard-edit",
         text: "New Test"
       }, {
-        icon: "mdi-pencil",
+        icon: "mdi-account",
         text: "User",
         subLinks: [{
           text: "New User",
@@ -5466,14 +5510,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         icon: "mdi-home",
         text: "Home"
       }, {
-        icon: "mdi-pencil",
+        icon: "mdi-book",
         text: "Classroom",
         subLinks: [{
           text: "Manage Classroom",
           to: "/manage-classroom"
         }]
       }, {
-        icon: "mdi-pencil",
+        icon: "mdi-calendar-check",
         text: "Problem",
         subLinks: [{
           text: "Problem",
@@ -5491,7 +5535,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         icon: "mdi-view-dashboard",
         text: "Scoreboard"
       }, {
-        icon: "mdi-pencil",
+        icon: "mdi-account",
         text: "User",
         subLinks: [{
           text: "Manage User",
@@ -5587,7 +5631,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   if (response.data.success == true) {
                     _this3.$store.commit("data/SET_USER", response.data.user);
                   }
-                });
+                })["catch"](function () {});
 
               case 2:
               case "end":
@@ -5860,6 +5904,7 @@ var routes = [{
   name: "app",
   component: function component() {
     var user_role = document.head.querySelector('meta[name="user-role"]').content;
+    console.log(user_role);
 
     switch (user_role) {
       case "admin":
@@ -5873,6 +5918,8 @@ var routes = [{
 
       case "teacher":
         return __webpack_require__.e(/*! import() */ "resources_js_pages_home_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/home.vue */ "./resources/js/pages/home.vue"));
+      // case "guest":
+      //     return import("../pages/home.vue");
 
       default:
         return __webpack_require__.e(/*! import() */ "resources_js_pages_guest_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/guest.vue */ "./resources/js/pages/guest.vue"));
@@ -5937,10 +5984,10 @@ var routes = [{
     return __webpack_require__.e(/*! import() */ "resources_js_components_Classroom_ManageClassroom_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Classroom/ManageClassroom.vue */ "./resources/js/components/Classroom/ManageClassroom.vue"));
   }
 }, {
-  path: "/classroom",
-  name: "classroom",
+  path: "/problems-view",
+  name: "problems-view",
   component: function component() {
-    return __webpack_require__.e(/*! import() */ "resources_js_pages_ClassRoomPage_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/ClassRoomPage.vue */ "./resources/js/pages/ClassRoomPage.vue"));
+    return __webpack_require__.e(/*! import() */ "resources_js_components_Mission_Problems_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Mission/Problems.vue */ "./resources/js/components/Mission/Problems.vue"));
   }
 }, {
   path: "/new-classroom",
@@ -6035,22 +6082,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _layouts_top_bar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./layouts/top_bar */ "./resources/js/store/layouts/top_bar.js");
 /* harmony import */ var _layouts_navigation_drawer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./layouts/navigation_drawer */ "./resources/js/store/layouts/navigation_drawer.js");
 /* harmony import */ var _data__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./data */ "./resources/js/store/data.js");
+/* harmony import */ var _snackbar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./snackbar */ "./resources/js/store/snackbar.js");
 
 
 
 
 
-vue__WEBPACK_IMPORTED_MODULE_3__.default.use(vuex__WEBPACK_IMPORTED_MODULE_4__.default);
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new vuex__WEBPACK_IMPORTED_MODULE_4__.default.Store({
+
+vue__WEBPACK_IMPORTED_MODULE_4__.default.use(vuex__WEBPACK_IMPORTED_MODULE_5__.default);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new vuex__WEBPACK_IMPORTED_MODULE_5__.default.Store({
   modules: {
     top_bar: _layouts_top_bar__WEBPACK_IMPORTED_MODULE_0__.default,
     navigation_drawer: _layouts_navigation_drawer__WEBPACK_IMPORTED_MODULE_1__.default,
-    data: _data__WEBPACK_IMPORTED_MODULE_2__.default
+    data: _data__WEBPACK_IMPORTED_MODULE_2__.default,
+    snackbar: _snackbar__WEBPACK_IMPORTED_MODULE_3__.default
   }
 }));
 
@@ -6133,6 +6183,41 @@ var mutations = {
   getters: getters,
   actions: actions,
   mutations: mutations
+});
+
+/***/ }),
+
+/***/ "./resources/js/store/snackbar.js":
+/*!****************************************!*\
+  !*** ./resources/js/store/snackbar.js ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  namespaced: true,
+  state: {
+    text: "",
+    color: "",
+    timeout: ""
+  },
+  mutations: {
+    SHOW_MESSAGE: function SHOW_MESSAGE(state, payload) {
+      state.text = payload.text;
+      state.color = payload.color;
+      state.timeout = payload.timeout;
+    }
+  },
+  actions: {
+    showSnack: function showSnack(_ref, payload) {
+      var commit = _ref.commit;
+      commit("SHOW_MESSAGE", payload);
+    }
+  }
 });
 
 /***/ }),
@@ -43388,126 +43473,137 @@ var render = function() {
         [
           _c(
             "v-container",
-            {
-              staticClass: "pa-md-8 mx-auto",
-              staticStyle: { width: "100%" },
-              attrs: { fluid: "" }
-            },
+            { attrs: { "fill-height": "", fluid: "" } },
             [
               _c(
-                "v-layout",
-                { attrs: { "align-center": "", "justify-center": "" } },
+                "v-row",
+                { attrs: { align: "center", justify: "center" } },
                 [
                   _c(
-                    "v-flex",
-                    { attrs: { xs12: "", sm10: "", md6: "" } },
+                    "v-layout",
+                    { attrs: { "align-center": "", "justify-center": "" } },
                     [
                       _c(
-                        "v-card",
-                        { staticClass: "elevation-12" },
+                        "v-flex",
+                        { attrs: { xs12: "", sm10: "", md6: "" } },
                         [
                           _c(
-                            "v-toolbar",
-                            { attrs: { dark: "", color: "primary" } },
-                            [
-                              _c("v-toolbar-title", [_vm._v("Register")]),
-                              _vm._v(" "),
-                              _c("v-spacer")
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-card-text",
+                            "v-card",
+                            { staticClass: "elevation-12" },
                             [
                               _c(
-                                "v-form",
-                                {
-                                  ref: "form",
-                                  attrs: {
-                                    id: "form",
-                                    method: "POST",
-                                    action: "/register"
-                                  }
-                                },
+                                "v-toolbar",
+                                { attrs: { dark: "", color: "primary" } },
+                                [
+                                  _c("v-toolbar-title", [_vm._v("Register")]),
+                                  _vm._v(" "),
+                                  _c("v-spacer")
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-card-text",
                                 [
                                   _c("v-text-field", {
                                     attrs: {
-                                      "prepend-icon": "person",
                                       name: "name",
                                       label: "Name",
                                       type: "text",
                                       required: ""
+                                    },
+                                    model: {
+                                      value: _vm.name,
+                                      callback: function($$v) {
+                                        _vm.name = $$v
+                                      },
+                                      expression: "name"
                                     }
                                   }),
                                   _vm._v(" "),
                                   _c("v-text-field", {
                                     attrs: {
-                                      "prepend-icon": "person",
+                                      label: "Username",
+                                      type: "text",
+                                      required: ""
+                                    },
+                                    model: {
+                                      value: _vm.username,
+                                      callback: function($$v) {
+                                        _vm.username = $$v
+                                      },
+                                      expression: "username"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c("v-text-field", {
+                                    attrs: {
                                       name: "email",
                                       label: "Email",
                                       type: "email",
                                       required: ""
+                                    },
+                                    model: {
+                                      value: _vm.email,
+                                      callback: function($$v) {
+                                        _vm.email = $$v
+                                      },
+                                      expression: "email"
                                     }
                                   }),
                                   _vm._v(" "),
                                   _c("v-text-field", {
                                     attrs: {
-                                      "prepend-icon": "person",
-                                      name: "password",
                                       label: "Password",
                                       type: "password",
                                       required: ""
+                                    },
+                                    model: {
+                                      value: _vm.password,
+                                      callback: function($$v) {
+                                        _vm.password = $$v
+                                      },
+                                      expression: "password"
                                     }
                                   }),
                                   _vm._v(" "),
                                   _c("v-text-field", {
                                     attrs: {
-                                      "prepend-icon": "person",
-                                      name: "password_confirmation",
-                                      label: "password",
+                                      label: "Password Confirmation",
                                       type: "password",
                                       required: ""
+                                    },
+                                    model: {
+                                      value: _vm.password_confirmation,
+                                      callback: function($$v) {
+                                        _vm.password_confirmation = $$v
+                                      },
+                                      expression: "password_confirmation"
                                     }
-                                  }),
-                                  _vm._v(" "),
-                                  _c("v-text-field", {
-                                    directives: [
-                                      {
-                                        name: "show",
-                                        rawName: "v-show",
-                                        value: false,
-                                        expression: "false"
-                                      }
-                                    ],
-                                    attrs: { name: "_token", value: _vm.csrf }
                                   })
                                 ],
                                 1
-                              )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-card-actions",
-                            [
-                              _c("v-spacer"),
+                              ),
                               _vm._v(" "),
                               _c(
-                                "div",
-                                { staticClass: "text-center" },
+                                "v-card-actions",
                                 [
+                                  _c("v-spacer"),
+                                  _vm._v(" "),
                                   _c(
-                                    "v-btn",
-                                    {
-                                      attrs: {
-                                        color: "primary",
-                                        type: "submit",
-                                        form: "form"
-                                      }
-                                    },
-                                    [_vm._v("Register")]
+                                    "div",
+                                    { staticClass: "text-center" },
+                                    [
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: { color: "primary" },
+                                          on: { click: _vm.register }
+                                        },
+                                        [_vm._v("Register")]
+                                      )
+                                    ],
+                                    1
                                   )
                                 ],
                                 1
@@ -43860,7 +43956,7 @@ var render = function() {
                     _vm._v(" Home ")
                   ]),
                   _vm._v(" "),
-                  _c("v-btn", { attrs: { text: "", to: "/classroom" } }, [
+                  _c("v-btn", { attrs: { text: "", to: "/problems-view" } }, [
                     _vm._v(" Problems ")
                   ]),
                   _vm._v(" "),
@@ -44341,6 +44437,19 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("v-spacer"),
+      _vm._v(" "),
+      _c(
+        "v-btn",
+        {
+          staticClass: "secondary pr-4 mr-2",
+          on: {
+            click: function($event) {
+              return _vm.redirect("/register")
+            }
+          }
+        },
+        [_vm._v("\n    Register\n  ")]
+      ),
       _vm._v(" "),
       _vm.$route.fullPath !== "/login"
         ? _c(
@@ -106465,7 +106574,7 @@ var index = {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_components_Admin_NewUser_vue":1,"resources_js_components_Admin_ManageUser_vue":1,"resources_js_auth_ChangePassword_vue":1,"resources_js_components_Mission_ManageMissionClassroom_vue":1,"resources_js_components_Mission_ManageMission_vue":1,"resources_js_components_Mission_NewMission_vue":1,"resources_js_components_Mission_Mission_vue":1,"resources_js_components_TestMission_NewTest_vue":1,"resources_js_components_Classroom_ManageClassroom_vue":1,"resources_js_pages_ClassRoomPage_vue":1,"resources_js_components_Classroom_NewClassroom_vue":1,"resources_js_pages_MyScorePage_vue":1,"resources_js_components_MyScore_MyScoreDetail_vue":1,"resources_js_pages_ScoreBoardPage_vue":1,"resources_js_components_Scoreboard_Comment_vue":1,"resources_js_components_Scoreboard_MyScoreScoreboard_vue":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_components_Admin_NewUser_vue":1,"resources_js_components_Admin_ManageUser_vue":1,"resources_js_auth_ChangePassword_vue":1,"resources_js_components_Mission_ManageMissionClassroom_vue":1,"resources_js_components_Mission_ManageMission_vue":1,"resources_js_components_Mission_NewMission_vue":1,"resources_js_components_Mission_Mission_vue":1,"resources_js_components_TestMission_NewTest_vue":1,"resources_js_components_Classroom_ManageClassroom_vue":1,"resources_js_components_Mission_Problems_vue":1,"resources_js_components_Classroom_NewClassroom_vue":1,"resources_js_pages_MyScorePage_vue":1,"resources_js_components_MyScore_MyScoreDetail_vue":1,"resources_js_pages_ScoreBoardPage_vue":1,"resources_js_components_Scoreboard_Comment_vue":1,"resources_js_components_Scoreboard_MyScoreScoreboard_vue":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};

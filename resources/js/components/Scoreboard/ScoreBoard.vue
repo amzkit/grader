@@ -2,6 +2,7 @@
 <template>
   <v-container>
     <Loading :loading="loading" />
+    <Snackbar />
     <v-row justify="space-between">
       <v-col md="4">
         <v-autocomplete
@@ -88,10 +89,14 @@
 import dayjs from "dayjs";
 import Navigation from "../Navigation/Navigation.vue";
 import Loading from "../Loading/Loading.vue";
+import Snackbar from "../Snackbar/Snackbar.vue";
+import { mapActions } from "vuex";
+
 export default {
   components: {
     Navigation,
     Loading,
+    Snackbar,
   },
   data: function () {
     return {
@@ -122,6 +127,7 @@ export default {
   },
   computed: {
     classroom: {
+      async get() {},
       async set(value) {
         this.loading = true;
         await axios
@@ -131,8 +137,8 @@ export default {
               this.data = response.data.payload;
             }
           })
-          .catch((error) => {
-            console.log(error);
+          .catch((response) => {
+            this.snackBar(3500, response, "error");
           });
         this.loading = false;
       },
@@ -140,13 +146,27 @@ export default {
   },
   methods: {
     dayjs,
+    ...mapActions("snackbar", ["showSnack"]),
+    snackBar(timeout = 3500, text = "Successfully", color = "success") {
+      this.showSnack({
+        text: text,
+        color: color,
+        timeout: timeout,
+      });
+    },
     async getClassrooms() {
       this.loading = true;
-      await axios.get("/api/classrooms").then((response) => {
-        if (response.data.success == true) {
-          this.items = response.data.payload;
-        }
-      });
+      await axios
+        .get("/api/classrooms")
+        .then((response) => {
+          if (response.data.success == true) {
+            this.items = response.data.payload;
+          }
+        })
+        .catch((response) => {
+          this.snackBar(3500, response, "error");
+        });
+
       this.loading = false;
     },
     async getScoreboard(item) {
@@ -159,8 +179,8 @@ export default {
               this.data = response.data.payload;
             }
           })
-          .catch((error) => {
-            console.log(error);
+          .catch((response) => {
+            this.snackBar(3500, response, "error");
           });
       }
       this.loading = false;
