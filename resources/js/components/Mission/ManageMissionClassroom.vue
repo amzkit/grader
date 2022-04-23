@@ -148,6 +148,7 @@
                                 @click:minute="$refs.menu.save(start_time)"
                               ></v-time-picker>
                             </v-menu>
+
                             <v-menu
                               ref="menu2"
                               v-model="menu4"
@@ -218,9 +219,12 @@
             </template>
             <template v-slot:[`item.file`]="{ item }">
               <div v-if="item.file">
-                <v-icon small class="mr-2" @click="download(item)">
+                <v-icon small class="mr-2" @click="download(item.file)">
                   mdi-file-download
                 </v-icon>
+              </div>
+              <div v-else>
+                {{ " - " }}
               </div>
             </template>
             <template v-slot:[`item.start_date`]="{ item }">
@@ -360,14 +364,27 @@ export default {
     },
 
     invalidDate(item) {
-      return item ? dayjs(item).format("MMMM D, YYYY hh:mm A") : "-";
+      return item ? dayjs(item).format("MMMM D, YYYY HH:mm") : "-";
     },
 
-    download(item) {
-      window.location.href = `api/schedule/download${item.file.replace(
-        "problem_file",
-        ""
-      )}`;
+    async download(item) {
+      this.loading = true;
+      await axios
+        .get(`/api/schedule/download${item.replace("problem_file", "")}`)
+        .then((response) => {
+          window.location.href = `api/schedule/download${item.replace(
+            "problem_file",
+            ""
+          )}`;
+        })
+        .catch((error) => {
+          if (error.response.status === 404) {
+            this.snackBar(3500, error.response.data.message, "error");
+          } else {
+            this.snackBar(3500, error, "error");
+          }
+        });
+      this.loading = false;
     },
 
     editItem(item) {
@@ -420,17 +437,17 @@ export default {
           exampleId: this.selectedExamplesId,
           roomId: this.roomId,
           start_date: dayjs(`${this.start_date} ${this.start_time}`).format(
-            "MM-DD-YYYY hh:mm A"
+            "MM-DD-YYYY HH:mm"
           ),
           end_date: dayjs(`${this.end_date} ${this.end_time}`).format(
-            "MM-DD-YYYY hh:mm A"
+            "MM-DD-YYYY HH:mm"
           ),
         })
         .then(() => {
           location.reload();
         })
-        .catch((response) => {
-          this.snackBar(3500, response, "error");
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
         });
       this.dialog = false;
       this.loading = false;
@@ -448,17 +465,17 @@ export default {
           .put("/api/manage/example", {
             id: item.id,
             start_date: dayjs(`${this.start_date} ${this.start_time}`).format(
-              "MM-DD-YYYY hh:mm A"
+              "MM-DD-YYYY HH:mm"
             ),
             end_date: dayjs(`${this.end_date} ${this.end_time}`).format(
-              "MM-DD-YYYY hh:mm A"
+              "MM-DD-YYYY HH:mm"
             ),
           })
           .then(() => {
             location.reload();
           })
-          .catch((response) => {
-            this.snackBar(3500, response, "error");
+          .catch((error) => {
+            this.snackBar(3500, error, "error");
           });
       }
       this.dialog = false;
@@ -472,8 +489,8 @@ export default {
         .then(() => {
           this.snackBar();
         })
-        .catch((response) => {
-          this.snackBar(3500, response, "error");
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
         });
       this.loading = false;
     },
@@ -487,8 +504,8 @@ export default {
             this.problemList = response.data.payload;
           }
         })
-        .catch((response) => {
-          this.snackBar(3500, response, "error");
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
         });
       this.loading = false;
     },
@@ -504,8 +521,8 @@ export default {
               this.desserts = response.data.payload;
             }
           })
-          .catch((response) => {
-            this.snackBar(3500, response, "error");
+          .catch((error) => {
+            this.snackBar(3500, error, "error");
           });
       }
       this.loading = false;

@@ -65,17 +65,11 @@
           </template>
           <template v-slot:[`item.score`]="{ item }">
             {{
-              data.submission.reduce((n, e) => {
-                if (e.user_id === item.user_id) {
-                  return n + e.score;
-                }
-              }, 0) > 0
-                ? data.submission.reduce((n, e) => {
-                    if (e.user_id === item.user_id) {
-                      return n + e.score;
-                    }
-                  }, 0)
-                : 0
+              data.submission
+                .filter((e) => {
+                  return e.user_id === item.user_id;
+                })
+                .reduce((t, n) => t + n.score, 0)
             }}
           </template>
         </v-data-table>
@@ -137,8 +131,8 @@ export default {
               this.data = response.data.payload;
             }
           })
-          .catch((response) => {
-            this.snackBar(3500, response, "error");
+          .catch((error) => {
+            this.snackBar(3500, error, "error");
           });
         this.loading = false;
       },
@@ -160,11 +154,19 @@ export default {
         .get("/api/classrooms")
         .then((response) => {
           if (response.data.success == true) {
-            this.items = response.data.payload;
+            this.items = response.data.payload.filter((e) => {
+              if (
+                this.$store.state.data.user.role !== "teacher" &&
+                this.$store.state.data.user.role !== "admin"
+              ) {
+                return e.courseId !== 1;
+              }
+              return e;
+            });
           }
         })
-        .catch((response) => {
-          this.snackBar(3500, response, "error");
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
         });
 
       this.loading = false;
@@ -179,8 +181,8 @@ export default {
               this.data = response.data.payload;
             }
           })
-          .catch((response) => {
-            this.snackBar(3500, response, "error");
+          .catch((error) => {
+            this.snackBar(3500, error, "error");
           });
       }
       this.loading = false;

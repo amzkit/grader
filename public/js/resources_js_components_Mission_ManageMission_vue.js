@@ -371,14 +371,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.editedItem.file = e.target.files[0];
     },
     download: function download(item) {
-      window.location.href = "api/schedule/download".concat(item.file.replace("problem_file", ""));
-    },
-    convertToPlain: function convertToPlain(html) {
-      var tempDivElement = document.createElement("div");
-      tempDivElement.innerHTML = html;
-      return tempDivElement.textContent || tempDivElement.innerText || "";
-    },
-    getProblems: function getProblems() {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
@@ -388,12 +380,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _this2.loading = true;
                 _context2.next = 3;
-                return axios.get("/api/problem").then(function (response) {
-                  if (response.data.success == true) {
-                    _this2.desserts = response.data.payload;
+                return axios.get("/api/schedule/download".concat(item.replace("problem_file", ""))).then(function (response) {
+                  window.location.href = "api/schedule/download".concat(item.replace("problem_file", ""));
+                })["catch"](function (error) {
+                  if (error.response.status === 404) {
+                    _this2.snackBar(3500, error.response.data.message, "error");
+                  } else {
+                    _this2.snackBar(3500, error, "error");
                   }
-                })["catch"](function (response) {
-                  _this2.snackBar(3500, response, "error");
                 });
 
               case 3:
@@ -407,7 +401,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2);
       }))();
     },
-    delateProblems: function delateProblems() {
+    convertToPlain: function convertToPlain(html) {
+      var tempDivElement = document.createElement("div");
+      tempDivElement.innerHTML = html;
+      return tempDivElement.textContent || tempDivElement.innerText || "";
+    },
+    getProblems: function getProblems() {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
@@ -417,10 +416,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _this3.loading = true;
                 _context3.next = 3;
-                return axios["delete"]("api/problem/" + _this3.editedItem.id).then(function () {
-                  _this3.snackBar();
-                })["catch"](function (response) {
-                  _this3.snackBar(3500, response, "error");
+                return axios.get("/api/problem").then(function (response) {
+                  if (response.data.success == true) {
+                    _this3.desserts = response.data.payload;
+                  }
+                })["catch"](function (error) {
+                  _this3.snackBar(3500, error, "error");
                 });
 
               case 3:
@@ -434,45 +435,72 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3);
       }))();
     },
-    putProblem: function putProblem() {
+    delateProblems: function delateProblems() {
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
-        var config, formData;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
                 _this4.loading = true;
+                _context4.next = 3;
+                return axios["delete"]("api/problem/" + _this4.editedItem.id).then(function () {
+                  _this4.snackBar();
+                })["catch"](function (error) {
+                  _this4.snackBar(3500, error, "error");
+                });
+
+              case 3:
+                _this4.loading = false;
+
+              case 4:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }))();
+    },
+    putProblem: function putProblem() {
+      var _this5 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
+        var config, formData;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _this5.loading = true;
                 config = {
                   headers: {
                     "content-type": "multipart/form-data"
                   }
                 };
                 formData = new FormData();
-                formData.append("id", _this4.editedItem.id);
-                formData.append("title", _this4.editedItem.title);
-                formData.append("question", _this4.editedItem.question);
-                formData.append("score", _this4.editedItem.score);
-                formData.append("file", _this4.editedItem.file ? _this4.editedItem.file : "");
-                formData.append("level", _this4.editedItem.level);
-                formData.append("tolerant", _this4.editedItem.tolerant != "" ? _this4.editedItem.tolerant : "$");
-                _context4.next = 12;
+                formData.append("id", _this5.editedItem.id);
+                formData.append("title", _this5.editedItem.title);
+                formData.append("question", _this5.editedItem.question);
+                formData.append("score", _this5.editedItem.score);
+                formData.append("file", _this5.editedItem.file ? _this5.editedItem.file : "");
+                formData.append("level", _this5.editedItem.level);
+                formData.append("tolerant", _this5.editedItem.tolerant != "" ? _this5.editedItem.tolerant : "$");
+                _context5.next = 12;
                 return axios.post("/api/problem/update", formData, config).then(function () {
-                  _this4.snackBar();
-                })["catch"](function (response) {
-                  _this4.snackBar(3500, response, "error");
+                  _this5.snackBar();
+                })["catch"](function (error) {
+                  _this5.snackBar(3500, error, "error");
                 });
 
               case 12:
-                _this4.loading = false;
+                _this5.loading = false;
 
               case 13:
               case "end":
-                return _context4.stop();
+                return _context5.stop();
             }
           }
-        }, _callee4);
+        }, _callee5);
       }))();
     },
     editItem: function editItem(item) {
@@ -491,21 +519,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.closeDelete();
     },
     close: function close() {
-      var _this5 = this;
+      var _this6 = this;
 
       this.dialog = false;
       this.$nextTick(function () {
-        _this5.editedItem = Object.assign({}, _this5.defaultItem);
-        _this5.editedIndex = -1;
+        _this6.editedItem = Object.assign({}, _this6.defaultItem);
+        _this6.editedIndex = -1;
       });
     },
     closeDelete: function closeDelete() {
-      var _this6 = this;
+      var _this7 = this;
 
       this.dialogDelete = false;
       this.$nextTick(function () {
-        _this6.editedItem = Object.assign({}, _this6.defaultItem);
-        _this6.editedIndex = -1;
+        _this7.editedItem = Object.assign({}, _this7.defaultItem);
+        _this7.editedIndex = -1;
       });
       this.snackbar = false;
     },
@@ -14962,7 +14990,7 @@ var render = function() {
                                       attrs: { small: "" },
                                       on: {
                                         click: function($event) {
-                                          return _vm.download(item)
+                                          return _vm.download(item.file)
                                         }
                                       }
                                     },

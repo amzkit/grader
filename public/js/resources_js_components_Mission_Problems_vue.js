@@ -110,6 +110,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -161,7 +162,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     download: function download(item) {
-      window.location.href = "api/schedule/download".concat(item.file.replace("problem_file", ""));
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _this.loading = true;
+                _context.next = 3;
+                return axios.get("/api/schedule/download".concat(item.replace("problem_file", ""))).then(function (response) {
+                  window.location.href = "api/schedule/download".concat(item.replace("problem_file", ""));
+                })["catch"](function (error) {
+                  if (error.response.status === 404) {
+                    _this.snackBar(3500, error.response.data.message, "error");
+                  } else {
+                    _this.snackBar(3500, error, "error");
+                  }
+                });
+
+              case 3:
+                _this.loading = false;
+
+              case 4:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
     },
     invalidDate: function invalidDate(item) {
       return item ? dayjs__WEBPACK_IMPORTED_MODULE_1___default()(item).format("MMMM D, YYYY") : "-";
@@ -172,38 +201,38 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return tempDivElement.textContent || tempDivElement.innerText || "";
     },
     fatchItemSchedule: function fatchItemSchedule(item) {
-      var _this = this;
+      var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
-            switch (_context.prev = _context.next) {
+            switch (_context2.prev = _context2.next) {
               case 0:
-                _this.loading = true;
+                _this2.loading = true;
 
                 if (!item) {
-                  _context.next = 4;
+                  _context2.next = 4;
                   break;
                 }
 
-                _context.next = 4;
+                _context2.next = 4;
                 return axios.get("/api/schedule/" + item.courseId).then(function (response) {
                   if (response.data.success == true) {
-                    _this.$store.commit("data/SET_SCHEDULES_ALL", response.data.payload);
+                    _this2.$store.commit("data/SET_SCHEDULES_ALL", response.data.payload);
                   }
-                })["catch"](function (response) {
-                  _this.snackBar(3500, response, "error");
+                })["catch"](function (error) {
+                  _this2.snackBar(3500, error, "error");
                 });
 
               case 4:
-                _this.loading = false;
+                _this2.loading = false;
 
               case 5:
               case "end":
-                return _context.stop();
+                return _context2.stop();
             }
           }
-        }, _callee);
+        }, _callee2);
       }))();
     }
   })
@@ -322,6 +351,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -336,6 +376,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   data: function data() {
     return {
+      search: "",
       model: 0,
       loading: false,
       dialog: false,
@@ -362,15 +403,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               return _this.onClick(_this.$store.state.data.courses.length > 0 ? _this.$store.state.data.courses[0] : 0);
 
             case 6:
-              console.log(_this.$store.state.data.courses);
-
-            case 7:
             case "end":
               return _context.stop();
           }
         }
       }, _callee);
     }))();
+  },
+  computed: {
+    filteredItems: function filteredItems() {
+      var _this2 = this;
+
+      var items = this.$store.state.data.courses.filter(function (e) {
+        if (_this2.$store.state.data.user.role !== "teacher" && _this2.$store.state.data.user.role !== "admin") {
+          return e.courseId !== 1;
+        }
+
+        return e;
+      });
+      return _.orderBy(items.filter(function (item) {
+        return item.course_name.toLowerCase().includes(_this2.search.toLowerCase());
+      }), "headline");
+    }
   },
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)("snackbar", ["showSnack"])), {}, {
     snackBar: function snackBar() {
@@ -384,25 +438,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       });
     },
     check_user: function check_user() {
-      var _this2 = this;
+      var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _this2.loading = true;
+                _this3.loading = true;
                 _context2.next = 3;
                 return axios.get("/api/user").then(function (response) {
                   if (response.data.success == true) {
-                    _this2.$store.commit("data/SET_USER", response.data.user);
+                    _this3.$store.commit("data/SET_USER", response.data.user);
                   }
-                })["catch"](function (response) {
-                  _this2.snackBar(3500, response, "error");
+                })["catch"](function (error) {
+                  _this3.snackBar(3500, error, "error");
                 });
 
               case 3:
-                _this2.loading = false;
+                _this3.loading = false;
 
               case 4:
               case "end":
@@ -413,25 +467,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     classroom: function classroom() {
-      var _this3 = this;
+      var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                _this3.loading = true;
+                _this4.loading = true;
                 _context3.next = 3;
                 return axios.get("api/classroom").then(function (response) {
                   if (response.data.success == true) {
-                    _this3.$store.commit("data/SET_COURSES", response.data.payload);
+                    _this4.$store.commit("data/SET_COURSES", response.data.payload);
                   }
-                })["catch"](function (response) {
-                  _this3.snackBar(3500, response, "error");
+                })["catch"](function (error) {
+                  _this4.snackBar(3500, error, "error");
                 });
 
               case 3:
-                _this3.loading = false;
+                _this4.loading = false;
 
               case 4:
               case "end":
@@ -442,33 +496,33 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     new_course: function new_course() {
-      var _this4 = this;
+      var _this5 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                _this4.loading = true;
+                _this5.loading = true;
                 _context4.next = 3;
                 return axios.post("api/course", {
-                  course_name: _this4.course_name
+                  course_name: _this5.course_name
                 }).then(function (response) {
                   if (response.data.success == true) {
-                    _this4.$store.state.data.courses.push({
+                    _this5.$store.state.data.courses.push({
                       courseId: response.data.payload.id,
                       course_name: response.data.payload.course_name
                     });
 
-                    _this4.snackBar();
+                    _this5.snackBar();
                   }
-                })["catch"](function (response) {
-                  _this4.snackBar(3500, response, "error");
+                })["catch"](function (error) {
+                  _this5.snackBar(3500, error, "error");
                 });
 
               case 3:
-                _this4.loading = false;
-                _this4.dialog = false;
+                _this5.loading = false;
+                _this5.dialog = false;
 
               case 5:
               case "end":
@@ -954,7 +1008,9 @@ var render = function() {
                                                 attrs: { small: "" },
                                                 on: {
                                                   click: function($event) {
-                                                    return _vm.download(item)
+                                                    return _vm.download(
+                                                      item.file
+                                                    )
                                                   }
                                                 }
                                               },
@@ -967,7 +1023,7 @@ var render = function() {
                                           ],
                                           1
                                         )
-                                      : _vm._e()
+                                      : _c("div", [_vm._v(_vm._s("-"))])
                                   ]
                                 }
                               },
@@ -1287,33 +1343,57 @@ var render = function() {
                   _c("div", [
                     _c(
                       "div",
-                      _vm._l(this.$store.state.data.courses, function(item) {
-                        return _c(
-                          "v-list-item",
-                          {
-                            key: item.id,
-                            attrs: { link: "" },
-                            on: {
-                              click: function($event) {
-                                return _vm.onClick(item)
-                              }
-                            }
+                      [
+                        _c("v-text-field", {
+                          staticClass: "mx-3 mt-3",
+                          attrs: {
+                            label: "Search",
+                            "prepend-inner-icon": "search",
+                            clearable: "",
+                            solo: "",
+                            dense: ""
                           },
-                          [
-                            _c(
-                              "v-list-item-content",
-                              [
-                                _c("v-list-item-title", [
-                                  _vm._v(_vm._s(item.course_name))
-                                ])
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        )
-                      }),
-                      1
+                          model: {
+                            value: _vm.search,
+                            callback: function($$v) {
+                              _vm.search = $$v
+                            },
+                            expression: "search"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _vm._l(_vm.filteredItems, function(item) {
+                          return _c(
+                            "v-list-item",
+                            {
+                              key: item.id,
+                              attrs: { link: "" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.onClick(item)
+                                }
+                              }
+                            },
+                            [
+                              _c(
+                                "v-list-item-content",
+                                [
+                                  _c("v-list-item-title", [
+                                    _vm._v(
+                                      "\n                  " +
+                                        _vm._s(item.course_name) +
+                                        "\n                "
+                                    )
+                                  ])
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        })
+                      ],
+                      2
                     )
                   ])
                 ]

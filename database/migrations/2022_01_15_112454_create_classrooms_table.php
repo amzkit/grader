@@ -22,10 +22,10 @@ class CreateClassroomsTable extends Migration
             $table->integer('semester')->nullable()->default(null);
             $table->string('start_datetime')->nullable()->default(null);
             $table->string('end_datetime')->nullable()->default(null);
-            // $table->enum('role', ['student', 'ta', 'teacher'])->nullable();
             $table->boolean('ta')->default(false);
             $table->boolean('teacher')->default(false);
             $table->boolean('student')->default(false);
+            $table->boolean('guest')->default(false);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

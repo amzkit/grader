@@ -134,7 +134,7 @@
           </template>
           <template v-slot:[`item.file`]="{ item }">
             <div v-if="item.file">
-              <v-icon small class="mr-2" @click="download(item)">
+              <v-icon small class="mr-2" @click="download(item.file)">
                 mdi-file-download
               </v-icon>
             </div>
@@ -270,11 +270,24 @@ export default {
       this.editedItem.file = e.target.files[0];
     },
 
-    download(item) {
-      window.location.href = `api/schedule/download${item.file.replace(
-        "problem_file",
-        ""
-      )}`;
+    async download(item) {
+      this.loading = true;
+      await axios
+        .get(`/api/schedule/download${item.replace("problem_file", "")}`)
+        .then((response) => {
+          window.location.href = `api/schedule/download${item.replace(
+            "problem_file",
+            ""
+          )}`;
+        })
+        .catch((error) => {
+          if (error.response.status === 404) {
+            this.snackBar(3500, error.response.data.message, "error");
+          } else {
+            this.snackBar(3500, error, "error");
+          }
+        });
+      this.loading = false;
     },
 
     convertToPlain(html) {
@@ -292,8 +305,8 @@ export default {
             this.desserts = response.data.payload;
           }
         })
-        .catch((response) => {
-          this.snackBar(3500, response, "error");
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
         });
       this.loading = false;
     },
@@ -305,8 +318,8 @@ export default {
         .then(() => {
           this.snackBar();
         })
-        .catch((response) => {
-          this.snackBar(3500, response, "error");
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
         });
       this.loading = false;
     },
@@ -332,8 +345,8 @@ export default {
         .then(() => {
           this.snackBar();
         })
-        .catch((response) => {
-          this.snackBar(3500, response, "error");
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
         });
       this.loading = false;
     },

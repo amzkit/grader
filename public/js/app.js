@@ -5453,6 +5453,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -5904,7 +5914,6 @@ var routes = [{
   name: "app",
   component: function component() {
     var user_role = document.head.querySelector('meta[name="user-role"]').content;
-    console.log(user_role);
 
     switch (user_role) {
       case "admin":
@@ -5918,8 +5927,9 @@ var routes = [{
 
       case "teacher":
         return __webpack_require__.e(/*! import() */ "resources_js_pages_home_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/home.vue */ "./resources/js/pages/home.vue"));
-      // case "guest":
-      //     return import("../pages/home.vue");
+
+      case "guest":
+        return __webpack_require__.e(/*! import() */ "resources_js_pages_home_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/home.vue */ "./resources/js/pages/home.vue"));
 
       default:
         return __webpack_require__.e(/*! import() */ "resources_js_pages_guest_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/guest.vue */ "./resources/js/pages/guest.vue"));
@@ -6026,6 +6036,31 @@ var routes = [{
   name: "scoreboard-score",
   component: function component() {
     return __webpack_require__.e(/*! import() */ "resources_js_components_Scoreboard_MyScoreScoreboard_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Scoreboard/MyScoreScoreboard.vue */ "./resources/js/components/Scoreboard/MyScoreScoreboard.vue"));
+  }
+}, // Guest
+{
+  path: "/user-problem",
+  name: "user-problem",
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ "resources_js_components_Guest_Problems_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Guest/Problems */ "./resources/js/components/Guest/Problems.vue"));
+  }
+}, {
+  path: "/user-my-score",
+  name: "user-my-score",
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ "resources_js_components_Guest_MyScore_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Guest/MyScore */ "./resources/js/components/Guest/MyScore.vue"));
+  }
+}, {
+  path: "/user-scoreboard",
+  name: "user-scoreboard",
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ "resources_js_components_Guest_ScoreBoard_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Guest/ScoreBoard */ "./resources/js/components/Guest/ScoreBoard.vue"));
+  }
+}, {
+  path: "/user-task",
+  name: "user-task",
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ "resources_js_components_Guest_Task_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Guest/Task */ "./resources/js/components/Guest/Task.vue"));
   }
 }];
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (routes);
@@ -43924,6 +43959,34 @@ var render = function() {
           _vm._v(" "),
           _c("v-spacer"),
           _vm._v(" "),
+          _vm.role === "guest"
+            ? _c(
+                "div",
+                [
+                  _c("v-btn", { attrs: { text: "", to: "/" } }, [
+                    _vm._v(" Home ")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-btn", { attrs: { text: "", to: "/user-task" } }, [
+                    _vm._v(" Task ")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-btn", { attrs: { text: "", to: "/user-problem" } }, [
+                    _vm._v(" Problems ")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-btn", { attrs: { text: "", to: "/user-my-score" } }, [
+                    _vm._v(" My Score ")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-btn", { attrs: { text: "", to: "/user-scoreboard" } }, [
+                    _vm._v(" Scoreboard ")
+                  ])
+                ],
+                1
+              )
+            : _vm._e(),
+          _vm._v(" "),
           _vm.role === "student"
             ? _c(
                 "div",
@@ -44060,265 +44123,274 @@ var render = function() {
                   _vm._v(" "),
                   _c("v-divider"),
                   _vm._v(" "),
-                  _c(
-                    "v-list",
-                    [
-                      _c(
-                        "v-list-group",
-                        {
-                          attrs: { "no-action": "" },
-                          scopedSlots: _vm._u([
-                            {
-                              key: "activator",
-                              fn: function() {
-                                return [
-                                  _c(
-                                    "v-list-item-title",
-                                    [
-                                      _c(
-                                        "v-list-item-content",
-                                        [
-                                          _c("v-list-item-title", [
-                                            _vm._v(
-                                              "\n                    " +
-                                                _vm._s(
-                                                  "ROLE (" +
-                                                    _vm.$store.state.data.user.role.toUpperCase() +
-                                                    ")"
-                                                )
-                                            )
-                                          ])
-                                        ],
-                                        1
-                                      )
-                                    ],
-                                    1
-                                  )
-                                ]
+                  _c("v-list", [
+                    this.$store.state.data.user.role !== "guest"
+                      ? _c(
+                          "div",
+                          [
+                            _c(
+                              "v-list-group",
+                              {
+                                attrs: { "no-action": "" },
+                                scopedSlots: _vm._u(
+                                  [
+                                    {
+                                      key: "activator",
+                                      fn: function() {
+                                        return [
+                                          _c(
+                                            "v-list-item-title",
+                                            [
+                                              _c(
+                                                "v-list-item-content",
+                                                [
+                                                  _c("v-list-item-title", [
+                                                    _vm._v(
+                                                      "\n                      " +
+                                                        _vm._s(
+                                                          "ROLE (" +
+                                                            _vm.$store.state.data.user.role.toUpperCase() +
+                                                            ")"
+                                                        )
+                                                    )
+                                                  ])
+                                                ],
+                                                1
+                                              )
+                                            ],
+                                            1
+                                          )
+                                        ]
+                                      },
+                                      proxy: true
+                                    }
+                                  ],
+                                  null,
+                                  false,
+                                  2080170422
+                                )
                               },
-                              proxy: true
+                              [
+                                _vm._v(" "),
+                                this.$store.state.data.user.role_admin === 1
+                                  ? _c(
+                                      "v-list-item",
+                                      {
+                                        attrs: { link: "" },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.changeRoleUser("admin")
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "v-list-item-title",
+                                          [
+                                            _c(
+                                              "v-list-item-content",
+                                              [
+                                                _c("v-list-item-title", [
+                                                  _vm._v("Admin ")
+                                                ])
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-list-item-icon",
+                                          [
+                                            _c("v-icon", [
+                                              _vm._v("mdi-view-dashboard")
+                                            ])
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                this.$store.state.data.user.role_ta === 1
+                                  ? _c(
+                                      "v-list-item",
+                                      {
+                                        attrs: { link: "" },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.changeRoleUser("ta")
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "v-list-item-title",
+                                          [
+                                            _c(
+                                              "v-list-item-content",
+                                              [
+                                                _c("v-list-item-title", [
+                                                  _vm._v("Teacher Assistant ")
+                                                ])
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-list-item-icon",
+                                          [
+                                            _c("v-icon", [
+                                              _vm._v("mdi-view-dashboard")
+                                            ])
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                this.$store.state.data.user.role_student === 1
+                                  ? _c(
+                                      "v-list-item",
+                                      {
+                                        attrs: { link: "" },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.changeRoleUser("student")
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "v-list-item-title",
+                                          [
+                                            _c(
+                                              "v-list-item-content",
+                                              [
+                                                _c("v-list-item-title", [
+                                                  _vm._v("Student ")
+                                                ])
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-list-item-icon",
+                                          [
+                                            _c("v-icon", [
+                                              _vm._v("mdi-view-dashboard")
+                                            ])
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                this.$store.state.data.user.role_teacher === 1
+                                  ? _c(
+                                      "v-list-item",
+                                      {
+                                        attrs: { link: "" },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.changeRoleUser("teacher")
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "v-list-item-title",
+                                          [
+                                            _c(
+                                              "v-list-item-content",
+                                              [
+                                                _c("v-list-item-title", [
+                                                  _vm._v("Teacher ")
+                                                ])
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-list-item-icon",
+                                          [
+                                            _c("v-icon", [
+                                              _vm._v("mdi-view-dashboard")
+                                            ])
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  : _vm._e()
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "pa-1" },
+                      [
+                        _c(
+                          "v-btn",
+                          {
+                            attrs: { color: "primary", block: "" },
+                            on: {
+                              click: function($event) {
+                                return _vm.redirect("/change-password")
+                              }
                             }
-                          ])
-                        },
-                        [
-                          _vm._v(" "),
-                          this.$store.state.data.user.role_admin === 1
-                            ? _c(
-                                "v-list-item",
-                                {
-                                  attrs: { link: "" },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.changeRoleUser("admin")
-                                    }
-                                  }
-                                },
-                                [
-                                  _c(
-                                    "v-list-item-title",
-                                    [
-                                      _c(
-                                        "v-list-item-content",
-                                        [
-                                          _c("v-list-item-title", [
-                                            _vm._v("Admin ")
-                                          ])
-                                        ],
-                                        1
-                                      )
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-list-item-icon",
-                                    [
-                                      _c("v-icon", [
-                                        _vm._v("mdi-view-dashboard")
-                                      ])
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            : _vm._e(),
-                          _vm._v(" "),
-                          this.$store.state.data.user.role_ta === 1
-                            ? _c(
-                                "v-list-item",
-                                {
-                                  attrs: { link: "" },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.changeRoleUser("ta")
-                                    }
-                                  }
-                                },
-                                [
-                                  _c(
-                                    "v-list-item-title",
-                                    [
-                                      _c(
-                                        "v-list-item-content",
-                                        [
-                                          _c("v-list-item-title", [
-                                            _vm._v("Teacher Assistant ")
-                                          ])
-                                        ],
-                                        1
-                                      )
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-list-item-icon",
-                                    [
-                                      _c("v-icon", [
-                                        _vm._v("mdi-view-dashboard")
-                                      ])
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            : _vm._e(),
-                          _vm._v(" "),
-                          this.$store.state.data.user.role_student === 1
-                            ? _c(
-                                "v-list-item",
-                                {
-                                  attrs: { link: "" },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.changeRoleUser("student")
-                                    }
-                                  }
-                                },
-                                [
-                                  _c(
-                                    "v-list-item-title",
-                                    [
-                                      _c(
-                                        "v-list-item-content",
-                                        [
-                                          _c("v-list-item-title", [
-                                            _vm._v("Student ")
-                                          ])
-                                        ],
-                                        1
-                                      )
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-list-item-icon",
-                                    [
-                                      _c("v-icon", [
-                                        _vm._v("mdi-view-dashboard")
-                                      ])
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            : _vm._e(),
-                          _vm._v(" "),
-                          this.$store.state.data.user.role_teacher === 1
-                            ? _c(
-                                "v-list-item",
-                                {
-                                  attrs: { link: "" },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.changeRoleUser("teacher")
-                                    }
-                                  }
-                                },
-                                [
-                                  _c(
-                                    "v-list-item-title",
-                                    [
-                                      _c(
-                                        "v-list-item-content",
-                                        [
-                                          _c("v-list-item-title", [
-                                            _vm._v("Teacher ")
-                                          ])
-                                        ],
-                                        1
-                                      )
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-list-item-icon",
-                                    [
-                                      _c("v-icon", [
-                                        _vm._v("mdi-view-dashboard")
-                                      ])
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            : _vm._e()
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "pa-1" },
-                        [
-                          _c(
-                            "v-btn",
-                            {
-                              attrs: { color: "primary", block: "" },
-                              on: {
-                                click: function($event) {
-                                  return _vm.redirect("/change-password")
-                                }
+                          },
+                          [
+                            _vm._v(
+                              "\n              Change Password\n            "
+                            )
+                          ]
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "pa-1" },
+                      [
+                        _c(
+                          "v-btn",
+                          {
+                            attrs: { color: "error", block: "" },
+                            on: {
+                              click: function($event) {
+                                return _vm.redirect("/logout")
                               }
-                            },
-                            [
-                              _vm._v(
-                                "\n              Change Password\n            "
-                              )
-                            ]
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "pa-1" },
-                        [
-                          _c(
-                            "v-btn",
-                            {
-                              attrs: { color: "error", block: "" },
-                              on: {
-                                click: function($event) {
-                                  return _vm.redirect("/logout")
-                                }
-                              }
-                            },
-                            [_vm._v("\n              Logout\n            ")]
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
+                            }
+                          },
+                          [_vm._v("\n              Logout\n            ")]
+                        )
+                      ],
+                      1
+                    )
+                  ]),
                   _vm._v(" "),
                   _c("v-card-actions", [_c("v-spacer")], 1)
                 ],
@@ -106574,7 +106646,7 @@ var index = {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_components_Admin_NewUser_vue":1,"resources_js_components_Admin_ManageUser_vue":1,"resources_js_auth_ChangePassword_vue":1,"resources_js_components_Mission_ManageMissionClassroom_vue":1,"resources_js_components_Mission_ManageMission_vue":1,"resources_js_components_Mission_NewMission_vue":1,"resources_js_components_Mission_Mission_vue":1,"resources_js_components_TestMission_NewTest_vue":1,"resources_js_components_Classroom_ManageClassroom_vue":1,"resources_js_components_Mission_Problems_vue":1,"resources_js_components_Classroom_NewClassroom_vue":1,"resources_js_pages_MyScorePage_vue":1,"resources_js_components_MyScore_MyScoreDetail_vue":1,"resources_js_pages_ScoreBoardPage_vue":1,"resources_js_components_Scoreboard_Comment_vue":1,"resources_js_components_Scoreboard_MyScoreScoreboard_vue":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_components_Admin_NewUser_vue":1,"resources_js_components_Admin_ManageUser_vue":1,"resources_js_auth_ChangePassword_vue":1,"resources_js_components_Mission_ManageMissionClassroom_vue":1,"resources_js_components_Mission_ManageMission_vue":1,"resources_js_components_Mission_NewMission_vue":1,"resources_js_components_Mission_Mission_vue":1,"resources_js_components_TestMission_NewTest_vue":1,"resources_js_components_Classroom_ManageClassroom_vue":1,"resources_js_components_Mission_Problems_vue":1,"resources_js_components_Classroom_NewClassroom_vue":1,"resources_js_pages_MyScorePage_vue":1,"resources_js_components_MyScore_MyScoreDetail_vue":1,"resources_js_pages_ScoreBoardPage_vue":1,"resources_js_components_Scoreboard_Comment_vue":1,"resources_js_components_Scoreboard_MyScoreScoreboard_vue":1,"resources_js_components_Guest_Problems_vue":1,"resources_js_components_Guest_MyScore_vue":1,"resources_js_components_Guest_ScoreBoard_vue":1,"resources_js_components_Guest_Task_vue":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};

@@ -2,10 +2,7 @@
   <v-row>
     <Loading :loading="this.loading" />
     <Snackbar />
-    <v-col cols="2">
-      <Navigation :onClick="fatchItemSchedule" />
-    </v-col>
-    <v-col cols="10">
+    <v-col cols="12">
       <div v-if="!this.$store.state.data.loading">
         <v-row justify="center">
           <v-data-table
@@ -56,13 +53,11 @@
 
 <script>
 import dayjs from "dayjs";
-import Navigation from "../Navigation/Navigation.vue";
 import Loading from "../Loading/Loading.vue";
 import Snackbar from "../Snackbar/Snackbar.vue";
 import { mapActions } from "vuex";
 export default {
   components: {
-    Navigation,
     Loading,
     Snackbar,
   },
@@ -91,6 +86,9 @@ export default {
       ],
     };
   },
+  created() {
+    this.fetchItemMyScore();
+  },
   methods: {
     dayjs,
     ...mapActions("snackbar", ["showSnack"]),
@@ -113,31 +111,19 @@ export default {
         query: { submission_id: val.id, course_id: this.course_id },
       });
     },
-    async fatchItemSchedule(item) {
+    async fetchItemMyScore() {
       this.loading = true;
-      this.course_id = item.courseId;
-      if (item) {
-        let items = [];
-        let items2 = [];
-
-        await axios
-          .get("/api/score", {
-            params: {
-              course_id: item.courseId,
-            },
-          })
-          .then((response) => {
-            if (response.data.success == true) {
-              items = response.data.payload;
-              items2 = response.data.comment;
-            }
-          })
-          .catch((error) => {
-            this.snackBar(3500, error, "error");
-          });
-        this.myScore = items;
-        this.comment = items2;
-      }
+      await axios
+        .get("/api/score-guest")
+        .then((response) => {
+          if (response.data.success == true) {
+            this.myScore = response.data.payload;
+            this.comment = response.data.comment;
+          }
+        })
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
+        });
       this.loading = false;
     },
   },

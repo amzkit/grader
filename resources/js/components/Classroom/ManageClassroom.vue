@@ -442,8 +442,8 @@ export default {
         .then(() => {
           this.snackBar();
         })
-        .catch((response) => {
-          this.snackBar(3500, response, "error");
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
         });
       this.loading = false;
     },
@@ -455,8 +455,8 @@ export default {
         .then(() => {
           this.snackBar();
         })
-        .catch((response) => {
-          this.snackBar(3500, response, "error");
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
         });
       this.loading = false;
     },
@@ -489,8 +489,8 @@ export default {
         .then(() => {
           location.reload();
         })
-        .catch((response) => {
-          this.snackBar(3500, response, "error");
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
         });
       this.loading = false;
     },
@@ -520,8 +520,8 @@ export default {
               this.desserts = response.data.payload;
             }
           })
-          .catch((response) => {
-            this.snackBar(3500, response, "error");
+          .catch((error) => {
+            this.snackBar(3500, error, "error");
           });
       }
       this.loading = false;

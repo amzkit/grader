@@ -157,8 +157,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   if (response.data.success == true) {
                     _this.comment = response.data.payload;
                   }
-                })["catch"](function (response) {
-                  _this.snackBar(3500, response, "error");
+                })["catch"](function (error) {
+                  _this.snackBar(3500, error, "error");
                 });
 
               case 2:
@@ -188,8 +188,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   if (response.data.success == true) {
                     items = response.data.payload2;
                   }
-                })["catch"](function (response) {
-                  _this2.snackBar(3500, response, "error");
+                })["catch"](function (error) {
+                  _this2.snackBar(3500, error, "error");
                 });
 
               case 3:

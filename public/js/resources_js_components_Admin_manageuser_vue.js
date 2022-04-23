@@ -221,8 +221,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   if (response.data.success == true) {
                     _this2.desserts = response.data.payload;
                   }
-                })["catch"](function (response) {
-                  _this2.snackBar(3500, response, "error");
+                })["catch"](function (error) {
+                  _this2.snackBar(3500, error, "error");
                 });
 
               case 3:
@@ -252,8 +252,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   name: _this3.editedItem.name
                 }).then(function () {
                   _this3.snackBar();
-                })["catch"](function (response) {
-                  _this3.snackBar(3500, response, "error");
+                })["catch"](function (error) {
+                  _this3.snackBar(3500, error, "error");
                 });
 
               case 3:

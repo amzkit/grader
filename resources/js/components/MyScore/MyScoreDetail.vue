@@ -119,8 +119,8 @@ export default {
             this.comment = response.data.payload;
           }
         })
-        .catch((response) => {
-          this.snackBar(3500, response, "error");
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
         });
     },
 
@@ -137,8 +137,8 @@ export default {
             items = response.data.payload2;
           }
         })
-        .catch((response) => {
-          this.snackBar(3500, response, "error");
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
         });
       this.items = items.filter(
         (e) => e.submission_id == this.$route.query.submission_id

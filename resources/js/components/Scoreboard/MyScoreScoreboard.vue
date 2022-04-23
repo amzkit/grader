@@ -99,10 +99,10 @@ export default {
       });
     },
     invalidDate(item) {
-      return item ? dayjs(item).format("MMMM D, YYYY hh:mm A") : "-";
+      return item ? dayjs(item).format("MMMM D, YYYY HH:mm") : "-";
     },
     invalidDate(item) {
-      return item ? dayjs(item).format("MMMM D, YYYY hh:mm A") : "-";
+      return item ? dayjs(item).format("MMMM D, YYYY HH:mm") : "-";
     },
     item(val) {
       this.$router.push({
@@ -128,8 +128,8 @@ export default {
             items = response.data.payload;
           }
         })
-        .catch((response) => {
-          this.snackBar(3500, response, "error");
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
         });
       this.myScore = items;
       this.loading = false;

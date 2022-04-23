@@ -24,12 +24,21 @@ class ClassroomController extends Controller
                 "courses.course_name",
             )->get();
         } else {
+            $classroomGuest = Course::select(
+                "courses.id as courseId",
+                "courses.course_name",
+            )
+                ->where('course_name', '=', 'Guest')
+                ->first();
+
             $classroom = Classroom::select(
                 "courses.id as courseId",
                 "courses.course_name",
             )->leftJoin("courses", "courses.id", "=", "classrooms.course_id")
                 ->where('user_id', '=', auth()->user()->id)
                 ->get();
+
+            $classroom->push($classroomGuest);
         }
 
         return response()->json(['success' => true, 'payload' =>  $classroom]);

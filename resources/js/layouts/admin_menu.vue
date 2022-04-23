@@ -98,6 +98,14 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
 
+      <div v-if="role === 'guest'">
+        <v-btn text to="/"> Home </v-btn>
+        <v-btn text to="/user-task"> Task </v-btn>
+        <v-btn text to="/user-problem"> Problems </v-btn>
+        <v-btn text to="/user-my-score"> My Score </v-btn>
+        <v-btn text to="/user-scoreboard"> Scoreboard </v-btn>
+      </div>
+
       <div v-if="role === 'student'">
         <v-btn text to="/"> Home </v-btn>
         <v-btn text to="/problem"> Problems </v-btn>
@@ -146,75 +154,77 @@
           </v-list>
           <v-divider></v-divider>
           <v-list>
-            <v-list-group no-action>
-              <template v-slot:activator>
-                <v-list-item-title>
-                  <v-list-item-content>
-                    <v-list-item-title>
-                      {{
-                        `ROLE (${$store.state.data.user.role.toUpperCase()})`
-                      }}</v-list-item-title
-                    >
-                  </v-list-item-content>
-                </v-list-item-title>
-              </template>
-              <v-list-item
-                link
-                v-if="this.$store.state.data.user.role_admin === 1"
-                @click="changeRoleUser('admin')"
-              >
-                <v-list-item-title>
-                  <v-list-item-content>
-                    <v-list-item-title>Admin </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item-title>
-                <v-list-item-icon>
-                  <v-icon>mdi-view-dashboard</v-icon>
-                </v-list-item-icon>
-              </v-list-item>
-              <v-list-item
-                link
-                v-if="this.$store.state.data.user.role_ta === 1"
-                @click="changeRoleUser('ta')"
-              >
-                <v-list-item-title>
-                  <v-list-item-content>
-                    <v-list-item-title>Teacher Assistant </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item-title>
-                <v-list-item-icon>
-                  <v-icon>mdi-view-dashboard</v-icon>
-                </v-list-item-icon>
-              </v-list-item>
-              <v-list-item
-                link
-                v-if="this.$store.state.data.user.role_student === 1"
-                @click="changeRoleUser('student')"
-              >
-                <v-list-item-title>
-                  <v-list-item-content>
-                    <v-list-item-title>Student </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item-title>
-                <v-list-item-icon>
-                  <v-icon>mdi-view-dashboard</v-icon>
-                </v-list-item-icon>
-              </v-list-item>
-              <v-list-item
-                link
-                v-if="this.$store.state.data.user.role_teacher === 1"
-                @click="changeRoleUser('teacher')"
-              >
-                <v-list-item-title>
-                  <v-list-item-content>
-                    <v-list-item-title>Teacher </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item-title>
-                <v-list-item-icon>
-                  <v-icon>mdi-view-dashboard</v-icon>
-                </v-list-item-icon>
-              </v-list-item>
-            </v-list-group>
+            <div v-if="this.$store.state.data.user.role !== 'guest'">
+              <v-list-group no-action>
+                <template v-slot:activator>
+                  <v-list-item-title>
+                    <v-list-item-content>
+                      <v-list-item-title>
+                        {{
+                          `ROLE (${$store.state.data.user.role.toUpperCase()})`
+                        }}</v-list-item-title
+                      >
+                    </v-list-item-content>
+                  </v-list-item-title>
+                </template>
+                <v-list-item
+                  link
+                  v-if="this.$store.state.data.user.role_admin === 1"
+                  @click="changeRoleUser('admin')"
+                >
+                  <v-list-item-title>
+                    <v-list-item-content>
+                      <v-list-item-title>Admin </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item-title>
+                  <v-list-item-icon>
+                    <v-icon>mdi-view-dashboard</v-icon>
+                  </v-list-item-icon>
+                </v-list-item>
+                <v-list-item
+                  link
+                  v-if="this.$store.state.data.user.role_ta === 1"
+                  @click="changeRoleUser('ta')"
+                >
+                  <v-list-item-title>
+                    <v-list-item-content>
+                      <v-list-item-title>Teacher Assistant </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item-title>
+                  <v-list-item-icon>
+                    <v-icon>mdi-view-dashboard</v-icon>
+                  </v-list-item-icon>
+                </v-list-item>
+                <v-list-item
+                  link
+                  v-if="this.$store.state.data.user.role_student === 1"
+                  @click="changeRoleUser('student')"
+                >
+                  <v-list-item-title>
+                    <v-list-item-content>
+                      <v-list-item-title>Student </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item-title>
+                  <v-list-item-icon>
+                    <v-icon>mdi-view-dashboard</v-icon>
+                  </v-list-item-icon>
+                </v-list-item>
+                <v-list-item
+                  link
+                  v-if="this.$store.state.data.user.role_teacher === 1"
+                  @click="changeRoleUser('teacher')"
+                >
+                  <v-list-item-title>
+                    <v-list-item-content>
+                      <v-list-item-title>Teacher </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item-title>
+                  <v-list-item-icon>
+                    <v-icon>mdi-view-dashboard</v-icon>
+                  </v-list-item-icon>
+                </v-list-item>
+              </v-list-group>
+            </div>
             <div class="pa-1">
               <v-btn
                 color="primary"

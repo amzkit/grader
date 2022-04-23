@@ -175,8 +175,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   if (response.data.success == true) {
                     _this.item = response.data.payload;
                   }
-                })["catch"](function (response) {
-                  _this.snackBar(3500, response, "error");
+                })["catch"](function (error) {
+                  _this.snackBar(3500, error, "error");
                 });
 
               case 3:
@@ -206,8 +206,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   user_id: _this2.item.user_id
                 }).then(function () {
                   window.location.href = "/scoreboard";
-                })["catch"](function (response) {
-                  _this2.snackBar(3500, response, "error");
+                })["catch"](function (error) {
+                  _this2.snackBar(3500, error, "error");
                 });
 
               case 3:

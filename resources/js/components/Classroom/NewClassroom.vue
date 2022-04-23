@@ -163,8 +163,8 @@ export default {
           window.location.href = "/manage-classroom";
           this.loading = false;
         })
-        .catch((response) => {
-          this.snackBar(3500, response, "error");
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
         });
       this.loading = false;
     },

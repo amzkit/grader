@@ -35,12 +35,17 @@ Route::post('problem', 'App\Http\Controllers\ProblemsController@insert');
 Route::post('problem/update', 'App\Http\Controllers\ProblemsController@updateProblem');
 Route::delete('problem/{id}', 'App\Http\Controllers\ProblemsController@delProblem');
 
+Route::get('user-problems/{id}', 'App\Http\Controllers\ProblemsController@getProblemGuestById');
+
 Route::get('classroom', 'App\Http\Controllers\ClassroomController@getClassrooms');
 Route::get('classrooms', 'App\Http\Controllers\ClassroomController@getClassroomsAll');
 
 Route::get('schedule', 'App\Http\Controllers\ScheduleController@getSchedule');
 Route::get('schedule/{id}', 'App\Http\Controllers\ScheduleController@getScheduleById');
 Route::get('schedule/download/{file_name}', 'App\Http\Controllers\ProblemsController@download');
+
+Route::get('user-schedule', 'App\Http\Controllers\ScheduleController@getScheduleGuest');
+Route::get('user-schedule/{id}', 'App\Http\Controllers\ScheduleController@getScheduleGuestById');
 
 Route::get('manage/classroom', 'App\Http\Controllers\ClassroomController@getManageClassrooms');
 
@@ -64,8 +69,10 @@ Route::get('language', 'App\Http\Controllers\LanguageController@getLanguage');
 Route::post('language', 'App\Http\Controllers\LanguageController@insert');
 
 Route::get('score', 'App\Http\Controllers\AnalysesController@getScore');
+Route::get('score-guest', 'App\Http\Controllers\AnalysesController@getScoreGuest');
 
 Route::get('scoreboard/{id}', 'App\Http\Controllers\SubmissionController@getScoreBoard');
+Route::get('user-scoreboard/{id}', 'App\Http\Controllers\SubmissionController@getScoreBoardGuest');
 
 Route::post('comment', 'App\Http\Controllers\CommentController@insertComment');
 Route::get('comment', 'App\Http\Controllers\CommentController@getComment');

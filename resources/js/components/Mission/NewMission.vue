@@ -177,8 +177,8 @@ export default {
           .then(function () {
             window.location.href = "/manage-problem";
           })
-          .catch((response) => {
-            this.snackBar(3500, response, "error");
+          .catch((error) => {
+            this.snackBar(3500, error, "error");
           });
       }
       this.loading = false;

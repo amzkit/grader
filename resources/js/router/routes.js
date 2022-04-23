@@ -6,7 +6,6 @@ const routes = [
             let user_role = document.head.querySelector(
                 'meta[name="user-role"]'
             ).content;
-            console.log(user_role);
             switch (user_role) {
                 case "admin":
                     return import("../pages/home.vue");
@@ -16,8 +15,8 @@ const routes = [
                     return import("../pages/home.vue");
                 case "teacher":
                     return import("../pages/home.vue");
-                // case "guest":
-                //     return import("../pages/home.vue");
+                case "guest":
+                    return import("../pages/home.vue");
                 default:
                     return import("../pages/guest.vue");
             }
@@ -110,6 +109,27 @@ const routes = [
         name: "scoreboard-score",
         component: () =>
             import("../components/Scoreboard/MyScoreScoreboard.vue")
+    },
+    // Guest
+    {
+        path: "/user-problem",
+        name: "user-problem",
+        component: () => import("../components/Guest/Problems")
+    },
+    {
+        path: "/user-my-score",
+        name: "user-my-score",
+        component: () => import("../components/Guest/MyScore")
+    },
+    {
+        path: "/user-scoreboard",
+        name: "user-scoreboard",
+        component: () => import("../components/Guest/ScoreBoard")
+    },
+    {
+        path: "/user-task",
+        name: "user-task",
+        component: () => import("../components/Guest/Task")
     }
 ];
 

@@ -7,6 +7,10 @@ use App\Models\Schedule;
 use App\Models\Problem;
 use Carbon\Carbon;
 use App\Models\Classroom;
+use App\Models\Course;
+use App\Models\Submission;
+
+
 
 class ScheduleController extends Controller
 {
@@ -15,6 +19,49 @@ class ScheduleController extends Controller
     {
         $this->middleware('auth');
     }
+
+    public function getScheduleGuest()
+    {
+
+        $course_id = Course::where('course_name', '=', 'Guest')->first();
+
+        $submissions = Submission::where('user_id', '=',  auth()->user()->id)
+            ->select("submissions.schedule_id")
+            ->get();
+
+        $schedules = Schedule::where('course_id', '=',  $course_id->id)
+            ->join("problems", "problems.id", "=", "schedules.problem_id")
+            ->select(
+                "schedules.id",
+                "problems.title",
+            )
+            ->get();
+
+        return response()->json(['success' => true, 'submissions' =>  $submissions, 'schedules' =>  $schedules]);
+    }
+
+    public function getScheduleGuestById($id)
+    {
+
+        $schedules = Schedule::where('id', '=',  $id)->first();
+        $problems = Problem::where('id', '=',  $schedules->problem_id)->first();
+
+        $schedule = [
+            'id' => $schedules->id,
+            'title' => $problems->title,
+            'question' => $problems->question,
+            'level' => $problems->level,
+            'score' => $problems->score,
+            'file' => $problems->file,
+            'start_date' => $schedules->start_date,
+            'end_date' => $schedules->end_date,
+            'problemsId' => $problems->id,
+            'course_id' => $schedules->course_id
+        ];
+
+        return response()->json(['success' => true, 'payload' =>  $schedule]);
+    }
+
 
     public function getSchedule()
     {

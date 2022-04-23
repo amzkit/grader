@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use App\Models\Classroom;
 
 class RegisterController extends Controller
 {
@@ -66,11 +67,20 @@ class RegisterController extends Controller
      */
     protected function register(Request $request)
     {
-        return User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'username' => $request->username,
             'password' => Hash::make($request->password),
+            'role' => 'guest'
         ]);
+
+        Classroom::create([
+            'user_id' => $user->id,
+            'course_id' => 1,
+            'guest' => 1,
+        ]);
+
+        return true;
     }
 }

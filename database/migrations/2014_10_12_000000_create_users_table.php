@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->boolean('role_admin')->default(false);
             $table->boolean('role_teacher')->default(false);
             $table->boolean('role_ta')->default(false);
-            $table->enum('role', ['admin', 'student', 'ta', 'teacher'])->nullable();
+            $table->enum('role', ['admin', 'student', 'ta', 'teacher', 'guest'])->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();

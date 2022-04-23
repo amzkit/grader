@@ -259,6 +259,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -276,6 +285,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       schedule_room: [],
       course_room: [],
       search: "",
+      searchProblem: "",
       dialog: false,
       snackbar: false,
       text: "",
@@ -303,7 +313,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   computed: {
     getDateTime: function getDateTime() {
-      return dayjs__WEBPACK_IMPORTED_MODULE_1___default()(new Date()).format("MM-DD-YYYY hh:mm A");
+      return dayjs__WEBPACK_IMPORTED_MODULE_1___default()(new Date()).format("MM-DD-YYYY HH:mm");
     },
     filteredItems: function filteredItems() {
       var _this = this;
@@ -315,7 +325,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     filterCourseRoom: function filterCourseRoom() {
       var _this2 = this;
 
-      return this.schedule_room.filter(function (e) {
+      var course_filter_time = this.schedule_room.filter(function (e) {
+        return e.end_date > _this2.getDateTime && e.start_date <= _this2.getDateTime;
+      });
+      var res = course_filter_time.filter(function (e) {
         var missionSend = _this2.missionPass.find(function (p) {
           return p.schedule_id == e.id;
         });
@@ -326,6 +339,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         return e;
       });
+      return _.orderBy(res.filter(function (item) {
+        return item.title.toLowerCase().includes(_this2.searchProblem.toLowerCase());
+      }), "headline");
+    },
+    filterSubmissionRoom: function filterSubmissionRoom() {
+      var _this3 = this;
+
+      return _.orderBy(this.missionPass.filter(function (item) {
+        return item.title.toLowerCase().includes(_this3.searchProblem.toLowerCase());
+      }), "headline");
     }
   },
   methods: _objectSpread(_objectSpread({
@@ -342,7 +365,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     submit: function submit() {
-      var _this3 = this;
+      var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
         var config, formData;
@@ -350,7 +373,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                if (_this3.problem.sendFile) {
+                if (_this4.problem.sendFile) {
                   _context.next = 2;
                   break;
                 }
@@ -358,31 +381,31 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 return _context.abrupt("return", console.log("NO"));
 
               case 2:
-                _this3.loading = true;
-                _this3.dialog = false;
+                _this4.loading = true;
+                _this4.dialog = false;
                 config = {
                   headers: {
                     "content-type": "multipart/form-data"
                   }
                 };
                 formData = new FormData();
-                formData.append("sourcefile", _this3.problem.sendFile);
-                formData.append("Lang", _this3.languages.find(function (e) {
-                  return e.id = _this3.problem.languageId;
+                formData.append("sourcefile", _this4.problem.sendFile);
+                formData.append("Lang", _this4.languages.find(function (e) {
+                  return e.id = _this4.problem.languageId;
                 }).lang);
-                formData.append("problem_id", _this3.problem.problem_id);
-                formData.append("course_id", _this3.$route.query.course_id);
+                formData.append("problem_id", _this4.problem.problem_id);
+                formData.append("course_id", _this4.$route.query.course_id);
                 _context.next = 12;
                 return axios.post("/api/submission", formData, config).then(function (response) {
                   if (response.data.success) {
                     window.location.reload();
                   }
-                })["catch"](function (response) {
-                  _this3.snackBar(3500, response, "error");
+                })["catch"](function (error) {
+                  _this4.snackBar(3500, error, "error");
                 });
 
               case 12:
-                _this3.loading = false;
+                _this4.loading = false;
 
               case 13:
               case "end":
@@ -393,34 +416,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }))();
     },
     download: function download(item) {
-      window.location.href = "api/schedule/download".concat(item.replace("problem_file", ""));
-    },
-    invalidDate: function invalidDate(item) {
-      return item ? dayjs__WEBPACK_IMPORTED_MODULE_1___default()(item).format("MMMM D, YYYY hh:mm A") : "-";
-    },
-    onFileChange: function onFileChange(e) {
-      this.problem.sendFile = e.target.files[0];
-    },
-    fetchItemSchedule: function fetchItemSchedule() {
-      var _this4 = this;
+      var _this5 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _this4.loading = true;
+                _this5.loading = true;
                 _context2.next = 3;
-                return axios.get("/api/schedule").then(function (response) {
-                  if (response.data.success == true) {
-                    _this4.course_room = response.data.payload;
+                return axios.get("/api/schedule/download".concat(item.replace("problem_file", ""))).then(function (response) {
+                  window.location.href = "api/schedule/download".concat(item.replace("problem_file", ""));
+                })["catch"](function (error) {
+                  if (error.response.status === 404) {
+                    _this5.snackBar(3500, error.response.data.message, "error");
+                  } else {
+                    _this5.snackBar(3500, error, "error");
                   }
-                })["catch"](function (response) {
-                  _this4.snackBar(3500, response, "error");
                 });
 
               case 3:
-                _this4.loading = false;
+                _this5.loading = false;
 
               case 4:
               case "end":
@@ -428,6 +444,41 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             }
           }
         }, _callee2);
+      }))();
+    },
+    invalidDate: function invalidDate(item) {
+      return item ? dayjs__WEBPACK_IMPORTED_MODULE_1___default()(item).format("MMMM D, YYYY HH:mm") : "-";
+    },
+    onFileChange: function onFileChange(e) {
+      this.problem.sendFile = e.target.files[0];
+    },
+    fetchItemSchedule: function fetchItemSchedule() {
+      var _this6 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _this6.loading = true;
+                _context3.next = 3;
+                return axios.get("/api/schedule").then(function (response) {
+                  if (response.data.success == true) {
+                    _this6.course_room = response.data.payload;
+                  }
+                })["catch"](function (error) {
+                  _this6.snackBar(3500, error, "error");
+                });
+
+              case 3:
+                _this6.loading = false;
+
+              case 4:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
       }))();
     },
     fetchRoom: function fetchRoom(val) {
@@ -441,58 +492,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.fetchItemSubmission();
     },
     fetchItemScheduleById: function fetchItemScheduleById() {
-      var _this5 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _this5.loading = true;
-                _context3.next = 3;
-                return axios.get("/api/schedule/" + _this5.$route.query.course_id).then(function (response) {
-                  if (response.data.success == true) {
-                    _this5.schedule_room = response.data.payload;
-                  }
-                })["catch"](function (response) {
-                  _this5.snackBar(3500, response, "error");
-                });
-
-              case 3:
-                _this5.loading = false;
-
-              case 4:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }))();
-    },
-    fetchItemSubmission: function fetchItemSubmission() {
-      var _this6 = this;
+      var _this7 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                _this6.loading = true;
+                _this7.loading = true;
                 _context4.next = 3;
-                return axios.get("/api/submission", {
-                  params: {
-                    course_id: _this6.$route.query.course_id
-                  }
-                }).then(function (response) {
+                return axios.get("/api/schedule/" + _this7.$route.query.course_id).then(function (response) {
                   if (response.data.success == true) {
-                    _this6.missionPass = response.data.payload;
+                    _this7.schedule_room = response.data.payload;
                   }
-                })["catch"](function (response) {
-                  _this6.snackBar(3500, response, "error");
+                })["catch"](function (error) {
+                  _this7.snackBar(3500, error, "error");
                 });
 
               case 3:
-                _this6.loading = false;
+                _this7.loading = false;
 
               case 4:
               case "end":
@@ -502,24 +520,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }, _callee4);
       }))();
     },
-    getLanguage: function getLanguage() {
-      var _this7 = this;
+    fetchItemSubmission: function fetchItemSubmission() {
+      var _this8 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
-                _this7.loading = true;
+                _this8.loading = true;
                 _context5.next = 3;
-                return axios.get("/api/language").then(function (response) {
-                  _this7.languages = response.data.payload;
-                })["catch"](function (response) {
-                  _this7.snackBar(3500, response, "error");
+                return axios.get("/api/submission", {
+                  params: {
+                    course_id: _this8.$route.query.course_id
+                  }
+                }).then(function (response) {
+                  if (response.data.success == true) {
+                    _this8.missionPass = response.data.payload;
+                  }
+                })["catch"](function (error) {
+                  _this8.snackBar(3500, error, "error");
                 });
 
               case 3:
-                _this7.loading = false;
+                _this8.loading = false;
 
               case 4:
               case "end":
@@ -527,6 +551,33 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             }
           }
         }, _callee5);
+      }))();
+    },
+    getLanguage: function getLanguage() {
+      var _this9 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                _this9.loading = true;
+                _context6.next = 3;
+                return axios.get("/api/language").then(function (response) {
+                  _this9.languages = response.data.payload;
+                })["catch"](function (error) {
+                  _this9.snackBar(3500, error, "error");
+                });
+
+              case 3:
+                _this9.loading = false;
+
+              case 4:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6);
       }))();
     }
   })
@@ -645,6 +696,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -659,6 +721,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   data: function data() {
     return {
+      search: "",
       model: 0,
       loading: false,
       dialog: false,
@@ -685,15 +748,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               return _this.onClick(_this.$store.state.data.courses.length > 0 ? _this.$store.state.data.courses[0] : 0);
 
             case 6:
-              console.log(_this.$store.state.data.courses);
-
-            case 7:
             case "end":
               return _context.stop();
           }
         }
       }, _callee);
     }))();
+  },
+  computed: {
+    filteredItems: function filteredItems() {
+      var _this2 = this;
+
+      var items = this.$store.state.data.courses.filter(function (e) {
+        if (_this2.$store.state.data.user.role !== "teacher" && _this2.$store.state.data.user.role !== "admin") {
+          return e.courseId !== 1;
+        }
+
+        return e;
+      });
+      return _.orderBy(items.filter(function (item) {
+        return item.course_name.toLowerCase().includes(_this2.search.toLowerCase());
+      }), "headline");
+    }
   },
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)("snackbar", ["showSnack"])), {}, {
     snackBar: function snackBar() {
@@ -707,25 +783,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       });
     },
     check_user: function check_user() {
-      var _this2 = this;
+      var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _this2.loading = true;
+                _this3.loading = true;
                 _context2.next = 3;
                 return axios.get("/api/user").then(function (response) {
                   if (response.data.success == true) {
-                    _this2.$store.commit("data/SET_USER", response.data.user);
+                    _this3.$store.commit("data/SET_USER", response.data.user);
                   }
-                })["catch"](function (response) {
-                  _this2.snackBar(3500, response, "error");
+                })["catch"](function (error) {
+                  _this3.snackBar(3500, error, "error");
                 });
 
               case 3:
-                _this2.loading = false;
+                _this3.loading = false;
 
               case 4:
               case "end":
@@ -736,25 +812,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     classroom: function classroom() {
-      var _this3 = this;
+      var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                _this3.loading = true;
+                _this4.loading = true;
                 _context3.next = 3;
                 return axios.get("api/classroom").then(function (response) {
                   if (response.data.success == true) {
-                    _this3.$store.commit("data/SET_COURSES", response.data.payload);
+                    _this4.$store.commit("data/SET_COURSES", response.data.payload);
                   }
-                })["catch"](function (response) {
-                  _this3.snackBar(3500, response, "error");
+                })["catch"](function (error) {
+                  _this4.snackBar(3500, error, "error");
                 });
 
               case 3:
-                _this3.loading = false;
+                _this4.loading = false;
 
               case 4:
               case "end":
@@ -765,33 +841,33 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     new_course: function new_course() {
-      var _this4 = this;
+      var _this5 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                _this4.loading = true;
+                _this5.loading = true;
                 _context4.next = 3;
                 return axios.post("api/course", {
-                  course_name: _this4.course_name
+                  course_name: _this5.course_name
                 }).then(function (response) {
                   if (response.data.success == true) {
-                    _this4.$store.state.data.courses.push({
+                    _this5.$store.state.data.courses.push({
                       courseId: response.data.payload.id,
                       course_name: response.data.payload.course_name
                     });
 
-                    _this4.snackBar();
+                    _this5.snackBar();
                   }
-                })["catch"](function (response) {
-                  _this4.snackBar(3500, response, "error");
+                })["catch"](function (error) {
+                  _this5.snackBar(3500, error, "error");
                 });
 
               case 3:
-                _this4.loading = false;
-                _this4.dialog = false;
+                _this5.loading = false;
+                _this5.dialog = false;
 
               case 5:
               case "end":
@@ -1304,6 +1380,24 @@ var render = function() {
       _c(
         "v-col",
         [
+          _c("v-text-field", {
+            staticClass: "mx-3",
+            attrs: {
+              label: "Search Title",
+              "prepend-inner-icon": "search",
+              clearable: "",
+              solo: "",
+              dense: ""
+            },
+            model: {
+              value: _vm.searchProblem,
+              callback: function($$v) {
+                _vm.searchProblem = $$v
+              },
+              expression: "searchProblem"
+            }
+          }),
+          _vm._v(" "),
           _vm._l(_vm.filterCourseRoom, function(item, i) {
             return _c(
               "v-card",
@@ -1421,7 +1515,7 @@ var render = function() {
           _vm._v(" "),
           _c(
             "v-expansion-panels",
-            _vm._l(_vm.missionPass, function(item, i) {
+            _vm._l(_vm.filterSubmissionRoom, function(item, i) {
               return _c(
                 "v-expansion-panel",
                 { key: i },
@@ -1581,7 +1675,7 @@ var render = function() {
                                   },
                                   on: {
                                     click: function($event) {
-                                      return _vm.download(_vm.item.file)
+                                      return _vm.download(_vm.problem.file)
                                     }
                                   }
                                 },
@@ -1969,33 +2063,57 @@ var render = function() {
                   _c("div", [
                     _c(
                       "div",
-                      _vm._l(this.$store.state.data.courses, function(item) {
-                        return _c(
-                          "v-list-item",
-                          {
-                            key: item.id,
-                            attrs: { link: "" },
-                            on: {
-                              click: function($event) {
-                                return _vm.onClick(item)
-                              }
-                            }
+                      [
+                        _c("v-text-field", {
+                          staticClass: "mx-3 mt-3",
+                          attrs: {
+                            label: "Search",
+                            "prepend-inner-icon": "search",
+                            clearable: "",
+                            solo: "",
+                            dense: ""
                           },
-                          [
-                            _c(
-                              "v-list-item-content",
-                              [
-                                _c("v-list-item-title", [
-                                  _vm._v(_vm._s(item.course_name))
-                                ])
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        )
-                      }),
-                      1
+                          model: {
+                            value: _vm.search,
+                            callback: function($$v) {
+                              _vm.search = $$v
+                            },
+                            expression: "search"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _vm._l(_vm.filteredItems, function(item) {
+                          return _c(
+                            "v-list-item",
+                            {
+                              key: item.id,
+                              attrs: { link: "" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.onClick(item)
+                                }
+                              }
+                            },
+                            [
+                              _c(
+                                "v-list-item-content",
+                                [
+                                  _c("v-list-item-title", [
+                                    _vm._v(
+                                      "\n                  " +
+                                        _vm._s(item.course_name) +
+                                        "\n                "
+                                    )
+                                  ])
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        })
+                      ],
+                      2
                     )
                   ])
                 ]

@@ -63,14 +63,25 @@
           </div>
           <div>
             <div>
+              <v-text-field
+                class="mx-3 mt-3"
+                label="Search"
+                prepend-inner-icon="search"
+                v-model="search"
+                clearable
+                solo
+                dense
+              ></v-text-field>
               <v-list-item
-                v-for="item in this.$store.state.data.courses"
+                v-for="item in filteredItems"
                 :key="item.id"
                 link
                 @click="onClick(item)"
               >
                 <v-list-item-content>
-                  <v-list-item-title>{{ item.course_name }}</v-list-item-title>
+                  <v-list-item-title>
+                    {{ item.course_name }}
+                  </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </div>
@@ -96,6 +107,7 @@ export default {
   },
   data: function () {
     return {
+      search: "",
       model: 0,
       loading: false,
       dialog: false,
@@ -110,7 +122,27 @@ export default {
         ? this.$store.state.data.courses[0]
         : 0
     );
-    console.log(this.$store.state.data.courses);
+  },
+  computed: {
+    filteredItems() {
+      const items = this.$store.state.data.courses.filter((e) => {
+        if (
+          this.$store.state.data.user.role !== "teacher" &&
+          this.$store.state.data.user.role !== "admin"
+        ) {
+          return e.courseId !== 1;
+        }
+        return e;
+      });
+      return _.orderBy(
+        items.filter((item) => {
+          return item.course_name
+            .toLowerCase()
+            .includes(this.search.toLowerCase());
+        }),
+        "headline"
+      );
+    },
   },
   methods: {
     ...mapActions("snackbar", ["showSnack"]),
@@ -130,8 +162,8 @@ export default {
             this.$store.commit("data/SET_USER", response.data.user);
           }
         })
-        .catch((response) => {
-          this.snackBar(3500, response, "error");
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
         });
       this.loading = false;
     },
@@ -144,8 +176,8 @@ export default {
             this.$store.commit("data/SET_COURSES", response.data.payload);
           }
         })
-        .catch((response) => {
-          this.snackBar(3500, response, "error");
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
         });
       this.loading = false;
     },
@@ -164,8 +196,8 @@ export default {
             this.snackBar();
           }
         })
-        .catch((response) => {
-          this.snackBar(3500, response, "error");
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
         });
       this.loading = false;
       this.dialog = false;

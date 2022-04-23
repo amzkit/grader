@@ -17,6 +17,7 @@ class Classroom extends Model
         "teacher",
         "ta",
         "student",
+        "guest",
         "semester",
         "start_datetime",
         "end_datetime",

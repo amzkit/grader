@@ -33,6 +33,15 @@
     </v-col>
     <v-col cols="1"> <v-divider vertical></v-divider></v-col>
     <v-col>
+      <v-text-field
+        class="mx-3"
+        label="Search Title"
+        prepend-inner-icon="search"
+        v-model="searchProblem"
+        clearable
+        solo
+        dense
+      ></v-text-field>
       <v-card
         class="mx-auto mb-4"
         max-width="100%"
@@ -93,7 +102,7 @@
         </v-card-actions>
       </v-card>
       <v-expansion-panels>
-        <v-expansion-panel v-for="(item, i) in missionPass" :key="i">
+        <v-expansion-panel v-for="(item, i) in filterSubmissionRoom" :key="i">
           <v-expansion-panel-header disable-icon-rotate>
             {{ item.title }}
             <template v-slot:actions>
@@ -135,7 +144,7 @@
           <v-row v-if="problem.file" class="mb-3">
             <v-col cols="4"> Download File Question </v-col>
             <v-col cols="8">
-              <v-btn small color="primary" dark @click="download(item.file)">
+              <v-btn small color="primary" dark @click="download(problem.file)">
                 Download File
               </v-btn>
             </v-col>
@@ -206,6 +215,7 @@ export default {
       schedule_room: [],
       course_room: [],
       search: "",
+      searchProblem: "",
       dialog: false,
       snackbar: false,
       text: "",
@@ -235,7 +245,7 @@ export default {
 
   computed: {
     getDateTime() {
-      return dayjs(new Date()).format("MM-DD-YYYY hh:mm A");
+      return dayjs(new Date()).format("MM-DD-YYYY HH:mm");
     },
     filteredItems() {
       return _.orderBy(
@@ -248,13 +258,36 @@ export default {
       );
     },
     filterCourseRoom() {
-      return this.schedule_room.filter((e) => {
+      const course_filter_time = this.schedule_room.filter(
+        (e) => e.end_date > this.getDateTime && e.start_date <= this.getDateTime
+      );
+      const res = course_filter_time.filter((e) => {
         const missionSend = this.missionPass.find((p) => p.schedule_id == e.id);
         if (missionSend) {
           return null;
         }
         return e;
       });
+
+      return _.orderBy(
+        res.filter((item) => {
+          return item.title
+            .toLowerCase()
+            .includes(this.searchProblem.toLowerCase());
+        }),
+        "headline"
+      );
+    },
+
+    filterSubmissionRoom() {
+      return _.orderBy(
+        this.missionPass.filter((item) => {
+          return item.title
+            .toLowerCase()
+            .includes(this.searchProblem.toLowerCase());
+        }),
+        "headline"
+      );
     },
   },
 
@@ -292,21 +325,34 @@ export default {
             window.location.reload();
           }
         })
-        .catch((response) => {
-          this.snackBar(3500, response, "error");
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
         });
       this.loading = false;
     },
 
-    download(item) {
-      window.location.href = `api/schedule/download${item.replace(
-        "problem_file",
-        ""
-      )}`;
+    async download(item) {
+      this.loading = true;
+      await axios
+        .get(`/api/schedule/download${item.replace("problem_file", "")}`)
+        .then((response) => {
+          window.location.href = `api/schedule/download${item.replace(
+            "problem_file",
+            ""
+          )}`;
+        })
+        .catch((error) => {
+          if (error.response.status === 404) {
+            this.snackBar(3500, error.response.data.message, "error");
+          } else {
+            this.snackBar(3500, error, "error");
+          }
+        });
+      this.loading = false;
     },
 
     invalidDate(item) {
-      return item ? dayjs(item).format("MMMM D, YYYY hh:mm A") : "-";
+      return item ? dayjs(item).format("MMMM D, YYYY HH:mm") : "-";
     },
 
     onFileChange(e) {
@@ -322,8 +368,8 @@ export default {
             this.course_room = response.data.payload;
           }
         })
-        .catch((response) => {
-          this.snackBar(3500, response, "error");
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
         });
       this.loading = false;
     },
@@ -351,8 +397,8 @@ export default {
             this.schedule_room = response.data.payload;
           }
         })
-        .catch((response) => {
-          this.snackBar(3500, response, "error");
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
         });
       this.loading = false;
     },
@@ -370,8 +416,8 @@ export default {
             this.missionPass = response.data.payload;
           }
         })
-        .catch((response) => {
-          this.snackBar(3500, response, "error");
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
         });
       this.loading = false;
     },
@@ -383,8 +429,8 @@ export default {
         .then((response) => {
           this.languages = response.data.payload;
         })
-        .catch((response) => {
-          this.snackBar(3500, response, "error");
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
         });
       this.loading = false;
     },
