@@ -1,49 +1,53 @@
 <template>
   <v-container>
+    <v-container fluid fill-height>
+      <v-layout justify-center align-center>
+        <v-flex text-xs-center>
+          <v-card class="elevation-20">
+            <v-card-title>
+              <v-icon large left> mdi-help-circle </v-icon>
+              <span class="text-h6 font-weight-light">{{ item.title }}</span>
+            </v-card-title>
+
+            <v-card-text class="text-h5 font-weight-bold">
+              {{ convertToPlain(item.question) }}
+            </v-card-text>
+            <v-container class="grey lighten-5">
+              <v-row justify="center">
+                <v-col md="6">
+                  <v-card class="pa-2" outlined tile>
+                    <v-card class="pa-2" tile outlined> Code </v-card>
+                    <textarea id="code"></textarea>
+                  </v-card>
+                </v-col>
+                <v-col md="6">
+                  <v-card class="pa-2" outlined tile>
+                    <v-card class="pa-2" tile outlined> Output </v-card>
+                    <textarea id="output"></textarea>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </v-container>
+            <v-col cols="12" class="mt-2">
+              <v-textarea
+                clearable
+                outlined
+                v-model="comment"
+                clear-icon="mdi-close-circle"
+                placeholder="Comment"
+                rows="2"
+                row-height="15"
+              ></v-textarea>
+              <v-btn block color="primary" @click="insertComment">
+                Comment
+              </v-btn>
+            </v-col>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
     <Snackbar />
     <Loading :loading="this.loading" />
-    <v-row>
-      <v-row>
-        <v-col cols="12">
-          <p class="text-h5 mb-1">{{ item.title }}</p>
-        </v-col>
-        <v-col cols="12">
-          <p class="text-h6">
-            {{ convertToPlain(item.question) }}
-          </p>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="6">
-          <VueEditor
-            v-model="item.code"
-            :editorToolbar="customToolbar"
-            disabled
-          />
-        </v-col>
-        <v-col cols="6">
-          <VueEditor
-            v-model="item.output"
-            :editorToolbar="customToolbar"
-            disabled
-          />
-        </v-col>
-      </v-row>
-      <v-row align="center">
-        <v-col cols="12">
-          <v-textarea
-            clearable
-            outlined
-            v-model="comment"
-            clear-icon="mdi-close-circle"
-            placeholder="Comment"
-            rows="2"
-            row-height="15"
-          ></v-textarea>
-          <v-btn block color="primary" @click="insertComment"> Comment </v-btn>
-        </v-col>
-      </v-row>
-    </v-row>
   </v-container>
 </template>
 
@@ -52,6 +56,10 @@ import Loading from "../Loading/Loading.vue";
 import { VueEditor } from "vue2-editor";
 import Snackbar from "../Snackbar/Snackbar.vue";
 import { mapActions } from "vuex";
+import * as CodeMirror from "codemirror";
+import "codemirror/lib/codemirror.css";
+import "codemirror/theme/dracula.css";
+
 export default {
   components: {
     Loading,
@@ -66,6 +74,11 @@ export default {
       loading: false,
       customToolbar: [{}],
     };
+  },
+  computed: {
+    content() {
+      return this.item.code;
+    },
   },
   created() {
     this.getScoreboard();
@@ -102,6 +115,16 @@ export default {
         .catch((error) => {
           this.snackBar(3500, error, "error");
         });
+      CodeMirror.fromTextArea(document.getElementById("code"), {
+        lineNumbers: true,
+        theme: "dracula",
+        readOnly: "nocursor",
+      }).setValue(this.item.code);
+      CodeMirror.fromTextArea(document.getElementById("output"), {
+        lineNumbers: true,
+        theme: "dracula",
+        readOnly: "nocursor",
+      }).setValue(this.item.output);
       this.loading = false;
     },
     async insertComment() {
