@@ -35,7 +35,8 @@ class UserTableSeeder extends Seeder
     public function run()
     {
         DB::table('users')->delete();
-        User::create(
+
+        $rows = [
             [
                 'name' => "Admin",
                 'email' => "admin@gmail.com",
@@ -51,8 +52,12 @@ class UserTableSeeder extends Seeder
                 'password' => Hash::make('12345678'),
                 'role_teacher' => 1,
                 'role' => 'teacher',
-            ],
-        );
+            ]
+        ];
+
+        foreach ($rows as $row) {
+            User::create($row);
+        }
     }
 }
 
@@ -62,7 +67,8 @@ class LanguageTableSeeder extends Seeder
     public function run()
     {
         DB::table('languages')->delete();
-        Language::create(
+
+        $rows = [
             [
                 'lang' => "PYTHON",
                 'type' => ".py",
@@ -75,7 +81,11 @@ class LanguageTableSeeder extends Seeder
                 'lang' => "C++",
                 'type' => ".cpp",
             ],
-        );
+        ];
+
+        foreach ($rows as $row) {
+            Language::create($row);
+        }
     }
 }
 

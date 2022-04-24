@@ -2,7 +2,7 @@
   <div>
     <Loading :loading="this.loading" />
     <Snackbar />
-    <v-navigation-drawer absolute permanent left>
+    <v-navigation-drawer absolute permanent left class="background">
       <v-list dense nav>
         <v-list-item-group v-model="model" mandatory>
           <div
@@ -205,3 +205,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.background {
+  background-color: #eeeeee;
+}
+</style>

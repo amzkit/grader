@@ -3,7 +3,7 @@
     <Snackbar />
     <Loading :loading="loading" />
     <v-col cols="3">
-      <v-card class="mx-auto" max-width="300" tile>
+      <v-card class="mx-auto" max-width="300">
         <v-list dense>
           <v-subheader>Problems</v-subheader>
           <v-text-field

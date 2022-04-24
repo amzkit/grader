@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="background-color: palegoldenrod">
     <v-navigation-drawer v-model="drawer" absolute temporary>
       <v-list-item>
         <v-list-item-avatar>
@@ -100,8 +100,8 @@
 
       <div v-if="role === 'guest'">
         <v-btn text to="/"> Home </v-btn>
-        <v-btn text to="/user-task"> Task </v-btn>
-        <v-btn text to="/user-problem"> Problems </v-btn>
+        <v-btn text to="/user-task"> Problems </v-btn>
+        <v-btn text to="/user-problem"> Challenge </v-btn>
         <v-btn text to="/user-my-score"> My Score </v-btn>
         <v-btn text to="/user-scoreboard"> Scoreboard </v-btn>
       </div>
