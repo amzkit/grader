@@ -359,6 +359,11 @@ export default {
           text: "Scoreboard",
         },
         {
+          to: "/analysis",
+          icon: "mdi-view-dashboard",
+          text: "Analysis",
+        },
+        {
           icon: "mdi-account",
           text: "User",
           subLinks: [

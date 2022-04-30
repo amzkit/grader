@@ -81,16 +81,23 @@ class ScheduleController extends Controller
 
         $schedule = Schedule::where('course_id', '=',  $id)
             ->join("problems", "problems.id", "=", "schedules.problem_id")
+            ->join("languages", "languages.id", "=", "schedules.language_id")
+            ->where('schedules.IsActive', '=', 1)
             ->select(
                 "schedules.id",
                 "problems.title",
                 "problems.question",
                 "problems.level",
-                "problems.score",
                 "problems.file",
+                "schedules.score",
                 "schedules.start_date",
                 "schedules.end_date",
                 "problems.id as problemsId",
+                "schedules.language_id",
+                "languages.lang",
+                "schedules.late",
+                "languages.type",
+                "schedules.IsAnalysis",
             )
             ->get();
 
@@ -101,18 +108,20 @@ class ScheduleController extends Controller
     {
         foreach ($request->exampleId as $exampleId) {
 
-            $scheduleWhere = [
+            $schedule = [
                 'course_id'  => $request->roomId,
-                'problem_id' =>  $exampleId
-            ];
-
-            $scheduleData = [
+                'problem_id' =>  $exampleId,
                 'start_date'  =>  $request->start_date,
                 'end_date'  =>  $request->end_date,
-                'problem_id' =>  $exampleId
+                'problem_id' =>  $exampleId,
+                'score' =>  $request->score,
+                'late' => $request->late,
+                'IsAnalysis' =>  $request->IsAnalysis,
+                'language_id' => $request->language_id,
+
             ];
 
-            $schedule = Schedule::updateOrCreate($scheduleWhere, $scheduleData);
+            $schedule = Schedule::create($schedule);
         }
         return response()->json(['success' => true, 'payload' => $schedule]);
     }
@@ -123,7 +132,11 @@ class ScheduleController extends Controller
         $schedule->update(
             [
                 'start_date' => $request->start_date,
-                'end_date' => $request->end_date
+                'end_date' => $request->end_date,
+                'score' =>  $request->score,
+                'late' => $request->late,
+                'IsAnalysis' =>  $request->IsAnalysis,
+                'language_id' => $request->language_id,
             ]
         );
         return response()->json(['success' => true, 'payload' => $schedule]);
@@ -131,15 +144,13 @@ class ScheduleController extends Controller
 
     public function deleteManageExample($id)
     {
-        if (Schedule::where('id', $id)->exists()) {
-            Schedule::find($id)->delete();
-            return response()->json([
-                "message" => "records delete successfully"
-            ], 200);
-        } else {
-            return response()->json([
-                "message" => "not found"
-            ], 404);
-        }
+
+        $schedule = Schedule::where("id", $id)->first();
+        $schedule->update(
+            [
+                'IsActive' => 0
+            ]
+        );
+        return response()->json(['success' => true]);
     }
 }

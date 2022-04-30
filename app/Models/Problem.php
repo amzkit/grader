@@ -13,8 +13,10 @@ class Problem extends Model
         'title',
         'question',
         'level',
-        'score',
         "file",
-        "tolerant"
+        "tolerant",
+        "IsActive",
+        "created_at",
+        "updated_at",
     ];
 }

@@ -34,6 +34,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -46,8 +48,23 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {},
-  created: function created() {},
-  methods: {}
+  created: function created() {
+    this.firstLogin();
+  },
+  methods: {
+    redirect: function redirect(url) {
+      window.location.href = url;
+    },
+    firstLogin: function firstLogin() {
+      var user_role = document.head.querySelector('meta[name="user-role"]').content;
+      var user_last_login = document.head.querySelector('meta[name="user-last-login"]').content;
+      console.log(user_role, user_last_login);
+
+      if (user_role == "student" && user_last_login == "") {
+        this.redirect("/change-password");
+      }
+    }
+  }
 });
 
 /***/ }),
@@ -168,11 +185,13 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("div", { staticClass: "mt-4" }, [
-        _c("h1", { staticClass: "text-center , font-weight-black" }, [
-          _vm._v("SOURCE CODE GRADER")
-        ]),
+        _c(
+          "h1",
+          { staticClass: "text-center , font-weight-black white--text" },
+          [_vm._v("\n      SOURCE CODE GRADER\n    ")]
+        ),
         _vm._v(" "),
-        _c("h5", { staticClass: "text-center" }, [
+        _c("h5", { staticClass: "text-center white--text" }, [
           _vm._v("Computer Science Maejo University")
         ])
       ])

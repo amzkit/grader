@@ -268,6 +268,40 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -281,6 +315,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   data: function data() {
     return {
+      viewAll: false,
       languages: [],
       schedule_room: [],
       course_room: [],
@@ -301,13 +336,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         sendFile: null,
         start_date: "",
         end_date: "",
-        languageId: 0
-      }
+        lang: "",
+        type: ""
+      },
+      sortby: "Sort"
     };
   },
   created: function created() {
     this.fetchItemSchedule();
-    this.getLanguage();
     this.fetchItemScheduleById();
     this.fetchItemSubmission();
   },
@@ -322,31 +358,60 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return item.course_name.toLowerCase().includes(_this.search.toLowerCase());
       }), "headline");
     },
-    filterCourseRoom: function filterCourseRoom() {
+    filterSubmissionRoom: function filterSubmissionRoom() {
       var _this2 = this;
 
-      var course_filter_time = this.schedule_room.filter(function (e) {
-        return e.end_date > _this2.getDateTime && e.start_date <= _this2.getDateTime;
-      });
-      var res = course_filter_time.filter(function (e) {
-        var missionSend = _this2.missionPass.find(function (p) {
-          return p.schedule_id == e.id;
+      var convert = function convert(arr) {
+        var res = {};
+        arr.forEach(function (obj) {
+          var key = "".concat(obj.schedule_id);
+
+          if (!res[key]) {
+            res[key] = _objectSpread(_objectSpread({}, obj), {}, {
+              count: 0
+            });
+          }
+
+          res[key].count += 1;
         });
+        return Object.values(res);
+      };
 
-        if (missionSend) {
-          return null;
-        }
-
-        return e;
-      });
-      return _.orderBy(res.filter(function (item) {
+      return _.orderBy(convert(this.missionPass).filter(function (item) {
         return item.title.toLowerCase().includes(_this2.searchProblem.toLowerCase());
       }), "headline");
     },
-    filterSubmissionRoom: function filterSubmissionRoom() {
+    filterCourseRoom: function filterCourseRoom() {
       var _this3 = this;
 
-      return _.orderBy(this.missionPass.filter(function (item) {
+      var course_filter_time = this.schedule_room.filter(function (e) {
+        if (e.late || e.end_date > _this3.getDateTime && e.start_date <= _this3.getDateTime) {
+          return e;
+        }
+      });
+      var sort = [];
+
+      if (this.sortby == "Title") {
+        sort = course_filter_time.sort(function (a, b) {
+          return a.title > b.title ? 1 : -1;
+        });
+      } else if (this.sortby == "Date") {
+        sort = course_filter_time.sort(function (a, b) {
+          return a.start_date > b.start_date ? 1 : -1;
+        });
+      } else if (this.sortby == "Level") {
+        sort = course_filter_time.sort(function (a, b) {
+          return a.level > b.level ? 1 : -1;
+        });
+      } else if (this.sortby == "Late") {
+        sort = course_filter_time.sort(function (a, b) {
+          return a.late < b.late ? 1 : -1;
+        });
+      } else {
+        sort = course_filter_time;
+      }
+
+      return _.orderBy(sort.filter(function (item) {
         return item.title.toLowerCase().includes(_this3.searchProblem.toLowerCase());
       }), "headline");
     }
@@ -390,9 +455,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 };
                 formData = new FormData();
                 formData.append("sourcefile", _this4.problem.sendFile);
-                formData.append("Lang", _this4.languages.find(function (e) {
-                  return e.id = _this4.problem.languageId;
-                }).lang);
+                formData.append("Lang", _this4.problem.lang);
                 formData.append("problem_id", _this4.problem.problem_id);
                 formData.append("course_id", _this4.$route.query.course_id);
                 _context.next = 12;
@@ -551,33 +614,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             }
           }
         }, _callee5);
-      }))();
-    },
-    getLanguage: function getLanguage() {
-      var _this9 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
-          while (1) {
-            switch (_context6.prev = _context6.next) {
-              case 0:
-                _this9.loading = true;
-                _context6.next = 3;
-                return axios.get("/api/language").then(function (response) {
-                  _this9.languages = response.data.payload;
-                })["catch"](function (error) {
-                  _this9.snackBar(3500, error, "error");
-                });
-
-              case 3:
-                _this9.loading = false;
-
-              case 4:
-              case "end":
-                return _context6.stop();
-            }
-          }
-        }, _callee6);
       }))();
     }
   })
@@ -1356,6 +1392,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
 var render = function() {
+  var this$1 = this
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -1449,23 +1486,77 @@ var render = function() {
       _c(
         "v-col",
         [
-          _c("v-text-field", {
-            staticClass: "mx-3",
-            attrs: {
-              label: "Search Title",
-              "prepend-inner-icon": "search",
-              clearable: "",
-              solo: "",
-              dense: ""
-            },
-            model: {
-              value: _vm.searchProblem,
-              callback: function($$v) {
-                _vm.searchProblem = $$v
-              },
-              expression: "searchProblem"
-            }
-          }),
+          _c(
+            "v-row",
+            [
+              _c(
+                "v-col",
+                { attrs: { cols: "7" } },
+                [
+                  _c("v-text-field", {
+                    staticClass: "mx-3",
+                    attrs: {
+                      label: "Search Title",
+                      "prepend-inner-icon": "search",
+                      clearable: "",
+                      solo: "",
+                      dense: ""
+                    },
+                    model: {
+                      value: _vm.searchProblem,
+                      callback: function($$v) {
+                        _vm.searchProblem = $$v
+                      },
+                      expression: "searchProblem"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-col",
+                { attrs: { cols: "3" } },
+                [
+                  _c("v-select", {
+                    attrs: {
+                      items: ["Title", "Date", "Level", "Late"],
+                      label: "Sort",
+                      solo: "",
+                      dense: ""
+                    },
+                    model: {
+                      value: _vm.sortby,
+                      callback: function($$v) {
+                        _vm.sortby = $$v
+                      },
+                      expression: "sortby"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-col",
+                { attrs: { cols: "2" } },
+                [
+                  _c("v-checkbox", {
+                    attrs: { solo: "", dense: "", label: "View All" },
+                    model: {
+                      value: _vm.viewAll,
+                      callback: function($$v) {
+                        _vm.viewAll = $$v
+                      },
+                      expression: "viewAll"
+                    }
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          ),
           _vm._v(" "),
           _vm._l(_vm.filterCourseRoom, function(item, i) {
             return _c(
@@ -1473,7 +1564,13 @@ var render = function() {
               {
                 key: i,
                 staticClass: "mx-auto mb-4",
-                attrs: { "max-width": "100%" }
+                attrs: {
+                  "max-width": "100%",
+                  color:
+                    item.late && item.end_date <= _vm.getDateTime
+                      ? "#FFE57F"
+                      : "white"
+                }
               },
               [
                 _c(
@@ -1509,7 +1606,11 @@ var render = function() {
                         _vm._v(" "),
                         _c("v-divider", { staticClass: "mx-4" }),
                         _vm._v(" "),
-                        _c("v-card-title", [_vm._v("Schedule")]),
+                        _c("v-card-title", [
+                          _vm._v(
+                            "Schedule " + _vm._s(item.late ? "(Past due)" : "")
+                          )
+                        ]),
                         _vm._v(" "),
                         _c(
                           "v-card-text",
@@ -1567,7 +1668,9 @@ var render = function() {
                             _vm.problem.file = item.file
                             _vm.problem.start_date = item.start_date
                             _vm.problem.end_date = item.end_date
+                            _vm.problem.lang = item.lang
                             _vm.problem.problem_id = item.problemsId
+                            _vm.problem.type = item.type
                             _vm.dialog = true
                           }
                         }
@@ -1581,6 +1684,66 @@ var render = function() {
               1
             )
           }),
+          _vm._v(" "),
+          _vm.viewAll
+            ? _c(
+                "div",
+                [
+                  _c(
+                    "v-expansion-panels",
+                    { staticClass: "mb-4" },
+                    _vm._l(
+                      this.schedule_room.filter(function(e) {
+                        return !e.late && e.end_date <= this$1.getDateTime
+                      }),
+                      function(item, i) {
+                        return _c(
+                          "v-expansion-panel",
+                          { key: i, staticStyle: { background: "#ffe57f" } },
+                          [
+                            _c(
+                              "v-expansion-panel-header",
+                              {
+                                attrs: { "disable-icon-rotate": "" },
+                                scopedSlots: _vm._u(
+                                  [
+                                    {
+                                      key: "actions",
+                                      fn: function() {
+                                        return [
+                                          _c(
+                                            "v-icon",
+                                            { attrs: { color: "error" } },
+                                            [_vm._v(" mdi-alert-circle ")]
+                                          )
+                                        ]
+                                      },
+                                      proxy: true
+                                    }
+                                  ],
+                                  null,
+                                  true
+                                )
+                              },
+                              [
+                                _vm._v(
+                                  "\n            " +
+                                    _vm._s(item.title + " (Late)") +
+                                    "\n            "
+                                )
+                              ]
+                            )
+                          ],
+                          1
+                        )
+                      }
+                    ),
+                    1
+                  )
+                ],
+                1
+              )
+            : _vm._e(),
           _vm._v(" "),
           _c(
             "v-expansion-panels",
@@ -1599,33 +1762,9 @@ var render = function() {
                             key: "actions",
                             fn: function() {
                               return [
-                                item.message == "waiting"
-                                  ? _c(
-                                      "div",
-                                      [
-                                        _c(
-                                          "v-icon",
-                                          { attrs: { color: "primary" } },
-                                          [
-                                            _vm._v(
-                                              "\n                mdi-checkbox-blank-circle-outline\n              "
-                                            )
-                                          ]
-                                        )
-                                      ],
-                                      1
-                                    )
-                                  : _c(
-                                      "div",
-                                      [
-                                        _c(
-                                          "v-icon",
-                                          { attrs: { color: "teal" } },
-                                          [_vm._v(" mdi-check ")]
-                                        )
-                                      ],
-                                      1
-                                    )
+                                _c("v-icon", { attrs: { color: "teal" } }, [
+                                  _vm._v(" mdi-check ")
+                                ])
                               ]
                             },
                             proxy: true
@@ -1637,7 +1776,9 @@ var render = function() {
                     },
                     [
                       _vm._v(
-                        "\n          " + _vm._s(item.title) + "\n          "
+                        "\n          " +
+                          _vm._s(item.title + " (Submit " + item.count + ")") +
+                          "\n          "
                       )
                     ]
                   )
@@ -1766,34 +1907,17 @@ var render = function() {
                     "v-row",
                     { staticClass: "mb-3" },
                     [
-                      _c(
-                        "v-col",
-                        { staticClass: "mt-6", attrs: { cols: "4" } },
-                        [_vm._v(" Language ")]
-                      ),
+                      _c("v-col", { attrs: { cols: "4" } }, [
+                        _vm._v(" Language ")
+                      ]),
                       _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "8" } },
-                        [
-                          _c("v-autocomplete", {
-                            attrs: {
-                              items: _vm.languages,
-                              label: "Language",
-                              "item-text": "lang",
-                              "item-value": "id"
-                            },
-                            model: {
-                              value: _vm.problem.languageId,
-                              callback: function($$v) {
-                                _vm.$set(_vm.problem, "languageId", $$v)
-                              },
-                              expression: "problem.languageId"
-                            }
-                          })
-                        ],
-                        1
-                      )
+                      _c("v-col", { attrs: { cols: "8" } }, [
+                        _vm._v(
+                          "\n            " +
+                            _vm._s(_vm.problem.lang) +
+                            "\n          "
+                        )
+                      ])
                     ],
                     1
                   ),
@@ -1809,7 +1933,7 @@ var render = function() {
                         _c("input", {
                           ref: "file_upload",
                           staticClass: "form-control",
-                          attrs: { type: "file" },
+                          attrs: { type: "file", accept: _vm.problem.type },
                           on: { change: _vm.onFileChange }
                         })
                       ])

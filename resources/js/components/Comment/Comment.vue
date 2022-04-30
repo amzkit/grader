@@ -6,24 +6,19 @@
           <v-card class="elevation-20">
             <v-card-title>
               <v-icon large left> mdi-help-circle </v-icon>
-              <span class="text-h6 font-weight-light">{{ item.title }}</span>
+              <span class="text-h6 font-weight-light">
+                {{ items.problems && items.problems.title }}
+              </span>
             </v-card-title>
-
             <v-card-text class="text-h5 font-weight-bold">
-              {{ convertToPlain(item.question) }}
+              {{ convertToPlain(items.problems && items.problems.question) }}
             </v-card-text>
             <v-container class="grey lighten-5">
               <v-row justify="center">
-                <v-col md="6">
+                <v-col md="12">
                   <v-card class="pa-2" outlined tile>
                     <v-card class="pa-2" tile outlined> Code </v-card>
                     <textarea id="code"></textarea>
-                  </v-card>
-                </v-col>
-                <v-col md="6">
-                  <v-card class="pa-2" outlined tile>
-                    <v-card class="pa-2" tile outlined> Output </v-card>
-                    <textarea id="output"></textarea>
                   </v-card>
                 </v-col>
               </v-row>
@@ -69,7 +64,7 @@ export default {
   name: "Comment",
   data: function () {
     return {
-      item: [],
+      items: [],
       comment: "",
       loading: false,
       customToolbar: [{}],
@@ -92,24 +87,25 @@ export default {
         timeout: timeout,
       });
     },
+
     convertToPlain(html) {
       var tempDivElement = document.createElement("div");
       tempDivElement.innerHTML = html;
       return tempDivElement.textContent || tempDivElement.innerText || "";
     },
+
     async getScoreboard() {
       this.loading = true;
       await axios
         .get(`/api/submission/scoreboard`, {
           params: {
-            user_id: this.$route.query.user_id,
+            submission_id: this.$route.query.submission_id,
             problem_id: this.$route.query.problem_id,
-            schedule_id: this.$route.query.schedule_id,
           },
         })
         .then((response) => {
           if (response.data.success == true) {
-            this.item = response.data.payload;
+            this.items = response.data.payload;
           }
         })
         .catch((error) => {
@@ -119,24 +115,19 @@ export default {
         lineNumbers: true,
         theme: "dracula",
         readOnly: "nocursor",
-      }).setValue(this.item.code);
-      CodeMirror.fromTextArea(document.getElementById("output"), {
-        lineNumbers: true,
-        theme: "dracula",
-        readOnly: "nocursor",
-      }).setValue(this.item.output);
+      }).setValue(this.items.submission.code);
       this.loading = false;
     },
+
     async insertComment() {
       this.loading = true;
       await axios
         .post("/api/comment", {
-          submission_id: this.item.id,
+          submission_id: this.$route.query.submission_id,
           comment: this.comment,
-          user_id: this.item.user_id,
         })
         .then(() => {
-          window.location.href = "/scoreboard";
+          window.location.href = "/analysis";
         })
         .catch((error) => {
           this.snackBar(3500, error, "error");

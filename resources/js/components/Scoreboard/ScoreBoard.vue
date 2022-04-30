@@ -1,90 +1,157 @@
 
 <template>
-  <v-container>
-    <Loading :loading="loading" />
+  <v-row>
     <Snackbar />
-    <v-row justify="space-between">
-      <v-col md="4">
-        <v-autocomplete
-          v-model="classroom"
-          :items="items"
-          label="Classroom"
-          item-text="course_name"
-          item-value="courseId"
-        >
-        </v-autocomplete>
-      </v-col>
-      <v-col md="4">
-        <v-row justify="end" align="center">
-          <v-chip class="ma-2" label>
-            Number of student : {{ data.student_count }} in:
-            {{ data.classroom_name }}
-          </v-chip>
-        </v-row>
-      </v-col>
-    </v-row>
-    <div>
-      <v-card>
-        <v-card-title>
+    <Loading :loading="loading" />
+    <v-col cols="3">
+      <v-card class="mx-auto" max-width="300">
+        <v-list dense>
+          <v-subheader>Course</v-subheader>
           <v-text-field
-            v-model="search"
-            append-icon="mdi-magnify"
+            class="mx-3"
             label="Search"
-            single-line
-            hide-details
+            prepend-inner-icon="search"
+            v-model="search"
+            clearable
+            solo
+            dense
           ></v-text-field>
-        </v-card-title>
+          <v-list-item-group>
+            <v-list-item
+              v-for="(item, i) in filteredItems"
+              :key="i"
+              @click="fetchRoom(item.courseId)"
+            >
+              <v-list-item-content>
+                <v-list-item-title
+                  v-text="item.course_name"
+                ></v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </v-card>
+    </v-col>
+    <v-col cols="1"> <v-divider vertical></v-divider></v-col>
+    <v-col>
+      <v-row>
         <v-data-table
           :headers="headers"
           :items="data.classroom"
-          :class="[
-            'elevation-1',
-            $store.state.data.user.role == 'ta' ||
-            $store.state.data.user.role == 'teacher'
-              ? 'row-pointer'
-              : null,
-          ]"
-          :search="search"
-          @click:row="
-            $store.state.data.user.role == 'ta' ||
-            $store.state.data.user.role == 'teacher'
-              ? item($event)
-              : null
-          "
+          :single-expand="true"
+          :expanded.sync="expanded"
+          item-key="name"
+          show-expand
+          class="elevation-1"
         >
+          <template v-slot:top>
+            <v-toolbar flat>
+              <v-toolbar-title>ScoreBoard</v-toolbar-title>
+              <v-spacer></v-spacer>
+              <template
+                v-if="
+                  $store.state.data.user.role === 'admin' ||
+                  $store.state.data.user.role === 'teacher'
+                "
+              >
+                <v-select
+                  v-model="exportData"
+                  class="mr-5 mt-6"
+                  :items="[
+                    {
+                      id: 1,
+                      key: 'No Detail',
+                    },
+                    { id: 2, key: 'Detail' },
+                  ]"
+                  label="Select Template Export"
+                  item-text="key"
+                  item-value="id"
+                  dense
+                  solo
+                ></v-select>
+                <v-btn depressed color="primary" @click="onExport">
+                  Primary
+                </v-btn>
+              </template>
+            </v-toolbar>
+          </template>
           <template v-slot:[`item.index`]="{ index }">
             {{ index + 1 }}
           </template>
-          <template v-slot:[`item.mission`]="{ item }">
+          <template v-slot:[`item.problems`]="{ item }">
             {{
-              `${data.submission.reduce(
-                (n, e) => (e.user_id === item.user_id ? n + 1 : n),
-                0
-              )}/${data.schedules_count}`
+              `${mapDataMyScore(item.user_id).length}/${data.schedule.length}`
             }}
           </template>
-          <template v-slot:[`item.score`]="{ item }">
+          <template v-slot:[`item.totalScore`]="{ item }">
             {{
-              data.submission
-                .filter((e) => {
-                  return e.user_id === item.user_id;
-                })
-                .reduce((t, n) => t + n.score, 0)
+              `${mapDataMyScore(item.user_id).reduce(
+                (t, n) => t + n.score,
+                0
+              )}/${data.schedule.reduce((t, n) => t + n.score, 0)}`
             }}
+          </template>
+          <template v-slot:expanded-item="{ headers, item }">
+            <td :colspan="headers.length">
+              <v-container fluid>
+                <v-simple-table>
+                  <template v-slot:default>
+                    <thead>
+                      <tr>
+                        <th class="text-left">#</th>
+                        <th class="text-left">Title Problem</th>
+                        <th class="text-left">Date Submission</th>
+                        <th class="text-left">Count Submit</th>
+                        <th class="text-left">Score</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        v-for="(sc, index) in mapDataMyScore(item.user_id)"
+                        :key="index"
+                      >
+                        <td>
+                          {{ index + 1 }}
+                        </td>
+                        <td>
+                          {{
+                            data.schedule.find((e) => e.id == sc.schedule_id)
+                              .title
+                          }}
+                        </td>
+                        <td>
+                          {{ sc.date_send }}
+                        </td>
+                        <td>
+                          {{ sc.count }}
+                        </td>
+                        <td>
+                          {{ sc.score }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+              </v-container>
+            </td>
           </template>
         </v-data-table>
-      </v-card>
-    </div>
-  </v-container>
+      </v-row>
+    </v-col>
+  </v-row>
 </template>
 
 
 <script>
+import Excel from "exceljs";
+import { saveAs } from "file-saver";
 import dayjs from "dayjs";
 import Navigation from "../Navigation/Navigation.vue";
 import Loading from "../Loading/Loading.vue";
 import Snackbar from "../Snackbar/Snackbar.vue";
 import { mapActions } from "vuex";
+import { exportProblems, exportProblemsDetail } from "./ExportProblems";
 
 export default {
   components: {
@@ -94,10 +161,10 @@ export default {
   },
   data: function () {
     return {
-      loading: false,
-      items: [],
-      data: [],
-      search: "",
+      exportData: null,
+      course_room: [],
+      expanded: [],
+      singleExpand: false,
       headers: [
         {
           text: "#",
@@ -105,37 +172,42 @@ export default {
           sortable: false,
           value: "index",
         },
-        { text: "Student ID", value: "username" },
-        { text: "Name", value: "name" },
+        { text: "Username", value: "username" },
         {
-          text: "Problem",
+          text: "Name",
+          align: "start",
           sortable: false,
-          value: "mission",
+          value: "name",
         },
-        { text: "Score", value: "score" },
+        { text: "Problems", value: "problems" },
+        { text: "Total Score", value: "totalScore" },
+      ],
+      loading: false,
+      items: [],
+      data: [],
+      search: "",
+      json: [
+        { name: "Dady", age: "21" },
+        { name: "Jonh", age: "25" },
+        { name: "James", age: "17" },
       ],
     };
   },
   async created() {
+    this.getScoreboard();
     this.getClassrooms();
+    this.fetchItemCourse();
   },
   computed: {
-    classroom: {
-      async get() {},
-      async set(value) {
-        this.loading = true;
-        await axios
-          .get(`/api/scoreboard/${value}`)
-          .then((response) => {
-            if (response.data.success == true) {
-              this.data = response.data.payload;
-            }
-          })
-          .catch((error) => {
-            this.snackBar(3500, error, "error");
-          });
-        this.loading = false;
-      },
+    filteredItems() {
+      return _.orderBy(
+        this.course_room.filter((item) => {
+          return item.course_name
+            .toLowerCase()
+            .includes(this.search.toLowerCase());
+        }),
+        "headline"
+      );
     },
   },
   methods: {
@@ -147,6 +219,93 @@ export default {
         color: color,
         timeout: timeout,
       });
+    },
+    async onExport() {
+      const schedules = this.data.schedule;
+      const classroom = this.data.classroom;
+      const scoreboard = this.data.scoreboard;
+      const classroom_name = this.data.classroom_name;
+
+      try {
+        if (this.exportData === 1) {
+          const exportFile = await exportProblems(
+            schedules,
+            classroom,
+            scoreboard,
+            classroom_name
+          );
+          return saveAs(new Blob([exportFile]), `${classroom_name}.xlsx`);
+        } else if (this.exportData === 2) {
+          const exportFile = await exportProblemsDetail(
+            schedules,
+            classroom,
+            scoreboard,
+            classroom_name
+          );
+          return saveAs(new Blob([exportFile]), `${classroom_name}.xlsx`);
+        } else {
+          this.snackBar(3500, "Please select a format", "warning");
+        }
+      } catch (err) {
+        this.snackBar(3500, "Please select a classroom.", "warning");
+      }
+    },
+    fetchRoom(val) {
+      this.$router
+        .push({
+          path: "/scoreboard",
+          query: {
+            course_id: val,
+          },
+        })
+        .catch(() => {});
+      this.getScoreboard();
+    },
+    async getScoreboard() {
+      this.loading = true;
+      await axios
+        .get(`/api/scoreboard/${this.$route.query.course_id}`)
+        .then((response) => {
+          if (response.data.success == true) {
+            this.data = response.data.payload;
+          }
+        })
+        .catch(() => {
+          this.snackBar(3500, "Please select a classroom.", "warning");
+        });
+      this.loading = false;
+    },
+    async fetchItemCourse() {
+      this.loading = true;
+      await axios
+        .get("api/classroom")
+        .then((response) => {
+          if (response.data.success == true) {
+            this.course_room = response.data.payload;
+          }
+        })
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
+        });
+      this.loading = false;
+    },
+    mapDataMyScore(user_id) {
+      const convert = (arr) => {
+        const res = {};
+        arr.forEach((obj) => {
+          const key = `${obj.schedule_id}`;
+          if (!res[key]) {
+            res[key] = { ...obj, count: 0 };
+          }
+          res[key].count += 1;
+        });
+        return Object.values(res);
+      };
+      return convert(
+        user_id
+          ? this.data.scoreboard.filter((e) => e.user_id === user_id)
+          : this.data.scoreboard
+      );
     },
     async getClassrooms() {
       this.loading = true;
@@ -171,28 +330,6 @@ export default {
 
       this.loading = false;
     },
-    async getScoreboard(item) {
-      this.loading = true;
-      if (item) {
-        await axios
-          .get(`/api/scoreboard/${item}`)
-          .then((response) => {
-            if (response.data.success == true) {
-              this.data = response.data.payload;
-            }
-          })
-          .catch((error) => {
-            this.snackBar(3500, error, "error");
-          });
-      }
-      this.loading = false;
-    },
-    item(val) {
-      this.$router.push({
-        path: "/scoreboard-score",
-        query: { course_id: val.course_id, user_id: val.user_id },
-      });
-    },
   },
 };
 </script>
@@ -202,4 +339,6 @@ export default {
   cursor: pointer;
 }
 </style>
+
+
 

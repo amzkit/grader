@@ -28,6 +28,7 @@ class User extends Authenticatable
         "role_teacher",
         "role_ta",
         "role",
+        "last_login"
     ];
 
     /**

@@ -13,5 +13,7 @@ class Comment extends Model
         'submission_id',
         'user_comment_id',
         'comment',
+        "created_at",
+        "updated_at"
     ];
 }

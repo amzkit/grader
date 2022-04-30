@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -20,6 +21,11 @@ use Illuminate\Support\Facades\DB;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return response()->json(['success' => true, 'user' => $request->user()]);
 });
+
+Route::get('picture', 'App\Http\Controllers\AnnouncementController@getAnnounce');
+Route::post('picture', 'App\Http\Controllers\AnnouncementController@postAnnounce');
+Route::put('picture', 'App\Http\Controllers\AnnouncementController@putAnnounce');
+Route::delete('picture/{id}', 'App\Http\Controllers\AnnouncementController@deleteAnnounce');
 
 Route::post('register', 'App\Http\Controllers\Auth\RegisterController@register');
 

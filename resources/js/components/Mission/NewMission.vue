@@ -4,9 +4,9 @@
     <Loading :loading="loading" />
     <v-col cols="12">
       <v-row justify="center">
-        <h1>New Problem</h1>
         <v-card>
           <v-container fluid>
+            <h1>New Problem</h1>
             <v-form ref="form" v-model="rules.valid" lazy-validation>
               <v-row align="center">
                 <v-col cols="4">
@@ -74,18 +74,6 @@
                     label="Tolerant"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="4">
-                  <v-subheader> Score </v-subheader>
-                </v-col>
-                <v-col cols="6">
-                  <v-text-field
-                    type="number"
-                    :rules="[rules.required]"
-                    v-model="score"
-                    onfocus="this.select()"
-                    label="Score"
-                  ></v-text-field>
-                </v-col>
               </v-row>
             </v-form>
           </v-container>
@@ -119,12 +107,10 @@ export default {
       text: "",
       title: "",
       question: "",
-      score: 0,
       lang: "",
       file: "",
       level: 0.0,
       tolerant: "",
-      languages: [],
       customToolbar: [
         [{ header: [false, 1, 2, 3, 4, 5, 6] }],
         ["bold", "italic", "underline"],
@@ -167,11 +153,10 @@ export default {
       let formData = new FormData();
       formData.append("title", this.title);
       formData.append("question", this.question);
-      formData.append("score", this.score);
       formData.append("file", this.file);
       formData.append("level", this.level);
       formData.append("tolerant", this.tolerant != "" ? this.tolerant : "$");
-      if (this.title && this.question && this.score) {
+      if (this.title && this.question) {
         await axios
           .post("/api/problem", formData, config)
           .then(function () {

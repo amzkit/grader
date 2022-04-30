@@ -1,9 +1,9 @@
-(self["webpackChunk"] = self["webpackChunk"] || []).push([["resources_js_components_MyScore_MyScoreDetail_vue"],{
+(self["webpackChunk"] = self["webpackChunk"] || []).push([["resources_js_components_Analysis_AnalysisDetail_vue"],{
 
-/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MyScore/MyScoreDetail.vue?vue&type=script&lang=js&":
-/*!****************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MyScore/MyScoreDetail.vue?vue&type=script&lang=js& ***!
-  \****************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Analysis/AnalysisDetail.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Analysis/AnalysisDetail.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -103,31 +103,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -138,7 +113,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     return {
       loading: false,
       search: "",
-      searchComment: "",
       analysis: [],
       comment: [],
       analysisItem: {
@@ -146,9 +120,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         output: "",
         testcase_input: "",
         testcase_output: ""
-      },
-      commentItem: {
-        message: ""
       }
     };
   },
@@ -168,7 +139,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this2 = this;
 
       return _.orderBy(this.comment.filter(function (item) {
-        return item.name.toLowerCase().includes(_this2.searchComment.toLowerCase());
+        return item.name.toLowerCase().includes(_this2.search.toLowerCase());
       }), "headline");
     }
   },
@@ -189,8 +160,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.analysisItem.testcase_input = item.testcase_input;
       this.analysisItem.testcase_output = item.testcase_output;
     },
-    fetchComment: function fetchComment(item) {
-      this.commentItem.message = item.comment;
+    commentCode: function commentCode() {
+      this.$router.push({
+        path: "/comment",
+        query: {
+          submission_id: this.$route.query.submission_id,
+          problem_id: this.$route.query.problem_id
+        }
+      });
     },
     commentScore: function commentScore() {
       var _this3 = this;
@@ -232,7 +209,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 _context2.next = 2;
                 return axios.get("/api/score", {
                   params: {
-                    course_id: _this4.$route.query.course_id
+                    course_id: _this4.$route.query.course_id,
+                    user_id: _this4.$route.query.user_id
                   }
                 }).then(function (response) {
                   if (response.data.success == true) {
@@ -246,9 +224,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 _this4.analysis = _this4.analysis.filter(function (e) {
                   return e.submission_id == _this4.$route.query.submission_id;
                 });
-                _this4.loading = false;
 
-              case 4:
+              case 3:
               case "end":
                 return _context2.stop();
             }
@@ -307,10 +284,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/MyScore/MyScoreDetail.vue":
-/*!***********************************************************!*\
-  !*** ./resources/js/components/MyScore/MyScoreDetail.vue ***!
-  \***********************************************************/
+/***/ "./resources/js/components/Analysis/AnalysisDetail.vue":
+/*!*************************************************************!*\
+  !*** ./resources/js/components/Analysis/AnalysisDetail.vue ***!
+  \*************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -318,8 +295,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _MyScoreDetail_vue_vue_type_template_id_1a4e59b3___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MyScoreDetail.vue?vue&type=template&id=1a4e59b3& */ "./resources/js/components/MyScore/MyScoreDetail.vue?vue&type=template&id=1a4e59b3&");
-/* harmony import */ var _MyScoreDetail_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MyScoreDetail.vue?vue&type=script&lang=js& */ "./resources/js/components/MyScore/MyScoreDetail.vue?vue&type=script&lang=js&");
+/* harmony import */ var _AnalysisDetail_vue_vue_type_template_id_61571965___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AnalysisDetail.vue?vue&type=template&id=61571965& */ "./resources/js/components/Analysis/AnalysisDetail.vue?vue&type=template&id=61571965&");
+/* harmony import */ var _AnalysisDetail_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AnalysisDetail.vue?vue&type=script&lang=js& */ "./resources/js/components/Analysis/AnalysisDetail.vue?vue&type=script&lang=js&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -329,9 +306,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 ;
 var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
-  _MyScoreDetail_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
-  _MyScoreDetail_vue_vue_type_template_id_1a4e59b3___WEBPACK_IMPORTED_MODULE_0__.render,
-  _MyScoreDetail_vue_vue_type_template_id_1a4e59b3___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  _AnalysisDetail_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _AnalysisDetail_vue_vue_type_template_id_61571965___WEBPACK_IMPORTED_MODULE_0__.render,
+  _AnalysisDetail_vue_vue_type_template_id_61571965___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
   false,
   null,
   null,
@@ -341,7 +318,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/MyScore/MyScoreDetail.vue"
+component.options.__file = "resources/js/components/Analysis/AnalysisDetail.vue"
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
@@ -385,10 +362,10 @@ component.options.__file = "resources/js/components/Snackbar/Snackbar.vue"
 
 /***/ }),
 
-/***/ "./resources/js/components/MyScore/MyScoreDetail.vue?vue&type=script&lang=js&":
-/*!************************************************************************************!*\
-  !*** ./resources/js/components/MyScore/MyScoreDetail.vue?vue&type=script&lang=js& ***!
-  \************************************************************************************/
+/***/ "./resources/js/components/Analysis/AnalysisDetail.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/Analysis/AnalysisDetail.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -396,8 +373,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MyScoreDetail_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MyScoreDetail.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MyScore/MyScoreDetail.vue?vue&type=script&lang=js&");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MyScoreDetail_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AnalysisDetail_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./AnalysisDetail.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Analysis/AnalysisDetail.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AnalysisDetail_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
 
 /***/ }),
 
@@ -417,19 +394,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/MyScore/MyScoreDetail.vue?vue&type=template&id=1a4e59b3&":
-/*!******************************************************************************************!*\
-  !*** ./resources/js/components/MyScore/MyScoreDetail.vue?vue&type=template&id=1a4e59b3& ***!
-  \******************************************************************************************/
+/***/ "./resources/js/components/Analysis/AnalysisDetail.vue?vue&type=template&id=61571965&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/components/Analysis/AnalysisDetail.vue?vue&type=template&id=61571965& ***!
+  \********************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MyScoreDetail_vue_vue_type_template_id_1a4e59b3___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MyScoreDetail_vue_vue_type_template_id_1a4e59b3___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AnalysisDetail_vue_vue_type_template_id_61571965___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AnalysisDetail_vue_vue_type_template_id_61571965___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MyScoreDetail_vue_vue_type_template_id_1a4e59b3___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MyScoreDetail.vue?vue&type=template&id=1a4e59b3& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MyScore/MyScoreDetail.vue?vue&type=template&id=1a4e59b3&");
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AnalysisDetail_vue_vue_type_template_id_61571965___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./AnalysisDetail.vue?vue&type=template&id=61571965& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Analysis/AnalysisDetail.vue?vue&type=template&id=61571965&");
 
 
 /***/ }),
@@ -451,10 +428,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MyScore/MyScoreDetail.vue?vue&type=template&id=1a4e59b3&":
-/*!*********************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MyScore/MyScoreDetail.vue?vue&type=template&id=1a4e59b3& ***!
-  \*********************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Analysis/AnalysisDetail.vue?vue&type=template&id=61571965&":
+/*!***********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Analysis/AnalysisDetail.vue?vue&type=template&id=61571965& ***!
+  \***********************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -484,7 +461,30 @@ var render = function() {
                 "v-list",
                 { attrs: { dense: "" } },
                 [
-                  _c("v-subheader", [_vm._v("Analysis")]),
+                  _c(
+                    "v-row",
+                    { attrs: { justify: "'space-between'" } },
+                    [
+                      _c("v-col", [_c("v-subheader", [_vm._v("Analysis")])], 1),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "ml-3",
+                              attrs: { depressed: "", color: "primary" },
+                              on: { click: _vm.commentCode }
+                            },
+                            [_vm._v("\n              Comment\n            ")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
                   _vm._v(" "),
                   _c("v-text-field", {
                     staticClass: "mx-3",
@@ -538,73 +538,7 @@ var render = function() {
               )
             ],
             1
-          ),
-          _vm._v(" "),
-          _vm.comment.length > 0
-            ? _c(
-                "v-card",
-                { staticClass: "mx-auto mt-3", attrs: { "max-width": "300" } },
-                [
-                  _c(
-                    "v-list",
-                    { attrs: { dense: "" } },
-                    [
-                      _c("v-subheader", [_vm._v("Comment")]),
-                      _vm._v(" "),
-                      _c("v-text-field", {
-                        staticClass: "mx-3",
-                        attrs: {
-                          label: "Search",
-                          "prepend-inner-icon": "search",
-                          clearable: "",
-                          solo: "",
-                          dense: ""
-                        },
-                        model: {
-                          value: _vm.searchComment,
-                          callback: function($$v) {
-                            _vm.searchComment = $$v
-                          },
-                          expression: "searchComment"
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item-group",
-                        _vm._l(_vm.filteredItemsComment, function(item, i) {
-                          return _c(
-                            "v-list-item",
-                            {
-                              key: i,
-                              on: {
-                                click: function($event) {
-                                  return _vm.fetchComment(item)
-                                }
-                              }
-                            },
-                            [
-                              _c(
-                                "v-list-item-content",
-                                [
-                                  _c("v-list-item-title", {
-                                    domProps: { textContent: _vm._s(item.name) }
-                                  })
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        }),
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            : _vm._e()
+          )
         ],
         1
       ),
@@ -694,50 +628,7 @@ var render = function() {
               )
             ],
             1
-          ),
-          _vm._v(" "),
-          _vm.comment.length > 0
-            ? _c(
-                "v-card",
-                { staticClass: "mx-auto mb-4", attrs: { "max-width": "100%" } },
-                [
-                  _c("v-card-title", { staticClass: "text-h5" }, [
-                    _vm._v(" Comment ")
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "v-card",
-                    [
-                      _c(
-                        "v-card-text",
-                        [
-                          _c(
-                            "v-row",
-                            [
-                              _c("v-col", { attrs: { cols: "4" } }, [
-                                _vm._v(" Message : ")
-                              ]),
-                              _vm._v(" "),
-                              _c("v-col", { attrs: { cols: "8" } }, [
-                                _vm._v(
-                                  "\n              " +
-                                    _vm._s(_vm.commentItem.message) +
-                                    "\n            "
-                                )
-                              ])
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            : _vm._e()
+          )
         ],
         1
       )

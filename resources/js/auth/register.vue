@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <GuestTopBar></GuestTopBar>
-    <v-main>
+    <v-main class="background">
       <v-container fill-height fluid>
         <v-row align="center" justify="center">
           <v-layout align-center justify-center>
@@ -45,12 +45,13 @@
                     required
                   ></v-text-field>
                 </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <div class="text-center">
-                    <v-btn color="primary" @click="register">Register</v-btn>
-                  </div>
-                </v-card-actions>
+                <v-layout justify-center>
+                  <v-card-actions class="mb-4">
+                    <div class="text-center">
+                      <v-btn color="primary" @click="register">Register</v-btn>
+                    </div>
+                  </v-card-actions>
+                </v-layout>
               </v-card>
             </v-flex>
           </v-layout>
@@ -98,5 +99,12 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.background {
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url("../../../storage/app/picture/background.jpeg");
+}
 </style>

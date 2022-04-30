@@ -15,8 +15,10 @@
       ></v-carousel-item>
     </v-carousel>
     <div class="mt-4">
-      <h1 class="text-center , font-weight-black">SOURCE CODE GRADER</h1>
-      <h5 class="text-center">Computer Science Maejo University</h5>
+      <h1 class="text-center , font-weight-black white--text">
+        SOURCE CODE GRADER
+      </h1>
+      <h5 class="text-center white--text">Computer Science Maejo University</h5>
     </div>
   </v-row>
 </template>
@@ -37,7 +39,25 @@ export default {
     };
   },
   mounted() {},
-  created() {},
-  methods: {},
+  created() {
+    this.firstLogin();
+  },
+  methods: {
+    redirect(url) {
+      window.location.href = url;
+    },
+    firstLogin() {
+      let user_role = document.head.querySelector(
+        'meta[name="user-role"]'
+      ).content;
+      let user_last_login = document.head.querySelector(
+        'meta[name="user-last-login"]'
+      ).content;
+      console.log(user_role, user_last_login);
+      if (user_role == "student" && user_last_login == "") {
+        this.redirect("/change-password");
+      }
+    },
+  },
 };
 </script>

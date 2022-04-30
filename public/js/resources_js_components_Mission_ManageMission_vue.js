@@ -224,14 +224,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -258,9 +250,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, {
         text: "Question",
         value: "question"
-      }, {
-        text: "Score",
-        value: "score"
       }, {
         text: "File",
         value: "file"
@@ -308,7 +297,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       editedItem: {
         title: "",
         question: "",
-        score: "",
         file: "",
         level: "",
         tolerant: ""
@@ -316,7 +304,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       defaultItem: {
         title: "",
         question: "",
-        score: "",
         file: "",
         level: "",
         tolerant: ""
@@ -481,21 +468,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 formData.append("id", _this5.editedItem.id);
                 formData.append("title", _this5.editedItem.title);
                 formData.append("question", _this5.editedItem.question);
-                formData.append("score", _this5.editedItem.score);
                 formData.append("file", _this5.editedItem.file ? _this5.editedItem.file : "");
                 formData.append("level", _this5.editedItem.level);
                 formData.append("tolerant", _this5.editedItem.tolerant != "" ? _this5.editedItem.tolerant : "$");
-                _context5.next = 12;
+                _context5.next = 11;
                 return axios.post("/api/problem/update", formData, config).then(function () {
                   _this5.snackBar();
                 })["catch"](function (error) {
                   _this5.snackBar(3500, error, "error");
                 });
 
-              case 12:
+              case 11:
                 _this5.loading = false;
 
-              case 13:
+              case 12:
               case "end":
                 return _context5.stop();
             }
@@ -14743,34 +14729,6 @@ var render = function() {
                                                 [
                                                   _c("v-text-field", {
                                                     attrs: {
-                                                      type: "number",
-                                                      onfocus: "this.select()",
-                                                      label: "Score"
-                                                    },
-                                                    model: {
-                                                      value:
-                                                        _vm.editedItem.score,
-                                                      callback: function($$v) {
-                                                        _vm.$set(
-                                                          _vm.editedItem,
-                                                          "score",
-                                                          $$v
-                                                        )
-                                                      },
-                                                      expression:
-                                                        "editedItem.score"
-                                                    }
-                                                  })
-                                                ],
-                                                1
-                                              ),
-                                              _vm._v(" "),
-                                              _c(
-                                                "v-col",
-                                                { attrs: { cols: "3" } },
-                                                [
-                                                  _c("v-text-field", {
-                                                    attrs: {
                                                       prefix: "$",
                                                       onfocus: "this.select()",
                                                       label: "Tolerant"
@@ -14795,7 +14753,7 @@ var render = function() {
                                               _vm._v(" "),
                                               _c(
                                                 "v-col",
-                                                { attrs: { cols: "6" } },
+                                                { attrs: { cols: "9" } },
                                                 [
                                                   _c("input", {
                                                     staticClass:

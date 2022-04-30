@@ -17,13 +17,11 @@ class CreateProblemsTable extends Migration
             $table->id();
             $table->string('title');
             $table->string('question');
-            $table->float('score');
             $table->string('tolerant')->default('$');
+            $table->boolean('IsActive')->default(true);
             $table->float('level')->nullable()->default(null);
             $table->string('file')->nullable()->default(null);
             $table->timestamps();
-
-
         });
     }
 

@@ -120,11 +120,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
 
 
 
@@ -141,7 +136,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   name: "Comment",
   data: function data() {
     return {
-      item: [],
+      items: [],
       comment: "",
       loading: false,
       customToolbar: [{}]
@@ -183,13 +178,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 _context.next = 3;
                 return axios.get("/api/submission/scoreboard", {
                   params: {
-                    user_id: _this.$route.query.user_id,
-                    problem_id: _this.$route.query.problem_id,
-                    schedule_id: _this.$route.query.schedule_id
+                    submission_id: _this.$route.query.submission_id,
+                    problem_id: _this.$route.query.problem_id
                   }
                 }).then(function (response) {
                   if (response.data.success == true) {
-                    _this.item = response.data.payload;
+                    _this.items = response.data.payload;
                   }
                 })["catch"](function (error) {
                   _this.snackBar(3500, error, "error");
@@ -200,15 +194,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   lineNumbers: true,
                   theme: "dracula",
                   readOnly: "nocursor"
-                }).setValue(_this.item.code);
-                codemirror__WEBPACK_IMPORTED_MODULE_4__.fromTextArea(document.getElementById("output"), {
-                  lineNumbers: true,
-                  theme: "dracula",
-                  readOnly: "nocursor"
-                }).setValue(_this.item.output);
+                }).setValue(_this.items.submission.code);
                 _this.loading = false;
 
-              case 6:
+              case 5:
               case "end":
                 return _context.stop();
             }
@@ -227,11 +216,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 _this2.loading = true;
                 _context2.next = 3;
                 return axios.post("/api/comment", {
-                  submission_id: _this2.item.id,
-                  comment: _this2.comment,
-                  user_id: _this2.item.user_id
+                  submission_id: _this2.$route.query.submission_id,
+                  comment: _this2.comment
                 }).then(function () {
-                  window.location.href = "/scoreboard";
+                  window.location.href = "/analysis";
                 })["catch"](function (error) {
                   _this2.snackBar(3500, error, "error");
                 });
@@ -24211,7 +24199,16 @@ var render = function() {
                           _c(
                             "span",
                             { staticClass: "text-h6 font-weight-light" },
-                            [_vm._v(_vm._s(_vm.item.title))]
+                            [
+                              _vm._v(
+                                "\n              " +
+                                  _vm._s(
+                                    _vm.items.problems &&
+                                      _vm.items.problems.title
+                                  ) +
+                                  "\n            "
+                              )
+                            ]
                           )
                         ],
                         1
@@ -24223,7 +24220,12 @@ var render = function() {
                         [
                           _vm._v(
                             "\n            " +
-                              _vm._s(_vm.convertToPlain(_vm.item.question)) +
+                              _vm._s(
+                                _vm.convertToPlain(
+                                  _vm.items.problems &&
+                                    _vm.items.problems.question
+                                )
+                              ) +
                               "\n          "
                           )
                         ]
@@ -24239,7 +24241,7 @@ var render = function() {
                             [
                               _c(
                                 "v-col",
-                                { attrs: { md: "6" } },
+                                { attrs: { md: "12" } },
                                 [
                                   _c(
                                     "v-card",
@@ -24258,36 +24260,6 @@ var render = function() {
                                       ),
                                       _vm._v(" "),
                                       _c("textarea", { attrs: { id: "code" } })
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-col",
-                                { attrs: { md: "6" } },
-                                [
-                                  _c(
-                                    "v-card",
-                                    {
-                                      staticClass: "pa-2",
-                                      attrs: { outlined: "", tile: "" }
-                                    },
-                                    [
-                                      _c(
-                                        "v-card",
-                                        {
-                                          staticClass: "pa-2",
-                                          attrs: { tile: "", outlined: "" }
-                                        },
-                                        [_vm._v(" Output ")]
-                                      ),
-                                      _vm._v(" "),
-                                      _c("textarea", {
-                                        attrs: { id: "output" }
-                                      })
                                     ],
                                     1
                                   )

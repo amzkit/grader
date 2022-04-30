@@ -273,8 +273,6 @@ var render = function() {
               "v-row",
               { attrs: { justify: "center" } },
               [
-                _c("h1", [_vm._v("New User")]),
-                _vm._v(" "),
                 _c(
                   "v-card",
                   [
@@ -282,6 +280,8 @@ var render = function() {
                       "v-container",
                       { attrs: { fluid: "" } },
                       [
+                        _c("h1", [_vm._v("New User")]),
+                        _vm._v(" "),
                         _c(
                           "v-row",
                           { attrs: { align: "center" } },

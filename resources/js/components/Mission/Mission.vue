@@ -33,20 +33,43 @@
     </v-col>
     <v-col cols="1"> <v-divider vertical></v-divider></v-col>
     <v-col>
-      <v-text-field
-        class="mx-3"
-        label="Search Title"
-        prepend-inner-icon="search"
-        v-model="searchProblem"
-        clearable
-        solo
-        dense
-      ></v-text-field>
+      <v-row>
+        <v-col cols="7">
+          <v-text-field
+            class="mx-3"
+            label="Search Title"
+            prepend-inner-icon="search"
+            v-model="searchProblem"
+            clearable
+            solo
+            dense
+          ></v-text-field>
+        </v-col>
+        <v-col cols="3">
+          <v-select
+            v-model="sortby"
+            :items="['Title', 'Date', 'Level', 'Late']"
+            label="Sort"
+            solo
+            dense
+          ></v-select>
+        </v-col>
+        <v-col cols="2">
+          <v-checkbox
+            v-model="viewAll"
+            solo
+            dense
+            :label="`View All`"
+          ></v-checkbox>
+        </v-col>
+      </v-row>
+
       <v-card
         class="mx-auto mb-4"
         max-width="100%"
         v-for="(item, i) in filterCourseRoom"
         :key="i"
+        :color="item.late && item.end_date <= getDateTime ? '#FFE57F' : 'white'"
       >
         <v-list-item two-line>
           <v-list-item-content>
@@ -63,7 +86,9 @@
               ></v-rating>
             </v-list-item-subtitle>
             <v-divider class="mx-4"></v-divider>
-            <v-card-title>Schedule</v-card-title>
+            <v-card-title
+              >Schedule {{ item.late ? `(Past due)` : "" }}</v-card-title
+            >
 
             <v-card-text>
               <v-chip-group
@@ -92,7 +117,9 @@
                 problem.file = item.file;
                 problem.start_date = item.start_date;
                 problem.end_date = item.end_date;
+                problem.lang = item.lang;
                 problem.problem_id = item.problemsId;
+                problem.type = item.type;
                 dialog = true;
               }
             "
@@ -101,19 +128,31 @@
           </v-btn>
         </v-card-actions>
       </v-card>
+      <div v-if="viewAll">
+        <v-expansion-panels class="mb-4">
+          <v-expansion-panel
+            style="background: #ffe57f"
+            v-for="(item, i) in this.schedule_room.filter(
+              (e) => !e.late && e.end_date <= this.getDateTime
+            )"
+            :key="i"
+          >
+            <v-expansion-panel-header disable-icon-rotate>
+              {{ `${item.title} (Late)` }}
+              <template v-slot:actions>
+                <v-icon color="error"> mdi-alert-circle </v-icon>
+              </template>
+            </v-expansion-panel-header>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </div>
+
       <v-expansion-panels>
         <v-expansion-panel v-for="(item, i) in filterSubmissionRoom" :key="i">
           <v-expansion-panel-header disable-icon-rotate>
-            {{ item.title }}
+            {{ `${item.title} (Submit ${item.count})` }}
             <template v-slot:actions>
-              <div v-if="item.message == 'waiting'">
-                <v-icon color="primary">
-                  mdi-checkbox-blank-circle-outline
-                </v-icon>
-              </div>
-              <div v-else>
-                <v-icon color="teal"> mdi-check </v-icon>
-              </div>
+              <v-icon color="teal"> mdi-check </v-icon>
             </template>
           </v-expansion-panel-header>
         </v-expansion-panel>
@@ -149,17 +188,11 @@
               </v-btn>
             </v-col>
           </v-row>
+
           <v-row class="mb-3">
-            <v-col cols="4" class="mt-6"> Language </v-col>
+            <v-col cols="4"> Language </v-col>
             <v-col cols="8">
-              <v-autocomplete
-                v-model="problem.languageId"
-                :items="languages"
-                label="Language"
-                item-text="lang"
-                item-value="id"
-              >
-              </v-autocomplete>
+              {{ problem.lang }}
             </v-col>
           </v-row>
           <v-row>
@@ -170,6 +203,7 @@
                 class="form-control"
                 ref="file_upload"
                 v-on:change="onFileChange"
+                :accept="problem.type"
               />
             </v-col>
           </v-row>
@@ -211,6 +245,7 @@ export default {
   },
   data: function () {
     return {
+      viewAll: false,
       languages: [],
       schedule_room: [],
       course_room: [],
@@ -231,14 +266,15 @@ export default {
         sendFile: null,
         start_date: "",
         end_date: "",
-        languageId: 0,
+        lang: "",
+        type: "",
       },
+      sortby: "Sort",
     };
   },
 
   created() {
     this.fetchItemSchedule();
-    this.getLanguage();
     this.fetchItemScheduleById();
     this.fetchItemSubmission();
   },
@@ -257,20 +293,22 @@ export default {
         "headline"
       );
     },
-    filterCourseRoom() {
-      const course_filter_time = this.schedule_room.filter(
-        (e) => e.end_date > this.getDateTime && e.start_date <= this.getDateTime
-      );
-      const res = course_filter_time.filter((e) => {
-        const missionSend = this.missionPass.find((p) => p.schedule_id == e.id);
-        if (missionSend) {
-          return null;
-        }
-        return e;
-      });
+
+    filterSubmissionRoom() {
+      const convert = (arr) => {
+        const res = {};
+        arr.forEach((obj) => {
+          const key = `${obj.schedule_id}`;
+          if (!res[key]) {
+            res[key] = { ...obj, count: 0 };
+          }
+          res[key].count += 1;
+        });
+        return Object.values(res);
+      };
 
       return _.orderBy(
-        res.filter((item) => {
+        convert(this.missionPass).filter((item) => {
           return item.title
             .toLowerCase()
             .includes(this.searchProblem.toLowerCase());
@@ -278,10 +316,31 @@ export default {
         "headline"
       );
     },
-
-    filterSubmissionRoom() {
+    filterCourseRoom() {
+      const course_filter_time = this.schedule_room.filter((e) => {
+        if (
+          e.late ||
+          (e.end_date > this.getDateTime && e.start_date <= this.getDateTime)
+        ) {
+          return e;
+        }
+      });
+      let sort = [];
+      if (this.sortby == "Title") {
+        sort = course_filter_time.sort((a, b) => (a.title > b.title ? 1 : -1));
+      } else if (this.sortby == "Date") {
+        sort = course_filter_time.sort((a, b) =>
+          a.start_date > b.start_date ? 1 : -1
+        );
+      } else if (this.sortby == "Level") {
+        sort = course_filter_time.sort((a, b) => (a.level > b.level ? 1 : -1));
+      } else if (this.sortby == "Late") {
+        sort = course_filter_time.sort((a, b) => (a.late < b.late ? 1 : -1));
+      } else {
+        sort = course_filter_time;
+      }
       return _.orderBy(
-        this.missionPass.filter((item) => {
+        sort.filter((item) => {
           return item.title
             .toLowerCase()
             .includes(this.searchProblem.toLowerCase());
@@ -312,10 +371,7 @@ export default {
       };
       let formData = new FormData();
       formData.append("sourcefile", this.problem.sendFile);
-      formData.append(
-        "Lang",
-        this.languages.find((e) => (e.id = this.problem.languageId)).lang
-      );
+      formData.append("Lang", this.problem.lang);
       formData.append("problem_id", this.problem.problem_id);
       formData.append("course_id", this.$route.query.course_id);
       await axios
@@ -389,7 +445,6 @@ export default {
 
     async fetchItemScheduleById() {
       this.loading = true;
-
       await axios
         .get("/api/schedule/" + this.$route.query.course_id)
         .then((response) => {
@@ -415,19 +470,6 @@ export default {
           if (response.data.success == true) {
             this.missionPass = response.data.payload;
           }
-        })
-        .catch((error) => {
-          this.snackBar(3500, error, "error");
-        });
-      this.loading = false;
-    },
-
-    async getLanguage() {
-      this.loading = true;
-      await axios
-        .get("/api/language")
-        .then((response) => {
-          this.languages = response.data.payload;
         })
         .catch((error) => {
           this.snackBar(3500, error, "error");

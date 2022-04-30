@@ -19,10 +19,15 @@ class CreateSchedulesTable extends Migration
             $table->string('start_date')->nullable()->default(null);
             $table->string('end_date')->nullable()->default(null);
             $table->bigInteger('problem_id')->unsigned();
+            $table->bigInteger('language_id')->unsigned();
+            $table->boolean('IsActive')->default(true);
+            $table->boolean('IsAnalysis')->default(false);
+            $table->boolean('late')->default(false);
+            $table->float('score')->default(100);
             $table->timestamps();
-
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
             $table->foreign('problem_id')->references('id')->on('problems')->onDelete('cascade');
+            $table->foreign('language_id')->references('id')->on('languages')->onDelete('cascade');
         });
     }
 

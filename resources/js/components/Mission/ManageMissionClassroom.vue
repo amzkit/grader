@@ -27,7 +27,7 @@
                   hide-details
                   class="mr-5"
                 ></v-text-field>
-                <v-dialog v-model="dialog" max-width="500px">
+                <v-dialog v-model="dialog" max-width="800px">
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn
                       color="primary"
@@ -48,11 +48,10 @@
                         }}
                       </span>
                     </v-card-title>
-
                     <v-card-text>
                       <v-container>
                         <v-row>
-                          <v-col cols="12">
+                          <v-col cols="8">
                             <div v-if="editedIndex === -1">
                               <v-autocomplete
                                 label="Examples"
@@ -75,7 +74,42 @@
                               >
                               </v-autocomplete>
                             </div>
-
+                          </v-col>
+                          <v-col :cols="editedIndex === -1 ? '4' : '12'">
+                            <v-autocomplete
+                              v-model="editedItem.language_id"
+                              :items="languages"
+                              label="Language"
+                              item-text="lang"
+                              item-value="id"
+                            >
+                            </v-autocomplete>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="6">
+                            <v-text-field
+                              v-model="editedItem.score"
+                              label="Score"
+                              hide-details
+                              class="mr-5"
+                            ></v-text-field>
+                          </v-col>
+                          <v-col cols="3">
+                            <v-checkbox
+                              v-model="editedItem.late"
+                              :label="`Late`"
+                            ></v-checkbox>
+                          </v-col>
+                          <v-col cols="3">
+                            <v-checkbox
+                              v-model="editedItem.IsAnalysis"
+                              :label="`Is Analysis`"
+                            ></v-checkbox>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="6">
                             <!-- DATE TIME 1 -->
                             <v-menu
                               v-model="menu1"
@@ -98,6 +132,8 @@
                                 @change="menu1 = false"
                               ></v-date-picker>
                             </v-menu>
+                          </v-col>
+                          <v-col cols="6">
                             <!-- DATE TIME 2 -->
                             <v-menu
                               v-model="menu3"
@@ -120,6 +156,10 @@
                                 @change="menu3 = false"
                               ></v-date-picker>
                             </v-menu>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="6">
                             <v-menu
                               ref="menu"
                               v-model="menu2"
@@ -148,7 +188,8 @@
                                 @click:minute="$refs.menu.save(start_time)"
                               ></v-time-picker>
                             </v-menu>
-
+                          </v-col>
+                          <v-col cols="6">
                             <v-menu
                               ref="menu2"
                               v-model="menu4"
@@ -181,6 +222,7 @@
                         </v-row>
                       </v-container>
                     </v-card-text>
+
                     <v-card-actions>
                       <v-spacer></v-spacer>
                       <v-btn color="blue darken-1" text @click="close">
@@ -192,6 +234,7 @@
                     </v-card-actions>
                   </v-card>
                 </v-dialog>
+
                 <v-dialog v-model="dialogDelete" max-width="500px">
                   <v-card>
                     <v-card-title class="text-h5"
@@ -262,6 +305,7 @@ export default {
   data: function () {
     return {
       loading: false,
+      languages: [],
       problemList: [],
       selectedExamplesId: [],
       roomId: 0,
@@ -275,9 +319,7 @@ export default {
           sortable: true,
           value: "title",
         },
-        { text: "Question", value: "question" },
         { text: "Score", value: "score" },
-        { text: "File", value: "file" },
         {
           text: "Start Date",
           value: "start_date",
@@ -285,6 +327,19 @@ export default {
         {
           text: "End Date",
           value: "end_date",
+        },
+        { text: "File", value: "file" },
+        {
+          text: "Language",
+          value: "lang",
+        },
+        {
+          text: "Is Late",
+          value: "late",
+        },
+        {
+          text: "Is Analysis",
+          value: "IsAnalysis",
         },
         {
           text: "Action",
@@ -295,22 +350,26 @@ export default {
       dialogDelete: false,
       editedIndex: -1,
       editedItem: {
-        name: "",
-        section: "",
-        semester: "",
-        year: "",
+        id: 0,
         start_date: "",
         end_date: "",
-        role: "",
+        language_id: 0,
+        late: false,
+        IsAnalysis: false,
+        score: 0,
+        start_date: "",
+        end_date: "",
       },
       defaultItem: {
-        name: "",
-        section: "",
-        semester: "",
-        year: "",
+        id: 0,
         start_date: "",
         end_date: "",
-        role: "",
+        language_id: 0,
+        late: false,
+        IsAnalysis: false,
+        score: 0,
+        start_date: "",
+        end_date: "",
       },
       start_date: null,
       end_date: null,
@@ -324,6 +383,7 @@ export default {
   },
   async created() {
     await this.getProblems();
+    await this.getLanguage();
   },
   computed: {
     computedDateFormattedStartDate() {
@@ -436,6 +496,10 @@ export default {
         .post("/api/manage/example", {
           exampleId: this.selectedExamplesId,
           roomId: this.roomId,
+          late: this.editedItem.late,
+          IsAnalysis: this.editedItem.IsAnalysis,
+          score: this.editedItem.score,
+          language_id: this.editedItem.language_id,
           start_date: dayjs(`${this.start_date} ${this.start_time}`).format(
             "MM-DD-YYYY HH:mm"
           ),
@@ -455,30 +519,46 @@ export default {
 
     async updateExample(item) {
       this.loading = true;
-      if (
-        this.start_date &&
-        this.start_time &&
-        this.end_date &&
-        this.end_time
-      ) {
-        await axios
-          .put("/api/manage/example", {
-            id: item.id,
-            start_date: dayjs(`${this.start_date} ${this.start_time}`).format(
-              "MM-DD-YYYY HH:mm"
-            ),
-            end_date: dayjs(`${this.end_date} ${this.end_time}`).format(
-              "MM-DD-YYYY HH:mm"
-            ),
-          })
-          .then(() => {
-            location.reload();
-          })
-          .catch((error) => {
-            this.snackBar(3500, error, "error");
-          });
-      }
+      await axios
+        .put("/api/manage/example", {
+          id: item.id,
+          late: this.editedItem.late,
+          IsAnalysis: this.editedItem.IsAnalysis,
+          score: this.editedItem.score,
+          language_id: this.editedItem.language_id,
+          start_date:
+            this.start_date && this.start_time
+              ? dayjs(`${this.start_date} ${this.start_time}`).format(
+                  "MM-DD-YYYY HH:mm"
+                )
+              : this.editedItem.start_date,
+          end_date:
+            this.end_date && this.end_time
+              ? dayjs(`${this.end_date} ${this.end_time}`).format(
+                  "MM-DD-YYYY HH:mm"
+                )
+              : this.editedItem.end_date,
+        })
+        .then(() => {
+          location.reload();
+        })
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
+        });
       this.dialog = false;
+      this.loading = false;
+    },
+
+    async getLanguage() {
+      this.loading = true;
+      await axios
+        .get("/api/language")
+        .then((response) => {
+          this.languages = response.data.payload;
+        })
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
+        });
       this.loading = false;
     },
 

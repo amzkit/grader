@@ -9,6 +9,14 @@
           hide-delimiter-background
           show-arrows-on-hover
         >
+          <!-- <v-carousel-item
+            v-for="(item, i) in image"
+            :key="i"
+            :src="'http://127.0.0.1:8000/storage' + item.picture"
+            reverse-transition="fade-transition"
+            transition="fade-transition"
+          >
+          </v-carousel-item> -->
           <v-carousel-item
             v-for="(item, i) in items"
             :key="i"
@@ -18,8 +26,12 @@
           ></v-carousel-item>
         </v-carousel>
         <div class="mt-4">
-          <h1 class="text-center , font-weight-black">SOURCE CODE GRADER</h1>
-          <h5 class="text-center">Computer Science Maejo University</h5>
+          <h1 class="text-center font-weight-black white--text">
+            SOURCE CODE GRADER
+          </h1>
+          <h5 class="text-center white--text">
+            Computer Science Maejo University
+          </h5>
         </div>
       </v-row>
     </v-main>
@@ -31,7 +43,8 @@ import GuestTopBar from "../layouts/guest_top_bar.vue";
 export default {
   data: function () {
     return {
-      loading: true,
+      loading: false,
+      image: [],
       items: [
         {
           src: "https://mindphp.com/images/knowledge/software-computer-code-1940x900_35196.jpg",
@@ -43,6 +56,24 @@ export default {
     };
   },
   components: { GuestTopBar },
-  mounted() {},
+  created() {
+    this.fetchPicture();
+  },
+  methods: {
+    async fetchPicture() {
+      this.loading = true;
+      await axios
+        .get(`/api/picture`)
+        .then((response) => {
+          if (response.data.success === true) {
+            this.image = response.data.payload;
+          }
+        })
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
+        });
+      this.loading = false;
+    },
+  },
 };
 </script>

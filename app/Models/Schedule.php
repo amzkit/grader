@@ -14,5 +14,12 @@ class Schedule extends Model
         'start_date',
         'end_date',
         "problem_id",
+        "language_id",
+        "IsActive",
+        "IsAnalysis",
+        "late",
+        "created_at",
+        "updated_at",
+        'score'
     ];
 }

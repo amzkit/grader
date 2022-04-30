@@ -60,22 +60,20 @@ class ProblemsController extends Controller
         $problem = Problem::select(
             "problems.*",
         )
+            ->where('problems.IsActive', '=', 1)
             ->get();
         return response()->json(['success' => true, 'payload' =>  $problem]);
     }
 
     public function delProblem($id)
     {
-        if (Problem::where('id', $id)->exists()) {
-            Problem::find($id)->delete();
-            return response()->json([
-                "message" => "records delete successfully"
-            ], 200);
-        } else {
-            return response()->json([
-                "message" => "not found"
-            ], 404);
-        }
+        $problems = Problem::where("id", $id)->first();
+        $problems->update(
+            [
+                'IsActive' => 0
+            ]
+        );
+        return response()->json(['success' => true]);
     }
 
     public function updateProblem(Request $request)
@@ -94,7 +92,6 @@ class ProblemsController extends Controller
             [
                 'title' => $request->title,
                 'question' => $request->question,
-                'score' => $request->score,
                 'tolerant' => $request->tolerant,
                 'level' => $request->level,
                 'file' => $problem->file

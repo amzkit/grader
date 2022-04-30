@@ -3,10 +3,11 @@
     <Snackbar />
     <v-col cols="12">
       <v-row justify="center">
-        <h1>Add Test Case</h1>
         <v-card>
           <v-container fluid>
             <v-row align="center">
+              <h1>Add Test Case</h1>
+
               <v-col cols="4">
                 <v-subheader> Problem Name </v-subheader>
               </v-col>

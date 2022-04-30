@@ -62,14 +62,57 @@ function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (O
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -331,8 +374,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     Snackbar: _Snackbar_Snackbar_vue__WEBPACK_IMPORTED_MODULE_4__.default
   },
   data: function data() {
+    var _editedItem, _defaultItem;
+
     return {
       loading: false,
+      languages: [],
       problemList: [],
       selectedExamplesId: [],
       roomId: 0,
@@ -345,14 +391,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         sortable: true,
         value: "title"
       }, {
-        text: "Question",
-        value: "question"
-      }, {
         text: "Score",
         value: "score"
-      }, {
-        text: "File",
-        value: "file"
       }, {
         text: "Start Date",
         value: "start_date"
@@ -360,30 +400,42 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         text: "End Date",
         value: "end_date"
       }, {
+        text: "File",
+        value: "file"
+      }, {
+        text: "Language",
+        value: "lang"
+      }, {
+        text: "Is Late",
+        value: "late"
+      }, {
+        text: "Is Analysis",
+        value: "IsAnalysis"
+      }, {
         text: "Action",
         value: "action"
       }],
       desserts: [],
       dialogDelete: false,
       editedIndex: -1,
-      editedItem: {
-        name: "",
-        section: "",
-        semester: "",
-        year: "",
+      editedItem: (_editedItem = {
+        id: 0,
         start_date: "",
         end_date: "",
-        role: ""
-      },
-      defaultItem: {
-        name: "",
-        section: "",
-        semester: "",
-        year: "",
+        language_id: 0,
+        late: false,
+        IsAnalysis: false,
+        score: 0
+      }, _defineProperty(_editedItem, "start_date", ""), _defineProperty(_editedItem, "end_date", ""), _editedItem),
+      defaultItem: (_defaultItem = {
+        id: 0,
         start_date: "",
         end_date: "",
-        role: ""
-      },
+        language_id: 0,
+        late: false,
+        IsAnalysis: false,
+        score: 0
+      }, _defineProperty(_defaultItem, "start_date", ""), _defineProperty(_defaultItem, "end_date", ""), _defaultItem),
       start_date: null,
       end_date: null,
       start_time: null,
@@ -406,6 +458,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               return _this.getProblems();
 
             case 2:
+              _context.next = 4;
+              return _this.getLanguage();
+
+            case 4:
             case "end":
               return _context.stop();
           }
@@ -536,6 +592,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return axios.post("/api/manage/example", {
                   exampleId: _this5.selectedExamplesId,
                   roomId: _this5.roomId,
+                  late: _this5.editedItem.late,
+                  IsAnalysis: _this5.editedItem.IsAnalysis,
+                  score: _this5.editedItem.score,
+                  language_id: _this5.editedItem.language_id,
                   start_date: dayjs__WEBPACK_IMPORTED_MODULE_1___default()("".concat(_this5.start_date, " ").concat(_this5.start_time)).format("MM-DD-YYYY HH:mm"),
                   end_date: dayjs__WEBPACK_IMPORTED_MODULE_1___default()("".concat(_this5.end_date, " ").concat(_this5.end_time)).format("MM-DD-YYYY HH:mm")
                 }).then(function () {
@@ -565,28 +625,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context4.prev = _context4.next) {
               case 0:
                 _this6.loading = true;
-
-                if (!(_this6.start_date && _this6.start_time && _this6.end_date && _this6.end_time)) {
-                  _context4.next = 4;
-                  break;
-                }
-
-                _context4.next = 4;
+                _context4.next = 3;
                 return axios.put("/api/manage/example", {
                   id: item.id,
-                  start_date: dayjs__WEBPACK_IMPORTED_MODULE_1___default()("".concat(_this6.start_date, " ").concat(_this6.start_time)).format("MM-DD-YYYY HH:mm"),
-                  end_date: dayjs__WEBPACK_IMPORTED_MODULE_1___default()("".concat(_this6.end_date, " ").concat(_this6.end_time)).format("MM-DD-YYYY HH:mm")
+                  late: _this6.editedItem.late,
+                  IsAnalysis: _this6.editedItem.IsAnalysis,
+                  score: _this6.editedItem.score,
+                  language_id: _this6.editedItem.language_id,
+                  start_date: _this6.start_date && _this6.start_time ? dayjs__WEBPACK_IMPORTED_MODULE_1___default()("".concat(_this6.start_date, " ").concat(_this6.start_time)).format("MM-DD-YYYY HH:mm") : _this6.editedItem.start_date,
+                  end_date: _this6.end_date && _this6.end_time ? dayjs__WEBPACK_IMPORTED_MODULE_1___default()("".concat(_this6.end_date, " ").concat(_this6.end_time)).format("MM-DD-YYYY HH:mm") : _this6.editedItem.end_date
                 }).then(function () {
                   location.reload();
                 })["catch"](function (error) {
                   _this6.snackBar(3500, error, "error");
                 });
 
-              case 4:
+              case 3:
                 _this6.dialog = false;
                 _this6.loading = false;
 
-              case 6:
+              case 5:
               case "end":
                 return _context4.stop();
             }
@@ -594,7 +652,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee4);
       }))();
     },
-    deleteSchedule: function deleteSchedule() {
+    getLanguage: function getLanguage() {
       var _this7 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
@@ -604,8 +662,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _this7.loading = true;
                 _context5.next = 3;
-                return axios["delete"]("api/manage/example/" + _this7.editedItem.id).then(function () {
-                  _this7.snackBar();
+                return axios.get("/api/language").then(function (response) {
+                  _this7.languages = response.data.payload;
                 })["catch"](function (error) {
                   _this7.snackBar(3500, error, "error");
                 });
@@ -621,7 +679,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee5);
       }))();
     },
-    getProblems: function getProblems() {
+    deleteSchedule: function deleteSchedule() {
       var _this8 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
@@ -631,10 +689,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _this8.loading = true;
                 _context6.next = 3;
-                return axios.get("/api/problem").then(function (response) {
-                  if (response.data.success == true) {
-                    _this8.problemList = response.data.payload;
-                  }
+                return axios["delete"]("api/manage/example/" + _this8.editedItem.id).then(function () {
+                  _this8.snackBar();
                 })["catch"](function (error) {
                   _this8.snackBar(3500, error, "error");
                 });
@@ -650,7 +706,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee6);
       }))();
     },
-    fetchItemSchedule: function fetchItemSchedule(item) {
+    getProblems: function getProblems() {
       var _this9 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7() {
@@ -659,31 +715,60 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context7.prev = _context7.next) {
               case 0:
                 _this9.loading = true;
-
-                if (!item) {
-                  _context7.next = 5;
-                  break;
-                }
-
-                _this9.roomId = item.courseId;
-                _context7.next = 5;
-                return axios.get("/api/schedule/" + item.courseId).then(function (response) {
+                _context7.next = 3;
+                return axios.get("/api/problem").then(function (response) {
                   if (response.data.success == true) {
-                    _this9.desserts = response.data.payload;
+                    _this9.problemList = response.data.payload;
                   }
                 })["catch"](function (error) {
                   _this9.snackBar(3500, error, "error");
                 });
 
-              case 5:
+              case 3:
                 _this9.loading = false;
 
-              case 6:
+              case 4:
               case "end":
                 return _context7.stop();
             }
           }
         }, _callee7);
+      }))();
+    },
+    fetchItemSchedule: function fetchItemSchedule(item) {
+      var _this10 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee8() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee8$(_context8) {
+          while (1) {
+            switch (_context8.prev = _context8.next) {
+              case 0:
+                _this10.loading = true;
+
+                if (!item) {
+                  _context8.next = 5;
+                  break;
+                }
+
+                _this10.roomId = item.courseId;
+                _context8.next = 5;
+                return axios.get("/api/schedule/" + item.courseId).then(function (response) {
+                  if (response.data.success == true) {
+                    _this10.desserts = response.data.payload;
+                  }
+                })["catch"](function (error) {
+                  _this10.snackBar(3500, error, "error");
+                });
+
+              case 5:
+                _this10.loading = false;
+
+              case 6:
+              case "end":
+                return _context8.stop();
+            }
+          }
+        }, _callee8);
       }))();
     }
   })
@@ -1538,7 +1623,7 @@ var render = function() {
                                   _c(
                                     "v-dialog",
                                     {
-                                      attrs: { "max-width": "500px" },
+                                      attrs: { "max-width": "800px" },
                                       scopedSlots: _vm._u([
                                         {
                                           key: "activator",
@@ -1616,7 +1701,7 @@ var render = function() {
                                                       _c(
                                                         "v-col",
                                                         {
-                                                          attrs: { cols: "12" }
+                                                          attrs: { cols: "8" }
                                                         },
                                                         [
                                                           _vm.editedIndex === -1
@@ -1677,8 +1762,166 @@ var render = function() {
                                                                 ],
                                                                 1
                                                               )
-                                                            : _vm._e(),
-                                                          _vm._v(" "),
+                                                            : _vm._e()
+                                                        ]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "v-col",
+                                                        {
+                                                          attrs: {
+                                                            cols:
+                                                              _vm.editedIndex ===
+                                                              -1
+                                                                ? "4"
+                                                                : "12"
+                                                          }
+                                                        },
+                                                        [
+                                                          _c("v-autocomplete", {
+                                                            attrs: {
+                                                              items:
+                                                                _vm.languages,
+                                                              label: "Language",
+                                                              "item-text":
+                                                                "lang",
+                                                              "item-value": "id"
+                                                            },
+                                                            model: {
+                                                              value:
+                                                                _vm.editedItem
+                                                                  .language_id,
+                                                              callback: function(
+                                                                $$v
+                                                              ) {
+                                                                _vm.$set(
+                                                                  _vm.editedItem,
+                                                                  "language_id",
+                                                                  $$v
+                                                                )
+                                                              },
+                                                              expression:
+                                                                "editedItem.language_id"
+                                                            }
+                                                          })
+                                                        ],
+                                                        1
+                                                      )
+                                                    ],
+                                                    1
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "v-row",
+                                                    [
+                                                      _c(
+                                                        "v-col",
+                                                        {
+                                                          attrs: { cols: "6" }
+                                                        },
+                                                        [
+                                                          _c("v-text-field", {
+                                                            staticClass: "mr-5",
+                                                            attrs: {
+                                                              label: "Score",
+                                                              "hide-details": ""
+                                                            },
+                                                            model: {
+                                                              value:
+                                                                _vm.editedItem
+                                                                  .score,
+                                                              callback: function(
+                                                                $$v
+                                                              ) {
+                                                                _vm.$set(
+                                                                  _vm.editedItem,
+                                                                  "score",
+                                                                  $$v
+                                                                )
+                                                              },
+                                                              expression:
+                                                                "editedItem.score"
+                                                            }
+                                                          })
+                                                        ],
+                                                        1
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "v-col",
+                                                        {
+                                                          attrs: { cols: "3" }
+                                                        },
+                                                        [
+                                                          _c("v-checkbox", {
+                                                            attrs: {
+                                                              label: "Late"
+                                                            },
+                                                            model: {
+                                                              value:
+                                                                _vm.editedItem
+                                                                  .late,
+                                                              callback: function(
+                                                                $$v
+                                                              ) {
+                                                                _vm.$set(
+                                                                  _vm.editedItem,
+                                                                  "late",
+                                                                  $$v
+                                                                )
+                                                              },
+                                                              expression:
+                                                                "editedItem.late"
+                                                            }
+                                                          })
+                                                        ],
+                                                        1
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "v-col",
+                                                        {
+                                                          attrs: { cols: "3" }
+                                                        },
+                                                        [
+                                                          _c("v-checkbox", {
+                                                            attrs: {
+                                                              label:
+                                                                "Is Analysis"
+                                                            },
+                                                            model: {
+                                                              value:
+                                                                _vm.editedItem
+                                                                  .IsAnalysis,
+                                                              callback: function(
+                                                                $$v
+                                                              ) {
+                                                                _vm.$set(
+                                                                  _vm.editedItem,
+                                                                  "IsAnalysis",
+                                                                  $$v
+                                                                )
+                                                              },
+                                                              expression:
+                                                                "editedItem.IsAnalysis"
+                                                            }
+                                                          })
+                                                        ],
+                                                        1
+                                                      )
+                                                    ],
+                                                    1
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "v-row",
+                                                    [
+                                                      _c(
+                                                        "v-col",
+                                                        {
+                                                          attrs: { cols: "6" }
+                                                        },
+                                                        [
                                                           _c(
                                                             "v-menu",
                                                             {
@@ -1774,8 +2017,17 @@ var render = function() {
                                                               )
                                                             ],
                                                             1
-                                                          ),
-                                                          _vm._v(" "),
+                                                          )
+                                                        ],
+                                                        1
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "v-col",
+                                                        {
+                                                          attrs: { cols: "6" }
+                                                        },
+                                                        [
                                                           _c(
                                                             "v-menu",
                                                             {
@@ -1871,8 +2123,23 @@ var render = function() {
                                                               )
                                                             ],
                                                             1
-                                                          ),
-                                                          _vm._v(" "),
+                                                          )
+                                                        ],
+                                                        1
+                                                      )
+                                                    ],
+                                                    1
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "v-row",
+                                                    [
+                                                      _c(
+                                                        "v-col",
+                                                        {
+                                                          attrs: { cols: "6" }
+                                                        },
+                                                        [
                                                           _c(
                                                             "v-menu",
                                                             {
@@ -1999,8 +2266,17 @@ var render = function() {
                                                                 : _vm._e()
                                                             ],
                                                             1
-                                                          ),
-                                                          _vm._v(" "),
+                                                          )
+                                                        ],
+                                                        1
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "v-col",
+                                                        {
+                                                          attrs: { cols: "6" }
+                                                        },
+                                                        [
                                                           _c(
                                                             "v-menu",
                                                             {

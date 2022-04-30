@@ -11,7 +11,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _layouts_guest_top_bar_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../layouts/guest_top_bar.vue */ "./resources/js/layouts/guest_top_bar.vue");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _layouts_guest_top_bar_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../layouts/guest_top_bar.vue */ "./resources/js/layouts/guest_top_bar.vue");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -44,7 +64,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      loading: true,
+      loading: false,
+      image: [],
       items: [{
         src: "https://mindphp.com/images/knowledge/software-computer-code-1940x900_35196.jpg"
       }, {
@@ -53,9 +74,42 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   components: {
-    GuestTopBar: _layouts_guest_top_bar_vue__WEBPACK_IMPORTED_MODULE_0__.default
+    GuestTopBar: _layouts_guest_top_bar_vue__WEBPACK_IMPORTED_MODULE_1__.default
   },
-  mounted: function mounted() {}
+  created: function created() {
+    this.fetchPicture();
+  },
+  methods: {
+    fetchPicture: function fetchPicture() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _this.loading = true;
+                _context.next = 3;
+                return axios.get("/api/picture").then(function (response) {
+                  if (response.data.success === true) {
+                    _this.image = response.data.payload;
+                  }
+                })["catch"](function (error) {
+                  _this.snackBar(3500, error, "error");
+                });
+
+              case 3:
+                _this.loading = false;
+
+              case 4:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    }
+  }
 });
 
 /***/ }),
@@ -184,12 +238,16 @@ var render = function() {
               ),
               _vm._v(" "),
               _c("div", { staticClass: "mt-4" }, [
-                _c("h1", { staticClass: "text-center , font-weight-black" }, [
-                  _vm._v("SOURCE CODE GRADER")
-                ]),
+                _c(
+                  "h1",
+                  { staticClass: "text-center font-weight-black white--text" },
+                  [_vm._v("\n          SOURCE CODE GRADER\n        ")]
+                ),
                 _vm._v(" "),
-                _c("h5", { staticClass: "text-center" }, [
-                  _vm._v("Computer Science Maejo University")
+                _c("h5", { staticClass: "text-center white--text" }, [
+                  _vm._v(
+                    "\n          Computer Science Maejo University\n        "
+                  )
                 ])
               ])
             ],

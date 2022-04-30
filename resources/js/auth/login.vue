@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <GuestTopBar></GuestTopBar>
-    <v-main>
+    <v-main class="background">
       <v-container fill-height fluid>
         <v-row align="center" justify="center">
           <v-layout align-center justify-center>
@@ -81,5 +81,12 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.background {
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url("../../../storage/app/picture/background.jpeg");
+}
 </style>

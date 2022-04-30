@@ -3,9 +3,9 @@
     <v-col cols="12">
       <div>
         <v-row justify="center">
-          <h1>New User</h1>
           <v-card>
             <v-container fluid>
+              <h1>New User</h1>
               <v-row align="center">
                 <v-col cols="4">
                   <v-subheader> Status </v-subheader>

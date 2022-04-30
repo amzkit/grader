@@ -3,16 +3,16 @@
     <Loading :loading="this.loading" />
     <Snackbar />
     <v-col cols="2">
-      <Navigation :onClick="fatchItemSchedule" />
+      <Navigation :onClick="fetchItemSchedule" />
     </v-col>
     <v-col cols="10">
       <div v-if="!this.$store.state.data.loading">
         <v-row justify="center">
           <v-data-table
             :headers="headers"
-            :items="myScore"
+            :items="mapDataMyScore"
             class="elevation-1 row-pointer"
-            @click:row="Item($event)"
+            @click:row="handleClick"
           >
             <template v-slot:[`item.index`]="{ index }">
               {{ index + 1 }}
@@ -84,12 +84,29 @@ export default {
           sortable: false,
           value: "title",
         },
-        { text: "Detail", value: "detail", align: "center", width: 450 },
+        { text: "Detail", value: "detail", align: "center", width: 350 },
+        { text: "Count Submit", value: "count", align: "center" },
         { text: "Score", value: "score", align: "center" },
         { text: "Comment Code", value: "comment_count", align: "center" },
         { text: "Date Submission", value: "created_at", align: "center" },
       ],
     };
+  },
+  computed: {
+    mapDataMyScore() {
+      const convert = (arr) => {
+        const res = {};
+        arr.forEach((obj) => {
+          const key = `${obj.schedule_id}`;
+          if (!res[key]) {
+            res[key] = { ...obj, count: 0 };
+          }
+          res[key].count += 1;
+        });
+        return Object.values(res);
+      };
+      return convert(this.myScore);
+    },
   },
   methods: {
     dayjs,
@@ -102,18 +119,24 @@ export default {
       });
     },
     invalidDate(item) {
-      return item ? dayjs(item).format("MMMM D, YYYY HH:mm") : "-";
+      return item ? dayjs(item).format("MMMM D, YYYY HH:mm:ss") : "-";
     },
-    invalidDate(item) {
-      return item ? dayjs(item).format("MMMM D, YYYY HH:mm") : "-";
+
+    handleClick(row) {
+      if (row.IsAnalysis === 1) {
+        this.$router.push({
+          path: "my-score-mission",
+          query: { submission_id: row.id, course_id: this.course_id },
+        });
+      } else
+        this.snackBar(
+          3500,
+          "You cannot view the results of the analysis for this problem.",
+          "warning"
+        );
     },
-    Item(val) {
-      this.$router.push({
-        path: "my-score-mission",
-        query: { submission_id: val.id, course_id: this.course_id },
-      });
-    },
-    async fatchItemSchedule(item) {
+
+    async fetchItemSchedule(item) {
       this.loading = true;
       this.course_id = item.courseId;
       if (item) {
@@ -133,7 +156,7 @@ export default {
             }
           })
           .catch((error) => {
-            this.snackBar(3500, error, "error");
+            this.snackBar(3500, error);
           });
         this.myScore = items;
         this.comment = items2;

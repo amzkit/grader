@@ -69,21 +69,13 @@
                     <v-row>
                       <v-col cols="3">
                         <v-text-field
-                          type="number"
-                          v-model="editedItem.score"
-                          onfocus="this.select()"
-                          label="Score"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="3">
-                        <v-text-field
                           prefix="$"
                           v-model="editedItem.tolerant"
                           onfocus="this.select()"
                           label="Tolerant"
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="6">
+                      <v-col cols="9">
                         <input
                           type="file"
                           class="form-control mt-3"
@@ -187,7 +179,6 @@ export default {
           value: "title",
         },
         { text: "Question", value: "question" },
-        { text: "Score", value: "score" },
         { text: "File", value: "file" },
         {
           text: "Level",
@@ -222,7 +213,6 @@ export default {
       editedItem: {
         title: "",
         question: "",
-        score: "",
         file: "",
         level: "",
         tolerant: "",
@@ -230,7 +220,6 @@ export default {
       defaultItem: {
         title: "",
         question: "",
-        score: "",
         file: "",
         level: "",
         tolerant: "",
@@ -333,7 +322,6 @@ export default {
       formData.append("id", this.editedItem.id);
       formData.append("title", this.editedItem.title);
       formData.append("question", this.editedItem.question);
-      formData.append("score", this.editedItem.score);
       formData.append("file", this.editedItem.file ? this.editedItem.file : "");
       formData.append("level", this.editedItem.level);
       formData.append(

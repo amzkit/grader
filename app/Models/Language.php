@@ -12,5 +12,7 @@ class Language extends Model
         'id',
         'lang',
         'type',
+        "created_at",
+        "updated_at"
     ];
 }

@@ -79,8 +79,10 @@ class AnalysesController extends Controller
                 "problems.title",
                 "schedules.start_date",
                 "schedules.end_date",
+                "schedules.IsAnalysis",
                 "submissions.*"
             )
+            ->orderBy('submissions.created_at', 'desc')
             ->get();
 
         $analyses = Analyses::join("submissions", "submissions.id", "=", "analyses.submission_id")

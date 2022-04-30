@@ -1,11 +1,24 @@
 <template>
   <v-row>
     <Snackbar />
-    <!-- <Loading :loading="loading" /> -->
     <v-col cols="3">
       <v-card class="mx-auto" max-width="300">
         <v-list dense>
-          <v-subheader>Analysis</v-subheader>
+          <v-row justify="'space-between'">
+            <v-col>
+              <v-subheader>Analysis</v-subheader>
+            </v-col>
+            <v-col>
+              <v-btn
+                class="ml-3"
+                depressed
+                color="primary"
+                @click="commentCode"
+              >
+                Comment
+              </v-btn>
+            </v-col>
+          </v-row>
           <v-text-field
             class="mx-3"
             label="Search"
@@ -23,31 +36,6 @@
             >
               <v-list-item-content>
                 <v-list-item-title v-text="item.message"></v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list-item-group>
-        </v-list>
-      </v-card>
-      <v-card class="mx-auto mt-3" max-width="300" v-if="comment.length > 0">
-        <v-list dense>
-          <v-subheader>Comment</v-subheader>
-          <v-text-field
-            class="mx-3"
-            label="Search"
-            prepend-inner-icon="search"
-            v-model="searchComment"
-            clearable
-            solo
-            dense
-          ></v-text-field>
-          <v-list-item-group>
-            <v-list-item
-              v-for="(item, i) in filteredItemsComment"
-              :key="i"
-              @click="fetchComment(item)"
-            >
-              <v-list-item-content>
-                <v-list-item-title v-text="item.name"></v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </v-list-item-group>
@@ -81,19 +69,6 @@
           </v-card-text>
         </v-card>
       </v-card>
-      <v-card class="mx-auto mb-4" max-width="100%" v-if="comment.length > 0">
-        <v-card-title class="text-h5"> Comment </v-card-title>
-        <v-card>
-          <v-card-text>
-            <v-row>
-              <v-col cols="4"> Message : </v-col>
-              <v-col cols="8">
-                {{ commentItem.message }}
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-      </v-card>
     </v-col>
   </v-row>
 </template>
@@ -110,7 +85,6 @@ export default {
     return {
       loading: false,
       search: "",
-      searchComment: "",
       analysis: [],
       comment: [],
       analysisItem: {
@@ -118,9 +92,6 @@ export default {
         output: "",
         testcase_input: "",
         testcase_output: "",
-      },
-      commentItem: {
-        message: "",
       },
     };
   },
@@ -142,9 +113,7 @@ export default {
     filteredItemsComment() {
       return _.orderBy(
         this.comment.filter((item) => {
-          return item.name
-            .toLowerCase()
-            .includes(this.searchComment.toLowerCase());
+          return item.name.toLowerCase().includes(this.search.toLowerCase());
         }),
         "headline"
       );
@@ -160,15 +129,24 @@ export default {
         timeout: timeout,
       });
     },
+
     fetchCase(item) {
       this.analysisItem.message = item.message;
       this.analysisItem.output = item.output;
       this.analysisItem.testcase_input = item.testcase_input;
       this.analysisItem.testcase_output = item.testcase_output;
     },
-    fetchComment(item) {
-      this.commentItem.message = item.comment;
+
+    commentCode() {
+      this.$router.push({
+        path: "/comment",
+        query: {
+          submission_id: this.$route.query.submission_id,
+          problem_id: this.$route.query.problem_id,
+        },
+      });
     },
+
     async commentScore() {
       await axios
         .get("/api/comment", {
@@ -191,6 +169,7 @@ export default {
         .get("/api/score", {
           params: {
             course_id: this.$route.query.course_id,
+            user_id: this.$route.query.user_id,
           },
         })
         .then((response) => {
@@ -198,13 +177,13 @@ export default {
             this.analysis = response.data.payload2;
           }
         })
+
         .catch((error) => {
           this.snackBar(3500, error, "error");
         });
       this.analysis = this.analysis.filter(
         (e) => e.submission_id == this.$route.query.submission_id
       );
-      this.loading = false;
     },
   },
 };

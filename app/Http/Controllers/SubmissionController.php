@@ -14,6 +14,7 @@ use App\Models\Submission;
 use App\Models\Waitinglist;
 use Carbon\Carbon;
 use Session;
+use App\Models\Scoreboard;
 use Illuminate\Support\Facades\Auth;
 
 class SubmissionController extends Controller
@@ -26,27 +27,32 @@ class SubmissionController extends Controller
     public function getScoreBoard($id)
     {
 
+
         $classroom = Classroom::join('users', 'users.id', 'classrooms.user_id')
             ->where('course_id', '=', $id)
             ->where('teacher', '!=', 1)
-            ->select('classrooms.*', 'users.id as user_id', 'users.name', 'users.username')
+            ->select('users.id as user_id', 'users.name', 'users.username')
             ->get();
-        $schedules = Schedule::where('course_id', '=', $id)->get();
-        $submission = Submission::join('schedules', 'schedules.id', 'submissions.schedule_id')
-            ->where('course_id', '=', $id)->get();
+
+        $schedule = Schedule::where('course_id', '=', $id)
+            ->join('problems', 'problems.id', 'schedules.problem_id')
+            ->select('schedules.*', 'problems.title')
+            ->get();
 
         $course_name = Course::where('id', '=', $id)->first();
 
-        $scoreboard = [
+        $scoreboard = Scoreboard::where('course_id', '=', $id)
+            ->get();
+
+        $res = [
             'student_count' => $classroom->count(),
-            'schedules_count' => $schedules->count(),
+            'schedule' => $schedule,
             'classroom_name' => $course_name->course_name,
             'classroom' => $classroom,
-            'submission' => $submission,
-            'schedules' => $schedules
+            'scoreboard' => $scoreboard
         ];
 
-        return response()->json(['success' => true, 'payload' => $scoreboard]);
+        return response()->json(['success' => true, 'payload' => $res]);
     }
 
     public function getScoreBoardGuest($id)
@@ -87,27 +93,18 @@ class SubmissionController extends Controller
 
     public function getSubmissionById(Request $request)
     {
-        if (Submission::where('problem_id', '=',  $request->problem_id)
-            ->where('user_id', '=',  $request->user_id)
-            ->where('schedule_id', '=',  $request->schedule_id)
-        ) {
-            $submission = Submission::where('problem_id', '=',  $request->problem_id)
-                ->where('user_id', '=',  $request->user_id)
-                ->where('schedule_id', '=',  $request->schedule_id)
-                ->join("users", "users.id", "=", "submissions.user_id")
-                ->join('problems', 'submissions.problem_id', '=', 'problems.id')
-                ->select(
-                    "submissions.*",
-                    "users.name",
-                    "users.username",
-                    "problems.title",
-                    "problems.question",
-                    "problems.score",
-                )
-                ->first();
-            return response()->json(['success' => true, 'payload' => $submission]);
-        }
-        return response()->json(['message' => 'Not Found!!']);
+        $submission = Submission::where('id', '=',  $request->submission_id)
+            ->first();
+
+        $problems = Problem::where('id', '=',  $request->problem_id)
+            ->first();
+
+        $res = [
+            'submission' => $submission,
+            'problems' => $problems,
+        ];
+
+        return response()->json(['success' => true, 'payload' => $res]);
     }
 
 

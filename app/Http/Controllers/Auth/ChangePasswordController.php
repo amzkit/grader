@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Carbon\Carbon;
+
 
 class ChangePasswordController extends Controller
 {
@@ -25,6 +27,7 @@ class ChangePasswordController extends Controller
         //Change Password
         $user = User::find($request->id);
         $user->password = bcrypt($request->get('new_password'));
+        $user->last_login = Carbon::now()->toDateTimeString();
         $user->save();
 
         return response()->json(['success' => "Password has been changed"]);

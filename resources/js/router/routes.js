@@ -102,7 +102,7 @@ const routes = [
     {
         path: "/comment",
         name: "comment",
-        component: () => import("../components/Scoreboard/Comment.vue")
+        component: () => import("../components/Comment/Comment.vue")
     },
     {
         path: "/scoreboard-score",
@@ -130,6 +130,22 @@ const routes = [
         path: "/user-task",
         name: "user-task",
         component: () => import("../components/Guest/Task")
+    },
+    // Analysis
+    {
+        path: "/analysis",
+        name: "analysis",
+        component: () => import("../components/Analysis/Analysis")
+    },
+    {
+        path: "/analysis-problems",
+        name: "analysis-problems",
+        component: () => import("../components/Analysis/AnalysisProblems.vue")
+    },
+    {
+        path: "/analysis-detail",
+        name: "analysis-detail",
+        component: () => import("../components/Analysis/AnalysisDetail.vue")
     }
 ];
 
