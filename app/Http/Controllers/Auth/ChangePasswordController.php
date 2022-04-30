@@ -11,10 +11,22 @@ use Carbon\Carbon;
 
 class ChangePasswordController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function changePassword(Request $request)
     {
 
-        if (!(Hash::check($request->get('current_password'), User::find($request->id)->password))) {
+        if ($request->get('skip')) {
+            $user = User::find(auth()->user()->id);
+            $user->last_login = Carbon::now()->toDateTimeString();
+            $user->save();
+            return response()->json(['success' => "Skip Changed Password"]);
+        }
+
+        if (!(Hash::check($request->get('current_password'), User::find(auth()->user()->id)->password))) {
             // The passwords matches
             return response()->json(['error' =>  "Your current password does not matches with the password you provided. Please try again."]);
         }
@@ -24,8 +36,8 @@ class ChangePasswordController extends Controller
             return response()->json(['error' =>   "New Password cannot be same as your current password. Please choose a different password."]);
         }
 
-        //Change Password
-        $user = User::find($request->id);
+        // Change Password
+        $user = User::find(auth()->user()->id);
         $user->password = bcrypt($request->get('new_password'));
         $user->last_login = Carbon::now()->toDateTimeString();
         $user->save();

@@ -71,11 +71,12 @@
                   solo
                 ></v-select>
                 <v-btn depressed color="primary" @click="onExport">
-                  Primary
+                  EXPORT
                 </v-btn>
               </template>
             </v-toolbar>
           </template>
+
           <template v-slot:[`item.index`]="{ index }">
             {{ index + 1 }}
           </template>
@@ -106,6 +107,7 @@
                         <th class="text-left">Score</th>
                       </tr>
                     </thead>
+
                     <tbody>
                       <tr
                         v-for="(sc, index) in mapDataMyScore(item.user_id)"
@@ -121,7 +123,7 @@
                           }}
                         </td>
                         <td>
-                          {{ sc.date_send }}
+                          {{ invalidDate(sc.date_send) }}
                         </td>
                         <td>
                           {{ sc.count }}
@@ -186,11 +188,6 @@ export default {
       items: [],
       data: [],
       search: "",
-      json: [
-        { name: "Dady", age: "21" },
-        { name: "Jonh", age: "25" },
-        { name: "James", age: "17" },
-      ],
     };
   },
   async created() {
@@ -219,6 +216,9 @@ export default {
         color: color,
         timeout: timeout,
       });
+    },
+    invalidDate(item) {
+      return item ? dayjs(item).format("MMMM D, YYYY HH:mm") : "-";
     },
     async onExport() {
       const schedules = this.data.schedule;

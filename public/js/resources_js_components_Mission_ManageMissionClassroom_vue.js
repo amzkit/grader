@@ -362,6 +362,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -406,11 +428,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         text: "Language",
         value: "lang"
       }, {
-        text: "Is Late",
-        value: "late"
+        text: "Pass due",
+        value: "late",
+        align: "center"
       }, {
         text: "Is Analysis",
-        value: "IsAnalysis"
+        value: "IsAnalysis",
+        align: "center"
       }, {
         text: "Action",
         value: "action"
@@ -804,16 +828,6 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -1821,10 +1835,11 @@ var render = function() {
                                                         },
                                                         [
                                                           _c("v-text-field", {
-                                                            staticClass: "mr-5",
                                                             attrs: {
-                                                              label: "Score",
-                                                              "hide-details": ""
+                                                              type: "number",
+                                                              onfocus:
+                                                                "this.select()",
+                                                              label: "Score"
                                                             },
                                                             model: {
                                                               value:
@@ -1855,7 +1870,7 @@ var render = function() {
                                                         [
                                                           _c("v-checkbox", {
                                                             attrs: {
-                                                              label: "Late"
+                                                              label: "Pass due"
                                                             },
                                                             model: {
                                                               value:
@@ -2551,6 +2566,60 @@ var render = function() {
                           }
                         },
                         {
+                          key: "item.late",
+                          fn: function(ref) {
+                            var item = ref.item
+                            return [
+                              item.late === 1
+                                ? _c(
+                                    "div",
+                                    [
+                                      _c("v-icon", { staticClass: "mr-2" }, [
+                                        _vm._v(" mdi-check ")
+                                      ])
+                                    ],
+                                    1
+                                  )
+                                : _c(
+                                    "div",
+                                    [
+                                      _c("v-icon", { staticClass: "mr-2" }, [
+                                        _vm._v(" mdi-close ")
+                                      ])
+                                    ],
+                                    1
+                                  )
+                            ]
+                          }
+                        },
+                        {
+                          key: "item.IsAnalysis",
+                          fn: function(ref) {
+                            var item = ref.item
+                            return [
+                              item.IsAnalysis === 1
+                                ? _c(
+                                    "div",
+                                    [
+                                      _c("v-icon", { staticClass: "mr-2" }, [
+                                        _vm._v(" mdi-check ")
+                                      ])
+                                    ],
+                                    1
+                                  )
+                                : _c(
+                                    "div",
+                                    [
+                                      _c("v-icon", { staticClass: "mr-2" }, [
+                                        _vm._v(" mdi-close ")
+                                      ])
+                                    ],
+                                    1
+                                  )
+                            ]
+                          }
+                        },
+                        {
                           key: "item.file",
                           fn: function(ref) {
                             var item = ref.item
@@ -2846,28 +2915,7 @@ var render = function() {
                                                       )
                                                     ],
                                                     1
-                                                  ),
-                                                  _vm._v(" "),
-                                                  this.$store.state.data.user
-                                                    .role === "admin"
-                                                    ? _c("div", [
-                                                        _c(
-                                                          "div",
-                                                          {
-                                                            staticClass:
-                                                              "text-no-wrap red lighten-1",
-                                                            staticStyle: {
-                                                              width: "14rem"
-                                                            }
-                                                          },
-                                                          [
-                                                            _vm._v(
-                                                              "\n                          Only teachers can add classrooms.\n                        "
-                                                            )
-                                                          ]
-                                                        )
-                                                      ])
-                                                    : _vm._e()
+                                                  )
                                                 ],
                                                 1
                                               )

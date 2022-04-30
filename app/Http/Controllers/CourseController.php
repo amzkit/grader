@@ -40,7 +40,20 @@ class CourseController extends Controller
 
             Classroom::updateOrCreate($classroomWhere, $classroomData);
             return response()->json(['success' => true, 'payload' => $courseDB]);
+        } else if (auth()->user()->role == 'admin') {
+
+            $courseWhere = [
+                'course_name' => $request->course_name,
+            ];
+
+            $courseData = [
+                'course_name' => $request->course_name,
+            ];
+
+            $courseDB = Course::updateOrCreate($courseWhere, $courseData);
+
+            return response()->json(['success' => true, 'payload' => $courseDB]);
         }
-        return response()->json(['message' => "You don't teacher !!"]);
+        return response()->json(['message' => "You don't permission"]);
     }
 }

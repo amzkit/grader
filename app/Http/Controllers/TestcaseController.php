@@ -14,6 +14,8 @@ class TestcaseController extends Controller
         if (isset($request->missionId) && $request->missionId != '') {
             $testcase->problem_id = $request->missionId;
         }
+        $testcase->input = empty($request->input) ? "" : $request->input;
+        $testcase->output = empty($request->output) ? "" : $request->output;
         $testcase->save();
         return response()->json(['success' => true, 'payload' =>  $testcase]);
     }

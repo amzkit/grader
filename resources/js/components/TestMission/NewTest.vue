@@ -98,6 +98,16 @@ export default {
     },
     async addTestCase() {
       this.loading = true;
+      if (this.missionId == 0) {
+        return this.snackBar(3500, "Please selector problem.", "warning");
+      }
+      if (this.input == "" && this.output == "") {
+        return this.snackBar(
+          3500,
+          "Please enter input or output again.",
+          "warning"
+        );
+      }
       await axios
         .post("/api/test-case", {
           missionId: this.missionId,

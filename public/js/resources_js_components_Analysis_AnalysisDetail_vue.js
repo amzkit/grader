@@ -473,7 +473,7 @@ var render = function() {
                           _c(
                             "v-btn",
                             {
-                              staticClass: "ml-3",
+                              staticClass: "ml-3 mb-2",
                               attrs: { depressed: "", color: "primary" },
                               on: { click: _vm.commentCode }
                             },

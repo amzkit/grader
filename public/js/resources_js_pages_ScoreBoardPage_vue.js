@@ -151,16 +151,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -518,6 +508,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 
 
 
@@ -561,17 +553,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       loading: false,
       items: [],
       data: [],
-      search: "",
-      json: [{
-        name: "Dady",
-        age: "21"
-      }, {
-        name: "Jonh",
-        age: "25"
-      }, {
-        name: "James",
-        age: "17"
-      }]
+      search: ""
     };
   },
   created: function created() {
@@ -617,6 +599,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         color: color,
         timeout: timeout
       });
+    },
+    invalidDate: function invalidDate(item) {
+      return item ? dayjs__WEBPACK_IMPORTED_MODULE_3___default()(item).format("MMMM D, YYYY HH:mm") : "-";
     },
     onExport: function onExport() {
       var _this3 = this;
@@ -1945,28 +1930,7 @@ var render = function() {
                                                       )
                                                     ],
                                                     1
-                                                  ),
-                                                  _vm._v(" "),
-                                                  this.$store.state.data.user
-                                                    .role === "admin"
-                                                    ? _c("div", [
-                                                        _c(
-                                                          "div",
-                                                          {
-                                                            staticClass:
-                                                              "text-no-wrap red lighten-1",
-                                                            staticStyle: {
-                                                              width: "14rem"
-                                                            }
-                                                          },
-                                                          [
-                                                            _vm._v(
-                                                              "\n                          Only teachers can add classrooms.\n                        "
-                                                            )
-                                                          ]
-                                                        )
-                                                      ])
-                                                    : _vm._e()
+                                                  )
                                                 ],
                                                 1
                                               )
@@ -2290,7 +2254,7 @@ var render = function() {
                                       },
                                       [
                                         _vm._v(
-                                          "\n                Primary\n              "
+                                          "\n                EXPORT\n              "
                                         )
                                       ]
                                     )
@@ -2461,7 +2425,9 @@ var render = function() {
                                                           _vm._v(
                                                             "\n                        " +
                                                               _vm._s(
-                                                                sc.date_send
+                                                                _vm.invalidDate(
+                                                                  sc.date_send
+                                                                )
                                                               ) +
                                                               "\n                      "
                                                           )

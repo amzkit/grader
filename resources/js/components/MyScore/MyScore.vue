@@ -156,7 +156,7 @@ export default {
             }
           })
           .catch((error) => {
-            this.snackBar(3500, error);
+            this.snackBar(3500, error, "error");
           });
         this.myScore = items;
         this.comment = items2;

@@ -404,16 +404,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -1507,28 +1497,7 @@ var render = function() {
                                                       )
                                                     ],
                                                     1
-                                                  ),
-                                                  _vm._v(" "),
-                                                  this.$store.state.data.user
-                                                    .role === "admin"
-                                                    ? _c("div", [
-                                                        _c(
-                                                          "div",
-                                                          {
-                                                            staticClass:
-                                                              "text-no-wrap red lighten-1",
-                                                            staticStyle: {
-                                                              width: "14rem"
-                                                            }
-                                                          },
-                                                          [
-                                                            _vm._v(
-                                                              "\n                          Only teachers can add classrooms.\n                        "
-                                                            )
-                                                          ]
-                                                        )
-                                                      ])
-                                                    : _vm._e()
+                                                  )
                                                 ],
                                                 1
                                               )

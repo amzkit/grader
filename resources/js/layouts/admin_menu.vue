@@ -116,6 +116,7 @@
       <div v-if="role === 'ta'">
         <v-btn text to="/"> Home </v-btn>
         <v-btn text to="/problems-view"> Problems </v-btn>
+        <v-btn text to="/analysis"> Analysis </v-btn>
         <v-btn text to="/scoreboard"> Scoreboard </v-btn>
       </div>
 
@@ -269,10 +270,6 @@ export default {
           icon: "mdi-calendar-check",
           text: "Problem",
           subLinks: [
-            // {
-            //   text: "Problem",
-            //   to: "/problem",
-            // },
             {
               text: "Manage Problem",
               to: "/manage-problem",
@@ -292,6 +289,11 @@ export default {
               to: "/manage-classroom",
             },
           ],
+        },
+        {
+          to: "/analysis",
+          icon: "mdi-file-chart",
+          text: "Analysis",
         },
         {
           to: "/scoreboard",
@@ -354,14 +356,14 @@ export default {
           ],
         },
         {
+          to: "/analysis",
+          icon: "mdi-file-chart",
+          text: "Analysis",
+        },
+        {
           to: "/scoreboard",
           icon: "mdi-view-dashboard",
           text: "Scoreboard",
-        },
-        {
-          to: "/analysis",
-          icon: "mdi-view-dashboard",
-          text: "Analysis",
         },
         {
           icon: "mdi-account",

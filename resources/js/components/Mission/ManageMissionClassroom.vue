@@ -89,16 +89,22 @@
                         <v-row>
                           <v-col cols="6">
                             <v-text-field
+                              type="number"
                               v-model="editedItem.score"
+                              onfocus="this.select()"
+                              label="Score"
+                            ></v-text-field>
+                            <!-- <v-text-field
+                              v-model=""
                               label="Score"
                               hide-details
                               class="mr-5"
-                            ></v-text-field>
+                            ></v-text-field> -->
                           </v-col>
                           <v-col cols="3">
                             <v-checkbox
                               v-model="editedItem.late"
-                              :label="`Late`"
+                              :label="`Pass due`"
                             ></v-checkbox>
                           </v-col>
                           <v-col cols="3">
@@ -260,6 +266,22 @@
             <template v-slot:[`item.question`]="{ item }">
               {{ convertToPlain(item.question) }}
             </template>
+            <template v-slot:[`item.late`]="{ item }">
+              <div v-if="item.late === 1">
+                <v-icon class="mr-2"> mdi-check </v-icon>
+              </div>
+              <div v-else>
+                <v-icon class="mr-2"> mdi-close </v-icon>
+              </div>
+            </template>
+            <template v-slot:[`item.IsAnalysis`]="{ item }">
+              <div v-if="item.IsAnalysis === 1">
+                <v-icon class="mr-2"> mdi-check </v-icon>
+              </div>
+              <div v-else>
+                <v-icon class="mr-2"> mdi-close </v-icon>
+              </div>
+            </template>
             <template v-slot:[`item.file`]="{ item }">
               <div v-if="item.file">
                 <v-icon small class="mr-2" @click="download(item.file)">
@@ -334,12 +356,14 @@ export default {
           value: "lang",
         },
         {
-          text: "Is Late",
+          text: "Pass due",
           value: "late",
+          align: "center",
         },
         {
           text: "Is Analysis",
           value: "IsAnalysis",
+          align: "center",
         },
         {
           text: "Action",

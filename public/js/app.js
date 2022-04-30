@@ -5464,6 +5464,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -5479,11 +5480,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, {
         icon: "mdi-calendar-check",
         text: "Problem",
-        subLinks: [// {
-        //   text: "Problem",
-        //   to: "/problem",
-        // },
-        {
+        subLinks: [{
           text: "Manage Problem",
           to: "/manage-problem"
         }, {
@@ -5497,6 +5494,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           text: "Manage Classroom",
           to: "/manage-classroom"
         }]
+      }, {
+        to: "/analysis",
+        icon: "mdi-file-chart",
+        text: "Analysis"
       }, {
         to: "/scoreboard",
         icon: "mdi-view-dashboard",
@@ -5542,13 +5543,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           text: "New Test"
         }]
       }, {
+        to: "/analysis",
+        icon: "mdi-file-chart",
+        text: "Analysis"
+      }, {
         to: "/scoreboard",
         icon: "mdi-view-dashboard",
         text: "Scoreboard"
-      }, {
-        to: "/analysis",
-        icon: "mdi-view-dashboard",
-        text: "Analysis"
       }, {
         icon: "mdi-account",
         text: "User",
@@ -44692,6 +44693,10 @@ var render = function() {
                   _vm._v(" "),
                   _c("v-btn", { attrs: { text: "", to: "/problems-view" } }, [
                     _vm._v(" Problems ")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-btn", { attrs: { text: "", to: "/analysis" } }, [
+                    _vm._v(" Analysis ")
                   ]),
                   _vm._v(" "),
                   _c("v-btn", { attrs: { text: "", to: "/scoreboard" } }, [

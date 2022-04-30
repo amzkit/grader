@@ -13,6 +13,9 @@
               :items="this.$store.state.data.schedule_all"
               class="elevation-1"
             >
+              <template v-slot:[`item.index`]="{ index }">
+                {{ index + 1 }}
+              </template>
               <template v-slot:[`item.question`]="{ item }">
                 {{ convertToPlain(item.question) }}
               </template>
@@ -56,6 +59,12 @@ export default {
     return {
       loading: false,
       headers: [
+        {
+          text: "#",
+          align: "center",
+          sortable: false,
+          value: "index",
+        },
         {
           text: "Title",
           align: "start",

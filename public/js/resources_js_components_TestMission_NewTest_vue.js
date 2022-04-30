@@ -195,7 +195,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             switch (_context2.prev = _context2.next) {
               case 0:
                 _this2.loading = true;
-                _context2.next = 3;
+
+                if (!(_this2.missionId == 0)) {
+                  _context2.next = 3;
+                  break;
+                }
+
+                return _context2.abrupt("return", _this2.snackBar(3500, "Please selector problem.", "warning"));
+
+              case 3:
+                if (!(_this2.input == "" && _this2.output == "")) {
+                  _context2.next = 5;
+                  break;
+                }
+
+                return _context2.abrupt("return", _this2.snackBar(3500, "Please enter input or output again.", "warning"));
+
+              case 5:
+                _context2.next = 7;
                 return axios.post("/api/test-case", {
                   missionId: _this2.missionId,
                   input: _this2.input,
@@ -208,10 +225,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   _this2.snackBar(3500, error, "error");
                 });
 
-              case 3:
+              case 7:
                 _this2.loading = false;
 
-              case 4:
+              case 8:
               case "end":
                 return _context2.stop();
             }

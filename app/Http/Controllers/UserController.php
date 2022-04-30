@@ -9,6 +9,7 @@ use App\Models\Classroom;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -155,12 +156,15 @@ class UserController extends Controller
 
             preg_match_all('/[0-9]{10}\\\cell\\\hich\\\af19\\\dbch\\\af15\\\loch\\\f19\s[^0-9]+}/', $file_data, $students);
 
+
             foreach ($students[0] as $i => $student) {
+
                 $student_id = substr($student, 0, 10);
                 $name = explode('\\f19 ', $student)[1];
                 $name = explode('}', $name)[0];
 
 
+                $user =  DB::table('users')->where('username', '=', $student_id)->first();
 
                 $userWhere = [
                     'username'  => $student_id
@@ -171,7 +175,7 @@ class UserController extends Controller
                     'email' =>  $student_id . "@mju.ac.th",
                     'role_student' =>  1,
                     'role' =>  "student",
-                    'password' => Hash::make($student_id),
+                    'password' => $user ? $user->password : Hash::make($student_id),
                 ];
 
                 $userDB = User::updateOrCreate($userWhere, $userData);

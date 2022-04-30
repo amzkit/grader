@@ -10,7 +10,7 @@
             </v-col>
             <v-col>
               <v-btn
-                class="ml-3"
+                class="ml-3 mb-2"
                 depressed
                 color="primary"
                 @click="commentCode"
