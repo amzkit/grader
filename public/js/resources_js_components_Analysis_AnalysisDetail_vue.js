@@ -463,7 +463,6 @@ var render = function() {
                 [
                   _c(
                     "v-row",
-                    { attrs: { justify: "'space-between'" } },
                     [
                       _c("v-col", [_c("v-subheader", [_vm._v("Analysis")])], 1),
                       _vm._v(" "),
@@ -552,6 +551,7 @@ var render = function() {
       _vm._v(" "),
       _c(
         "v-col",
+        { attrs: { cols: "7" } },
         [
           _c(
             "v-card",

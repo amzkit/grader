@@ -16,6 +16,7 @@ class CreateAnnouncesTable extends Migration
         Schema::create('announces', function (Blueprint $table) {
             $table->id();
             $table->longText('picture');
+            $table->boolean('IsActive')->default(true);
             $table->timestamps();
         });
     }

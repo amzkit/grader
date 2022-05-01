@@ -61,16 +61,18 @@ class SubmissionController extends Controller
 
         $items = Submission::join('users', 'users.id', 'submissions.user_id')
             ->join('problems', 'problems.id', 'submissions.problem_id')
+            ->join('schedules', 'schedules.id', 'submissions.schedule_id')
             ->where('schedule_id', '=', $id)
             ->where('role', '=', "Guest")
             ->select(
                 'users.name',
-                'problems.score as problem_score',
+                'schedules.score as problem_score',
                 'submissions.created_at as date_send',
                 'submissions.score as submission_score',
+                'submissions.schedule_id',
                 'submissions.Lang',
             )
-            ->orderBy('submissions.score', 'DESC')
+            ->orderBy('submissions.created_at', 'DESC')
             ->get();
 
         $scoreboard = [

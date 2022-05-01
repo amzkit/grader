@@ -127,20 +127,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -154,8 +140,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   data: function data() {
     return {
-      languages: [],
-      languagesId: 0,
       schedule_room: null,
       search: "",
       loading: false,
@@ -171,31 +155,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.getLanguage();
   },
   computed: {
-    languageAccept: function languageAccept() {
-      var _this$languages$find,
-          _this = this;
-
-      var language = (_this$languages$find = this.languages.find(function (e) {
-        return e.id == _this.languagesId;
-      })) === null || _this$languages$find === void 0 ? void 0 : _this$languages$find.type;
-      return language;
-    },
     filteredItems: function filteredItems() {
-      var _this2 = this;
+      var _this = this;
 
-      var item = this.schedules.filter(function (e) {
-        var missionSend = _this2.submissions.find(function (p) {
-          return p.schedule_id == e.id;
-        });
-
-        if (missionSend) {
-          return null;
-        }
-
-        return e;
-      });
-      return _.orderBy(item.filter(function (item) {
-        return item.title.toLowerCase().includes(_this2.search.toLowerCase());
+      return _.orderBy(this.schedules.filter(function (item) {
+        return item.title.toLowerCase().includes(_this.search.toLowerCase());
       }), "headline");
     }
   },
@@ -213,7 +177,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     submit: function submit() {
-      var _this3 = this;
+      var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
         var config, formData;
@@ -221,41 +185,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                if (_this3.file) {
-                  _context.next = 2;
-                  break;
+                if (!_this2.file) {
+                  _this2.snackBar(3500, "Please your input file.", "warning");
                 }
 
-                return _context.abrupt("return", console.log("NO"));
-
-              case 2:
-                _this3.loading = true;
-                _this3.dialog = false;
+                _this2.loading = true;
+                _this2.dialog = false;
                 config = {
                   headers: {
                     "content-type": "multipart/form-data"
                   }
                 };
                 formData = new FormData();
-                formData.append("sourcefile", _this3.file);
-                formData.append("Lang", _this3.languages.find(function (e) {
-                  return e.id = _this3.languagesId;
-                }).lang);
-                formData.append("problem_id", _this3.schedule_room.problemsId);
-                formData.append("course_id", _this3.schedule_room.course_id);
-                _context.next = 12;
+                formData.append("sourcefile", _this2.file);
+                formData.append("Lang", _this2.schedule_room.language);
+                formData.append("problem_id", _this2.schedule_room.problemsId);
+                formData.append("course_id", _this2.schedule_room.course_id);
+                _context.next = 11;
                 return axios.post("/api/submission", formData, config).then(function (response) {
                   if (response.data.success) {
                     window.location.reload();
                   }
                 })["catch"](function (error) {
-                  _this3.snackBar(3500, error, "error");
+                  _this2.snackBar(3500, error, "error");
                 });
 
-              case 12:
-                _this3.loading = false;
+              case 11:
+                _this2.loading = false;
 
-              case 13:
+              case 12:
               case "end":
                 return _context.stop();
             }
@@ -264,27 +222,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }))();
     },
     download: function download(item) {
-      var _this4 = this;
+      var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _this4.loading = true;
+                _this3.loading = true;
                 _context2.next = 3;
                 return axios.get("/api/schedule/download".concat(item.replace("problem_file", ""))).then(function (response) {
                   window.location.href = "api/schedule/download".concat(item.replace("problem_file", ""));
                 })["catch"](function (error) {
                   if (error.response.status === 404) {
-                    _this4.snackBar(3500, error.response.data.message, "error");
+                    _this3.snackBar(3500, error.response.data.message, "error");
                   } else {
-                    _this4.snackBar(3500, error, "error");
+                    _this3.snackBar(3500, error, "error");
                   }
                 });
 
               case 3:
-                _this4.loading = false;
+                _this3.loading = false;
 
               case 4:
               case "end":
@@ -298,26 +256,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.file = e.target.files[0];
     },
     fetchItemSchedule: function fetchItemSchedule() {
-      var _this5 = this;
+      var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                _this5.loading = true;
+                _this4.loading = true;
                 _context3.next = 3;
                 return axios.get("/api/user-schedule").then(function (response) {
                   if (response.data.success == true) {
-                    _this5.schedules = response.data.schedules;
-                    _this5.submissions = response.data.submissions;
+                    _this4.schedules = response.data.schedules;
+                    _this4.submissions = response.data.submissions;
                   }
                 })["catch"](function (error) {
-                  _this5.snackBar(3500, error, "error");
+                  _this4.snackBar(3500, error, "error");
                 });
 
               case 3:
-                _this5.loading = false;
+                _this4.loading = false;
 
               case 4:
               case "end":
@@ -328,25 +286,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }))();
     },
     fetchItemScheduleById: function fetchItemScheduleById(item) {
-      var _this6 = this;
+      var _this5 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                _this6.loading = true;
+                _this5.loading = true;
                 _context4.next = 3;
                 return axios.get("/api/user-schedule/" + item).then(function (response) {
                   if (response.data.success == true) {
-                    _this6.schedule_room = response.data.payload;
+                    _this5.schedule_room = response.data.payload;
                   }
                 })["catch"](function (error) {
-                  _this6.snackBar(3500, error, "error");
+                  _this5.snackBar(3500, error, "error");
                 });
 
               case 3:
-                _this6.loading = false;
+                _this5.loading = false;
 
               case 4:
               case "end":
@@ -357,23 +315,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }))();
     },
     getLanguage: function getLanguage() {
-      var _this7 = this;
+      var _this6 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
-                _this7.loading = true;
+                _this6.loading = true;
                 _context5.next = 3;
                 return axios.get("/api/language").then(function (response) {
-                  _this7.languages = response.data.payload;
+                  _this6.languages = response.data.payload;
                 })["catch"](function (error) {
-                  _this7.snackBar(3500, error, "error");
+                  _this6.snackBar(3500, error, "error");
                 });
 
               case 3:
-                _this7.loading = false;
+                _this6.loading = false;
 
               case 4:
               case "end":
@@ -1228,213 +1186,95 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c(
-        "v-col",
-        [
-          _c(
-            "v-container",
-            { attrs: { "text-xs-center": "", fluid: "" } },
-            [
-              _c(
-                "v-layout",
-                { attrs: { row: "", wrap: "" } },
-                [
-                  _c("v-flex", { attrs: { xs12: "" } }, [
-                    _vm.schedule_room
-                      ? _c(
-                          "div",
+      _c("v-col", { attrs: { cols: "7" } }, [
+        _vm.schedule_room
+          ? _c(
+              "div",
+              [
+                _c(
+                  "v-card",
+                  { staticClass: "mx-auto", attrs: { "max-width": "1200" } },
+                  [
+                    _c("v-card-title", { staticClass: "text-h5" }, [
+                      _vm._v(
+                        "\n          " +
+                          _vm._s(_vm.schedule_room.title) +
+                          "\n        "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "v-card-text",
+                      [
+                        _c(
+                          "v-row",
                           [
-                            _c(
-                              "v-card",
-                              {
-                                staticClass: "mx-auto",
-                                attrs: { "max-width": "700" }
-                              },
+                            _c("v-col", { attrs: { cols: "4" } }, [
+                              _vm._v(" Question ")
+                            ]),
+                            _vm._v(" "),
+                            _c("v-col", { attrs: { cols: "8" } }, [
+                              _c("div", {
+                                domProps: {
+                                  innerHTML: _vm._s(_vm.schedule_room.question)
+                                }
+                              })
+                            ])
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-row",
+                          { staticClass: "mb-3" },
+                          [
+                            _c("v-col", { attrs: { cols: "4" } }, [
+                              _vm._v(" Score ")
+                            ]),
+                            _vm._v(" "),
+                            _c("v-col", { attrs: { cols: "8" } }, [
+                              _vm._v(
+                                "\n              " +
+                                  _vm._s(_vm.schedule_room.score) +
+                                  "\n            "
+                              )
+                            ])
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _vm.schedule_room.file
+                          ? _c(
+                              "v-row",
+                              { staticClass: "mb-3" },
                               [
-                                _c("v-card-title", { staticClass: "text-h5" }, [
-                                  _vm._v(
-                                    "\n                " +
-                                      _vm._s(_vm.schedule_room.title) +
-                                      "\n              "
-                                  )
+                                _c("v-col", { attrs: { cols: "4" } }, [
+                                  _vm._v(" Download File Question ")
                                 ]),
                                 _vm._v(" "),
                                 _c(
-                                  "v-card-text",
+                                  "v-col",
+                                  { attrs: { cols: "8" } },
                                   [
-                                    _c(
-                                      "v-row",
-                                      [
-                                        _c("v-col", { attrs: { cols: "4" } }, [
-                                          _vm._v(" Question ")
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("v-col", { attrs: { cols: "8" } }, [
-                                          _c("div", {
-                                            domProps: {
-                                              innerHTML: _vm._s(
-                                                _vm.schedule_room.question
-                                              )
-                                            }
-                                          })
-                                        ])
-                                      ],
-                                      1
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-row",
-                                      { staticClass: "mb-3" },
-                                      [
-                                        _c("v-col", { attrs: { cols: "4" } }, [
-                                          _vm._v(" Score ")
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("v-col", { attrs: { cols: "8" } }, [
-                                          _vm._v(
-                                            "\n                    " +
-                                              _vm._s(_vm.schedule_room.score) +
-                                              "\n                  "
-                                          )
-                                        ])
-                                      ],
-                                      1
-                                    ),
-                                    _vm._v(" "),
-                                    _vm.schedule_room.file
-                                      ? _c(
-                                          "v-row",
-                                          { staticClass: "mb-3" },
-                                          [
-                                            _c(
-                                              "v-col",
-                                              { attrs: { cols: "4" } },
-                                              [
-                                                _vm._v(
-                                                  " Download File Question "
-                                                )
-                                              ]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-col",
-                                              { attrs: { cols: "8" } },
-                                              [
-                                                _c(
-                                                  "v-btn",
-                                                  {
-                                                    attrs: {
-                                                      small: "",
-                                                      color: "primary",
-                                                      dark: ""
-                                                    },
-                                                    on: {
-                                                      click: function($event) {
-                                                        return _vm.download(
-                                                          _vm.schedule_room.file
-                                                        )
-                                                      }
-                                                    }
-                                                  },
-                                                  [
-                                                    _vm._v(
-                                                      "\n                      Download File\n                    "
-                                                    )
-                                                  ]
-                                                )
-                                              ],
-                                              1
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      : _vm._e(),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-row",
-                                      { staticClass: "mb-3" },
-                                      [
-                                        _c(
-                                          "v-col",
-                                          {
-                                            staticClass: "mt-6",
-                                            attrs: { cols: "4" }
-                                          },
-                                          [_vm._v(" Language ")]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "v-col",
-                                          { attrs: { cols: "8" } },
-                                          [
-                                            _c("v-autocomplete", {
-                                              attrs: {
-                                                items: _vm.languages,
-                                                label: "Language",
-                                                "item-text": "lang",
-                                                "item-value": "id"
-                                              },
-                                              model: {
-                                                value: _vm.languagesId,
-                                                callback: function($$v) {
-                                                  _vm.languagesId = $$v
-                                                },
-                                                expression: "languagesId"
-                                              }
-                                            })
-                                          ],
-                                          1
-                                        )
-                                      ],
-                                      1
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-row",
-                                      [
-                                        _c("v-col", { attrs: { cols: "4" } }, [
-                                          _vm._v(" File Import ")
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("v-col", { attrs: { cols: "8" } }, [
-                                          _c("input", {
-                                            ref: "file_upload",
-                                            staticClass: "form-control",
-                                            attrs: {
-                                              type: "file",
-                                              accept: _vm.languageAccept
-                                            },
-                                            on: { change: _vm.onFileChange }
-                                          })
-                                        ])
-                                      ],
-                                      1
-                                    )
-                                  ],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-card-actions",
-                                  [
-                                    _c("v-spacer"),
-                                    _vm._v(" "),
                                     _c(
                                       "v-btn",
                                       {
                                         attrs: {
-                                          color: "green darken-1",
-                                          text: ""
+                                          small: "",
+                                          color: "primary",
+                                          dark: ""
                                         },
                                         on: {
                                           click: function($event) {
-                                            return _vm.submit()
+                                            return _vm.download(
+                                              _vm.schedule_room.file
+                                            )
                                           }
                                         }
                                       },
                                       [
                                         _vm._v(
-                                          "\n                  Submit\n                "
+                                          "\n                Download File\n              "
                                         )
                                       ]
                                     )
@@ -1444,20 +1284,80 @@ var render = function() {
                               ],
                               1
                             )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _c(
+                          "v-row",
+                          { staticClass: "mb-3" },
+                          [
+                            _c("v-col", { attrs: { cols: "4" } }, [
+                              _vm._v(" Language ")
+                            ]),
+                            _vm._v(" "),
+                            _c("v-col", { attrs: { cols: "8" } }, [
+                              _vm._v(
+                                "\n              " +
+                                  _vm._s(_vm.schedule_room.language) +
+                                  "\n            "
+                              )
+                            ])
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-row",
+                          [
+                            _c("v-col", { attrs: { cols: "4" } }, [
+                              _vm._v(" File Import ")
+                            ]),
+                            _vm._v(" "),
+                            _c("v-col", { attrs: { cols: "8" } }, [
+                              _c("input", {
+                                ref: "file_upload",
+                                staticClass: "form-control",
+                                attrs: {
+                                  type: "file",
+                                  accept: _vm.schedule_room.language_accept
+                                },
+                                on: { change: _vm.onFileChange }
+                              })
+                            ])
                           ],
                           1
                         )
-                      : _vm._e()
-                  ])
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "v-card-actions",
+                      [
+                        _c("v-spacer"),
+                        _vm._v(" "),
+                        _c(
+                          "v-btn",
+                          {
+                            attrs: { color: "green darken-1", text: "" },
+                            on: {
+                              click: function($event) {
+                                return _vm.submit()
+                              }
+                            }
+                          },
+                          [_vm._v("\n            Submit\n          ")]
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          : _vm._e()
+      ])
     ],
     1
   )

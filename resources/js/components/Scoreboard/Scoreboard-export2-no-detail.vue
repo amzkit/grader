@@ -258,10 +258,8 @@ export default {
           const res = scoreBoard.find((e) => e.schedule_id === sch.id);
           rowObj[sch.title.replace(" ", "")] = res ? res.score : "-";
         });
-        console.log(rowObj);
         workSheet.addRow(rowObj);
         row += 1;
-
 
         workSheet.eachRow({ includeEmpty: true }, function (row) {
           row.eachCell({ includeEmpty: true }, function (cell) {

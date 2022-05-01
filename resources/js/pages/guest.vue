@@ -1,41 +1,46 @@
 <template>
-  <div>
-    <guest-top-bar />
-    <v-main>
-      <v-row justify="center">
-        <v-carousel
-          cycle
-          height="500"
-          hide-delimiter-background
-          show-arrows-on-hover
-        >
-          <!-- <v-carousel-item
-            v-for="(item, i) in image"
-            :key="i"
-            :src="'http://127.0.0.1:8000/storage' + item.picture"
-            reverse-transition="fade-transition"
-            transition="fade-transition"
+  <v-container fill-height fluid>
+    <v-row justify="center">
+      <guest-top-bar />
+      <v-main>
+        <v-row justify="center">
+          <v-carousel
+            cycle
+            height="500"
+            hide-delimiter-background
+            show-arrows-on-hover
           >
-          </v-carousel-item> -->
-          <v-carousel-item
-            v-for="(item, i) in items"
-            :key="i"
-            :src="item.src"
-            reverse-transition="fade-transition"
-            transition="fade-transition"
-          ></v-carousel-item>
-        </v-carousel>
-        <div class="mt-4">
-          <h1 class="text-center font-weight-black white--text">
-            SOURCE CODE GRADER
-          </h1>
-          <h5 class="text-center white--text">
-            Computer Science Maejo University
-          </h5>
-        </div>
-      </v-row>
-    </v-main>
-  </div>
+            <v-carousel-item
+              v-for="(item, i) in image"
+              :key="i"
+              :src="`${'http://127.0.0.1:8000'}/storage${item.picture.replace(
+                'public',
+                ''
+              )}`"
+              reverse-transition="fade-transition"
+              transition="fade-transition"
+            >
+            </v-carousel-item>
+            <v-carousel-item
+              v-for="(item, i) in items"
+              :key="i"
+              :src="item.src"
+              reverse-transition="fade-transition"
+              transition="fade-transition"
+            ></v-carousel-item>
+          </v-carousel>
+          <div class="mt-4">
+            <h1 class="text-center font-weight-black white--text">
+              SOURCE CODE GRADER
+            </h1>
+            <h5 class="text-center white--text">
+              Computer Science Maejo University
+            </h5>
+          </div>
+        </v-row>
+      </v-main>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -59,21 +64,6 @@ export default {
   created() {
     this.fetchPicture();
   },
-  methods: {
-    async fetchPicture() {
-      this.loading = true;
-      await axios
-        .get(`/api/picture`)
-        .then((response) => {
-          if (response.data.success === true) {
-            this.image = response.data.payload;
-          }
-        })
-        .catch((error) => {
-          this.snackBar(3500, error, "error");
-        });
-      this.loading = false;
-    },
-  },
+  methods: {},
 };
 </script>

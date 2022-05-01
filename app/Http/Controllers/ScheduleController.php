@@ -9,8 +9,7 @@ use Carbon\Carbon;
 use App\Models\Classroom;
 use App\Models\Course;
 use App\Models\Submission;
-
-
+use App\Models\Language;
 
 class ScheduleController extends Controller
 {
@@ -46,17 +45,21 @@ class ScheduleController extends Controller
         $schedules = Schedule::where('id', '=',  $id)->first();
         $problems = Problem::where('id', '=',  $schedules->problem_id)->first();
 
+        $language = Language::where('id', '=',  $schedules->language_id)->first();
+
         $schedule = [
             'id' => $schedules->id,
             'title' => $problems->title,
             'question' => $problems->question,
             'level' => $problems->level,
-            'score' => $problems->score,
+            'score' => $schedules->score,
             'file' => $problems->file,
             'start_date' => $schedules->start_date,
             'end_date' => $schedules->end_date,
             'problemsId' => $problems->id,
-            'course_id' => $schedules->course_id
+            'course_id' => $schedules->course_id,
+            'language' => $language->lang,
+            'language_accept' => $language->type,
         ];
 
         return response()->json(['success' => true, 'payload' =>  $schedule]);

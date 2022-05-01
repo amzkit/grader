@@ -5551,6 +5551,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         icon: "mdi-view-dashboard",
         text: "Scoreboard"
       }, {
+        to: "/announce",
+        icon: "mdi-view-dashboard",
+        text: "Announcement"
+      }, {
         icon: "mdi-account",
         text: "User",
         subLinks: [{
@@ -5617,16 +5621,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                console.log(role);
-                _context2.next = 3;
+                _context2.next = 2;
                 return axios.put("api/user/" + _this2.$store.state.data.user.id, {
                   role: role
                 });
 
-              case 3:
+              case 2:
                 _this2.redirect("/");
 
-              case 4:
+              case 3:
               case "end":
                 return _context2.stop();
             }
@@ -5674,8 +5677,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _admin_menu_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./admin_menu.vue */ "./resources/js/layouts/admin_menu.vue");
-//
-//
 //
 //
 //
@@ -6086,6 +6087,13 @@ var routes = [{
   name: "analysis-detail",
   component: function component() {
     return __webpack_require__.e(/*! import() */ "resources_js_components_Analysis_AnalysisDetail_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Analysis/AnalysisDetail.vue */ "./resources/js/components/Analysis/AnalysisDetail.vue"));
+  }
+}, // Announcement
+{
+  path: "/announce",
+  name: "announce",
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ "resources_js_components_Announcement_Announce_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Announcement/Announce.vue */ "./resources/js/components/Announcement/Announce.vue"));
   }
 }];
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (routes);
@@ -45111,23 +45119,7 @@ var render = function() {
     [
       _c("admin-menu"),
       _vm._v(" "),
-      _c(
-        "v-main",
-        { staticClass: "background" },
-        [
-          _c(
-            "v-container",
-            {
-              staticClass: "pa-md-8 mx-auto",
-              staticStyle: { width: "100%" },
-              attrs: { fluid: "" }
-            },
-            [_c("router-view")],
-            1
-          )
-        ],
-        1
-      )
+      _c("v-main", { staticClass: "background" }, [_c("router-view")], 1)
     ],
     1
   )
@@ -107323,7 +107315,7 @@ var index = {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_components_Admin_NewUser_vue":1,"resources_js_components_Admin_ManageUser_vue":1,"resources_js_auth_ChangePassword_vue":1,"resources_js_components_Mission_ManageMissionClassroom_vue":1,"resources_js_components_Mission_ManageMission_vue":1,"resources_js_components_Mission_NewMission_vue":1,"resources_js_components_Mission_Mission_vue":1,"resources_js_components_TestMission_NewTest_vue":1,"resources_js_components_Classroom_ManageClassroom_vue":1,"resources_js_components_Mission_Problems_vue":1,"resources_js_components_Classroom_NewClassroom_vue":1,"resources_js_pages_MyScorePage_vue":1,"resources_js_components_MyScore_MyScoreDetail_vue":1,"resources_js_pages_ScoreBoardPage_vue":1,"resources_js_components_Comment_Comment_vue":1,"resources_js_components_Scoreboard_MyScoreScoreboard_vue":1,"resources_js_components_Guest_Problems_vue":1,"resources_js_components_Guest_MyScore_vue":1,"resources_js_components_Guest_ScoreBoard_vue":1,"resources_js_components_Guest_Task_vue":1,"resources_js_components_Analysis_Analysis_vue":1,"resources_js_components_Analysis_AnalysisProblems_vue":1,"resources_js_components_Analysis_AnalysisDetail_vue":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_components_Admin_NewUser_vue":1,"resources_js_components_Admin_ManageUser_vue":1,"resources_js_auth_ChangePassword_vue":1,"resources_js_components_Mission_ManageMissionClassroom_vue":1,"resources_js_components_Mission_ManageMission_vue":1,"resources_js_components_Mission_NewMission_vue":1,"resources_js_components_Mission_Mission_vue":1,"resources_js_components_TestMission_NewTest_vue":1,"resources_js_components_Classroom_ManageClassroom_vue":1,"resources_js_components_Mission_Problems_vue":1,"resources_js_components_Classroom_NewClassroom_vue":1,"resources_js_pages_MyScorePage_vue":1,"resources_js_components_MyScore_MyScoreDetail_vue":1,"resources_js_pages_ScoreBoardPage_vue":1,"resources_js_components_Comment_Comment_vue":1,"resources_js_components_Scoreboard_MyScoreScoreboard_vue":1,"resources_js_components_Guest_Problems_vue":1,"resources_js_components_Guest_MyScore_vue":1,"resources_js_components_Guest_ScoreBoard_vue":1,"resources_js_components_Guest_Task_vue":1,"resources_js_components_Analysis_Analysis_vue":1,"resources_js_components_Analysis_AnalysisProblems_vue":1,"resources_js_components_Analysis_AnalysisDetail_vue":1,"resources_js_components_Announcement_Announce_vue":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};

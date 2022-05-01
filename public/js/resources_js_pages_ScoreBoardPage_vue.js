@@ -339,18 +339,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var exceljs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! exceljs */ "./node_modules/exceljs/dist/exceljs.min.js");
-/* harmony import */ var exceljs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(exceljs__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! file-saver */ "./node_modules/file-saver/dist/FileSaver.min.js");
-/* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(file_saver__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
-/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _Navigation_Navigation_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Navigation/Navigation.vue */ "./resources/js/components/Navigation/Navigation.vue");
-/* harmony import */ var _Loading_Loading_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Loading/Loading.vue */ "./resources/js/components/Loading/Loading.vue");
-/* harmony import */ var _Snackbar_Snackbar_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Snackbar/Snackbar.vue */ "./resources/js/components/Snackbar/Snackbar.vue");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _ExportProblems__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./ExportProblems */ "./resources/js/components/ScoreBoard/ExportProblems.js");
-/* harmony import */ var _ExportProblems__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_ExportProblems__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! file-saver */ "./node_modules/file-saver/dist/FileSaver.min.js");
+/* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(file_saver__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _Navigation_Navigation_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Navigation/Navigation.vue */ "./resources/js/components/Navigation/Navigation.vue");
+/* harmony import */ var _Loading_Loading_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Loading/Loading.vue */ "./resources/js/components/Loading/Loading.vue");
+/* harmony import */ var _Snackbar_Snackbar_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Snackbar/Snackbar.vue */ "./resources/js/components/Snackbar/Snackbar.vue");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _ExportProblems__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ExportProblems */ "./resources/js/components/ScoreBoard/ExportProblems.js");
+/* harmony import */ var _ExportProblems__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_ExportProblems__WEBPACK_IMPORTED_MODULE_6__);
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -517,15 +515,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
-    Navigation: _Navigation_Navigation_vue__WEBPACK_IMPORTED_MODULE_4__.default,
-    Loading: _Loading_Loading_vue__WEBPACK_IMPORTED_MODULE_5__.default,
-    Snackbar: _Snackbar_Snackbar_vue__WEBPACK_IMPORTED_MODULE_6__.default
+    Navigation: _Navigation_Navigation_vue__WEBPACK_IMPORTED_MODULE_3__.default,
+    Loading: _Loading_Loading_vue__WEBPACK_IMPORTED_MODULE_4__.default,
+    Snackbar: _Snackbar_Snackbar_vue__WEBPACK_IMPORTED_MODULE_5__.default
   },
   data: function data() {
     return {
+      selected: 0,
       exportData: null,
       course_room: [],
       expanded: [],
@@ -564,11 +562,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _this.getScoreboard();
+              _context.next = 2;
+              return _this.fetchItemCourse();
 
-              _this.getClassrooms();
-
-              _this.fetchItemCourse();
+            case 2:
+              _this.fetchRoom(_this.course_room[0] ? _this.course_room[0].courseId : 0);
 
             case 3:
             case "end":
@@ -588,8 +586,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   methods: _objectSpread(_objectSpread({
-    dayjs: (dayjs__WEBPACK_IMPORTED_MODULE_3___default())
-  }, (0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapActions)("snackbar", ["showSnack"])), {}, {
+    dayjs: (dayjs__WEBPACK_IMPORTED_MODULE_2___default())
+  }, (0,vuex__WEBPACK_IMPORTED_MODULE_7__.mapActions)("snackbar", ["showSnack"])), {}, {
     snackBar: function snackBar() {
       var timeout = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 3500;
       var text = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "Successfully";
@@ -601,7 +599,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       });
     },
     invalidDate: function invalidDate(item) {
-      return item ? dayjs__WEBPACK_IMPORTED_MODULE_3___default()(item).format("MMMM D, YYYY HH:mm") : "-";
+      return item ? dayjs__WEBPACK_IMPORTED_MODULE_2___default()(item).format("MMMM D, YYYY HH:mm") : "-";
     },
     onExport: function onExport() {
       var _this3 = this;
@@ -625,11 +623,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 }
 
                 _context2.next = 8;
-                return (0,_ExportProblems__WEBPACK_IMPORTED_MODULE_7__.exportProblems)(schedules, classroom, scoreboard, classroom_name);
+                return (0,_ExportProblems__WEBPACK_IMPORTED_MODULE_6__.exportProblems)(schedules, classroom, scoreboard, classroom_name);
 
               case 8:
                 exportFile = _context2.sent;
-                return _context2.abrupt("return", (0,file_saver__WEBPACK_IMPORTED_MODULE_2__.saveAs)(new Blob([exportFile]), "".concat(classroom_name, ".xlsx")));
+                return _context2.abrupt("return", (0,file_saver__WEBPACK_IMPORTED_MODULE_1__.saveAs)(new Blob([exportFile]), "".concat(classroom_name, ".xlsx")));
 
               case 12:
                 if (!(_this3.exportData === 2)) {
@@ -638,11 +636,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 }
 
                 _context2.next = 15;
-                return (0,_ExportProblems__WEBPACK_IMPORTED_MODULE_7__.exportProblemsDetail)(schedules, classroom, scoreboard, classroom_name);
+                return (0,_ExportProblems__WEBPACK_IMPORTED_MODULE_6__.exportProblemsDetail)(schedules, classroom, scoreboard, classroom_name);
 
               case 15:
                 _exportFile = _context2.sent;
-                return _context2.abrupt("return", (0,file_saver__WEBPACK_IMPORTED_MODULE_2__.saveAs)(new Blob([_exportFile]), "".concat(classroom_name, ".xlsx")));
+                return _context2.abrupt("return", (0,file_saver__WEBPACK_IMPORTED_MODULE_1__.saveAs)(new Blob([_exportFile]), "".concat(classroom_name, ".xlsx")));
 
               case 19:
                 _this3.snackBar(3500, "Please select a format", "warning");
@@ -715,7 +713,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context4.next = 3;
                 return axios.get("api/classroom").then(function (response) {
                   if (response.data.success == true) {
-                    _this5.course_room = response.data.payload;
+                    _this5.course_room = response.data.payload.filter(function (e) {
+                      return e.courseId != 1;
+                    });
                   }
                 })["catch"](function (error) {
                   _this5.snackBar(3500, error, "error");
@@ -752,41 +752,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return convert(user_id ? this.data.scoreboard.filter(function (e) {
         return e.user_id === user_id;
       }) : this.data.scoreboard);
-    },
-    getClassrooms: function getClassrooms() {
-      var _this6 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
-          while (1) {
-            switch (_context5.prev = _context5.next) {
-              case 0:
-                _this6.loading = true;
-                _context5.next = 3;
-                return axios.get("/api/classrooms").then(function (response) {
-                  if (response.data.success == true) {
-                    _this6.items = response.data.payload.filter(function (e) {
-                      if (_this6.$store.state.data.user.role !== "teacher" && _this6.$store.state.data.user.role !== "admin") {
-                        return e.courseId !== 1;
-                      }
-
-                      return e;
-                    });
-                  }
-                })["catch"](function (error) {
-                  _this6.snackBar(3500, error, "error");
-                });
-
-              case 3:
-                _this6.loading = false;
-
-              case 4:
-              case "end":
-                return _context5.stop();
-            }
-          }
-        }, _callee5);
-      }))();
     }
   })
 });
@@ -2134,6 +2099,15 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "v-list-item-group",
+                    {
+                      model: {
+                        value: _vm.selected,
+                        callback: function($$v) {
+                          _vm.selected = $$v
+                        },
+                        expression: "selected"
+                      }
+                    },
                     _vm._l(_vm.filteredItems, function(item, i) {
                       return _c(
                         "v-list-item",
@@ -2182,6 +2156,7 @@ var render = function() {
       _vm._v(" "),
       _c(
         "v-col",
+        { attrs: { cols: "7" } },
         [
           _c(
             "v-row",

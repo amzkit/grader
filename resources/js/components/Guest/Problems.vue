@@ -31,61 +31,55 @@
     </v-col>
     <v-col cols="1"> <v-divider vertical></v-divider></v-col>
 
-    <v-col>
-      <v-container text-xs-center fluid>
-        <v-layout row wrap>
-          <v-flex xs12>
-            <div v-if="problems">
-              <v-card class="mx-auto" max-width="700">
-                <v-card-title class="text-h5">
-                  {{ problems.title }}
-                </v-card-title>
-                <v-card-text>
-                  <v-row>
-                    <v-col cols="4"> Question </v-col>
-                    <v-col cols="8">
-                      <div v-html="problems.question"></div>
-                    </v-col>
-                  </v-row>
-                  <v-row class="mb-3">
-                    <v-col cols="4"> Score </v-col>
-                    <v-col cols="8">
-                      {{ problems.score }}
-                    </v-col>
-                  </v-row>
-                  <v-row v-if="problems.file" class="mb-3">
-                    <v-col cols="4"> Download File Question </v-col>
-                    <v-col cols="8">
-                      <v-btn
-                        small
-                        color="primary"
-                        dark
-                        @click="download(problems.file)"
-                      >
-                        Download File
-                      </v-btn>
-                    </v-col>
-                  </v-row>
-                  <v-row class="mb-3">
-                    <v-col cols="4" class="mt-1"> Level </v-col>
-                    <v-col cols="8">
-                      <v-rating
-                        :value="problems.level"
-                        dense
-                        half-increments
-                        color="yellow darken-3"
-                        background-color="grey darken-1"
-                        hover
-                        readonly
-                      ></v-rating>
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-              </v-card>
-            </div>
-          </v-flex>
-        </v-layout>
-      </v-container>
+    <v-col cols="7">
+      <div v-if="problems">
+        <v-card class="mx-auto" max-width="1200">
+          <v-card-title class="text-h5">
+            {{ problems.title }}
+          </v-card-title>
+          <v-card-text>
+            <v-row>
+              <v-col cols="4"> Question </v-col>
+              <v-col cols="8">
+                <div v-html="problems.question"></div>
+              </v-col>
+            </v-row>
+            <v-row class="mb-3">
+              <v-col cols="4"> Score </v-col>
+              <v-col cols="8">
+                {{ problems.score }}
+              </v-col>
+            </v-row>
+            <v-row v-if="problems.file" class="mb-3">
+              <v-col cols="4"> Download File Question </v-col>
+              <v-col cols="8">
+                <v-btn
+                  small
+                  color="primary"
+                  dark
+                  @click="download(problems.file)"
+                >
+                  Download File
+                </v-btn>
+              </v-col>
+            </v-row>
+            <v-row class="mb-3">
+              <v-col cols="4" class="mt-1"> Level </v-col>
+              <v-col cols="8">
+                <v-rating
+                  :value="problems.level"
+                  dense
+                  half-increments
+                  color="yellow darken-3"
+                  background-color="grey darken-1"
+                  hover
+                  readonly
+                ></v-rating>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </div>
     </v-col>
   </v-row>
 </template>

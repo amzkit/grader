@@ -118,12 +118,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 
 
@@ -1093,162 +1087,97 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c(
-        "v-col",
-        [
-          _c(
-            "v-container",
-            { attrs: { "text-xs-center": "", fluid: "" } },
-            [
-              _c(
-                "v-layout",
-                { attrs: { row: "", wrap: "" } },
-                [
-                  _c("v-flex", { attrs: { xs12: "" } }, [
-                    _vm.problems
-                      ? _c(
-                          "div",
+      _c("v-col", { attrs: { cols: "7" } }, [
+        _vm.problems
+          ? _c(
+              "div",
+              [
+                _c(
+                  "v-card",
+                  { staticClass: "mx-auto", attrs: { "max-width": "1200" } },
+                  [
+                    _c("v-card-title", { staticClass: "text-h5" }, [
+                      _vm._v(
+                        "\n          " +
+                          _vm._s(_vm.problems.title) +
+                          "\n        "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "v-card-text",
+                      [
+                        _c(
+                          "v-row",
                           [
-                            _c(
-                              "v-card",
-                              {
-                                staticClass: "mx-auto",
-                                attrs: { "max-width": "700" }
-                              },
+                            _c("v-col", { attrs: { cols: "4" } }, [
+                              _vm._v(" Question ")
+                            ]),
+                            _vm._v(" "),
+                            _c("v-col", { attrs: { cols: "8" } }, [
+                              _c("div", {
+                                domProps: {
+                                  innerHTML: _vm._s(_vm.problems.question)
+                                }
+                              })
+                            ])
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-row",
+                          { staticClass: "mb-3" },
+                          [
+                            _c("v-col", { attrs: { cols: "4" } }, [
+                              _vm._v(" Score ")
+                            ]),
+                            _vm._v(" "),
+                            _c("v-col", { attrs: { cols: "8" } }, [
+                              _vm._v(
+                                "\n              " +
+                                  _vm._s(_vm.problems.score) +
+                                  "\n            "
+                              )
+                            ])
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _vm.problems.file
+                          ? _c(
+                              "v-row",
+                              { staticClass: "mb-3" },
                               [
-                                _c("v-card-title", { staticClass: "text-h5" }, [
-                                  _vm._v(
-                                    "\n                " +
-                                      _vm._s(_vm.problems.title) +
-                                      "\n              "
-                                  )
+                                _c("v-col", { attrs: { cols: "4" } }, [
+                                  _vm._v(" Download File Question ")
                                 ]),
                                 _vm._v(" "),
                                 _c(
-                                  "v-card-text",
+                                  "v-col",
+                                  { attrs: { cols: "8" } },
                                   [
                                     _c(
-                                      "v-row",
-                                      [
-                                        _c("v-col", { attrs: { cols: "4" } }, [
-                                          _vm._v(" Question ")
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("v-col", { attrs: { cols: "8" } }, [
-                                          _c("div", {
-                                            domProps: {
-                                              innerHTML: _vm._s(
-                                                _vm.problems.question
-                                              )
-                                            }
-                                          })
-                                        ])
-                                      ],
-                                      1
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-row",
-                                      { staticClass: "mb-3" },
-                                      [
-                                        _c("v-col", { attrs: { cols: "4" } }, [
-                                          _vm._v(" Score ")
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("v-col", { attrs: { cols: "8" } }, [
-                                          _vm._v(
-                                            "\n                    " +
-                                              _vm._s(_vm.problems.score) +
-                                              "\n                  "
-                                          )
-                                        ])
-                                      ],
-                                      1
-                                    ),
-                                    _vm._v(" "),
-                                    _vm.problems.file
-                                      ? _c(
-                                          "v-row",
-                                          { staticClass: "mb-3" },
-                                          [
-                                            _c(
-                                              "v-col",
-                                              { attrs: { cols: "4" } },
-                                              [
-                                                _vm._v(
-                                                  " Download File Question "
-                                                )
-                                              ]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-col",
-                                              { attrs: { cols: "8" } },
-                                              [
-                                                _c(
-                                                  "v-btn",
-                                                  {
-                                                    attrs: {
-                                                      small: "",
-                                                      color: "primary",
-                                                      dark: ""
-                                                    },
-                                                    on: {
-                                                      click: function($event) {
-                                                        return _vm.download(
-                                                          _vm.problems.file
-                                                        )
-                                                      }
-                                                    }
-                                                  },
-                                                  [
-                                                    _vm._v(
-                                                      "\n                      Download File\n                    "
-                                                    )
-                                                  ]
-                                                )
-                                              ],
-                                              1
+                                      "v-btn",
+                                      {
+                                        attrs: {
+                                          small: "",
+                                          color: "primary",
+                                          dark: ""
+                                        },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.download(
+                                              _vm.problems.file
                                             )
-                                          ],
-                                          1
-                                        )
-                                      : _vm._e(),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-row",
-                                      { staticClass: "mb-3" },
+                                          }
+                                        }
+                                      },
                                       [
-                                        _c(
-                                          "v-col",
-                                          {
-                                            staticClass: "mt-1",
-                                            attrs: { cols: "4" }
-                                          },
-                                          [_vm._v(" Level ")]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "v-col",
-                                          { attrs: { cols: "8" } },
-                                          [
-                                            _c("v-rating", {
-                                              attrs: {
-                                                value: _vm.problems.level,
-                                                dense: "",
-                                                "half-increments": "",
-                                                color: "yellow darken-3",
-                                                "background-color":
-                                                  "grey darken-1",
-                                                hover: "",
-                                                readonly: ""
-                                              }
-                                            })
-                                          ],
-                                          1
+                                        _vm._v(
+                                          "\n                Download File\n              "
                                         )
-                                      ],
-                                      1
+                                      ]
                                     )
                                   ],
                                   1
@@ -1256,20 +1185,50 @@ var render = function() {
                               ],
                               1
                             )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _c(
+                          "v-row",
+                          { staticClass: "mb-3" },
+                          [
+                            _c(
+                              "v-col",
+                              { staticClass: "mt-1", attrs: { cols: "4" } },
+                              [_vm._v(" Level ")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-col",
+                              { attrs: { cols: "8" } },
+                              [
+                                _c("v-rating", {
+                                  attrs: {
+                                    value: _vm.problems.level,
+                                    dense: "",
+                                    "half-increments": "",
+                                    color: "yellow darken-3",
+                                    "background-color": "grey darken-1",
+                                    hover: "",
+                                    readonly: ""
+                                  }
+                                })
+                              ],
+                              1
+                            )
                           ],
                           1
                         )
-                      : _vm._e()
-                  ])
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          : _vm._e()
+      ])
     ],
     1
   )

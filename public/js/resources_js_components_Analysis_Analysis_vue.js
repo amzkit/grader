@@ -74,8 +74,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
 
 
 
@@ -1027,6 +1025,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-row",
+    { attrs: { justify: "center" } },
     [
       _c("Loading", { attrs: { loading: this.loading } }),
       _vm._v(" "),
@@ -1041,95 +1040,86 @@ var render = function() {
       _vm._v(" "),
       _c(
         "v-col",
-        { attrs: { cols: "10" } },
+        { attrs: { cols: "9" } },
         [
-          _c(
-            "v-row",
-            { attrs: { justify: "center" } },
-            [
-              _c("v-data-table", {
-                staticClass: "elevation-1 row-pointer",
-                attrs: { headers: _vm.headers, items: _vm.items.classroom },
-                on: { click: _vm.handleClick, "click:row": _vm.handleClick },
-                scopedSlots: _vm._u(
-                  [
-                    {
-                      key: "top",
-                      fn: function() {
-                        return [
-                          _c(
-                            "v-toolbar",
-                            { attrs: { flat: "" } },
-                            [
-                              _c("v-toolbar-title", [_vm._v("Analysis")]),
-                              _vm._v(" "),
-                              _c("v-spacer")
-                            ],
-                            1
-                          )
-                        ]
-                      },
-                      proxy: true
-                    },
-                    {
-                      key: "item.index",
-                      fn: function(ref) {
-                        var index = ref.index
-                        return [
-                          _vm._v(
-                            "\n          " + _vm._s(index + 1) + "\n        "
-                          )
-                        ]
-                      }
-                    },
-                    {
-                      key: "item.problems",
-                      fn: function(ref) {
-                        var item = ref.item
-                        return [
-                          _vm._v(
-                            "\n          " +
-                              _vm._s(
-                                _vm.mapDataMyScore(item.user_id).length +
-                                  "/" +
-                                  _vm.items.schedule.length
-                              ) +
-                              "\n        "
-                          )
-                        ]
-                      }
-                    },
-                    {
-                      key: "item.totalScore",
-                      fn: function(ref) {
-                        var item = ref.item
-                        return [
-                          _vm._v(
-                            "\n          " +
-                              _vm._s(
-                                _vm
-                                  .mapDataMyScore(item.user_id)
-                                  .reduce(function(t, n) {
-                                    return t + n.score
-                                  }, 0) +
-                                  "/" +
-                                  _vm.items.schedule.reduce(function(t, n) {
-                                    return t + n.score
-                                  }, 0)
-                              ) +
-                              "\n        "
-                          )
-                        ]
-                      }
-                    }
-                  ],
-                  null,
-                  true
-                )
-              })
-            ],
-            1
-          )
+          _c("v-data-table", {
+            staticClass: "elevation-1 row-pointer",
+            attrs: { headers: _vm.headers, items: _vm.items.classroom },
+            on: { click: _vm.handleClick, "click:row": _vm.handleClick },
+            scopedSlots: _vm._u(
+              [
+                {
+                  key: "top",
+                  fn: function() {
+                    return [
+                      _c(
+                        "v-toolbar",
+                        { attrs: { flat: "" } },
+                        [
+                          _c("v-toolbar-title", [_vm._v("Analysis")]),
+                          _vm._v(" "),
+                          _c("v-spacer")
+                        ],
+                        1
+                      )
+                    ]
+                  },
+                  proxy: true
+                },
+                {
+                  key: "item.index",
+                  fn: function(ref) {
+                    var index = ref.index
+                    return [
+                      _vm._v("\n        " + _vm._s(index + 1) + "\n      ")
+                    ]
+                  }
+                },
+                {
+                  key: "item.problems",
+                  fn: function(ref) {
+                    var item = ref.item
+                    return [
+                      _vm._v(
+                        "\n        " +
+                          _vm._s(
+                            _vm.mapDataMyScore(item.user_id).length +
+                              "/" +
+                              _vm.items.schedule.length
+                          ) +
+                          "\n      "
+                      )
+                    ]
+                  }
+                },
+                {
+                  key: "item.totalScore",
+                  fn: function(ref) {
+                    var item = ref.item
+                    return [
+                      _vm._v(
+                        "\n        " +
+                          _vm._s(
+                            _vm
+                              .mapDataMyScore(item.user_id)
+                              .reduce(function(t, n) {
+                                return t + n.score
+                              }, 0) +
+                              "/" +
+                              _vm.items.schedule.reduce(function(t, n) {
+                                return t + n.score
+                              }, 0)
+                          ) +
+                          "\n      "
+                      )
+                    ]
+                  }
+                }
+              ],
+              null,
+              true
+            )
+          })
         ],
         1
       )

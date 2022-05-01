@@ -1,8 +1,8 @@
 <template>
-  <v-row>
+  <v-row justify="center">
     <Snackbar />
     <Loading :loading="loading" />
-    <v-col cols="12">
+    <v-col cols="10">
       <v-row justify="center">
         <v-card>
           <v-container fluid>

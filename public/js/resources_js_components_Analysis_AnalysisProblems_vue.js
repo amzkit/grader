@@ -79,56 +79,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -678,14 +628,15 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-row",
+    { attrs: { justify: "center" } },
     [
       _c("Loading", { attrs: { loading: this.loading } }),
       _vm._v(" "),
       _c("Snackbar"),
       _vm._v(" "),
       _c(
-        "v-row",
-        { attrs: { justify: "center" } },
+        "v-col",
+        { attrs: { cols: "10" } },
         [
           _c("v-data-table", {
             staticClass: "elevation-1 row-pointer",

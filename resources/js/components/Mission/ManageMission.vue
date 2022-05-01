@@ -1,153 +1,151 @@
 <template>
-  <v-row>
+  <v-row justify="center">
     <Loading :loading="loading" />
     <Snackbar />
-    <v-row justify="center">
-      <v-col>
-        <v-data-table
-          :headers="headers"
-          :items="desserts"
-          sort-by="calories"
-          class="elevation-1"
-          :search="search"
-        >
-          <template v-slot:top>
-            <v-toolbar flat>
-              <v-toolbar-title>Manage Problem</v-toolbar-title>
-              <v-divider class="mx-4" inset vertical></v-divider>
-              <v-spacer></v-spacer>
-              <v-text-field
-                v-model="search"
-                append-icon="mdi-magnify"
-                label="Search"
-                hide-details
-                class="mr-5"
-              ></v-text-field>
-              <v-btn
-                color="primary"
-                dark
-                class="mb-2"
-                @click="$router.push('/new-problem')"
-              >
-                New Problem
-              </v-btn>
-            </v-toolbar>
-            <v-dialog v-model="dialog" max-width="800px">
-              <v-card>
-                <v-card-title>
-                  <span class="text-h5">{{ formTitle }}</span>
-                </v-card-title>
-                <v-card-text>
-                  <v-container>
-                    <v-row>
-                      <v-col cols="8">
-                        <v-text-field v-model="editedItem.title" label="Title">
-                        </v-text-field>
-                      </v-col>
+    <v-col cols="10">
+      <v-data-table
+        :headers="headers"
+        :items="desserts"
+        sort-by="calories"
+        class="elevation-1"
+        :search="search"
+      >
+        <template v-slot:top>
+          <v-toolbar flat>
+            <v-toolbar-title>Manage Problem</v-toolbar-title>
+            <v-divider class="mx-4" inset vertical></v-divider>
+            <v-spacer></v-spacer>
+            <v-text-field
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="Search"
+              hide-details
+              class="mr-5"
+            ></v-text-field>
+            <v-btn
+              color="primary"
+              dark
+              class="mb-2"
+              @click="$router.push('/new-problem')"
+            >
+              New Problem
+            </v-btn>
+          </v-toolbar>
+          <v-dialog v-model="dialog" max-width="800px">
+            <v-card>
+              <v-card-title>
+                <span class="text-h5">{{ formTitle }}</span>
+              </v-card-title>
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="8">
+                      <v-text-field v-model="editedItem.title" label="Title">
+                      </v-text-field>
+                    </v-col>
 
-                      <v-col cols="4">
-                        <div class="text-center">
-                          <v-rating
-                            v-model="editedItem.level"
-                            color="yellow darken-3"
-                            background-color="grey darken-1"
-                            empty-icon="$ratingFull"
-                            half-increments
-                            hover
-                          ></v-rating>
-                          <div>
-                            <span class="text-caption text-uppercase"
-                              >level:</span
-                            >
-                            <span class="font-weight-bold">
-                              {{ editedItem.level }}
-                            </span>
-                          </div>
+                    <v-col cols="4">
+                      <div class="text-center">
+                        <v-rating
+                          v-model="editedItem.level"
+                          color="yellow darken-3"
+                          background-color="grey darken-1"
+                          empty-icon="$ratingFull"
+                          half-increments
+                          hover
+                        ></v-rating>
+                        <div>
+                          <span class="text-caption text-uppercase"
+                            >level:</span
+                          >
+                          <span class="font-weight-bold">
+                            {{ editedItem.level }}
+                          </span>
                         </div>
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                      <v-col cols="3">
-                        <v-text-field
-                          prefix="$"
-                          v-model="editedItem.tolerant"
-                          onfocus="this.select()"
-                          label="Tolerant"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="9">
-                        <input
-                          type="file"
-                          class="form-control mt-3"
-                          v-on:change="onFileChange"
-                        />
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                      <v-col cols="12">
-                        <VueEditor
-                          v-model="editedItem.question"
-                          :editorToolbar="customToolbar"
-                        />
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card-text>
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="3">
+                      <v-text-field
+                        prefix="$"
+                        v-model="editedItem.tolerant"
+                        onfocus="this.select()"
+                        label="Tolerant"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="9">
+                      <input
+                        type="file"
+                        class="form-control mt-3"
+                        v-on:change="onFileChange"
+                      />
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12">
+                      <VueEditor
+                        v-model="editedItem.question"
+                        :editorToolbar="customToolbar"
+                      />
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
 
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text @click="close">
-                    Cancel
-                  </v-btn>
-                  <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-            <v-dialog v-model="dialogDelete" max-width="500px">
-              <v-card>
-                <v-card-title class="text-h5"
-                  >Are you sure you want to delete this item?</v-card-title
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="close">
+                  Cancel
+                </v-btn>
+                <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          <v-dialog v-model="dialogDelete" max-width="500px">
+            <v-card>
+              <v-card-title class="text-h5"
+                >Are you sure you want to delete this item?</v-card-title
+              >
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="closeDelete"
+                  >Cancel</v-btn
                 >
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text @click="closeDelete"
-                    >Cancel</v-btn
-                  >
-                  <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-                    >OK</v-btn
-                  >
-                  <v-spacer></v-spacer>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </template>
-          <template v-slot:[`item.question`]="{ item }">
-            {{ convertToPlain(item.question) }}
-          </template>
-          <template v-slot:[`item.file`]="{ item }">
-            <div v-if="item.file">
-              <v-icon small class="mr-2" @click="download(item.file)">
-                mdi-file-download
-              </v-icon>
-            </div>
-            <div v-else>-</div>
-          </template>
-          <template v-slot:[`item.tolerant`]="{ item }">
-            {{
-              item.tolerant.replace("$", "") != ""
-                ? item.tolerant.replace("$", "")
-                : "-"
-            }}
-          </template>
-          <template v-slot:[`item.action`]="{ item }">
-            <v-icon small class="mr-2" @click="editItem(item)">
-              mdi-pencil
+                <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+                  >OK</v-btn
+                >
+                <v-spacer></v-spacer>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </template>
+        <template v-slot:[`item.question`]="{ item }">
+          {{ convertToPlain(item.question) }}
+        </template>
+        <template v-slot:[`item.file`]="{ item }">
+          <div v-if="item.file">
+            <v-icon small class="mr-2" @click="download(item.file)">
+              mdi-file-download
             </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-          </template>
-        </v-data-table>
-      </v-col>
-    </v-row>
+          </div>
+          <div v-else>-</div>
+        </template>
+        <template v-slot:[`item.tolerant`]="{ item }">
+          {{
+            item.tolerant.replace("$", "") != ""
+              ? item.tolerant.replace("$", "")
+              : "-"
+          }}
+        </template>
+        <template v-slot:[`item.action`]="{ item }">
+          <v-icon small class="mr-2" @click="editItem(item)">
+            mdi-pencil
+          </v-icon>
+          <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+        </template>
+      </v-data-table>
+    </v-col>
   </v-row>
 </template>
 

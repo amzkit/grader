@@ -129,6 +129,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -513,191 +518,203 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-row",
+    { attrs: { justify: "center" } },
     [
-      _c("Snackbar"),
-      _vm._v(" "),
-      _c("v-data-table", {
-        staticClass: "elevation-1",
-        attrs: {
-          headers: _vm.headers,
-          search: _vm.search,
-          items: _vm.desserts.filter(function(e) {
-            if (this$1.status === "student") {
-              if (e.role_student === 1) {
-                return e
-              }
-            } else if (this$1.status === "ta") {
-              if (e.role_ta === 1) {
-                return e
-              }
-            } else if (this$1.status === "teacher") {
-              if (e.role_teacher === 1) {
-                return e
-              }
-            } else if (this$1.status === "all") {
-              return e
-            }
-          }),
-          "sort-by": "calories"
-        },
-        scopedSlots: _vm._u(
-          [
-            {
-              key: "top",
-              fn: function() {
-                return [
-                  _c(
-                    "v-toolbar",
-                    { attrs: { flat: "" } },
-                    [
-                      _c("v-toolbar-title", [_vm._v("Manage Users")]),
-                      _vm._v(" "),
-                      _c("v-divider", {
-                        staticClass: "mx-4",
-                        attrs: { inset: "", vertical: "" }
-                      }),
-                      _vm._v(" "),
-                      _c("v-spacer"),
-                      _vm._v(" "),
-                      _c("v-text-field", {
-                        staticClass: "mr-5",
-                        attrs: {
-                          "append-icon": "mdi-magnify",
-                          label: "Search",
-                          "hide-details": ""
-                        },
-                        model: {
-                          value: _vm.search,
-                          callback: function($$v) {
-                            _vm.search = $$v
-                          },
-                          expression: "search"
-                        }
-                      }),
-                      _vm._v(" "),
+      _c(
+        "v-col",
+        { attrs: { cols: "10" } },
+        [
+          _c("Snackbar"),
+          _vm._v(" "),
+          _c("v-data-table", {
+            staticClass: "elevation-1",
+            attrs: {
+              headers: _vm.headers,
+              search: _vm.search,
+              items: _vm.desserts.filter(function(e) {
+                if (this$1.status === "student") {
+                  if (e.role_student === 1) {
+                    return e
+                  }
+                } else if (this$1.status === "ta") {
+                  if (e.role_ta === 1) {
+                    return e
+                  }
+                } else if (this$1.status === "teacher") {
+                  if (e.role_teacher === 1) {
+                    return e
+                  }
+                } else if (this$1.status === "all") {
+                  return e
+                }
+              }),
+              "sort-by": "calories"
+            },
+            scopedSlots: _vm._u(
+              [
+                {
+                  key: "top",
+                  fn: function() {
+                    return [
                       _c(
-                        "v-dialog",
-                        {
-                          attrs: { "max-width": "800px" },
-                          model: {
-                            value: _vm.dialog,
-                            callback: function($$v) {
-                              _vm.dialog = $$v
-                            },
-                            expression: "dialog"
-                          }
-                        },
+                        "v-toolbar",
+                        { attrs: { flat: "" } },
                         [
+                          _c("v-toolbar-title", [_vm._v("Manage Users")]),
+                          _vm._v(" "),
+                          _c("v-divider", {
+                            staticClass: "mx-4",
+                            attrs: { inset: "", vertical: "" }
+                          }),
+                          _vm._v(" "),
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            staticClass: "mr-5",
+                            attrs: {
+                              "append-icon": "mdi-magnify",
+                              label: "Search",
+                              "hide-details": ""
+                            },
+                            model: {
+                              value: _vm.search,
+                              callback: function($$v) {
+                                _vm.search = $$v
+                              },
+                              expression: "search"
+                            }
+                          }),
+                          _vm._v(" "),
                           _c(
-                            "v-card",
+                            "v-dialog",
+                            {
+                              attrs: { "max-width": "800px" },
+                              model: {
+                                value: _vm.dialog,
+                                callback: function($$v) {
+                                  _vm.dialog = $$v
+                                },
+                                expression: "dialog"
+                              }
+                            },
                             [
                               _c(
-                                "v-card-text",
+                                "v-card",
                                 [
                                   _c(
-                                    "v-container",
+                                    "v-card-text",
                                     [
                                       _c(
-                                        "v-row",
+                                        "v-container",
                                         [
                                           _c(
-                                            "v-col",
-                                            { attrs: { cols: "12" } },
-                                            [
-                                              _c("v-text-field", {
-                                                attrs: {
-                                                  label: "Username",
-                                                  disabled: ""
-                                                },
-                                                model: {
-                                                  value:
-                                                    _vm.editedItem.username,
-                                                  callback: function($$v) {
-                                                    _vm.$set(
-                                                      _vm.editedItem,
-                                                      "username",
-                                                      $$v
-                                                    )
-                                                  },
-                                                  expression:
-                                                    "editedItem.username"
-                                                }
-                                              })
-                                            ],
-                                            1
-                                          ),
-                                          _vm._v(" "),
-                                          _c(
-                                            "v-col",
-                                            { attrs: { cols: "12" } },
-                                            [
-                                              _c("v-text-field", {
-                                                attrs: { label: "Name" },
-                                                model: {
-                                                  value: _vm.editedItem.name,
-                                                  callback: function($$v) {
-                                                    _vm.$set(
-                                                      _vm.editedItem,
-                                                      "name",
-                                                      $$v
-                                                    )
-                                                  },
-                                                  expression: "editedItem.name"
-                                                }
-                                              })
-                                            ],
-                                            1
-                                          ),
-                                          _vm._v(" "),
-                                          _c(
-                                            "v-col",
-                                            { attrs: { cols: "9" } },
-                                            [
-                                              _c("v-text-field", {
-                                                attrs: {
-                                                  label: "Email",
-                                                  disabled: ""
-                                                },
-                                                model: {
-                                                  value: _vm.editedItem.email,
-                                                  callback: function($$v) {
-                                                    _vm.$set(
-                                                      _vm.editedItem,
-                                                      "email",
-                                                      $$v
-                                                    )
-                                                  },
-                                                  expression: "editedItem.email"
-                                                }
-                                              })
-                                            ],
-                                            1
-                                          ),
-                                          _vm._v(" "),
-                                          _c(
-                                            "v-col",
-                                            { attrs: { cols: "3" } },
+                                            "v-row",
                                             [
                                               _c(
-                                                "v-btn",
-                                                {
-                                                  staticClass: "ma-2",
-                                                  attrs: {
-                                                    loading: _vm.loading,
-                                                    disabled: _vm.loading,
-                                                    color: "primary"
-                                                  },
-                                                  on: {
-                                                    click: function() {
-                                                      _vm.loader = "loading"
-                                                    }
-                                                  }
-                                                },
+                                                "v-col",
+                                                { attrs: { cols: "12" } },
                                                 [
-                                                  _vm._v(
-                                                    "\n                      Reset password\n                    "
+                                                  _c("v-text-field", {
+                                                    attrs: {
+                                                      label: "Username",
+                                                      disabled: ""
+                                                    },
+                                                    model: {
+                                                      value:
+                                                        _vm.editedItem.username,
+                                                      callback: function($$v) {
+                                                        _vm.$set(
+                                                          _vm.editedItem,
+                                                          "username",
+                                                          $$v
+                                                        )
+                                                      },
+                                                      expression:
+                                                        "editedItem.username"
+                                                    }
+                                                  })
+                                                ],
+                                                1
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "v-col",
+                                                { attrs: { cols: "12" } },
+                                                [
+                                                  _c("v-text-field", {
+                                                    attrs: { label: "Name" },
+                                                    model: {
+                                                      value:
+                                                        _vm.editedItem.name,
+                                                      callback: function($$v) {
+                                                        _vm.$set(
+                                                          _vm.editedItem,
+                                                          "name",
+                                                          $$v
+                                                        )
+                                                      },
+                                                      expression:
+                                                        "editedItem.name"
+                                                    }
+                                                  })
+                                                ],
+                                                1
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "v-col",
+                                                { attrs: { cols: "9" } },
+                                                [
+                                                  _c("v-text-field", {
+                                                    attrs: {
+                                                      label: "Email",
+                                                      disabled: ""
+                                                    },
+                                                    model: {
+                                                      value:
+                                                        _vm.editedItem.email,
+                                                      callback: function($$v) {
+                                                        _vm.$set(
+                                                          _vm.editedItem,
+                                                          "email",
+                                                          $$v
+                                                        )
+                                                      },
+                                                      expression:
+                                                        "editedItem.email"
+                                                    }
+                                                  })
+                                                ],
+                                                1
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "v-col",
+                                                { attrs: { cols: "3" } },
+                                                [
+                                                  _c(
+                                                    "v-btn",
+                                                    {
+                                                      staticClass: "ma-2",
+                                                      attrs: {
+                                                        loading: _vm.loading,
+                                                        disabled: _vm.loading,
+                                                        color: "primary"
+                                                      },
+                                                      on: {
+                                                        click: function() {
+                                                          _vm.loader = "loading"
+                                                        }
+                                                      }
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                        Reset password\n                      "
+                                                      )
+                                                    ]
                                                   )
-                                                ]
+                                                ],
+                                                1
                                               )
                                             ],
                                             1
@@ -707,42 +724,42 @@ var render = function() {
                                       )
                                     ],
                                     1
-                                  )
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-card-actions",
-                                [
-                                  _c("v-spacer"),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-btn",
-                                    {
-                                      attrs: {
-                                        color: "blue darken-1",
-                                        text: ""
-                                      },
-                                      on: { click: _vm.close }
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\n                Cancel\n              "
-                                      )
-                                    ]
                                   ),
                                   _vm._v(" "),
                                   _c(
-                                    "v-btn",
-                                    {
-                                      attrs: {
-                                        color: "blue darken-1",
-                                        text: ""
-                                      },
-                                      on: { click: _vm.save }
-                                    },
-                                    [_vm._v(" Save ")]
+                                    "v-card-actions",
+                                    [
+                                      _c("v-spacer"),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: {
+                                            color: "blue darken-1",
+                                            text: ""
+                                          },
+                                          on: { click: _vm.close }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                  Cancel\n                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: {
+                                            color: "blue darken-1",
+                                            text: ""
+                                          },
+                                          on: { click: _vm.save }
+                                        },
+                                        [_vm._v(" Save ")]
+                                      )
+                                    ],
+                                    1
                                   )
                                 ],
                                 1
@@ -753,39 +770,39 @@ var render = function() {
                         ],
                         1
                       )
-                    ],
-                    1
-                  )
-                ]
-              },
-              proxy: true
-            },
-            {
-              key: "item.action",
-              fn: function(ref) {
-                var item = ref.item
-                return [
-                  _c(
-                    "v-icon",
-                    {
-                      staticClass: "mr-2",
-                      attrs: { small: "" },
-                      on: {
-                        click: function($event) {
-                          return _vm.editItem(item)
-                        }
-                      }
-                    },
-                    [_vm._v(" mdi-pencil ")]
-                  )
-                ]
-              }
-            }
-          ],
-          null,
-          true
-        )
-      })
+                    ]
+                  },
+                  proxy: true
+                },
+                {
+                  key: "item.action",
+                  fn: function(ref) {
+                    var item = ref.item
+                    return [
+                      _c(
+                        "v-icon",
+                        {
+                          staticClass: "mr-2",
+                          attrs: { small: "" },
+                          on: {
+                            click: function($event) {
+                              return _vm.editItem(item)
+                            }
+                          }
+                        },
+                        [_vm._v("\n          mdi-pencil\n        ")]
+                      )
+                    ]
+                  }
+                }
+              ],
+              null,
+              true
+            )
+          })
+        ],
+        1
+      )
     ],
     1
   )

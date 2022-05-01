@@ -11,5 +11,6 @@ class Announce extends Model
     protected $fillable = [
         'id',
         'picture',
+        'IsActive'
     ];
 }

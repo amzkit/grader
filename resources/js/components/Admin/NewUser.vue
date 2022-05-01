@@ -1,82 +1,80 @@
 <template>
-  <v-row>
-    <v-col cols="12">
-      <div>
-        <v-row justify="center">
-          <v-card>
-            <v-container fluid>
-              <h1>New User</h1>
+  <v-row justify="center">
+    <v-col cols="10">
+      <v-row justify="center">
+        <v-card>
+          <v-container fluid>
+            <h1>New User</h1>
+            <v-row align="center">
+              <v-col cols="4">
+                <v-subheader> Status </v-subheader>
+              </v-col>
+              <v-col cols="6">
+                <v-radio-group v-model="status" row>
+                  <v-radio label="Teacher" value="teacher"></v-radio>
+                </v-radio-group>
+              </v-col>
+            </v-row>
+            <div v-if="this.status === 'teacher'">
               <v-row align="center">
                 <v-col cols="4">
-                  <v-subheader> Status </v-subheader>
+                  <v-subheader> Username </v-subheader>
                 </v-col>
                 <v-col cols="6">
-                  <v-radio-group v-model="status" row>
-                    <v-radio label="Teacher" value="teacher"></v-radio>
-                  </v-radio-group>
+                  <v-text-field
+                    :rules="[rules.required]"
+                    v-model="username"
+                    label="Username"
+                  ></v-text-field>
                 </v-col>
               </v-row>
-              <div v-if="this.status === 'teacher'">
-                <v-row align="center">
-                  <v-col cols="4">
-                    <v-subheader> Username </v-subheader>
-                  </v-col>
-                  <v-col cols="6">
-                    <v-text-field
-                      :rules="[rules.required]"
-                      v-model="username"
-                      label="Username"
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-                <v-row align="center">
-                  <v-col cols="4">
-                    <v-subheader> Name </v-subheader>
-                  </v-col>
-                  <v-col cols="6">
-                    <v-text-field
-                      v-model="name"
-                      :rules="[rules.required]"
-                      label="Name"
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-                <v-row align="center">
-                  <v-col cols="4">
-                    <v-subheader> E-mail </v-subheader>
-                  </v-col>
-                  <v-col cols="6">
-                    <v-text-field
-                      v-model="email"
-                      :rules="[rules.required, rules.email]"
-                      label="E-mail"
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-                <v-row align="center">
-                  <v-col cols="4">
-                    <v-subheader> Password </v-subheader>
-                  </v-col>
-                  <v-col cols="6">
-                    <v-text-field
-                      v-model="password"
-                      :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                      :rules="[rules.required]"
-                      :type="showPassword ? 'text' : 'password'"
-                      label="Password"
-                      hint="At least 8 characters"
-                      value="wqfasds"
-                      class="input-group--focused"
-                      @click:append="showPassword = !showPassword"
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-              </div>
-            </v-container>
-          </v-card>
-          <v-btn @click="formSubmit" color="primary"> Save </v-btn>
-        </v-row>
-      </div>
+              <v-row align="center">
+                <v-col cols="4">
+                  <v-subheader> Name </v-subheader>
+                </v-col>
+                <v-col cols="6">
+                  <v-text-field
+                    v-model="name"
+                    :rules="[rules.required]"
+                    label="Name"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row align="center">
+                <v-col cols="4">
+                  <v-subheader> E-mail </v-subheader>
+                </v-col>
+                <v-col cols="6">
+                  <v-text-field
+                    v-model="email"
+                    :rules="[rules.required, rules.email]"
+                    label="E-mail"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row align="center">
+                <v-col cols="4">
+                  <v-subheader> Password </v-subheader>
+                </v-col>
+                <v-col cols="6">
+                  <v-text-field
+                    v-model="password"
+                    :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                    :rules="[rules.required]"
+                    :type="showPassword ? 'text' : 'password'"
+                    label="Password"
+                    hint="At least 8 characters"
+                    value="wqfasds"
+                    class="input-group--focused"
+                    @click:append="showPassword = !showPassword"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </div>
+          </v-container>
+        </v-card>
+        <v-btn @click="formSubmit" color="primary"> Save </v-btn>
+      </v-row>
     </v-col>
   </v-row>
 </template>

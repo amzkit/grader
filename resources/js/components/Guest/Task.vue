@@ -30,79 +30,65 @@
       </v-card>
     </v-col>
     <v-col cols="1"> <v-divider vertical></v-divider></v-col>
-
-    <v-col>
-      <v-container text-xs-center fluid>
-        <v-layout row wrap>
-          <v-flex xs12>
-            <div v-if="schedule_room">
-              <v-card class="mx-auto" max-width="700">
-                <v-card-title class="text-h5">
-                  {{ schedule_room.title }}
-                </v-card-title>
-                <v-card-text>
-                  <v-row>
-                    <v-col cols="4"> Question </v-col>
-                    <v-col cols="8">
-                      <div v-html="schedule_room.question"></div>
-                    </v-col>
-                  </v-row>
-                  <v-row class="mb-3">
-                    <v-col cols="4"> Score </v-col>
-                    <v-col cols="8">
-                      {{ schedule_room.score }}
-                    </v-col>
-                  </v-row>
-                  <v-row v-if="schedule_room.file" class="mb-3">
-                    <v-col cols="4"> Download File Question </v-col>
-                    <v-col cols="8">
-                      <v-btn
-                        small
-                        color="primary"
-                        dark
-                        @click="download(schedule_room.file)"
-                      >
-                        Download File
-                      </v-btn>
-                    </v-col>
-                  </v-row>
-                  <v-row class="mb-3">
-                    <v-col cols="4" class="mt-6"> Language </v-col>
-                    <v-col cols="8">
-                      <v-autocomplete
-                        v-model="languagesId"
-                        :items="languages"
-                        label="Language"
-                        item-text="lang"
-                        item-value="id"
-                      >
-                      </v-autocomplete>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="4"> File Import </v-col>
-                    <v-col cols="8">
-                      <input
-                        type="file"
-                        class="form-control"
-                        ref="file_upload"
-                        v-on:change="onFileChange"
-                        :accept="languageAccept"
-                      />
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="green darken-1" text @click="submit()">
-                    Submit
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </div>
-          </v-flex>
-        </v-layout>
-      </v-container>
+    <v-col cols="7">
+      <div v-if="schedule_room">
+        <v-card class="mx-auto" max-width="1200">
+          <v-card-title class="text-h5">
+            {{ schedule_room.title }}
+          </v-card-title>
+          <v-card-text>
+            <v-row>
+              <v-col cols="4"> Question </v-col>
+              <v-col cols="8">
+                <div v-html="schedule_room.question"></div>
+              </v-col>
+            </v-row>
+            <v-row class="mb-3">
+              <v-col cols="4"> Score </v-col>
+              <v-col cols="8">
+                {{ schedule_room.score }}
+              </v-col>
+            </v-row>
+            <v-row v-if="schedule_room.file" class="mb-3">
+              <v-col cols="4"> Download File Question </v-col>
+              <v-col cols="8">
+                <v-btn
+                  small
+                  color="primary"
+                  dark
+                  @click="download(schedule_room.file)"
+                >
+                  Download File
+                </v-btn>
+              </v-col>
+            </v-row>
+            <v-row class="mb-3">
+              <v-col cols="4"> Language </v-col>
+              <v-col cols="8">
+                {{ schedule_room.language }}
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="4"> File Import </v-col>
+              <v-col cols="8">
+                <input
+                  type="file"
+                  class="form-control"
+                  ref="file_upload"
+                  v-on:change="onFileChange"
+                  :accept="schedule_room.language_accept"
+                />
+              </v-col>
+            </v-row>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" text @click="submit()">
+              Submit
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </div>
     </v-col>
   </v-row>
 </template>
@@ -123,8 +109,6 @@ export default {
   },
   data: function () {
     return {
-      languages: [],
-      languagesId: 0,
       schedule_room: null,
       search: "",
       loading: false,
@@ -142,22 +126,9 @@ export default {
   },
 
   computed: {
-    languageAccept() {
-      const language = this.languages.find(
-        (e) => e.id == this.languagesId
-      )?.type;
-      return language;
-    },
     filteredItems() {
-      const item = this.schedules.filter((e) => {
-        const missionSend = this.submissions.find((p) => p.schedule_id == e.id);
-        if (missionSend) {
-          return null;
-        }
-        return e;
-      });
       return _.orderBy(
-        item.filter((item) => {
+        this.schedules.filter((item) => {
           return item.title.toLowerCase().includes(this.search.toLowerCase());
         }),
         "headline"
@@ -177,7 +148,7 @@ export default {
     },
     async submit() {
       if (!this.file) {
-        return console.log("NO");
+        this.snackBar(3500, "Please your input file.", "warning");
       }
       this.loading = true;
       this.dialog = false;
@@ -186,10 +157,7 @@ export default {
       };
       let formData = new FormData();
       formData.append("sourcefile", this.file);
-      formData.append(
-        "Lang",
-        this.languages.find((e) => (e.id = this.languagesId)).lang
-      );
+      formData.append("Lang", this.schedule_room.language);
       formData.append("problem_id", this.schedule_room.problemsId);
       formData.append("course_id", this.schedule_room.course_id);
       await axios

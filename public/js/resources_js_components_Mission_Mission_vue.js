@@ -438,14 +438,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                if (_this4.problem.sendFile) {
-                  _context.next = 2;
-                  break;
+                if (!_this4.problem.sendFile) {
+                  _this4.snackBar(3500, "Please your input file.", "warning");
                 }
 
-                return _context.abrupt("return", console.log("NO"));
-
-              case 2:
                 _this4.loading = true;
                 _this4.dialog = false;
                 config = {
@@ -458,7 +454,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 formData.append("Lang", _this4.problem.lang);
                 formData.append("problem_id", _this4.problem.problem_id);
                 formData.append("course_id", _this4.$route.query.course_id);
-                _context.next = 12;
+                _context.next = 11;
                 return axios.post("/api/submission", formData, config).then(function (response) {
                   if (response.data.success) {
                     window.location.reload();
@@ -467,10 +463,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   _this4.snackBar(3500, error, "error");
                 });
 
-              case 12:
+              case 11:
                 _this4.loading = false;
 
-              case 13:
+              case 12:
               case "end":
                 return _context.stop();
             }
@@ -1475,6 +1471,7 @@ var render = function() {
       _vm._v(" "),
       _c(
         "v-col",
+        { attrs: { cols: "7" } },
         [
           _c(
             "v-row",

@@ -16,7 +16,7 @@
             solo
             dense
           ></v-text-field>
-          <v-list-item-group>
+          <v-list-item-group v-model="selected">
             <v-list-item
               v-for="(item, i) in filteredItems"
               :key="i"
@@ -33,7 +33,7 @@
       </v-card>
     </v-col>
     <v-col cols="1"> <v-divider vertical></v-divider></v-col>
-    <v-col>
+    <v-col cols="7">
       <v-row>
         <v-data-table
           :headers="headers"
@@ -146,7 +146,6 @@
 
 
 <script>
-import Excel from "exceljs";
 import { saveAs } from "file-saver";
 import dayjs from "dayjs";
 import Navigation from "../Navigation/Navigation.vue";
@@ -163,6 +162,7 @@ export default {
   },
   data: function () {
     return {
+      selected: 0,
       exportData: null,
       course_room: [],
       expanded: [],
@@ -191,9 +191,8 @@ export default {
     };
   },
   async created() {
-    this.getScoreboard();
-    this.getClassrooms();
-    this.fetchItemCourse();
+    await this.fetchItemCourse();
+    this.fetchRoom(this.course_room[0] ? this.course_room[0].courseId : 0);
   },
   computed: {
     filteredItems() {
@@ -273,6 +272,7 @@ export default {
         .catch(() => {
           this.snackBar(3500, "Please select a classroom.", "warning");
         });
+
       this.loading = false;
     },
     async fetchItemCourse() {
@@ -281,7 +281,9 @@ export default {
         .get("api/classroom")
         .then((response) => {
           if (response.data.success == true) {
-            this.course_room = response.data.payload;
+            this.course_room = response.data.payload.filter(
+              (e) => e.courseId != 1
+            );
           }
         })
         .catch((error) => {
@@ -306,29 +308,6 @@ export default {
           ? this.data.scoreboard.filter((e) => e.user_id === user_id)
           : this.data.scoreboard
       );
-    },
-    async getClassrooms() {
-      this.loading = true;
-      await axios
-        .get("/api/classrooms")
-        .then((response) => {
-          if (response.data.success == true) {
-            this.items = response.data.payload.filter((e) => {
-              if (
-                this.$store.state.data.user.role !== "teacher" &&
-                this.$store.state.data.user.role !== "admin"
-              ) {
-                return e.courseId !== 1;
-              }
-              return e;
-            });
-          }
-        })
-        .catch((error) => {
-          this.snackBar(3500, error, "error");
-        });
-
-      this.loading = false;
     },
   },
 };

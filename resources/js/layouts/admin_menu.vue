@@ -366,6 +366,11 @@ export default {
           text: "Scoreboard",
         },
         {
+          to: "/announce",
+          icon: "mdi-view-dashboard",
+          text: "Announcement",
+        },
+        {
           icon: "mdi-account",
           text: "User",
           subLinks: [
@@ -409,7 +414,6 @@ export default {
       this.$router.push(url);
     },
     async changeRoleUser(role) {
-      console.log(role);
       await axios.put("api/user/" + this.$store.state.data.user.id, {
         role: role,
       });

@@ -1,275 +1,269 @@
 <template>
-  <v-row>
+  <v-row justify="center">
     <Loading :loading="loading" />
     <Snackbar />
     <v-col cols="2">
       <Navigation :onClick="fetchItemClassroom" />
     </v-col>
-    <v-col cols="10">
-      <v-row justify="center">
-        <v-col>
-          <v-data-table
-            :headers="headers"
-            :items="desserts.filter((e) => e.role != 'teacher')"
-            sort-by="calories"
-            class="elevation-1"
-            :search="search"
-          >
-            <template v-slot:top>
-              <v-toolbar flat>
-                <v-toolbar-title>Manage Classroom</v-toolbar-title>
-                <v-divider class="mx-4" inset vertical></v-divider>
-                <v-spacer></v-spacer>
-                <v-text-field
-                  v-model="search"
-                  append-icon="mdi-magnify"
-                  label="Search"
-                  hide-details
-                  class="mr-5"
-                ></v-text-field>
-                <v-dialog v-model="dialog" max-width="650px">
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                      color="primary"
-                      dark
-                      class="mb-2"
-                      v-bind="attrs"
-                      v-on="on"
-                    >
-                      New Users
-                    </v-btn>
-                  </template>
-                  <v-card>
-                    <v-toolbar flat color="primary" dark>
-                      <v-toolbar-title>{{ formTitle }}</v-toolbar-title>
-                    </v-toolbar>
-                    <div v-if="editedIndex === -1">
-                      <v-tabs vertical>
-                        <v-tab>
-                          <v-icon left> mdi-upload </v-icon>
-                          Import File
-                        </v-tab>
-                        <v-tab>
-                          <v-icon left> mdi-account-plus </v-icon>
-                          Add
-                        </v-tab>
-                        <v-tab-item>
-                          <v-card flat>
-                            <v-card-text>
-                              <template>
-                                <input
-                                  type="file"
-                                  class="form-control"
-                                  v-on:change="onFileChange"
-                                />
-                              </template>
+    <v-col cols="9">
+      <v-data-table
+        :headers="headers"
+        :items="desserts.filter((e) => e.role != 'teacher')"
+        sort-by="calories"
+        class="elevation-1"
+        :search="search"
+      >
+        <template v-slot:top>
+          <v-toolbar flat>
+            <v-toolbar-title>Manage Classroom</v-toolbar-title>
+            <v-divider class="mx-4" inset vertical></v-divider>
+            <v-spacer></v-spacer>
+            <v-text-field
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="Search"
+              hide-details
+              class="mr-5"
+            ></v-text-field>
+            <v-dialog v-model="dialog" max-width="650px">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  color="primary"
+                  dark
+                  class="mb-2"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  New Users
+                </v-btn>
+              </template>
+              <v-card>
+                <v-toolbar flat color="primary" dark>
+                  <v-toolbar-title>{{ formTitle }}</v-toolbar-title>
+                </v-toolbar>
+                <div v-if="editedIndex === -1">
+                  <v-tabs vertical>
+                    <v-tab>
+                      <v-icon left> mdi-upload </v-icon>
+                      Import File
+                    </v-tab>
+                    <v-tab>
+                      <v-icon left> mdi-account-plus </v-icon>
+                      Add
+                    </v-tab>
+                    <v-tab-item>
+                      <v-card flat>
+                        <v-card-text>
+                          <template>
+                            <input
+                              type="file"
+                              class="form-control"
+                              v-on:change="onFileChange"
+                            />
+                          </template>
 
-                              <v-menu
-                                v-model="menu1"
-                                :close-on-content-click="false"
-                                max-width="290"
-                              >
-                                <template v-slot:activator="{ on, attrs }">
-                                  <v-text-field
-                                    :value="computedDateFormattedStartDate"
-                                    clearable
-                                    label="Start Date"
-                                    readonly
-                                    v-bind="attrs"
-                                    v-on="on"
-                                    @click:clear="start_date = null"
-                                  ></v-text-field>
-                                </template>
-                                <v-date-picker
-                                  v-model="start_date"
-                                  @change="menu1 = false"
-                                ></v-date-picker>
-                              </v-menu>
-                              <v-menu
-                                v-model="menu2"
-                                :close-on-content-click="false"
-                                max-width="290"
-                              >
-                                <template v-slot:activator="{ on, attrs }">
-                                  <v-text-field
-                                    :value="computedDateFormattedEndDate"
-                                    clearable
-                                    label="End Date"
-                                    readonly
-                                    v-bind="attrs"
-                                    v-on="on"
-                                    @click:clear="end_date = null"
-                                  ></v-text-field>
-                                </template>
-                                <v-date-picker
-                                  v-model="end_date"
-                                  @change="menu2 = false"
-                                ></v-date-picker>
-                              </v-menu>
-                            </v-card-text>
-                          </v-card>
-                        </v-tab-item>
-                        <v-tab-item>
-                          <v-card flat>
-                            <v-card-text>
-                              <v-col cols="12">
-                                <v-autocomplete
-                                  v-model="selectUser"
-                                  :items="userItems"
-                                  label="Name"
-                                  item-text="name"
-                                  item-value="id"
-                                ></v-autocomplete>
-                                <v-text-field
-                                  v-model="editedItem.year"
-                                  label="Year"
-                                  type="number"
-                                ></v-text-field>
+                          <v-menu
+                            v-model="menu1"
+                            :close-on-content-click="false"
+                            max-width="290"
+                          >
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-text-field
+                                :value="computedDateFormattedStartDate"
+                                clearable
+                                label="Start Date"
+                                readonly
+                                v-bind="attrs"
+                                v-on="on"
+                                @click:clear="start_date = null"
+                              ></v-text-field>
+                            </template>
+                            <v-date-picker
+                              v-model="start_date"
+                              @change="menu1 = false"
+                            ></v-date-picker>
+                          </v-menu>
+                          <v-menu
+                            v-model="menu2"
+                            :close-on-content-click="false"
+                            max-width="290"
+                          >
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-text-field
+                                :value="computedDateFormattedEndDate"
+                                clearable
+                                label="End Date"
+                                readonly
+                                v-bind="attrs"
+                                v-on="on"
+                                @click:clear="end_date = null"
+                              ></v-text-field>
+                            </template>
+                            <v-date-picker
+                              v-model="end_date"
+                              @change="menu2 = false"
+                            ></v-date-picker>
+                          </v-menu>
+                        </v-card-text>
+                      </v-card>
+                    </v-tab-item>
+                    <v-tab-item>
+                      <v-card flat>
+                        <v-card-text>
+                          <v-col cols="12">
+                            <v-autocomplete
+                              v-model="selectUser"
+                              :items="userItems"
+                              label="Name"
+                              item-text="name"
+                              item-value="id"
+                            ></v-autocomplete>
+                            <v-text-field
+                              v-model="editedItem.year"
+                              label="Year"
+                              type="number"
+                            ></v-text-field>
 
-                                <v-text-field
-                                  v-model="editedItem.section"
-                                  label="Section"
-                                ></v-text-field>
-                                <v-text-field
-                                  v-model="editedItem.semester"
-                                  label="Semester"
-                                ></v-text-field>
-                                <v-row>
-                                  <v-col cols="4">
-                                    <v-checkbox
-                                      v-model="editedItem.teacher"
-                                      label="Teacher"
-                                    ></v-checkbox>
-                                  </v-col>
-                                  <v-col cols="4">
-                                    <v-checkbox
-                                      v-model="editedItem.ta"
-                                      label="TA"
-                                    ></v-checkbox>
-                                  </v-col>
-                                  <v-col cols="4">
-                                    <v-checkbox
-                                      v-model="editedItem.student"
-                                      label="Student"
-                                    ></v-checkbox>
-                                  </v-col>
-                                </v-row>
+                            <v-text-field
+                              v-model="editedItem.section"
+                              label="Section"
+                            ></v-text-field>
+                            <v-text-field
+                              v-model="editedItem.semester"
+                              label="Semester"
+                            ></v-text-field>
+                            <v-row>
+                              <v-col cols="4">
+                                <v-checkbox
+                                  v-model="editedItem.teacher"
+                                  label="Teacher"
+                                ></v-checkbox>
                               </v-col>
-                            </v-card-text>
-                          </v-card>
-                        </v-tab-item>
-                      </v-tabs>
-                    </div>
-                    <div v-else>
-                      <v-card-text>
-                        <v-container>
-                          <v-row>
-                            <v-card-text>
-                              <v-col cols="12">
-                                <v-text-field
-                                  v-model="editedItem.name"
-                                  label="Name"
-                                  disabled
-                                ></v-text-field>
-                                <v-text-field
-                                  v-model="editedItem.section"
-                                  label="Section"
-                                ></v-text-field>
-                                <v-text-field
-                                  v-model="editedItem.semester"
-                                  label="Semester"
-                                ></v-text-field>
-                                <div v-if="!editedItem.teacher">
-                                  <v-row>
-                                    <!-- <v-col cols="4">
+                              <v-col cols="4">
+                                <v-checkbox
+                                  v-model="editedItem.ta"
+                                  label="TA"
+                                ></v-checkbox>
+                              </v-col>
+                              <v-col cols="4">
+                                <v-checkbox
+                                  v-model="editedItem.student"
+                                  label="Student"
+                                ></v-checkbox>
+                              </v-col>
+                            </v-row>
+                          </v-col>
+                        </v-card-text>
+                      </v-card>
+                    </v-tab-item>
+                  </v-tabs>
+                </div>
+                <div v-else>
+                  <v-card-text>
+                    <v-container>
+                      <v-row>
+                        <v-card-text>
+                          <v-col cols="12">
+                            <v-text-field
+                              v-model="editedItem.name"
+                              label="Name"
+                              disabled
+                            ></v-text-field>
+                            <v-text-field
+                              v-model="editedItem.section"
+                              label="Section"
+                            ></v-text-field>
+                            <v-text-field
+                              v-model="editedItem.semester"
+                              label="Semester"
+                            ></v-text-field>
+                            <div v-if="!editedItem.teacher">
+                              <v-row>
+                                <!-- <v-col cols="4">
                                     <v-checkbox
                                       v-model="editedItem.teacher"
                                       label="Teacher"
                                     ></v-checkbox>
                                   </v-col> -->
-                                    <v-col cols="6">
-                                      <v-checkbox
-                                        v-model="editedItem.ta"
-                                        label="TA"
-                                      ></v-checkbox>
-                                    </v-col>
-                                    <v-col cols="6">
-                                      <v-checkbox
-                                        v-model="editedItem.student"
-                                        label="Student"
-                                      ></v-checkbox>
-                                    </v-col>
-                                  </v-row>
-                                </div>
-                              </v-col>
-                            </v-card-text>
-                          </v-row>
-                        </v-container>
-                      </v-card-text>
-                    </div>
+                                <v-col cols="6">
+                                  <v-checkbox
+                                    v-model="editedItem.ta"
+                                    label="TA"
+                                  ></v-checkbox>
+                                </v-col>
+                                <v-col cols="6">
+                                  <v-checkbox
+                                    v-model="editedItem.student"
+                                    label="Student"
+                                  ></v-checkbox>
+                                </v-col>
+                              </v-row>
+                            </div>
+                          </v-col>
+                        </v-card-text>
+                      </v-row>
+                    </v-container>
+                  </v-card-text>
+                </div>
 
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn color="blue darken-1" text @click="close">
-                        Cancel
-                      </v-btn>
-                      <v-btn color="blue darken-1" text @click="save">
-                        Save
-                      </v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
-                <v-dialog v-model="dialogDelete" max-width="500px">
-                  <v-card>
-                    <v-card-title class="text-h5"
-                      >Are you sure you want to delete this item?</v-card-title
-                    >
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn color="blue darken-1" text @click="closeDelete"
-                        >Cancel</v-btn
-                      >
-                      <v-btn
-                        color="blue darken-1"
-                        text
-                        @click="deleteItemConfirm"
-                        >OK</v-btn
-                      >
-                      <v-spacer></v-spacer>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
-              </v-toolbar>
-            </template>
-            <template v-slot:[`item.section`]="{ item }">
-              {{ item.section ? item.section : "-" }}
-            </template>
-            <template v-slot:[`item.semester`]="{ item }">
-              {{ item.semester ? item.semester : "-" }}
-            </template>
-            <template v-slot:[`item.year`]="{ item }">
-              {{ item.year ? item.year : "-" }}
-            </template>
-            <template v-slot:[`item.role`]="{ item }">
-              {{ item.teacher == 1 ? "Teacher," : "" }}
-              {{ item.ta == 1 ? "TA," : "" }}
-              {{ item.student == 1 ? "Student," : "" }}
-            </template>
-            <template v-slot:[`item.start_datetime`]="{ item }">
-              {{ invalidDate(item.start_datetime) }}
-            </template>
-            <template v-slot:[`item.end_datetime`]="{ item }">
-              {{ invalidDate(item.end_datetime) }}
-            </template>
-            <template v-slot:[`item.action`]="{ item }">
-              <v-icon small class="mr-2" @click="editItem(item)">
-                mdi-pencil
-              </v-icon>
-              <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-            </template>
-          </v-data-table>
-        </v-col>
-      </v-row>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue darken-1" text @click="close">
+                    Cancel
+                  </v-btn>
+                  <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+            <v-dialog v-model="dialogDelete" max-width="500px">
+              <v-card>
+                <v-card-title class="text-h5"
+                  >Are you sure you want to delete this item?</v-card-title
+                >
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue darken-1" text @click="closeDelete"
+                    >Cancel</v-btn
+                  >
+                  <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+                    >OK</v-btn
+                  >
+                  <v-spacer></v-spacer>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </v-toolbar>
+        </template>
+        <template v-slot:[`item.index`]="{ index }">
+          {{ index + 1 }}
+        </template>
+        <template v-slot:[`item.section`]="{ item }">
+          {{ item.section ? item.section : "-" }}
+        </template>
+        <template v-slot:[`item.semester`]="{ item }">
+          {{ item.semester ? item.semester : "-" }}
+        </template>
+        <template v-slot:[`item.year`]="{ item }">
+          {{ item.year ? item.year : "-" }}
+        </template>
+        <template v-slot:[`item.role`]="{ item }">
+          {{ item.teacher == 1 ? "Teacher," : "" }}
+          {{ item.ta == 1 ? "TA," : "" }}
+          {{ item.student == 1 ? "Student," : "" }}
+        </template>
+        <template v-slot:[`item.start_datetime`]="{ item }">
+          {{ invalidDate(item.start_datetime) }}
+        </template>
+        <template v-slot:[`item.end_datetime`]="{ item }">
+          {{ invalidDate(item.end_datetime) }}
+        </template>
+        <template v-slot:[`item.action`]="{ item }">
+          <v-icon small class="mr-2" @click="editItem(item)">
+            mdi-pencil
+          </v-icon>
+          <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+        </template>
+      </v-data-table>
     </v-col>
   </v-row>
 </template>
@@ -296,6 +290,13 @@ export default {
     course_id: 0,
     headers: [
       {
+        text: "#",
+        align: "center",
+        sortable: false,
+        value: "index",
+      },
+      { text: "Username", value: "username" },
+      {
         text: "Name",
         align: "start",
         value: "name",
@@ -303,8 +304,8 @@ export default {
       { text: "Section", value: "section" },
       { text: "Semester", value: "semester" },
       { text: "Year", value: "year" },
-      { text: "Start Datetime", value: "start_datetime" },
-      { text: "End Datetime", value: "end_datetime" },
+      { text: "Start Semester", value: "start_datetime" },
+      { text: "End Semester", value: "end_datetime" },
       { text: "Role", value: "role" },
       { text: "Action", value: "action" },
     ],

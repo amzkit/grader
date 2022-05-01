@@ -1,7 +1,7 @@
 <template>
-  <v-row>
+  <v-row justify="center">
     <Snackbar />
-    <v-col cols="12">
+    <v-col cols="10">
       <v-row justify="center">
         <v-card>
           <v-container fluid>

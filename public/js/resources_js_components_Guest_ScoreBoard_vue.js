@@ -19,17 +19,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Loading_Loading_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Loading/Loading.vue */ "./resources/js/components/Loading/Loading.vue");
 /* harmony import */ var _Snackbar_Snackbar_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Snackbar/Snackbar.vue */ "./resources/js/components/Snackbar/Snackbar.vue");
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 //
 //
@@ -97,6 +97,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   data: function data() {
     return {
+      items: [],
       search: "",
       loading: false,
       schedules: [],
@@ -117,23 +118,43 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         text: "Language",
         value: "Lang"
       }, {
+        text: "Count Submit",
+        value: "count",
+        align: "center"
+      }, {
         text: "Score",
         value: "score"
       }]
     };
   },
   created: function created() {
-    this.fetchItemSchedule();
+    var _this = this;
+
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return _this.fetchItemSchedule();
+
+            case 2:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }))();
   },
   computed: {
     getDateTime: function getDateTime() {
       return dayjs__WEBPACK_IMPORTED_MODULE_1___default()(new Date()).format("MM-DD-YYYY HH:mm");
     },
     filteredItems: function filteredItems() {
-      var _this = this;
+      var _this2 = this;
 
       return _.orderBy(this.schedules.filter(function (item) {
-        return item.title.toLowerCase().includes(_this.search.toLowerCase());
+        return item.title.toLowerCase().includes(_this2.search.toLowerCase());
       }), "headline");
     }
   },
@@ -154,35 +175,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return item ? dayjs__WEBPACK_IMPORTED_MODULE_1___default()(item).format("MMMM D, YYYY HH:mm") : "-";
     },
     fetchItemSchedule: function fetchItemSchedule() {
-      var _this2 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _this2.loading = true;
-                _context.next = 3;
-                return axios.get("/api/user-schedule").then(function (response) {
-                  if (response.data.success == true) {
-                    _this2.schedules = response.data.schedules;
-                  }
-                })["catch"](function (error) {
-                  _this2.snackBar(3500, error, "error");
-                });
-
-              case 3:
-                _this2.loading = false;
-
-              case 4:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
-    },
-    fetchItemScoreBoardById: function fetchItemScoreBoardById(item) {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
@@ -192,9 +184,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               case 0:
                 _this3.loading = true;
                 _context2.next = 3;
-                return axios.get("/api/user-scoreboard/" + item).then(function (response) {
+                return axios.get("/api/user-schedule").then(function (response) {
                   if (response.data.success == true) {
-                    _this3.scoreboard = response.data.payload;
+                    _this3.schedules = response.data.schedules;
                   }
                 })["catch"](function (error) {
                   _this3.snackBar(3500, error, "error");
@@ -209,6 +201,56 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             }
           }
         }, _callee2);
+      }))();
+    },
+    fetchItemScoreBoardById: function fetchItemScoreBoardById(item) {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        var convert;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _this4.loading = true;
+                _context3.next = 3;
+                return axios.get("/api/user-scoreboard/" + item).then(function (response) {
+                  if (response.data.success == true) {
+                    _this4.scoreboard = response.data.payload;
+                  }
+                })["catch"](function (error) {
+                  _this4.snackBar(3500, error, "error");
+                });
+
+              case 3:
+                if (_this4.scoreboard.scoreboard) {
+                  convert = function convert(arr) {
+                    var res = {};
+                    arr.forEach(function (obj) {
+                      var key = "".concat(obj.schedule_id);
+
+                      if (!res[key]) {
+                        res[key] = _objectSpread(_objectSpread({}, obj), {}, {
+                          count: 0
+                        });
+                      }
+
+                      res[key].count += 1;
+                    });
+                    return Object.values(res);
+                  };
+
+                  _this4.items = convert(_this4.scoreboard.scoreboard);
+                }
+
+                _this4.loading = false;
+
+              case 5:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
       }))();
     }
   })
@@ -1058,6 +1100,7 @@ var render = function() {
       _vm._v(" "),
       _c(
         "v-col",
+        { attrs: { cols: "7" } },
         [
           _c(
             "v-row",
@@ -1065,10 +1108,7 @@ var render = function() {
             [
               _c("v-data-table", {
                 staticClass: "elevation-1 row-pointer",
-                attrs: {
-                  headers: _vm.headers,
-                  items: _vm.scoreboard.scoreboard
-                },
+                attrs: { headers: _vm.headers, items: _vm.items },
                 scopedSlots: _vm._u(
                   [
                     {

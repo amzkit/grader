@@ -23,9 +23,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('picture', 'App\Http\Controllers\AnnouncementController@getAnnounce');
-Route::post('picture', 'App\Http\Controllers\AnnouncementController@postAnnounce');
-Route::put('picture', 'App\Http\Controllers\AnnouncementController@putAnnounce');
-Route::delete('picture/{id}', 'App\Http\Controllers\AnnouncementController@deleteAnnounce');
+Route::get('announce', 'App\Http\Controllers\AnnouncementController@getAnnounceByAdmin');
+Route::post('announce', 'App\Http\Controllers\AnnouncementController@postAnnounce');
+Route::post('announce/update', 'App\Http\Controllers\AnnouncementController@putAnnounce');
+Route::delete('announce/{id}', 'App\Http\Controllers\AnnouncementController@deleteAnnounce');
 
 Route::post('register', 'App\Http\Controllers\Auth\RegisterController@register');
 

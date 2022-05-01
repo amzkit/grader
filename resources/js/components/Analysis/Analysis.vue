@@ -1,43 +1,41 @@
 <template>
-  <v-row>
+  <v-row justify="center">
     <Loading :loading="this.loading" />
     <Snackbar />
     <v-col cols="2">
       <Navigation :onClick="fetchItemSchedule" />
     </v-col>
-    <v-col cols="10">
-      <v-row justify="center">
-        <v-data-table
-          :headers="headers"
-          :items="items.classroom"
-          class="elevation-1 row-pointer"
-          @click="handleClick"
-          @click:row="handleClick"
-        >
-          <template v-slot:top>
-            <v-toolbar flat>
-              <v-toolbar-title>Analysis</v-toolbar-title>
-              <v-spacer></v-spacer>
-            </v-toolbar>
-          </template>
-          <template v-slot:[`item.index`]="{ index }">
-            {{ index + 1 }}
-          </template>
-          <template v-slot:[`item.problems`]="{ item }">
-            {{
-              `${mapDataMyScore(item.user_id).length}/${items.schedule.length}`
-            }}
-          </template>
-          <template v-slot:[`item.totalScore`]="{ item }">
-            {{
-              `${mapDataMyScore(item.user_id).reduce(
-                (t, n) => t + n.score,
-                0
-              )}/${items.schedule.reduce((t, n) => t + n.score, 0)}`
-            }}
-          </template>
-        </v-data-table>
-      </v-row>
+    <v-col cols="9">
+      <v-data-table
+        :headers="headers"
+        :items="items.classroom"
+        class="elevation-1 row-pointer"
+        @click="handleClick"
+        @click:row="handleClick"
+      >
+        <template v-slot:top>
+          <v-toolbar flat>
+            <v-toolbar-title>Analysis</v-toolbar-title>
+            <v-spacer></v-spacer>
+          </v-toolbar>
+        </template>
+        <template v-slot:[`item.index`]="{ index }">
+          {{ index + 1 }}
+        </template>
+        <template v-slot:[`item.problems`]="{ item }">
+          {{
+            `${mapDataMyScore(item.user_id).length}/${items.schedule.length}`
+          }}
+        </template>
+        <template v-slot:[`item.totalScore`]="{ item }">
+          {{
+            `${mapDataMyScore(item.user_id).reduce(
+              (t, n) => t + n.score,
+              0
+            )}/${items.schedule.reduce((t, n) => t + n.score, 0)}`
+          }}
+        </template>
+      </v-data-table>
     </v-col>
   </v-row>
 </template>

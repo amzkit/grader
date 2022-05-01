@@ -1,58 +1,8 @@
 <template>
-  <!-- <v-row>
+  <v-row justify="center">
     <Loading :loading="this.loading" />
     <Snackbar />
-    <div v-if="!this.$store.state.data.loading">
-      <v-row justify="center">
-        <v-data-table
-          :headers="headers"
-          :items="myScore"
-          :class="[
-            'elevation-1',
-            $store.state.data.user.role == 'ta' ||
-            $store.state.data.user.role == 'teacher'
-              ? 'row-pointer'
-              : null,
-          ]"
-          @click:row="
-            $store.state.data.user.role == 'ta' ||
-            $store.state.data.user.role == 'teacher'
-              ? item($event)
-              : null
-          "
-        >
-          <template v-slot:[`item.index`]="{ index }">
-            {{ index + 1 }}
-          </template>
-
-          <template v-slot:[`item.detail`]="{ item }">
-            <v-col>
-              <v-chip
-                v-for="(i, index) in item.message.match(/[A-Z]/g)"
-                :key="index"
-                :color="i == 'Y' ? 'green' : 'red'"
-                text-color="white"
-              >
-                {{ i }}
-              </v-chip>
-            </v-col>
-          </template>
-          <template v-slot:[`item.score`]="{ item }">
-            <v-chip color="primary" dark>
-              {{ item.score }}
-            </v-chip>
-          </template>
-          <template v-slot:[`item.created_at`]="{ item }">
-            {{ invalidDate(item.created_at) }}
-          </template>
-        </v-data-table>
-      </v-row>
-    </div>
-  </v-row> -->
-  <v-row>
-    <Loading :loading="this.loading" />
-    <Snackbar />
-    <v-row justify="center">
+    <v-col cols="10">
       <v-data-table
         :headers="headers"
         :items="mapDataMyScore"
@@ -92,7 +42,7 @@
           {{ invalidDate(item.created_at) }}
         </template>
       </v-data-table>
-    </v-row>
+    </v-col>
   </v-row>
 </template>
 

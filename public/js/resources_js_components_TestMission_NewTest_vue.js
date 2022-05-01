@@ -472,12 +472,13 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-row",
+    { attrs: { justify: "center" } },
     [
       _c("Snackbar"),
       _vm._v(" "),
       _c(
         "v-col",
-        { attrs: { cols: "12" } },
+        { attrs: { cols: "10" } },
         [
           _c(
             "v-row",

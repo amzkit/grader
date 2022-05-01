@@ -32,7 +32,7 @@
       </v-card>
     </v-col>
     <v-col cols="1"> <v-divider vertical></v-divider></v-col>
-    <v-col>
+    <v-col cols="7">
       <v-row>
         <v-col cols="7">
           <v-text-field
@@ -362,7 +362,7 @@ export default {
     },
     async submit() {
       if (!this.problem.sendFile) {
-        return console.log("NO");
+        this.snackBar(3500, "Please your input file.", "warning");
       }
       this.loading = true;
       this.dialog = false;

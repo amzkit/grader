@@ -81,10 +81,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
 
 
 
@@ -119,6 +115,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: "score",
         align: "center"
       }, {
+        text: "Count Submit",
+        value: "count",
+        align: "center"
+      }, {
         text: "Comment Code",
         value: "comment_count",
         align: "center"
@@ -131,6 +131,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   created: function created() {
     this.fetchItemMyScore();
+  },
+  computed: {
+    mapDataMyScore: function mapDataMyScore() {
+      var convert = function convert(arr) {
+        var res = {};
+        arr.forEach(function (obj) {
+          var key = "".concat(obj.schedule_id);
+
+          if (!res[key]) {
+            res[key] = _objectSpread(_objectSpread({}, obj), {}, {
+              count: 0
+            });
+          }
+
+          res[key].count += 1;
+        });
+        return Object.values(res);
+      };
+
+      return convert(this.myScore);
+    }
   },
   methods: _objectSpread(_objectSpread({
     dayjs: (dayjs__WEBPACK_IMPORTED_MODULE_1___default())
@@ -590,141 +611,115 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-row",
+    { attrs: { justify: "center" } },
     [
       _c("Loading", { attrs: { loading: this.loading } }),
       _vm._v(" "),
       _c("Snackbar"),
       _vm._v(" "),
-      _c("v-col", { attrs: { cols: "12" } }, [
-        !this.$store.state.data.loading
-          ? _c(
-              "div",
+      _c(
+        "v-col",
+        { attrs: { cols: "10" } },
+        [
+          _c("v-data-table", {
+            staticClass: "elevation-1 row-pointer",
+            attrs: { headers: _vm.headers, items: _vm.mapDataMyScore },
+            on: {
+              "click:row": function($event) {
+                return _vm.Item($event)
+              }
+            },
+            scopedSlots: _vm._u(
               [
-                _c(
-                  "v-row",
-                  { attrs: { justify: "center" } },
-                  [
-                    _c("v-data-table", {
-                      staticClass: "elevation-1 row-pointer",
-                      attrs: { headers: _vm.headers, items: _vm.myScore },
-                      on: {
-                        "click:row": function($event) {
-                          return _vm.Item($event)
-                        }
-                      },
-                      scopedSlots: _vm._u(
-                        [
-                          {
-                            key: "item.index",
-                            fn: function(ref) {
-                              var index = ref.index
-                              return [
-                                _vm._v(
-                                  "\n            " +
-                                    _vm._s(index + 1) +
-                                    "\n          "
-                                )
-                              ]
-                            }
-                          },
-                          {
-                            key: "item.detail",
-                            fn: function(ref) {
-                              var item = ref.item
-                              return [
-                                _c(
-                                  "v-col",
-                                  _vm._l(item.message.match(/[A-Z]/g), function(
-                                    i,
-                                    n
-                                  ) {
-                                    return _c(
-                                      "v-chip",
-                                      {
-                                        key: n,
-                                        attrs: {
-                                          color: i == "Y" ? "green" : "red",
-                                          "text-color": "white"
-                                        }
-                                      },
-                                      [
-                                        _vm._v(
-                                          "\n                " +
-                                            _vm._s(i) +
-                                            "\n              "
-                                        )
-                                      ]
-                                    )
-                                  }),
-                                  1
-                                )
-                              ]
-                            }
-                          },
-                          {
-                            key: "item.score",
-                            fn: function(ref) {
-                              var item = ref.item
-                              return [
-                                _c(
-                                  "v-chip",
-                                  { attrs: { color: "primary", dark: "" } },
-                                  [
-                                    _vm._v(
-                                      "\n              " +
-                                        _vm._s(item.score) +
-                                        "\n            "
-                                    )
-                                  ]
-                                )
-                              ]
-                            }
-                          },
-                          {
-                            key: "item.comment_count",
-                            fn: function(ref) {
-                              var item = ref.item
-                              return [
-                                _vm._v(
-                                  "\n            " +
-                                    _vm._s(
-                                      _vm.comment.reduce(function(n, e) {
-                                        return item.id == e.submission_id
-                                          ? n + 1
-                                          : n
-                                      }, 0) + " Comment"
-                                    ) +
-                                    "\n          "
-                                )
-                              ]
-                            }
-                          },
-                          {
-                            key: "item.created_at",
-                            fn: function(ref) {
-                              var item = ref.item
-                              return [
-                                _vm._v(
-                                  "\n            " +
-                                    _vm._s(_vm.invalidDate(item.created_at)) +
-                                    "\n          "
-                                )
-                              ]
-                            }
-                          }
-                        ],
-                        null,
-                        true
+                {
+                  key: "item.index",
+                  fn: function(ref) {
+                    var index = ref.index
+                    return [
+                      _vm._v("\n        " + _vm._s(index + 1) + "\n      ")
+                    ]
+                  }
+                },
+                {
+                  key: "item.detail",
+                  fn: function(ref) {
+                    var item = ref.item
+                    return [
+                      _c(
+                        "v-col",
+                        _vm._l(item.message.match(/[A-Z]/g), function(i, n) {
+                          return _c(
+                            "v-chip",
+                            {
+                              key: n,
+                              attrs: {
+                                color: i == "Y" ? "green" : "red",
+                                "text-color": "white"
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n            " + _vm._s(i) + "\n          "
+                              )
+                            ]
+                          )
+                        }),
+                        1
                       )
-                    })
-                  ],
-                  1
-                )
+                    ]
+                  }
+                },
+                {
+                  key: "item.score",
+                  fn: function(ref) {
+                    var item = ref.item
+                    return [
+                      _c("v-chip", { attrs: { color: "primary", dark: "" } }, [
+                        _vm._v(
+                          "\n          " + _vm._s(item.score) + "\n        "
+                        )
+                      ])
+                    ]
+                  }
+                },
+                {
+                  key: "item.comment_count",
+                  fn: function(ref) {
+                    var item = ref.item
+                    return [
+                      _vm._v(
+                        "\n        " +
+                          _vm._s(
+                            _vm.comment.reduce(function(n, e) {
+                              return item.id == e.submission_id ? n + 1 : n
+                            }, 0) + " Comment"
+                          ) +
+                          "\n      "
+                      )
+                    ]
+                  }
+                },
+                {
+                  key: "item.created_at",
+                  fn: function(ref) {
+                    var item = ref.item
+                    return [
+                      _vm._v(
+                        "\n        " +
+                          _vm._s(_vm.invalidDate(item.created_at)) +
+                          "\n      "
+                      )
+                    ]
+                  }
+                }
               ],
-              1
+              null,
+              true
             )
-          : _vm._e()
-      ])
+          })
+        ],
+        1
+      )
     ],
     1
   )

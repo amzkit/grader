@@ -146,6 +146,12 @@ const routes = [
         path: "/analysis-detail",
         name: "analysis-detail",
         component: () => import("../components/Analysis/AnalysisDetail.vue")
+    },
+    // Announcement
+    {
+        path: "/announce",
+        name: "announce",
+        component: () => import("../components/Announcement/Announce.vue")
     }
 ];
 

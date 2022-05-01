@@ -100,8 +100,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -264,262 +262,251 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-row",
+    { attrs: { justify: "center" } },
     [
-      _c("v-col", { attrs: { cols: "12" } }, [
-        _c(
-          "div",
-          [
-            _c(
-              "v-row",
-              { attrs: { justify: "center" } },
-              [
-                _c(
-                  "v-card",
-                  [
-                    _c(
-                      "v-container",
-                      { attrs: { fluid: "" } },
-                      [
-                        _c("h1", [_vm._v("New User")]),
-                        _vm._v(" "),
-                        _c(
-                          "v-row",
-                          { attrs: { align: "center" } },
-                          [
-                            _c(
-                              "v-col",
-                              { attrs: { cols: "4" } },
-                              [_c("v-subheader", [_vm._v(" Status ")])],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "v-col",
-                              { attrs: { cols: "6" } },
-                              [
-                                _c(
-                                  "v-radio-group",
-                                  {
-                                    attrs: { row: "" },
-                                    model: {
-                                      value: _vm.status,
-                                      callback: function($$v) {
-                                        _vm.status = $$v
-                                      },
-                                      expression: "status"
+      _c(
+        "v-col",
+        { attrs: { cols: "10" } },
+        [
+          _c(
+            "v-row",
+            { attrs: { justify: "center" } },
+            [
+              _c(
+                "v-card",
+                [
+                  _c(
+                    "v-container",
+                    { attrs: { fluid: "" } },
+                    [
+                      _c("h1", [_vm._v("New User")]),
+                      _vm._v(" "),
+                      _c(
+                        "v-row",
+                        { attrs: { align: "center" } },
+                        [
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "4" } },
+                            [_c("v-subheader", [_vm._v(" Status ")])],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "6" } },
+                            [
+                              _c(
+                                "v-radio-group",
+                                {
+                                  attrs: { row: "" },
+                                  model: {
+                                    value: _vm.status,
+                                    callback: function($$v) {
+                                      _vm.status = $$v
+                                    },
+                                    expression: "status"
+                                  }
+                                },
+                                [
+                                  _c("v-radio", {
+                                    attrs: {
+                                      label: "Teacher",
+                                      value: "teacher"
                                     }
-                                  },
-                                  [
-                                    _c("v-radio", {
-                                      attrs: {
-                                        label: "Teacher",
-                                        value: "teacher"
-                                      }
-                                    })
-                                  ],
-                                  1
-                                )
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        ),
-                        _vm._v(" "),
-                        this.status === "teacher"
-                          ? _c(
-                              "div",
-                              [
-                                _c(
-                                  "v-row",
-                                  { attrs: { align: "center" } },
-                                  [
-                                    _c(
-                                      "v-col",
-                                      { attrs: { cols: "4" } },
-                                      [
-                                        _c("v-subheader", [
-                                          _vm._v(" Username ")
-                                        ])
-                                      ],
-                                      1
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-col",
-                                      { attrs: { cols: "6" } },
-                                      [
-                                        _c("v-text-field", {
-                                          attrs: {
-                                            rules: [_vm.rules.required],
-                                            label: "Username"
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      this.status === "teacher"
+                        ? _c(
+                            "div",
+                            [
+                              _c(
+                                "v-row",
+                                { attrs: { align: "center" } },
+                                [
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "4" } },
+                                    [_c("v-subheader", [_vm._v(" Username ")])],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "6" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          rules: [_vm.rules.required],
+                                          label: "Username"
+                                        },
+                                        model: {
+                                          value: _vm.username,
+                                          callback: function($$v) {
+                                            _vm.username = $$v
                                           },
-                                          model: {
-                                            value: _vm.username,
-                                            callback: function($$v) {
-                                              _vm.username = $$v
-                                            },
-                                            expression: "username"
+                                          expression: "username"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-row",
+                                { attrs: { align: "center" } },
+                                [
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "4" } },
+                                    [_c("v-subheader", [_vm._v(" Name ")])],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "6" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          rules: [_vm.rules.required],
+                                          label: "Name"
+                                        },
+                                        model: {
+                                          value: _vm.name,
+                                          callback: function($$v) {
+                                            _vm.name = $$v
+                                          },
+                                          expression: "name"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-row",
+                                { attrs: { align: "center" } },
+                                [
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "4" } },
+                                    [_c("v-subheader", [_vm._v(" E-mail ")])],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "6" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          rules: [
+                                            _vm.rules.required,
+                                            _vm.rules.email
+                                          ],
+                                          label: "E-mail"
+                                        },
+                                        model: {
+                                          value: _vm.email,
+                                          callback: function($$v) {
+                                            _vm.email = $$v
+                                          },
+                                          expression: "email"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-row",
+                                { attrs: { align: "center" } },
+                                [
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "4" } },
+                                    [_c("v-subheader", [_vm._v(" Password ")])],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "6" } },
+                                    [
+                                      _c("v-text-field", {
+                                        staticClass: "input-group--focused",
+                                        attrs: {
+                                          "append-icon": _vm.showPassword
+                                            ? "mdi-eye"
+                                            : "mdi-eye-off",
+                                          rules: [_vm.rules.required],
+                                          type: _vm.showPassword
+                                            ? "text"
+                                            : "password",
+                                          label: "Password",
+                                          hint: "At least 8 characters",
+                                          value: "wqfasds"
+                                        },
+                                        on: {
+                                          "click:append": function($event) {
+                                            _vm.showPassword = !_vm.showPassword
                                           }
-                                        })
-                                      ],
-                                      1
-                                    )
-                                  ],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-row",
-                                  { attrs: { align: "center" } },
-                                  [
-                                    _c(
-                                      "v-col",
-                                      { attrs: { cols: "4" } },
-                                      [_c("v-subheader", [_vm._v(" Name ")])],
-                                      1
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-col",
-                                      { attrs: { cols: "6" } },
-                                      [
-                                        _c("v-text-field", {
-                                          attrs: {
-                                            rules: [_vm.rules.required],
-                                            label: "Name"
+                                        },
+                                        model: {
+                                          value: _vm.password,
+                                          callback: function($$v) {
+                                            _vm.password = $$v
                                           },
-                                          model: {
-                                            value: _vm.name,
-                                            callback: function($$v) {
-                                              _vm.name = $$v
-                                            },
-                                            expression: "name"
-                                          }
-                                        })
-                                      ],
-                                      1
-                                    )
-                                  ],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-row",
-                                  { attrs: { align: "center" } },
-                                  [
-                                    _c(
-                                      "v-col",
-                                      { attrs: { cols: "4" } },
-                                      [_c("v-subheader", [_vm._v(" E-mail ")])],
-                                      1
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-col",
-                                      { attrs: { cols: "6" } },
-                                      [
-                                        _c("v-text-field", {
-                                          attrs: {
-                                            rules: [
-                                              _vm.rules.required,
-                                              _vm.rules.email
-                                            ],
-                                            label: "E-mail"
-                                          },
-                                          model: {
-                                            value: _vm.email,
-                                            callback: function($$v) {
-                                              _vm.email = $$v
-                                            },
-                                            expression: "email"
-                                          }
-                                        })
-                                      ],
-                                      1
-                                    )
-                                  ],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-row",
-                                  { attrs: { align: "center" } },
-                                  [
-                                    _c(
-                                      "v-col",
-                                      { attrs: { cols: "4" } },
-                                      [
-                                        _c("v-subheader", [
-                                          _vm._v(" Password ")
-                                        ])
-                                      ],
-                                      1
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-col",
-                                      { attrs: { cols: "6" } },
-                                      [
-                                        _c("v-text-field", {
-                                          staticClass: "input-group--focused",
-                                          attrs: {
-                                            "append-icon": _vm.showPassword
-                                              ? "mdi-eye"
-                                              : "mdi-eye-off",
-                                            rules: [_vm.rules.required],
-                                            type: _vm.showPassword
-                                              ? "text"
-                                              : "password",
-                                            label: "Password",
-                                            hint: "At least 8 characters",
-                                            value: "wqfasds"
-                                          },
-                                          on: {
-                                            "click:append": function($event) {
-                                              _vm.showPassword = !_vm.showPassword
-                                            }
-                                          },
-                                          model: {
-                                            value: _vm.password,
-                                            callback: function($$v) {
-                                              _vm.password = $$v
-                                            },
-                                            expression: "password"
-                                          }
-                                        })
-                                      ],
-                                      1
-                                    )
-                                  ],
-                                  1
-                                )
-                              ],
-                              1
-                            )
-                          : _vm._e()
-                      ],
-                      1
-                    )
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "v-btn",
-                  {
-                    attrs: { color: "primary" },
-                    on: { click: _vm.formSubmit }
-                  },
-                  [_vm._v(" Save ")]
-                )
-              ],
-              1
-            )
-          ],
-          1
-        )
-      ])
+                                          expression: "password"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        : _vm._e()
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                { attrs: { color: "primary" }, on: { click: _vm.formSubmit } },
+                [_vm._v(" Save ")]
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
     ],
     1
   )

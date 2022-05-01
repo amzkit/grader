@@ -1,42 +1,36 @@
 <template>
-  <v-row>
+  <v-row justify="center">
     <Loading :loading="this.loading" />
     <v-col cols="2">
       <Navigation :onClick="fatchItemSchedule" />
     </v-col>
-    <v-col cols="10">
-      <div v-if="!this.$store.state.data.loading">
-        <v-row justify="center">
-          <v-col>
-            <v-data-table
-              :headers="headers"
-              :items="this.$store.state.data.schedule_all"
-              class="elevation-1"
-            >
-              <template v-slot:[`item.index`]="{ index }">
-                {{ index + 1 }}
-              </template>
-              <template v-slot:[`item.question`]="{ item }">
-                {{ convertToPlain(item.question) }}
-              </template>
-              <template v-slot:[`item.file`]="{ item }">
-                <div v-if="item.file">
-                  <v-icon small class="mr-2" @click="download(item.file)">
-                    mdi-file-download
-                  </v-icon>
-                </div>
-                <div v-else>{{ "-" }}</div>
-              </template>
-              <template v-slot:[`item.start_date`]="{ item }">
-                {{ invalidDate(item.start_date) }}
-              </template>
-              <template v-slot:[`item.end_date`]="{ item }">
-                {{ invalidDate(item.end_date) }}
-              </template>
-            </v-data-table>
-          </v-col>
-        </v-row>
-      </div>
+    <v-col cols="9">
+      <v-data-table
+        :headers="headers"
+        :items="this.$store.state.data.schedule_all"
+        class="elevation-1"
+      >
+        <template v-slot:[`item.index`]="{ index }">
+          {{ index + 1 }}
+        </template>
+        <template v-slot:[`item.question`]="{ item }">
+          {{ convertToPlain(item.question) }}
+        </template>
+        <template v-slot:[`item.file`]="{ item }">
+          <div v-if="item.file">
+            <v-icon small class="mr-2" @click="download(item.file)">
+              mdi-file-download
+            </v-icon>
+          </div>
+          <div v-else>{{ "-" }}</div>
+        </template>
+        <template v-slot:[`item.start_date`]="{ item }">
+          {{ invalidDate(item.start_date) }}
+        </template>
+        <template v-slot:[`item.end_date`]="{ item }">
+          {{ invalidDate(item.end_date) }}
+        </template>
+      </v-data-table>
     </v-col>
   </v-row>
 </template>

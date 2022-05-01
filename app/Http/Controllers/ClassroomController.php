@@ -71,7 +71,7 @@ class ClassroomController extends Controller
 
         $item = Classroom::where('course_id', '=', $courseId)
             ->join('users', 'classrooms.user_id', '=', 'users.id')
-            ->select('classrooms.*', 'users.name')
+            ->select('classrooms.*', 'users.name', 'users.username')
             ->get();
 
         return response()->json(['success' => true, 'payload' =>  $item]);

@@ -61,18 +61,28 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _components_Snackbar_Snackbar_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/Snackbar/Snackbar.vue */ "./resources/js/components/Snackbar/Snackbar.vue");
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -177,6 +187,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   data: function data() {
     return {
+      image: [],
       currentPassword: "",
       newPassword: "",
       confirmationPassword: "",
@@ -193,7 +204,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   mounted: function mounted() {},
   created: function created() {
-    this.firstLogin();
+    var _this = this;
+
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return _this.fetchAnnounce();
+
+            case 2:
+              _this.firstLogin();
+
+            case 3:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }))();
   },
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapActions)("snackbar", ["showSnack"])), {}, {
     snackBar: function snackBar() {
@@ -206,56 +236,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         timeout: timeout
       });
     },
-    redirect: function redirect(url) {
-      window.location.href = url;
-    },
-    handleOnSave: function handleOnSave() {
-      var _this = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _this.loading = true;
-
-                if (!(_this.confirmationPassword === _this.newPassword && _this.newPassword != "")) {
-                  _context.next = 6;
-                  break;
-                }
-
-                _context.next = 4;
-                return axios.post("api/changePassword", {
-                  current_password: _this.currentPassword,
-                  new_password: _this.newPassword
-                }).then(function () {
-                  _this.stepper = 3;
-                })["catch"](function (error) {
-                  _this.snackBar(3500, error, "error");
-                });
-
-              case 4:
-                _context.next = 7;
-                break;
-
-              case 6:
-                _this.snackBar(3500, "Password and confirm password does not match", "error");
-
-              case 7:
-                _this.loading = false;
-
-              case 8:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
-    },
-    handleOnFinish: function handleOnFinish() {
-      this.dialog = false;
-    },
-    handleOnSkip: function handleOnSkip() {
+    fetchAnnounce: function fetchAnnounce() {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
@@ -263,21 +244,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _this2.skip = true;
                 _this2.loading = true;
-                _context2.next = 4;
-                return axios.post("api/changePassword", {
-                  skip: _this2.skip
-                }).then(function () {
-                  _this2.stepper = 3;
+                _context2.next = 3;
+                return axios.get("/api/picture").then(function (response) {
+                  if (response.data.success === true) {
+                    _this2.image = response.data.payload;
+                  }
                 })["catch"](function (error) {
                   _this2.snackBar(3500, error, "error");
                 });
 
-              case 4:
+              case 3:
                 _this2.loading = false;
 
-              case 5:
+              case 4:
               case "end":
                 return _context2.stop();
             }
@@ -285,10 +265,88 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }, _callee2);
       }))();
     },
+    redirect: function redirect(url) {
+      window.location.href = url;
+    },
+    handleOnSave: function handleOnSave() {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _this3.loading = true;
+
+                if (!(_this3.confirmationPassword === _this3.newPassword && _this3.newPassword != "")) {
+                  _context3.next = 6;
+                  break;
+                }
+
+                _context3.next = 4;
+                return axios.post("api/changePassword", {
+                  current_password: _this3.currentPassword,
+                  new_password: _this3.newPassword
+                }).then(function () {
+                  _this3.stepper = 3;
+                })["catch"](function (error) {
+                  _this3.snackBar(3500, error, "error");
+                });
+
+              case 4:
+                _context3.next = 7;
+                break;
+
+              case 6:
+                _this3.snackBar(3500, "Password and confirm password does not match", "error");
+
+              case 7:
+                _this3.loading = false;
+
+              case 8:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }))();
+    },
+    handleOnFinish: function handleOnFinish() {
+      this.dialog = false;
+    },
+    handleOnSkip: function handleOnSkip() {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _this4.skip = true;
+                _this4.loading = true;
+                _context4.next = 4;
+                return axios.post("api/changePassword", {
+                  skip: _this4.skip
+                }).then(function () {
+                  _this4.stepper = 3;
+                })["catch"](function (error) {
+                  _this4.snackBar(3500, error, "error");
+                });
+
+              case 4:
+                _this4.loading = false;
+
+              case 5:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }))();
+    },
     firstLogin: function firstLogin() {
       var user_role = document.head.querySelector('meta[name="user-role"]').content;
       var user_last_login = document.head.querySelector('meta[name="user-last-login"]').content;
-      console.log(user_role, user_last_login);
 
       if (user_role == "student" && user_last_login == "") {
         this.dialog = true;
@@ -525,251 +583,269 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-row",
-    { attrs: { justify: "center" } },
+    "v-container",
+    { attrs: { "fill-height": "", fluid: "" } },
     [
-      _c("Snackbar"),
-      _vm._v(" "),
-      _c(
-        "v-carousel",
-        {
-          attrs: {
-            cycle: "",
-            height: "500",
-            "hide-delimiter-background": "",
-            "show-arrows-on-hover": ""
-          }
-        },
-        _vm._l(_vm.items, function(item, i) {
-          return _c("v-carousel-item", {
-            key: i,
-            attrs: {
-              src: item.src,
-              "reverse-transition": "fade-transition",
-              transition: "fade-transition"
-            }
-          })
-        }),
-        1
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "mt-4" }, [
-        _c(
-          "h1",
-          { staticClass: "text-center , font-weight-black white--text" },
-          [_vm._v("\n      SOURCE CODE GRADER\n    ")]
-        ),
-        _vm._v(" "),
-        _c("h5", { staticClass: "text-center white--text" }, [
-          _vm._v("Computer Science Maejo University")
-        ])
-      ]),
-      _vm._v(" "),
       _c(
         "v-row",
         { attrs: { justify: "center" } },
         [
+          _c("Snackbar"),
+          _vm._v(" "),
           _c(
-            "v-dialog",
+            "v-carousel",
             {
-              attrs: { "max-width": "1000" },
-              model: {
-                value: _vm.dialog,
-                callback: function($$v) {
-                  _vm.dialog = $$v
-                },
-                expression: "dialog"
+              attrs: {
+                cycle: "",
+                height: "500",
+                "hide-delimiter-background": "",
+                "show-arrows-on-hover": ""
               }
             },
+            _vm._l(_vm.image, function(item, i) {
+              return _c("v-carousel-item", {
+                key: i,
+                attrs: {
+                  src:
+                    "http://127.0.0.1:8000" +
+                    "/storage" +
+                    item.picture.replace("public", ""),
+                  "reverse-transition": "fade-transition",
+                  transition: "fade-transition"
+                }
+              })
+            }),
+            1
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "mt-4" }, [
+            _c(
+              "h1",
+              { staticClass: "text-center , font-weight-black white--text" },
+              [_vm._v("\n        SOURCE CODE GRADER\n      ")]
+            ),
+            _vm._v(" "),
+            _c("h5", { staticClass: "text-center white--text" }, [
+              _vm._v("\n        Computer Science Maejo University\n      ")
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "v-row",
+            { attrs: { justify: "center" } },
             [
               _c(
-                "v-card",
+                "v-dialog",
+                {
+                  attrs: { "max-width": "1000" },
+                  model: {
+                    value: _vm.dialog,
+                    callback: function($$v) {
+                      _vm.dialog = $$v
+                    },
+                    expression: "dialog"
+                  }
+                },
                 [
                   _c(
-                    "v-stepper",
-                    {
-                      attrs: { vertical: "" },
-                      model: {
-                        value: _vm.stepper,
-                        callback: function($$v) {
-                          _vm.stepper = $$v
-                        },
-                        expression: "stepper"
-                      }
-                    },
+                    "v-card",
                     [
                       _c(
-                        "v-stepper-step",
-                        { attrs: { step: "1", complete: "" } },
-                        [_vm._v(" Login Complete ")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-stepper-step",
-                        { attrs: { step: "2", complete: _vm.stepper > 2 } },
-                        [_vm._v("\n            Change Password\n          ")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-stepper-content",
-                        { attrs: { step: "2" } },
+                        "v-stepper",
+                        {
+                          attrs: { vertical: "" },
+                          model: {
+                            value: _vm.stepper,
+                            callback: function($$v) {
+                              _vm.stepper = $$v
+                            },
+                            expression: "stepper"
+                          }
+                        },
                         [
-                          _c("v-text-field", {
-                            attrs: {
-                              "prepend-icon": "lock",
-                              name: "current-password",
-                              label: "Current Password",
-                              type: "password",
-                              "persistent-placeholder": "",
-                              required: ""
-                            },
-                            model: {
-                              value: _vm.currentPassword,
-                              callback: function($$v) {
-                                _vm.currentPassword = $$v
-                              },
-                              expression: "currentPassword"
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("v-text-field", {
-                            attrs: {
-                              "prepend-icon": "lock",
-                              name: "new-password",
-                              label: "New Password",
-                              type: "password",
-                              "persistent-placeholder": "",
-                              required: ""
-                            },
-                            model: {
-                              value: _vm.newPassword,
-                              callback: function($$v) {
-                                _vm.newPassword = $$v
-                              },
-                              expression: "newPassword"
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("v-text-field", {
-                            attrs: {
-                              id: "password",
-                              "prepend-icon": "lock",
-                              name: "new-password_confirmation",
-                              label: "New Password Confirmation",
-                              type: "password",
-                              "persistent-placeholder": "",
-                              required: ""
-                            },
-                            model: {
-                              value: _vm.confirmationPassword,
-                              callback: function($$v) {
-                                _vm.confirmationPassword = $$v
-                              },
-                              expression: "confirmationPassword"
-                            }
-                          }),
-                          _vm._v(" "),
                           _c(
-                            "v-btn",
-                            {
-                              attrs: { color: "primary" },
-                              on: { click: _vm.handleOnSave }
-                            },
-                            [_vm._v(" Save ")]
+                            "v-stepper-step",
+                            { attrs: { step: "1", complete: "" } },
+                            [
+                              _vm._v(
+                                "\n              Login Complete\n            "
+                              )
+                            ]
                           ),
                           _vm._v(" "),
                           _c(
-                            "v-btn",
-                            {
-                              attrs: { text: "" },
-                              on: { click: _vm.handleOnSkip }
-                            },
-                            [_vm._v(" Skip ")]
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _vm.stepper == 3 && _vm.skip
-                        ? [
-                            _c(
-                              "v-stepper-step",
-                              {
-                                attrs: {
-                                  rules: [
-                                    function() {
-                                      return false
-                                    }
-                                  ],
-                                  step: "3"
-                                }
-                              },
-                              [
-                                _vm._v(
-                                  "\n              Warning\n              "
-                                ),
-                                _c("small", [
-                                  _vm._v(
-                                    "\n                Please be careful If you don't change your password."
-                                  )
-                                ])
-                              ]
-                            )
-                          ]
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _c("v-stepper-step", { attrs: { step: "3" } }, [
-                        _vm._v(" Finish ")
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "v-stepper-content",
-                        { attrs: { step: "3" } },
-                        [
-                          _c(
-                            "v-layout",
-                            { attrs: { "justify-center": "" } },
+                            "v-stepper-step",
+                            { attrs: { step: "2", complete: _vm.stepper > 2 } },
                             [
-                              _c("v-card-actions", [
-                                _c(
-                                  "div",
-                                  { staticClass: "text-center" },
-                                  [
-                                    _c(
-                                      "v-icon",
-                                      {
-                                        attrs: {
-                                          "x-large": "",
-                                          color: "green darken-2"
-                                        }
-                                      },
-                                      [
-                                        _vm._v(
-                                          "\n                    mdi-checkbox-marked-circle\n                  "
-                                        )
-                                      ]
-                                    )
-                                  ],
-                                  1
-                                )
-                              ])
+                              _vm._v(
+                                "\n              Change Password\n            "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-stepper-content",
+                            { attrs: { step: "2" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  "prepend-icon": "lock",
+                                  name: "current-password",
+                                  label: "Current Password",
+                                  type: "password",
+                                  "persistent-placeholder": "",
+                                  required: ""
+                                },
+                                model: {
+                                  value: _vm.currentPassword,
+                                  callback: function($$v) {
+                                    _vm.currentPassword = $$v
+                                  },
+                                  expression: "currentPassword"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("v-text-field", {
+                                attrs: {
+                                  "prepend-icon": "lock",
+                                  name: "new-password",
+                                  label: "New Password",
+                                  type: "password",
+                                  "persistent-placeholder": "",
+                                  required: ""
+                                },
+                                model: {
+                                  value: _vm.newPassword,
+                                  callback: function($$v) {
+                                    _vm.newPassword = $$v
+                                  },
+                                  expression: "newPassword"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("v-text-field", {
+                                attrs: {
+                                  id: "password",
+                                  "prepend-icon": "lock",
+                                  name: "new-password_confirmation",
+                                  label: "New Password Confirmation",
+                                  type: "password",
+                                  "persistent-placeholder": "",
+                                  required: ""
+                                },
+                                model: {
+                                  value: _vm.confirmationPassword,
+                                  callback: function($$v) {
+                                    _vm.confirmationPassword = $$v
+                                  },
+                                  expression: "confirmationPassword"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: { color: "primary" },
+                                  on: { click: _vm.handleOnSave }
+                                },
+                                [_vm._v(" Save ")]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: { text: "" },
+                                  on: { click: _vm.handleOnSkip }
+                                },
+                                [_vm._v(" Skip ")]
+                              )
                             ],
                             1
                           ),
                           _vm._v(" "),
+                          _vm.stepper == 3 && _vm.skip
+                            ? [
+                                _c(
+                                  "v-stepper-step",
+                                  {
+                                    attrs: {
+                                      rules: [
+                                        function() {
+                                          return false
+                                        }
+                                      ],
+                                      step: "3"
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                Warning\n                "
+                                    ),
+                                    _c("small", [
+                                      _vm._v(
+                                        "\n                  Please be careful If you don't change your password."
+                                      )
+                                    ])
+                                  ]
+                                )
+                              ]
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _c("v-stepper-step", { attrs: { step: "3" } }, [
+                            _vm._v(" Finish ")
+                          ]),
+                          _vm._v(" "),
                           _c(
-                            "v-btn",
-                            {
-                              attrs: { color: "primary" },
-                              on: { click: _vm.handleOnFinish }
-                            },
-                            [_vm._v(" Finish")]
+                            "v-stepper-content",
+                            { attrs: { step: "3" } },
+                            [
+                              _c(
+                                "v-layout",
+                                { attrs: { "justify-center": "" } },
+                                [
+                                  _c("v-card-actions", [
+                                    _c(
+                                      "div",
+                                      { staticClass: "text-center" },
+                                      [
+                                        _c(
+                                          "v-icon",
+                                          {
+                                            attrs: {
+                                              "x-large": "",
+                                              color: "green darken-2"
+                                            }
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                      mdi-checkbox-marked-circle\n                    "
+                                            )
+                                          ]
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  ])
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: { color: "primary" },
+                                  on: { click: _vm.handleOnFinish }
+                                },
+                                [_vm._v(" Finish")]
+                              )
+                            ],
+                            1
                           )
                         ],
-                        1
+                        2
                       )
                     ],
-                    2
+                    1
                   )
                 ],
                 1

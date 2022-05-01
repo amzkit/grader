@@ -4,7 +4,7 @@
     <v-col cols="3">
       <v-card class="mx-auto" max-width="300">
         <v-list dense>
-          <v-row justify="'space-between'">
+          <v-row>
             <v-col>
               <v-subheader>Analysis</v-subheader>
             </v-col>
@@ -43,7 +43,7 @@
       </v-card>
     </v-col>
     <v-col cols="1"> <v-divider vertical></v-divider></v-col>
-    <v-col>
+    <v-col cols="7">
       <v-card class="mx-auto mb-4" max-width="100%">
         <v-card>
           <v-card-title class="text-h5">Analysis </v-card-title>

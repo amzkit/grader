@@ -1,312 +1,295 @@
 <template>
-  <v-row>
+  <v-row justify="center">
     <Loading :loading="loading" />
     <Snackbar />
     <v-col cols="2">
       <Navigation :onClick="fetchItemSchedule" />
     </v-col>
-    <v-col cols="10">
-      <v-row justify="center">
-        <v-col>
-          <v-data-table
-            :headers="headers"
-            :items="desserts"
-            sort-by="calories"
-            class="elevation-1"
-            :search="search"
-          >
-            <template v-slot:top>
-              <v-toolbar flat>
-                <v-toolbar-title>Manage Problems Classroom</v-toolbar-title>
-                <v-divider class="mx-4" inset vertical></v-divider>
-                <v-spacer></v-spacer>
-                <v-text-field
-                  v-model="search"
-                  append-icon="mdi-magnify"
-                  label="Search"
-                  hide-details
-                  class="mr-5"
-                ></v-text-field>
-                <v-dialog v-model="dialog" max-width="800px">
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                      color="primary"
-                      dark
-                      class="mb-2"
-                      v-bind="attrs"
-                      v-on="on"
-                    >
-                      ADD PROBLEMS
-                    </v-btn>
-                  </template>
+    <v-col cols="9">
+      <v-data-table
+        :headers="headers"
+        :items="desserts"
+        sort-by="calories"
+        class="elevation-1"
+        :search="search"
+      >
+        <template v-slot:top>
+          <v-toolbar flat>
+            <v-toolbar-title>Manage Problems Classroom</v-toolbar-title>
+            <v-divider class="mx-4" inset vertical></v-divider>
+            <v-spacer></v-spacer>
+            <v-text-field
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="Search"
+              hide-details
+              class="mr-5"
+            ></v-text-field>
+            <v-dialog v-model="dialog" max-width="800px">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  color="primary"
+                  dark
+                  class="mb-2"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  ADD PROBLEMS
+                </v-btn>
+              </template>
 
-                  <v-card>
-                    <v-card-title>
-                      <span class="text-h5">
-                        {{
-                          editedIndex === -1 ? "Add Problems" : "Edit Problems"
-                        }}
-                      </span>
-                    </v-card-title>
-                    <v-card-text>
-                      <v-container>
-                        <v-row>
-                          <v-col cols="8">
-                            <div v-if="editedIndex === -1">
-                              <v-autocomplete
-                                label="Examples"
-                                v-model="selectedExamplesId"
-                                :items="
-                                  problemList.filter(
-                                    (e) =>
-                                      !desserts
-                                        .map((e) => e.problemsId)
-                                        .includes(e.id)
-                                  )
-                                "
-                                item-text="title"
-                                item-value="id"
-                                hide-no-data
-                                hide-selected
-                                multiple
-                                chips
-                                deletable-chips
-                              >
-                              </v-autocomplete>
-                            </div>
-                          </v-col>
-                          <v-col :cols="editedIndex === -1 ? '4' : '12'">
-                            <v-autocomplete
-                              v-model="editedItem.language_id"
-                              :items="languages"
-                              label="Language"
-                              item-text="lang"
-                              item-value="id"
-                            >
-                            </v-autocomplete>
-                          </v-col>
-                        </v-row>
-                        <v-row>
-                          <v-col cols="6">
+              <v-card>
+                <v-card-title>
+                  <span class="text-h5">
+                    {{ editedIndex === -1 ? "Add Problems" : "Edit Problems" }}
+                  </span>
+                </v-card-title>
+                <v-card-text>
+                  <v-container>
+                    <v-row>
+                      <v-col cols="8">
+                        <div v-if="editedIndex === -1">
+                          <v-autocomplete
+                            label="Examples"
+                            v-model="selectedExamplesId"
+                            :items="
+                              problemList.filter(
+                                (e) =>
+                                  !desserts
+                                    .map((e) => e.problemsId)
+                                    .includes(e.id)
+                              )
+                            "
+                            item-text="title"
+                            item-value="id"
+                            hide-no-data
+                            hide-selected
+                            multiple
+                            chips
+                            deletable-chips
+                          >
+                          </v-autocomplete>
+                        </div>
+                      </v-col>
+                      <v-col :cols="editedIndex === -1 ? '4' : '12'">
+                        <v-autocomplete
+                          v-model="editedItem.language_id"
+                          :items="languages"
+                          label="Language"
+                          item-text="lang"
+                          item-value="id"
+                        >
+                        </v-autocomplete>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="6">
+                        <v-text-field
+                          type="number"
+                          v-model="editedItem.score"
+                          onfocus="this.select()"
+                          label="Score"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="3">
+                        <v-checkbox
+                          v-model="editedItem.late"
+                          :label="`Pass due`"
+                        ></v-checkbox>
+                      </v-col>
+                      <v-col cols="3">
+                        <v-checkbox
+                          v-model="editedItem.IsAnalysis"
+                          :label="`Is Analysis`"
+                        ></v-checkbox>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="6">
+                        <!-- DATE TIME 1 -->
+                        <v-menu
+                          v-model="menu1"
+                          :close-on-content-click="false"
+                          max-width="290"
+                        >
+                          <template v-slot:activator="{ on, attrs }">
                             <v-text-field
-                              type="number"
-                              v-model="editedItem.score"
-                              onfocus="this.select()"
-                              label="Score"
+                              :value="computedDateFormattedStartDate"
+                              clearable
+                              label="Start Date"
+                              readonly
+                              v-bind="attrs"
+                              v-on="on"
+                              @click:clear="start_date = null"
                             ></v-text-field>
-                            <!-- <v-text-field
-                              v-model=""
-                              label="Score"
-                              hide-details
-                              class="mr-5"
-                            ></v-text-field> -->
-                          </v-col>
-                          <v-col cols="3">
-                            <v-checkbox
-                              v-model="editedItem.late"
-                              :label="`Pass due`"
-                            ></v-checkbox>
-                          </v-col>
-                          <v-col cols="3">
-                            <v-checkbox
-                              v-model="editedItem.IsAnalysis"
-                              :label="`Is Analysis`"
-                            ></v-checkbox>
-                          </v-col>
-                        </v-row>
-                        <v-row>
-                          <v-col cols="6">
-                            <!-- DATE TIME 1 -->
-                            <v-menu
-                              v-model="menu1"
-                              :close-on-content-click="false"
-                              max-width="290"
-                            >
-                              <template v-slot:activator="{ on, attrs }">
-                                <v-text-field
-                                  :value="computedDateFormattedStartDate"
-                                  clearable
-                                  label="Start Date"
-                                  readonly
-                                  v-bind="attrs"
-                                  v-on="on"
-                                  @click:clear="start_date = null"
-                                ></v-text-field>
-                              </template>
-                              <v-date-picker
-                                v-model="start_date"
-                                @change="menu1 = false"
-                              ></v-date-picker>
-                            </v-menu>
-                          </v-col>
-                          <v-col cols="6">
-                            <!-- DATE TIME 2 -->
-                            <v-menu
-                              v-model="menu3"
-                              :close-on-content-click="false"
-                              max-width="290"
-                            >
-                              <template v-slot:activator="{ on, attrs }">
-                                <v-text-field
-                                  :value="computedDateFormattedEndDate"
-                                  clearable
-                                  label="End Date"
-                                  readonly
-                                  v-bind="attrs"
-                                  v-on="on"
-                                  @click:clear="end_date = null"
-                                ></v-text-field>
-                              </template>
-                              <v-date-picker
-                                v-model="end_date"
-                                @change="menu3 = false"
-                              ></v-date-picker>
-                            </v-menu>
-                          </v-col>
-                        </v-row>
-                        <v-row>
-                          <v-col cols="6">
-                            <v-menu
-                              ref="menu"
-                              v-model="menu2"
-                              :close-on-content-click="false"
-                              :nudge-right="40"
-                              :return-value.sync="start_time"
-                              transition="scale-transition"
-                              offset-y
-                              max-width="290px"
-                              min-width="290px"
-                            >
-                              <template v-slot:activator="{ on, attrs }">
-                                <v-text-field
-                                  v-model="start_time"
-                                  label="Start Time"
-                                  readonly
-                                  v-bind="attrs"
-                                  v-on="on"
-                                ></v-text-field>
-                              </template>
-                              <v-time-picker
-                                v-if="menu2"
-                                format="24hr"
-                                v-model="start_time"
-                                full-width
-                                @click:minute="$refs.menu.save(start_time)"
-                              ></v-time-picker>
-                            </v-menu>
-                          </v-col>
-                          <v-col cols="6">
-                            <v-menu
-                              ref="menu2"
-                              v-model="menu4"
-                              :close-on-content-click="false"
-                              :nudge-right="40"
-                              :return-value.sync="end_time"
-                              transition="scale-transition"
-                              offset-y
-                              max-width="290px"
-                              min-width="290px"
-                            >
-                              <template v-slot:activator="{ on, attrs }">
-                                <v-text-field
-                                  v-model="end_time"
-                                  label="End Time"
-                                  readonly
-                                  v-bind="attrs"
-                                  v-on="on"
-                                ></v-text-field>
-                              </template>
-                              <v-time-picker
-                                v-if="menu4"
-                                format="24hr"
-                                v-model="end_time"
-                                full-width
-                                @click:minute="$refs.menu2.save(end_time)"
-                              ></v-time-picker>
-                            </v-menu>
-                          </v-col>
-                        </v-row>
-                      </v-container>
-                    </v-card-text>
+                          </template>
+                          <v-date-picker
+                            v-model="start_date"
+                            @change="menu1 = false"
+                          ></v-date-picker>
+                        </v-menu>
+                      </v-col>
+                      <v-col cols="6">
+                        <!-- DATE TIME 2 -->
+                        <v-menu
+                          v-model="menu3"
+                          :close-on-content-click="false"
+                          max-width="290"
+                        >
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-text-field
+                              :value="computedDateFormattedEndDate"
+                              clearable
+                              label="End Date"
+                              readonly
+                              v-bind="attrs"
+                              v-on="on"
+                              @click:clear="end_date = null"
+                            ></v-text-field>
+                          </template>
+                          <v-date-picker
+                            v-model="end_date"
+                            @change="menu3 = false"
+                          ></v-date-picker>
+                        </v-menu>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="6">
+                        <v-menu
+                          ref="menu"
+                          v-model="menu2"
+                          :close-on-content-click="false"
+                          :nudge-right="40"
+                          :return-value.sync="start_time"
+                          transition="scale-transition"
+                          offset-y
+                          max-width="290px"
+                          min-width="290px"
+                        >
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-text-field
+                              v-model="start_time"
+                              label="Start Time"
+                              readonly
+                              v-bind="attrs"
+                              v-on="on"
+                            ></v-text-field>
+                          </template>
+                          <v-time-picker
+                            v-if="menu2"
+                            format="24hr"
+                            v-model="start_time"
+                            full-width
+                            @click:minute="$refs.menu.save(start_time)"
+                          ></v-time-picker>
+                        </v-menu>
+                      </v-col>
+                      <v-col cols="6">
+                        <v-menu
+                          ref="menu2"
+                          v-model="menu4"
+                          :close-on-content-click="false"
+                          :nudge-right="40"
+                          :return-value.sync="end_time"
+                          transition="scale-transition"
+                          offset-y
+                          max-width="290px"
+                          min-width="290px"
+                        >
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-text-field
+                              v-model="end_time"
+                              label="End Time"
+                              readonly
+                              v-bind="attrs"
+                              v-on="on"
+                            ></v-text-field>
+                          </template>
+                          <v-time-picker
+                            v-if="menu4"
+                            format="24hr"
+                            v-model="end_time"
+                            full-width
+                            @click:minute="$refs.menu2.save(end_time)"
+                          ></v-time-picker>
+                        </v-menu>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-card-text>
 
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn color="blue darken-1" text @click="close">
-                        Cancel
-                      </v-btn>
-                      <v-btn color="blue darken-1" text @click="save">
-                        Save
-                      </v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue darken-1" text @click="close">
+                    Cancel
+                  </v-btn>
+                  <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
 
-                <v-dialog v-model="dialogDelete" max-width="500px">
-                  <v-card>
-                    <v-card-title class="text-h5"
-                      >Are you sure you want to delete this item?</v-card-title
-                    >
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn color="blue darken-1" text @click="closeDelete"
-                        >Cancel</v-btn
-                      >
-                      <v-btn
-                        color="blue darken-1"
-                        text
-                        @click="deleteItemConfirm"
-                        >OK</v-btn
-                      >
-                      <v-spacer></v-spacer>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
-              </v-toolbar>
-            </template>
-            <template v-slot:[`item.question`]="{ item }">
-              {{ convertToPlain(item.question) }}
-            </template>
-            <template v-slot:[`item.late`]="{ item }">
-              <div v-if="item.late === 1">
-                <v-icon class="mr-2"> mdi-check </v-icon>
-              </div>
-              <div v-else>
-                <v-icon class="mr-2"> mdi-close </v-icon>
-              </div>
-            </template>
-            <template v-slot:[`item.IsAnalysis`]="{ item }">
-              <div v-if="item.IsAnalysis === 1">
-                <v-icon class="mr-2"> mdi-check </v-icon>
-              </div>
-              <div v-else>
-                <v-icon class="mr-2"> mdi-close </v-icon>
-              </div>
-            </template>
-            <template v-slot:[`item.file`]="{ item }">
-              <div v-if="item.file">
-                <v-icon small class="mr-2" @click="download(item.file)">
-                  mdi-file-download
-                </v-icon>
-              </div>
-              <div v-else>
-                {{ " - " }}
-              </div>
-            </template>
-            <template v-slot:[`item.start_date`]="{ item }">
-              {{ invalidDate(item.start_date) }}
-            </template>
-            <template v-slot:[`item.end_date`]="{ item }">
-              {{ invalidDate(item.end_date) }}
-            </template>
-            <template v-slot:[`item.action`]="{ item }">
-              <v-icon small class="mr-2" @click="editItem(item)">
-                mdi-pencil
-              </v-icon>
-              <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-            </template>
-          </v-data-table>
-        </v-col>
-      </v-row>
+            <v-dialog v-model="dialogDelete" max-width="500px">
+              <v-card>
+                <v-card-title class="text-h5"
+                  >Are you sure you want to delete this item?</v-card-title
+                >
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue darken-1" text @click="closeDelete"
+                    >Cancel</v-btn
+                  >
+                  <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+                    >OK</v-btn
+                  >
+                  <v-spacer></v-spacer>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </v-toolbar>
+        </template>
+        <template v-slot:[`item.question`]="{ item }">
+          {{ convertToPlain(item.question) }}
+        </template>
+        <template v-slot:[`item.late`]="{ item }">
+          <div v-if="item.late === 1">
+            <v-icon class="mr-2"> mdi-check </v-icon>
+          </div>
+          <div v-else>
+            <v-icon class="mr-2"> mdi-close </v-icon>
+          </div>
+        </template>
+        <template v-slot:[`item.IsAnalysis`]="{ item }">
+          <div v-if="item.IsAnalysis === 1">
+            <v-icon class="mr-2"> mdi-check </v-icon>
+          </div>
+          <div v-else>
+            <v-icon class="mr-2"> mdi-close </v-icon>
+          </div>
+        </template>
+        <template v-slot:[`item.file`]="{ item }">
+          <div v-if="item.file">
+            <v-icon small class="mr-2" @click="download(item.file)">
+              mdi-file-download
+            </v-icon>
+          </div>
+          <div v-else>
+            {{ " - " }}
+          </div>
+        </template>
+        <template v-slot:[`item.start_date`]="{ item }">
+          {{ invalidDate(item.start_date) }}
+        </template>
+        <template v-slot:[`item.end_date`]="{ item }">
+          {{ invalidDate(item.end_date) }}
+        </template>
+        <template v-slot:[`item.action`]="{ item }">
+          <v-icon small class="mr-2" @click="editItem(item)">
+            mdi-pencil
+          </v-icon>
+          <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+        </template>
+      </v-data-table>
     </v-col>
   </v-row>
 </template>

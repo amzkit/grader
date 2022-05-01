@@ -108,12 +108,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 
 
@@ -1014,6 +1008,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-row",
+    { attrs: { justify: "center" } },
     [
       _c("Loading", { attrs: { loading: this.loading } }),
       _vm._v(" "),
@@ -1024,133 +1019,107 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c("v-col", { attrs: { cols: "10" } }, [
-        !this.$store.state.data.loading
-          ? _c(
-              "div",
+      _c(
+        "v-col",
+        { attrs: { cols: "9" } },
+        [
+          _c("v-data-table", {
+            staticClass: "elevation-1",
+            attrs: {
+              headers: _vm.headers,
+              items: this.$store.state.data.schedule_all
+            },
+            scopedSlots: _vm._u(
               [
-                _c(
-                  "v-row",
-                  { attrs: { justify: "center" } },
-                  [
-                    _c(
-                      "v-col",
-                      [
-                        _c("v-data-table", {
-                          staticClass: "elevation-1",
-                          attrs: {
-                            headers: _vm.headers,
-                            items: this.$store.state.data.schedule_all
-                          },
-                          scopedSlots: _vm._u(
+                {
+                  key: "item.index",
+                  fn: function(ref) {
+                    var index = ref.index
+                    return [
+                      _vm._v("\n        " + _vm._s(index + 1) + "\n      ")
+                    ]
+                  }
+                },
+                {
+                  key: "item.question",
+                  fn: function(ref) {
+                    var item = ref.item
+                    return [
+                      _vm._v(
+                        "\n        " +
+                          _vm._s(_vm.convertToPlain(item.question)) +
+                          "\n      "
+                      )
+                    ]
+                  }
+                },
+                {
+                  key: "item.file",
+                  fn: function(ref) {
+                    var item = ref.item
+                    return [
+                      item.file
+                        ? _c(
+                            "div",
                             [
-                              {
-                                key: "item.index",
-                                fn: function(ref) {
-                                  var index = ref.index
-                                  return [
-                                    _vm._v(
-                                      "\n              " +
-                                        _vm._s(index + 1) +
-                                        "\n            "
-                                    )
-                                  ]
-                                }
-                              },
-                              {
-                                key: "item.question",
-                                fn: function(ref) {
-                                  var item = ref.item
-                                  return [
-                                    _vm._v(
-                                      "\n              " +
-                                        _vm._s(
-                                          _vm.convertToPlain(item.question)
-                                        ) +
-                                        "\n            "
-                                    )
-                                  ]
-                                }
-                              },
-                              {
-                                key: "item.file",
-                                fn: function(ref) {
-                                  var item = ref.item
-                                  return [
-                                    item.file
-                                      ? _c(
-                                          "div",
-                                          [
-                                            _c(
-                                              "v-icon",
-                                              {
-                                                staticClass: "mr-2",
-                                                attrs: { small: "" },
-                                                on: {
-                                                  click: function($event) {
-                                                    return _vm.download(
-                                                      item.file
-                                                    )
-                                                  }
-                                                }
-                                              },
-                                              [
-                                                _vm._v(
-                                                  "\n                  mdi-file-download\n                "
-                                                )
-                                              ]
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      : _c("div", [_vm._v(_vm._s("-"))])
-                                  ]
-                                }
-                              },
-                              {
-                                key: "item.start_date",
-                                fn: function(ref) {
-                                  var item = ref.item
-                                  return [
-                                    _vm._v(
-                                      "\n              " +
-                                        _vm._s(
-                                          _vm.invalidDate(item.start_date)
-                                        ) +
-                                        "\n            "
-                                    )
-                                  ]
-                                }
-                              },
-                              {
-                                key: "item.end_date",
-                                fn: function(ref) {
-                                  var item = ref.item
-                                  return [
-                                    _vm._v(
-                                      "\n              " +
-                                        _vm._s(_vm.invalidDate(item.end_date)) +
-                                        "\n            "
-                                    )
-                                  ]
-                                }
-                              }
+                              _c(
+                                "v-icon",
+                                {
+                                  staticClass: "mr-2",
+                                  attrs: { small: "" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.download(item.file)
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n            mdi-file-download\n          "
+                                  )
+                                ]
+                              )
                             ],
-                            null,
-                            true
+                            1
                           )
-                        })
-                      ],
-                      1
-                    )
-                  ],
-                  1
-                )
+                        : _c("div", [_vm._v(_vm._s("-"))])
+                    ]
+                  }
+                },
+                {
+                  key: "item.start_date",
+                  fn: function(ref) {
+                    var item = ref.item
+                    return [
+                      _vm._v(
+                        "\n        " +
+                          _vm._s(_vm.invalidDate(item.start_date)) +
+                          "\n      "
+                      )
+                    ]
+                  }
+                },
+                {
+                  key: "item.end_date",
+                  fn: function(ref) {
+                    var item = ref.item
+                    return [
+                      _vm._v(
+                        "\n        " +
+                          _vm._s(_vm.invalidDate(item.end_date)) +
+                          "\n      "
+                      )
+                    ]
+                  }
+                }
               ],
-              1
+              null,
+              true
             )
-          : _vm._e()
-      ])
+          })
+        ],
+        1
+      )
     ],
     1
   )

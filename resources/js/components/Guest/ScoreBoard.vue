@@ -31,11 +31,11 @@
     </v-col>
     <v-col cols="1"> <v-divider vertical></v-divider></v-col>
 
-    <v-col>
+    <v-col cols="7">
       <v-row justify="center">
         <v-data-table
           :headers="headers"
-          :items="scoreboard.scoreboard"
+          :items="items"
           class="elevation-1 row-pointer"
         >
           <template v-slot:[`item.index`]="{ index }">
@@ -66,6 +66,7 @@ export default {
   },
   data: function () {
     return {
+      items: [],
       search: "",
       loading: false,
       schedules: [],
@@ -79,19 +80,19 @@ export default {
         },
         {
           text: "Date Send",
-
           sortable: false,
           value: "date_send",
         },
         { text: "Name", value: "name" },
         { text: "Language", value: "Lang" },
+        { text: "Count Submit", value: "count", align: "center" },
         { text: "Score", value: "score" },
       ],
     };
   },
 
-  created() {
-    this.fetchItemSchedule();
+  async created() {
+    await this.fetchItemSchedule();
   },
 
   computed: {
@@ -151,6 +152,21 @@ export default {
         .catch((error) => {
           this.snackBar(3500, error, "error");
         });
+
+      if (this.scoreboard.scoreboard) {
+        const convert = (arr) => {
+          const res = {};
+          arr.forEach((obj) => {
+            const key = `${obj.schedule_id}`;
+            if (!res[key]) {
+              res[key] = { ...obj, count: 0 };
+            }
+            res[key].count += 1;
+          });
+          return Object.values(res);
+        };
+        this.items = convert(this.scoreboard.scoreboard);
+      }
       this.loading = false;
     },
   },
