@@ -1350,10 +1350,7 @@ var render = function() {
                                   _c(
                                     "v-dialog",
                                     {
-                                      attrs: {
-                                        persistent: "",
-                                        "max-width": "600px"
-                                      },
+                                      attrs: { "max-width": "600px" },
                                       scopedSlots: _vm._u(
                                         [
                                           {

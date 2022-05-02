@@ -302,6 +302,64 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -337,7 +395,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         start_date: "",
         end_date: "",
         lang: "",
-        type: ""
+        type: "",
+        send: false
       },
       sortby: "Sort"
     };
@@ -349,7 +408,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   computed: {
     getDateTime: function getDateTime() {
-      return dayjs__WEBPACK_IMPORTED_MODULE_1___default()(new Date()).format("MM-DD-YYYY HH:mm");
+      return dayjs__WEBPACK_IMPORTED_MODULE_1___default()(new Date()).format("YYYY-MM-DD HH:mm");
     },
     filteredItems: function filteredItems() {
       var _this = this;
@@ -384,31 +443,38 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     filterCourseRoom: function filterCourseRoom() {
       var _this3 = this;
 
-      var course_filter_time = this.schedule_room.filter(function (e) {
-        if (e.late || e.end_date > _this3.getDateTime && e.start_date <= _this3.getDateTime) {
-          return e;
+      var schedule_filter = [];
+      this.schedule_room.filter(function (e) {
+        if (e.late) {
+          if (e.end_date > _this3.getDateTime && e.start_date <= _this3.getDateTime || e.end_date <= _this3.getDateTime && e.late) {
+            schedule_filter.push(e);
+          }
+        } else {
+          if (e.end_date > _this3.getDateTime && e.start_date <= _this3.getDateTime) {
+            schedule_filter.push(e);
+          }
         }
       });
       var sort = [];
 
       if (this.sortby == "Title") {
-        sort = course_filter_time.sort(function (a, b) {
+        sort = schedule_filter.sort(function (a, b) {
           return a.title > b.title ? 1 : -1;
         });
       } else if (this.sortby == "Date") {
-        sort = course_filter_time.sort(function (a, b) {
+        sort = schedule_filter.sort(function (a, b) {
           return a.start_date > b.start_date ? 1 : -1;
         });
       } else if (this.sortby == "Level") {
-        sort = course_filter_time.sort(function (a, b) {
+        sort = schedule_filter.sort(function (a, b) {
           return a.level > b.level ? 1 : -1;
         });
       } else if (this.sortby == "Late") {
-        sort = course_filter_time.sort(function (a, b) {
+        sort = schedule_filter.sort(function (a, b) {
           return a.late < b.late ? 1 : -1;
         });
       } else {
-        sort = course_filter_time;
+        sort = schedule_filter;
       }
 
       return _.orderBy(sort.filter(function (item) {
@@ -1554,7 +1620,7 @@ var render = function() {
                 attrs: {
                   "max-width": "100%",
                   color:
-                    item.late && item.end_date <= _vm.getDateTime
+                    item.late && _vm.getDateTime >= item.end_date
                       ? "#FFE57F"
                       : "white"
                 }
@@ -1595,7 +1661,13 @@ var render = function() {
                         _vm._v(" "),
                         _c("v-card-title", [
                           _vm._v(
-                            "Schedule " + _vm._s(item.late ? "(Past due)" : "")
+                            "Schedule\n            " +
+                              _vm._s(
+                                item.late && _vm.getDateTime >= item.end_date
+                                  ? "(Past due)"
+                                  : ""
+                              ) +
+                              "\n          "
                           )
                         ]),
                         _vm._v(" "),
@@ -1659,6 +1731,7 @@ var render = function() {
                             _vm.problem.problem_id = item.problemsId
                             _vm.problem.type = item.type
                             _vm.dialog = true
+                            _vm.problem.send = true
                           }
                         }
                       },
@@ -1675,59 +1748,135 @@ var render = function() {
           _vm.viewAll
             ? _c(
                 "div",
-                [
-                  _c(
-                    "v-expansion-panels",
-                    { staticClass: "mb-4" },
-                    _vm._l(
-                      this.schedule_room.filter(function(e) {
-                        return !e.late && e.end_date <= this$1.getDateTime
-                      }),
-                      function(item, i) {
-                        return _c(
-                          "v-expansion-panel",
-                          { key: i, staticStyle: { background: "#ffe57f" } },
+                _vm._l(
+                  this.schedule_room.filter(function(e) {
+                    return !e.late && e.end_date <= this$1.getDateTime
+                  }),
+                  function(item, i) {
+                    return _c(
+                      "v-card",
+                      {
+                        key: i,
+                        staticClass: "mx-auto mb-4",
+                        staticStyle: { background: "#ffe57f" },
+                        attrs: { "max-width": "100%" }
+                      },
+                      [
+                        _c(
+                          "v-list-item",
+                          { attrs: { "two-line": "" } },
                           [
                             _c(
-                              "v-expansion-panel-header",
-                              {
-                                attrs: { "disable-icon-rotate": "" },
-                                scopedSlots: _vm._u(
-                                  [
-                                    {
-                                      key: "actions",
-                                      fn: function() {
-                                        return [
-                                          _c(
-                                            "v-icon",
-                                            { attrs: { color: "error" } },
-                                            [_vm._v(" mdi-alert-circle ")]
-                                          )
-                                        ]
-                                      },
-                                      proxy: true
-                                    }
-                                  ],
-                                  null,
-                                  true
-                                )
-                              },
+                              "v-list-item-content",
                               [
-                                _vm._v(
-                                  "\n            " +
-                                    _vm._s(item.title + " (Late)") +
-                                    "\n            "
+                                _c(
+                                  "v-list-item-title",
+                                  { staticClass: "text-h5" },
+                                  [
+                                    _vm._v(
+                                      "\n              " +
+                                        _vm._s(item.title + " (Out of time)") +
+                                        "\n            "
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-list-item-subtitle",
+                                  [
+                                    _c("v-rating", {
+                                      attrs: {
+                                        value: item.level,
+                                        dense: "",
+                                        "half-increments": "",
+                                        readonly: "",
+                                        size: "14"
+                                      }
+                                    })
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c("v-divider", { staticClass: "mx-4" }),
+                                _vm._v(" "),
+                                _c("v-card-title", [_vm._v("Schedule ")]),
+                                _vm._v(" "),
+                                _c(
+                                  "v-card-text",
+                                  [
+                                    _c(
+                                      "v-chip-group",
+                                      {
+                                        attrs: {
+                                          "active-class":
+                                            "deep-purple accent-4 white--text",
+                                          column: ""
+                                        }
+                                      },
+                                      [
+                                        _c("v-chip", [
+                                          _vm._v(
+                                            "\n                  " +
+                                              _vm._s(
+                                                _vm.invalidDate(
+                                                  item.start_date
+                                                ) || "NOT SET"
+                                              ) +
+                                              "\n                  -\n                  " +
+                                              _vm._s(
+                                                _vm.invalidDate(
+                                                  item.end_date
+                                                ) || "NOT SET"
+                                              ) +
+                                              "\n                "
+                                          )
+                                        ])
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
                                 )
-                              ]
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-card-actions",
+                          [
+                            _c(
+                              "v-btn",
+                              {
+                                attrs: { color: "primary", text: "" },
+                                on: {
+                                  click: function() {
+                                    _vm.problem.title = item.title
+                                    _vm.problem.question = item.question
+                                    _vm.problem.score = item.score
+                                    _vm.problem.file = item.file
+                                    _vm.problem.start_date = item.start_date
+                                    _vm.problem.end_date = item.end_date
+                                    _vm.problem.lang = item.lang
+                                    _vm.problem.problem_id = item.problemsId
+                                    _vm.problem.type = item.type
+                                    _vm.dialog = true
+                                    _vm.problem.send = false
+                                  }
+                                }
+                              },
+                              [_vm._v("\n            SHOW MORE\n          ")]
                             )
                           ],
                           1
                         )
-                      }
-                    ),
-                    1
-                  )
-                ],
+                      ],
+                      1
+                    )
+                  }
+                ),
                 1
               )
             : _vm._e(),
@@ -1782,7 +1931,7 @@ var render = function() {
       _c(
         "v-dialog",
         {
-          attrs: { persistent: "", "max-width": "800" },
+          attrs: { "max-width": "800" },
           model: {
             value: _vm.dialog,
             callback: function($$v) {
@@ -1909,26 +2058,33 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
-                  _c(
-                    "v-row",
-                    [
-                      _c("v-col", { attrs: { cols: "4" } }, [
-                        _vm._v(" File Import ")
-                      ]),
-                      _vm._v(" "),
-                      _c("v-col", { attrs: { cols: "8" } }, [
-                        _c("input", {
-                          ref: "file_upload",
-                          staticClass: "form-control",
-                          attrs: { type: "file", accept: _vm.problem.type },
-                          on: { change: _vm.onFileChange }
-                        })
-                      ])
-                    ],
-                    1
-                  )
+                  _vm.problem.send
+                    ? [
+                        _c(
+                          "v-row",
+                          [
+                            _c("v-col", { attrs: { cols: "4" } }, [
+                              _vm._v(" File Import ")
+                            ]),
+                            _vm._v(" "),
+                            _c("v-col", { attrs: { cols: "8" } }, [
+                              _c("input", {
+                                ref: "file_upload",
+                                staticClass: "form-control",
+                                attrs: {
+                                  type: "file",
+                                  accept: _vm.problem.type
+                                },
+                                on: { change: _vm.onFileChange }
+                              })
+                            ])
+                          ],
+                          1
+                        )
+                      ]
+                    : _vm._e()
                 ],
-                1
+                2
               ),
               _vm._v(" "),
               _c(
@@ -1942,7 +2098,9 @@ var render = function() {
                       attrs: { color: "green darken-1", text: "" },
                       on: {
                         click: function() {
-                          _vm.$refs.file_upload.value = null
+                          if (_vm.$refs.file_upload) {
+                            _vm.$refs.file_upload.value = null
+                          }
                           _vm.dialog = false
                         }
                       }
@@ -1950,20 +2108,24 @@ var render = function() {
                     [_vm._v("\n          Close\n        ")]
                   ),
                   _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "green darken-1", text: "" },
-                      on: {
-                        click: function($event) {
-                          return _vm.submit()
-                        }
-                      }
-                    },
-                    [_vm._v(" Submit ")]
-                  )
+                  _vm.problem.send
+                    ? [
+                        _c(
+                          "v-btn",
+                          {
+                            attrs: { color: "green darken-1", text: "" },
+                            on: {
+                              click: function($event) {
+                                return _vm.submit()
+                              }
+                            }
+                          },
+                          [_vm._v("\n            Submit\n          ")]
+                        )
+                      ]
+                    : _vm._e()
                 ],
-                1
+                2
               )
             ],
             1
@@ -2044,10 +2206,7 @@ var render = function() {
                                   _c(
                                     "v-dialog",
                                     {
-                                      attrs: {
-                                        persistent: "",
-                                        "max-width": "600px"
-                                      },
+                                      attrs: { "max-width": "600px" },
                                       scopedSlots: _vm._u(
                                         [
                                           {

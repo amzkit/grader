@@ -69,7 +69,7 @@
         max-width="100%"
         v-for="(item, i) in filterCourseRoom"
         :key="i"
-        :color="item.late && item.end_date <= getDateTime ? '#FFE57F' : 'white'"
+        :color="item.late && getDateTime >= item.end_date ? '#FFE57F' : 'white'"
       >
         <v-list-item two-line>
           <v-list-item-content>
@@ -87,9 +87,11 @@
             </v-list-item-subtitle>
             <v-divider class="mx-4"></v-divider>
             <v-card-title
-              >Schedule {{ item.late ? `(Past due)` : "" }}</v-card-title
-            >
-
+              >Schedule
+              {{
+                item.late && getDateTime >= item.end_date ? `(Past due)` : ""
+              }}
+            </v-card-title>
             <v-card-text>
               <v-chip-group
                 active-class="deep-purple accent-4 white--text"
@@ -121,6 +123,7 @@
                 problem.problem_id = item.problemsId;
                 problem.type = item.type;
                 dialog = true;
+                problem.send = true;
               }
             "
           >
@@ -129,22 +132,69 @@
         </v-card-actions>
       </v-card>
       <div v-if="viewAll">
-        <v-expansion-panels class="mb-4">
-          <v-expansion-panel
-            style="background: #ffe57f"
-            v-for="(item, i) in this.schedule_room.filter(
-              (e) => !e.late && e.end_date <= this.getDateTime
-            )"
-            :key="i"
-          >
-            <v-expansion-panel-header disable-icon-rotate>
-              {{ `${item.title} (Late)` }}
-              <template v-slot:actions>
-                <v-icon color="error"> mdi-alert-circle </v-icon>
-              </template>
-            </v-expansion-panel-header>
-          </v-expansion-panel>
-        </v-expansion-panels>
+        <v-card
+          class="mx-auto mb-4"
+          max-width="100%"
+          style="background: #ffe57f"
+          v-for="(item, i) in this.schedule_room.filter(
+            (e) => !e.late && e.end_date <= this.getDateTime
+          )"
+          :key="i"
+        >
+          <v-list-item two-line>
+            <v-list-item-content>
+              <v-list-item-title class="text-h5">
+                {{ `${item.title} (Out of time)` }}
+              </v-list-item-title>
+              <v-list-item-subtitle>
+                <v-rating
+                  :value="item.level"
+                  dense
+                  half-increments
+                  readonly
+                  size="14"
+                ></v-rating>
+              </v-list-item-subtitle>
+              <v-divider class="mx-4"></v-divider>
+              <v-card-title>Schedule </v-card-title>
+              <v-card-text>
+                <v-chip-group
+                  active-class="deep-purple accent-4 white--text"
+                  column
+                >
+                  <v-chip>
+                    {{ invalidDate(item.start_date) || "NOT SET" }}
+                    -
+                    {{ invalidDate(item.end_date) || "NOT SET" }}
+                  </v-chip>
+                </v-chip-group>
+              </v-card-text>
+            </v-list-item-content>
+          </v-list-item>
+          <v-card-actions>
+            <v-btn
+              color="primary"
+              text
+              @click="
+                () => {
+                  problem.title = item.title;
+                  problem.question = item.question;
+                  problem.score = item.score;
+                  problem.file = item.file;
+                  problem.start_date = item.start_date;
+                  problem.end_date = item.end_date;
+                  problem.lang = item.lang;
+                  problem.problem_id = item.problemsId;
+                  problem.type = item.type;
+                  dialog = true;
+                  problem.send = false;
+                }
+              "
+            >
+              SHOW MORE
+            </v-btn>
+          </v-card-actions>
+        </v-card>
       </div>
 
       <v-expansion-panels>
@@ -159,7 +209,7 @@
       </v-expansion-panels>
     </v-col>
 
-    <v-dialog v-model="dialog" persistent max-width="800">
+    <v-dialog v-model="dialog" max-width="800">
       <v-card>
         <v-card-title class="text-h5"> {{ problem.title }} </v-card-title>
         <v-card-subtitle>
@@ -195,18 +245,20 @@
               {{ problem.lang }}
             </v-col>
           </v-row>
-          <v-row>
-            <v-col cols="4"> File Import </v-col>
-            <v-col cols="8">
-              <input
-                type="file"
-                class="form-control"
-                ref="file_upload"
-                v-on:change="onFileChange"
-                :accept="problem.type"
-              />
-            </v-col>
-          </v-row>
+          <template v-if="problem.send">
+            <v-row>
+              <v-col cols="4"> File Import </v-col>
+              <v-col cols="8">
+                <input
+                  type="file"
+                  class="form-control"
+                  ref="file_upload"
+                  v-on:change="onFileChange"
+                  :accept="problem.type"
+                />
+              </v-col>
+            </v-row>
+          </template>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -215,14 +267,20 @@
             text
             @click="
               () => {
-                $refs.file_upload.value = null;
+                if ($refs.file_upload) {
+                  $refs.file_upload.value = null;
+                }
                 dialog = false;
               }
             "
           >
             Close
           </v-btn>
-          <v-btn color="green darken-1" text @click="submit()"> Submit </v-btn>
+          <template v-if="problem.send">
+            <v-btn color="green darken-1" text @click="submit()">
+              Submit
+            </v-btn>
+          </template>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -268,6 +326,7 @@ export default {
         end_date: "",
         lang: "",
         type: "",
+        send: false,
       },
       sortby: "Sort",
     };
@@ -281,7 +340,7 @@ export default {
 
   computed: {
     getDateTime() {
-      return dayjs(new Date()).format("MM-DD-YYYY HH:mm");
+      return dayjs(new Date()).format("YYYY-MM-DD HH:mm");
     },
     filteredItems() {
       return _.orderBy(
@@ -317,27 +376,38 @@ export default {
       );
     },
     filterCourseRoom() {
-      const course_filter_time = this.schedule_room.filter((e) => {
-        if (
-          e.late ||
-          (e.end_date > this.getDateTime && e.start_date <= this.getDateTime)
-        ) {
-          return e;
+      let schedule_filter = [];
+      this.schedule_room.filter((e) => {
+        if (e.late) {
+          if (
+            (e.end_date > this.getDateTime &&
+              e.start_date <= this.getDateTime) ||
+            (e.end_date <= this.getDateTime && e.late)
+          ) {
+            schedule_filter.push(e);
+          }
+        } else {
+          if (
+            e.end_date > this.getDateTime &&
+            e.start_date <= this.getDateTime
+          ) {
+            schedule_filter.push(e);
+          }
         }
       });
       let sort = [];
       if (this.sortby == "Title") {
-        sort = course_filter_time.sort((a, b) => (a.title > b.title ? 1 : -1));
+        sort = schedule_filter.sort((a, b) => (a.title > b.title ? 1 : -1));
       } else if (this.sortby == "Date") {
-        sort = course_filter_time.sort((a, b) =>
+        sort = schedule_filter.sort((a, b) =>
           a.start_date > b.start_date ? 1 : -1
         );
       } else if (this.sortby == "Level") {
-        sort = course_filter_time.sort((a, b) => (a.level > b.level ? 1 : -1));
+        sort = schedule_filter.sort((a, b) => (a.level > b.level ? 1 : -1));
       } else if (this.sortby == "Late") {
-        sort = course_filter_time.sort((a, b) => (a.late < b.late ? 1 : -1));
+        sort = schedule_filter.sort((a, b) => (a.late < b.late ? 1 : -1));
       } else {
-        sort = course_filter_time;
+        sort = schedule_filter;
       }
       return _.orderBy(
         sort.filter((item) => {

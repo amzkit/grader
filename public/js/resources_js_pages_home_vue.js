@@ -194,12 +194,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       skip: false,
       stepper: 2,
       dialog: false,
-      loading: true,
-      items: [{
-        src: "https://mindphp.com/images/knowledge/software-computer-code-1940x900_35196.jpg"
-      }, {
-        src: "https://code.org/shared/images/social-media/codeorg2020_social.png"
-      }]
+      loading: true
     };
   },
   mounted: function mounted() {},
@@ -637,7 +632,7 @@ var render = function() {
               _c(
                 "v-dialog",
                 {
-                  attrs: { "max-width": "1000" },
+                  attrs: { persistent: "", "max-width": "1000" },
                   model: {
                     value: _vm.dialog,
                     callback: function($$v) {

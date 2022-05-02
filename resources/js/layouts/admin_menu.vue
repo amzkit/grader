@@ -296,6 +296,11 @@ export default {
           text: "Analysis",
         },
         {
+          to: "/announce",
+          icon: "mdi-bullhorn",
+          text: "Announcement",
+        },
+        {
           to: "/scoreboard",
           icon: "mdi-view-dashboard",
           text: "Scoreboard",
@@ -361,14 +366,14 @@ export default {
           text: "Analysis",
         },
         {
+          to: "/announce",
+          icon: "mdi-bullhorn",
+          text: "Announcement",
+        },
+        {
           to: "/scoreboard",
           icon: "mdi-view-dashboard",
           text: "Scoreboard",
-        },
-        {
-          to: "/announce",
-          icon: "mdi-view-dashboard",
-          text: "Announcement",
         },
         {
           icon: "mdi-account",

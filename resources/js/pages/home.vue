@@ -29,7 +29,7 @@
         </h5>
       </div>
       <v-row justify="center">
-        <v-dialog v-model="dialog" max-width="1000">
+        <v-dialog v-model="dialog" persistent max-width="1000">
           <v-card>
             <v-stepper v-model="stepper" vertical>
               <v-stepper-step step="1" complete>
@@ -121,14 +121,6 @@ export default {
       stepper: 2,
       dialog: false,
       loading: true,
-      items: [
-        {
-          src: "https://mindphp.com/images/knowledge/software-computer-code-1940x900_35196.jpg",
-        },
-        {
-          src: "https://code.org/shared/images/social-media/codeorg2020_social.png",
-        },
-      ],
     };
   },
   mounted() {},

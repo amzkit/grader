@@ -603,8 +603,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   IsAnalysis: _this5.editedItem.IsAnalysis,
                   score: _this5.editedItem.score,
                   language_id: _this5.editedItem.language_id,
-                  start_date: dayjs__WEBPACK_IMPORTED_MODULE_1___default()("".concat(_this5.start_date, " ").concat(_this5.start_time)).format("MM-DD-YYYY HH:mm"),
-                  end_date: dayjs__WEBPACK_IMPORTED_MODULE_1___default()("".concat(_this5.end_date, " ").concat(_this5.end_time)).format("MM-DD-YYYY HH:mm")
+                  start_date: dayjs__WEBPACK_IMPORTED_MODULE_1___default()("".concat(_this5.start_date, " ").concat(_this5.start_time)).format("YYYY-MM-DD HH:mm"),
+                  end_date: dayjs__WEBPACK_IMPORTED_MODULE_1___default()("".concat(_this5.end_date, " ").concat(_this5.end_time)).format("YYYY-MM-DD HH:mm")
                 }).then(function () {
                   location.reload();
                 })["catch"](function (error) {
@@ -639,8 +639,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   IsAnalysis: _this6.editedItem.IsAnalysis,
                   score: _this6.editedItem.score,
                   language_id: _this6.editedItem.language_id,
-                  start_date: _this6.start_date && _this6.start_time ? dayjs__WEBPACK_IMPORTED_MODULE_1___default()("".concat(_this6.start_date, " ").concat(_this6.start_time)).format("MM-DD-YYYY HH:mm") : _this6.editedItem.start_date,
-                  end_date: _this6.end_date && _this6.end_time ? dayjs__WEBPACK_IMPORTED_MODULE_1___default()("".concat(_this6.end_date, " ").concat(_this6.end_time)).format("MM-DD-YYYY HH:mm") : _this6.editedItem.end_date
+                  start_date: _this6.start_date && _this6.start_time ? dayjs__WEBPACK_IMPORTED_MODULE_1___default()("".concat(_this6.start_date, " ").concat(_this6.start_time)).format("YYYY-MM-DD HH:mm") : _this6.editedItem.start_date,
+                  end_date: _this6.end_date && _this6.end_time ? dayjs__WEBPACK_IMPORTED_MODULE_1___default()("".concat(_this6.end_date, " ").concat(_this6.end_time)).format("YYYY-MM-DD HH:mm") : _this6.editedItem.end_date
                 }).then(function () {
                   location.reload();
                 })["catch"](function (error) {
@@ -2668,10 +2668,7 @@ var render = function() {
                                   _c(
                                     "v-dialog",
                                     {
-                                      attrs: {
-                                        persistent: "",
-                                        "max-width": "600px"
-                                      },
+                                      attrs: { "max-width": "600px" },
                                       scopedSlots: _vm._u(
                                         [
                                           {

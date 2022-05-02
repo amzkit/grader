@@ -508,10 +508,10 @@ export default {
           score: this.editedItem.score,
           language_id: this.editedItem.language_id,
           start_date: dayjs(`${this.start_date} ${this.start_time}`).format(
-            "MM-DD-YYYY HH:mm"
+            "YYYY-MM-DD HH:mm"
           ),
           end_date: dayjs(`${this.end_date} ${this.end_time}`).format(
-            "MM-DD-YYYY HH:mm"
+            "YYYY-MM-DD HH:mm"
           ),
         })
         .then(() => {
@@ -536,13 +536,13 @@ export default {
           start_date:
             this.start_date && this.start_time
               ? dayjs(`${this.start_date} ${this.start_time}`).format(
-                  "MM-DD-YYYY HH:mm"
+                  "YYYY-MM-DD HH:mm"
                 )
               : this.editedItem.start_date,
           end_date:
             this.end_date && this.end_time
               ? dayjs(`${this.end_date} ${this.end_time}`).format(
-                  "MM-DD-YYYY HH:mm"
+                  "YYYY-MM-DD HH:mm"
                 )
               : this.editedItem.end_date,
         })

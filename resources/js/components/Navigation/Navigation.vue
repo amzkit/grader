@@ -14,7 +14,7 @@
           >
             <v-list-item-content>
               <v-list-item-title>
-                <v-dialog v-model="dialog" persistent max-width="600px">
+                <v-dialog v-model="dialog" max-width="600px">
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn color="primary" block dark v-bind="attrs" v-on="on">
                       New Classroom

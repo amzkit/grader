@@ -5499,6 +5499,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         icon: "mdi-file-chart",
         text: "Analysis"
       }, {
+        to: "/announce",
+        icon: "mdi-bullhorn",
+        text: "Announcement"
+      }, {
         to: "/scoreboard",
         icon: "mdi-view-dashboard",
         text: "Scoreboard"
@@ -5547,13 +5551,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         icon: "mdi-file-chart",
         text: "Analysis"
       }, {
+        to: "/announce",
+        icon: "mdi-bullhorn",
+        text: "Announcement"
+      }, {
         to: "/scoreboard",
         icon: "mdi-view-dashboard",
         text: "Scoreboard"
-      }, {
-        to: "/announce",
-        icon: "mdi-view-dashboard",
-        text: "Announcement"
       }, {
         icon: "mdi-account",
         text: "User",
