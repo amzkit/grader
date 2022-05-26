@@ -320,7 +320,7 @@ export default {
             },
             {
               text: "Manage User",
-              to: "/manage-user",
+              to: "/manage-users",
             },
           ],
         },
@@ -381,7 +381,7 @@ export default {
           subLinks: [
             {
               text: "Manage User",
-              to: "/manage-user",
+              to: "/manage-users",
             },
           ],
         },

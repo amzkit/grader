@@ -5518,7 +5518,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           to: "/new-user"
         }, {
           text: "Manage User",
-          to: "/manage-user"
+          to: "/manage-users"
         }]
       }],
       teacher: [{
@@ -5563,7 +5563,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         text: "User",
         subLinks: [{
           text: "Manage User",
-          to: "/manage-user"
+          to: "/manage-users"
         }]
       }]
     };
