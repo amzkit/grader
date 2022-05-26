@@ -29,9 +29,9 @@ const routes = [
         component: () => import("../components/Admin/NewUser.vue")
     },
     {
-        path: "/manage-user",
-        name: "manage-user",
-        component: () => import("../components/Admin/ManageUser.vue")
+        path: "/manage-users",
+        name: "manage-users",
+        component: () => import("../components/Admin/ManageUsers.vue")
     },
     {
         path: "/change-password",

@@ -5954,10 +5954,10 @@ var routes = [{
     return __webpack_require__.e(/*! import() */ "resources_js_components_Admin_NewUser_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Admin/NewUser.vue */ "./resources/js/components/Admin/NewUser.vue"));
   }
 }, {
-  path: "/manage-user",
-  name: "manage-user",
+  path: "/manage-users",
+  name: "manage-users",
   component: function component() {
-    return __webpack_require__.e(/*! import() */ "resources_js_components_Admin_ManageUser_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Admin/ManageUser.vue */ "./resources/js/components/Admin/ManageUser.vue"));
+    return __webpack_require__.e(/*! import() */ "resources_js_components_Admin_ManageUsers_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/Admin/ManageUsers.vue */ "./resources/js/components/Admin/ManageUsers.vue"));
   }
 }, {
   path: "/change-password",
@@ -107319,7 +107319,7 @@ var index = {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_components_Admin_NewUser_vue":1,"resources_js_components_Admin_ManageUser_vue":1,"resources_js_auth_ChangePassword_vue":1,"resources_js_components_Mission_ManageMissionClassroom_vue":1,"resources_js_components_Mission_ManageMission_vue":1,"resources_js_components_Mission_NewMission_vue":1,"resources_js_components_Mission_Mission_vue":1,"resources_js_components_TestMission_NewTest_vue":1,"resources_js_components_Classroom_ManageClassroom_vue":1,"resources_js_components_Mission_Problems_vue":1,"resources_js_components_Classroom_NewClassroom_vue":1,"resources_js_pages_MyScorePage_vue":1,"resources_js_components_MyScore_MyScoreDetail_vue":1,"resources_js_pages_ScoreBoardPage_vue":1,"resources_js_components_Comment_Comment_vue":1,"resources_js_components_Scoreboard_MyScoreScoreboard_vue":1,"resources_js_components_Guest_Problems_vue":1,"resources_js_components_Guest_MyScore_vue":1,"resources_js_components_Guest_ScoreBoard_vue":1,"resources_js_components_Guest_Task_vue":1,"resources_js_components_Analysis_Analysis_vue":1,"resources_js_components_Analysis_AnalysisProblems_vue":1,"resources_js_components_Analysis_AnalysisDetail_vue":1,"resources_js_components_Announcement_Announce_vue":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_components_Admin_NewUser_vue":1,"resources_js_components_Admin_ManageUsers_vue":1,"resources_js_auth_ChangePassword_vue":1,"resources_js_components_Mission_ManageMissionClassroom_vue":1,"resources_js_components_Mission_ManageMission_vue":1,"resources_js_components_Mission_NewMission_vue":1,"resources_js_components_Mission_Mission_vue":1,"resources_js_components_TestMission_NewTest_vue":1,"resources_js_components_Classroom_ManageClassroom_vue":1,"resources_js_components_Mission_Problems_vue":1,"resources_js_components_Classroom_NewClassroom_vue":1,"resources_js_pages_MyScorePage_vue":1,"resources_js_components_MyScore_MyScoreDetail_vue":1,"resources_js_pages_ScoreBoardPage_vue":1,"resources_js_components_Comment_Comment_vue":1,"resources_js_components_Scoreboard_MyScoreScoreboard_vue":1,"resources_js_components_Guest_Problems_vue":1,"resources_js_components_Guest_MyScore_vue":1,"resources_js_components_Guest_ScoreBoard_vue":1,"resources_js_components_Guest_Task_vue":1,"resources_js_components_Analysis_Analysis_vue":1,"resources_js_components_Analysis_AnalysisProblems_vue":1,"resources_js_components_Analysis_AnalysisDetail_vue":1,"resources_js_components_Announcement_Announce_vue":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};
