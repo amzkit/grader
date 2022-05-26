@@ -119,7 +119,7 @@ export default {
         .post("/api/user/file/upload", formData, config)
         .then(function (response) {
           if (response.data.success === true) {
-            window.location.href = "/manage-user";
+            window.location.href = "/manage-users";
           }
         })
         .catch(function (error) {

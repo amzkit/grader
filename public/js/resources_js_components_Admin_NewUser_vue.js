@@ -153,7 +153,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context.next = 6;
                 return axios.post("/api/user/file/upload", formData, config).then(function (response) {
                   if (response.data.success === true) {
-                    window.location.href = "/manage-user";
+                    window.location.href = "/manage-users";
                   }
                 })["catch"](function (error) {
                   console.log(error);
