@@ -60,9 +60,9 @@
                   :items="[
                     {
                       id: 1,
-                      key: 'No Detail',
+                      key: 'Report No Detail',
                     },
-                    { id: 2, key: 'Detail' },
+                    { id: 2, key: 'Report Detail' },
                   ]"
                   label="Select Template Export"
                   item-text="key"

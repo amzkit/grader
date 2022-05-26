@@ -205,7 +205,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       editedIndex: -1,
       editedItem: {
         id: 0,
-        IsActive: 0,
+        IsActive: 1,
         picture: ""
       },
       defaultItem: {

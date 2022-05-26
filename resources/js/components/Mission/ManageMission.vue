@@ -175,8 +175,9 @@ export default {
           align: "start",
           sortable: true,
           value: "title",
+          width: "150pt"
         },
-        { text: "Question", value: "question" },
+        { text: "Question", value: "question" ,width: "400pt"},
         { text: "File", value: "file" },
         {
           text: "Level",

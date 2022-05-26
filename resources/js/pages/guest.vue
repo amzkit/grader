@@ -13,7 +13,7 @@
             <v-carousel-item
               v-for="(item, i) in image"
               :key="i"
-              :src="`${'http://127.0.0.1:8000'}/storage${item.picture.replace(
+              :src="`${'https://grader.ajkit.com'}/storage${item.picture.replace(
                 'public',
                 ''
               )}`"

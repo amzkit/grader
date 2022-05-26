@@ -244,10 +244,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         text: "Title",
         align: "start",
         sortable: true,
-        value: "title"
+        value: "title",
+        width: "150pt"
       }, {
         text: "Question",
-        value: "question"
+        value: "question",
+        width: "400pt"
       }, {
         text: "File",
         value: "file"

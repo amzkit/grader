@@ -5,7 +5,7 @@
     <v-col cols="3">
       <v-card class="mx-auto" max-width="300">
         <v-list dense>
-          <v-subheader>Problems</v-subheader>
+          <v-subheader>Course</v-subheader>
           <v-text-field
             class="mx-3"
             label="Search"

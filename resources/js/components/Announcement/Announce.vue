@@ -43,7 +43,7 @@
                               width: 100%;
                               object-fit: cover;
                             "
-                            :src="`${'http://127.0.0.1:8000'}/storage/${editedItem.picture.replace(
+                            :src="`${'https://grader.ajkit.com'}/storage/${editedItem.picture.replace(
                               'public/',
                               ''
                             )}`"
@@ -114,7 +114,7 @@
           <v-img
             max-height="190"
             max-width="290"
-            :src="`${'http://127.0.0.1:8000'}/storage/${item.picture.replace(
+            :src="`${'https://grader.ajkit.com'}/storage/${item.picture.replace(
               'public/',
               ''
             )}`"
@@ -167,7 +167,7 @@ export default {
     editedIndex: -1,
     editedItem: {
       id: 0,
-      IsActive: 0,
+      IsActive: 1,
       picture: "",
     },
     defaultItem: {

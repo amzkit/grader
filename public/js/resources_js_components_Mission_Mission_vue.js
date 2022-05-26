@@ -1467,7 +1467,7 @@ var render = function() {
                 "v-list",
                 { attrs: { dense: "" } },
                 [
-                  _c("v-subheader", [_vm._v("Problems")]),
+                  _c("v-subheader", [_vm._v("Course")]),
                   _vm._v(" "),
                   _c("v-text-field", {
                     staticClass: "mx-3",
