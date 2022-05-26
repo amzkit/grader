@@ -602,7 +602,7 @@ var render = function() {
                 key: i,
                 attrs: {
                   src:
-                    "http://127.0.0.1:8000" +
+                    "https://grader.ajkit.com" +
                     "/storage" +
                     item.picture.replace("public", ""),
                   "reverse-transition": "fade-transition",

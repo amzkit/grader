@@ -890,7 +890,7 @@ var render = function() {
                                                           },
                                                           attrs: {
                                                             src:
-                                                              "http://127.0.0.1:8000" +
+                                                              "https://grader.ajkit.com" +
                                                               "/storage/" +
                                                               _vm.editedItem.picture.replace(
                                                                 "public/",
@@ -1102,7 +1102,7 @@ var render = function() {
                           "max-height": "190",
                           "max-width": "290",
                           src:
-                            "http://127.0.0.1:8000" +
+                            "https://grader.ajkit.com" +
                             "/storage/" +
                             item.picture.replace("public/", "")
                         }
