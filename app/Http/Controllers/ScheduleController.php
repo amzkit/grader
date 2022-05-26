@@ -83,8 +83,8 @@ class ScheduleController extends Controller
     {
 
         $schedule = Schedule::where('course_id', '=',  $id)
-            ->join("problems", "problems.id", "=", "schedules.problem_id")
-            ->join("languages", "languages.id", "=", "schedules.language_id")
+            ->leftJoin("problems", "problems.id", "=", "schedules.problem_id")
+            ->leftJoin("languages", "languages.id", "=", "schedules.language_id")
             ->where('schedules.IsActive', '=', 1)
             ->select(
                 "schedules.id",
@@ -120,7 +120,7 @@ class ScheduleController extends Controller
                 'score' =>  $request->score,
                 'late' => $request->late,
                 'IsAnalysis' =>  $request->IsAnalysis,
-                'language_id' => $request->language_id,
+                'language_id' => $request->language_id == 0 ? null : $request->language_id,
 
             ];
 
@@ -139,7 +139,7 @@ class ScheduleController extends Controller
                 'score' =>  $request->score,
                 'late' => $request->late,
                 'IsAnalysis' =>  $request->IsAnalysis,
-                'language_id' => $request->language_id,
+                'language_id' => $request->language_id == 0 ? null : $request->language_id,
             ]
         );
         return response()->json(['success' => true, 'payload' => $schedule]);

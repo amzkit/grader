@@ -5481,9 +5481,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         icon: "mdi-calendar-check",
         text: "Problem",
         subLinks: [{
-          text: "Manage Problem",
-          to: "/manage-problem"
-        }, {
           text: "Manage Problem Classroom",
           to: "/manage-problem-classroom"
         }]
@@ -5493,6 +5490,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         subLinks: [{
           text: "Manage Classroom",
           to: "/manage-classroom"
+        }, {
+          text: "Manage Problem",
+          to: "/manage-problem"
         }]
       }, {
         to: "/analysis",
@@ -5506,11 +5506,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         to: "/scoreboard",
         icon: "mdi-view-dashboard",
         text: "Scoreboard"
-      }, {
-        to: "/new-test",
-        icon: "mdi-clipboard-edit",
-        text: "New Test"
-      }, {
+      }, // {
+      //   to: "/new-test",
+      //   icon: "mdi-clipboard-edit",
+      //   text: "New Test",
+      // },
+      {
         icon: "mdi-account",
         text: "User",
         subLinks: [{
@@ -5531,21 +5532,29 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         subLinks: [{
           text: "Manage Classroom",
           to: "/manage-classroom"
-        }]
-      }, {
-        icon: "mdi-calendar-check",
-        text: "Problem",
-        subLinks: [{
-          text: "Problem",
-          to: "/manage-problem"
         }, {
           text: "Problem Classroom",
           to: "/manage-problem-classroom"
-        }, {
-          to: "/new-test",
-          icon: "mdi-view-dashboard",
-          text: "New Test"
         }]
+      }, // {
+      //   icon: "mdi-calendar-check",
+      //   text: "Problem",
+      //   subLinks: [
+      //     {
+      //       text: "Problem",
+      //       to: "/manage-problem",
+      //     },
+      //     {
+      //       to: "/new-test",
+      //       icon: "mdi-view-dashboard",
+      //       text: "New Test",
+      //     },
+      //   ],
+      // },
+      {
+        to: "/manage-problem",
+        icon: "mdi-calendar-check",
+        text: "Manage Problems"
       }, {
         to: "/analysis",
         icon: "mdi-file-chart",
@@ -5996,6 +6005,12 @@ var routes = [{
   name: "new-test",
   component: function component() {
     return __webpack_require__.e(/*! import() */ "resources_js_components_TestMission_NewTest_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/TestMission/NewTest.vue */ "./resources/js/components/TestMission/NewTest.vue"));
+  }
+}, {
+  path: "/test-case",
+  name: "test-case",
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ "resources_js_components_TestMission_TestCase_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../components/TestMission/TestCase.vue */ "./resources/js/components/TestMission/TestCase.vue"));
   }
 }, // Classroom
 {
@@ -107319,7 +107334,7 @@ var index = {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_components_Admin_NewUser_vue":1,"resources_js_components_Admin_ManageUsers_vue":1,"resources_js_auth_ChangePassword_vue":1,"resources_js_components_Mission_ManageMissionClassroom_vue":1,"resources_js_components_Mission_ManageMission_vue":1,"resources_js_components_Mission_NewMission_vue":1,"resources_js_components_Mission_Mission_vue":1,"resources_js_components_TestMission_NewTest_vue":1,"resources_js_components_Classroom_ManageClassroom_vue":1,"resources_js_components_Mission_Problems_vue":1,"resources_js_components_Classroom_NewClassroom_vue":1,"resources_js_pages_MyScorePage_vue":1,"resources_js_components_MyScore_MyScoreDetail_vue":1,"resources_js_pages_ScoreBoardPage_vue":1,"resources_js_components_Comment_Comment_vue":1,"resources_js_components_Scoreboard_MyScoreScoreboard_vue":1,"resources_js_components_Guest_Problems_vue":1,"resources_js_components_Guest_MyScore_vue":1,"resources_js_components_Guest_ScoreBoard_vue":1,"resources_js_components_Guest_Task_vue":1,"resources_js_components_Analysis_Analysis_vue":1,"resources_js_components_Analysis_AnalysisProblems_vue":1,"resources_js_components_Analysis_AnalysisDetail_vue":1,"resources_js_components_Announcement_Announce_vue":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_pages_home_vue":1,"resources_js_pages_guest_vue":1,"resources_js_components_Admin_NewUser_vue":1,"resources_js_components_Admin_ManageUsers_vue":1,"resources_js_auth_ChangePassword_vue":1,"resources_js_components_Mission_ManageMissionClassroom_vue":1,"resources_js_components_Mission_ManageMission_vue":1,"resources_js_components_Mission_NewMission_vue":1,"resources_js_components_Mission_Mission_vue":1,"resources_js_components_TestMission_NewTest_vue":1,"resources_js_components_TestMission_TestCase_vue":1,"resources_js_components_Classroom_ManageClassroom_vue":1,"resources_js_components_Mission_Problems_vue":1,"resources_js_components_Classroom_NewClassroom_vue":1,"resources_js_pages_MyScorePage_vue":1,"resources_js_components_MyScore_MyScoreDetail_vue":1,"resources_js_pages_ScoreBoardPage_vue":1,"resources_js_components_Comment_Comment_vue":1,"resources_js_components_Scoreboard_MyScoreScoreboard_vue":1,"resources_js_components_Guest_Problems_vue":1,"resources_js_components_Guest_MyScore_vue":1,"resources_js_components_Guest_ScoreBoard_vue":1,"resources_js_components_Guest_Task_vue":1,"resources_js_components_Analysis_Analysis_vue":1,"resources_js_components_Analysis_AnalysisProblems_vue":1,"resources_js_components_Analysis_AnalysisDetail_vue":1,"resources_js_components_Announcement_Announce_vue":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};

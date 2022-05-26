@@ -19,6 +19,12 @@
               </v-btn>
             </v-col>
           </v-row>
+          <v-col>
+            <li>Y = Correct</li>
+            <li>N = Incorrect</li>
+            <li>T = Timeout</li>
+            <li>X = No Output( Problems did't run or Crash )</li>
+          </v-col>
           <v-text-field
             class="mx-3"
             label="Search"

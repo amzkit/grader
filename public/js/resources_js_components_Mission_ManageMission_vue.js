@@ -222,6 +222,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -244,8 +249,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         text: "Title",
         align: "start",
         sortable: true,
-        value: "title",
-        width: "150pt"
+        value: "title"
       }, {
         text: "Question",
         value: "question",
@@ -259,6 +263,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, {
         text: "Tolerant",
         value: "tolerant"
+      }, {
+        text: "Test Case",
+        value: "testcase"
       }, {
         text: "Action",
         value: "action"
@@ -357,7 +364,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     onFileChange: function onFileChange(e) {
       this.editedItem.file = e.target.files[0];
     },
-    download: function download(item) {
+    testcase: function testcase(id) {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
@@ -365,22 +372,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _this2.loading = true;
-                _context2.next = 3;
-                return axios.get("/api/schedule/download".concat(item.replace("problem_file", ""))).then(function (response) {
-                  window.location.href = "api/schedule/download".concat(item.replace("problem_file", ""));
-                })["catch"](function (error) {
-                  if (error.response.status === 404) {
-                    _this2.snackBar(3500, error.response.data.message, "error");
-                  } else {
-                    _this2.snackBar(3500, error, "error");
+                _this2.$router.push({
+                  path: "/test-case",
+                  query: {
+                    test_case_id: id
                   }
-                });
+                })["catch"](function () {});
 
-              case 3:
-                _this2.loading = false;
-
-              case 4:
+              case 1:
               case "end":
                 return _context2.stop();
             }
@@ -388,12 +387,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2);
       }))();
     },
-    convertToPlain: function convertToPlain(html) {
-      var tempDivElement = document.createElement("div");
-      tempDivElement.innerHTML = html;
-      return tempDivElement.textContent || tempDivElement.innerText || "";
-    },
-    getProblems: function getProblems() {
+    download: function download(item) {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
@@ -403,12 +397,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _this3.loading = true;
                 _context3.next = 3;
-                return axios.get("/api/problem").then(function (response) {
-                  if (response.data.success == true) {
-                    _this3.desserts = response.data.payload;
-                  }
+                return axios.get("/api/schedule/download".concat(item.replace("problem_file", ""))).then(function (response) {
+                  window.location.href = "api/schedule/download".concat(item.replace("problem_file", ""));
                 })["catch"](function (error) {
-                  _this3.snackBar(3500, error, "error");
+                  if (error.response.status === 404) {
+                    _this3.snackBar(3500, error.response.data.message, "error");
+                  } else {
+                    _this3.snackBar(3500, error, "error");
+                  }
                 });
 
               case 3:
@@ -422,7 +418,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3);
       }))();
     },
-    delateProblems: function delateProblems() {
+    convertToPlain: function convertToPlain(html) {
+      var tempDivElement = document.createElement("div");
+      tempDivElement.innerHTML = html;
+      return tempDivElement.textContent || tempDivElement.innerText || "";
+    },
+    getProblems: function getProblems() {
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
@@ -432,8 +433,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _this4.loading = true;
                 _context4.next = 3;
-                return axios["delete"]("api/problem/" + _this4.editedItem.id).then(function () {
-                  _this4.snackBar();
+                return axios.get("/api/problem").then(function (response) {
+                  if (response.data.success == true) {
+                    _this4.desserts = response.data.payload;
+                  }
                 })["catch"](function (error) {
                   _this4.snackBar(3500, error, "error");
                 });
@@ -449,44 +452,71 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee4);
       }))();
     },
-    putProblem: function putProblem() {
+    delateProblems: function delateProblems() {
       var _this5 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
-        var config, formData;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
                 _this5.loading = true;
+                _context5.next = 3;
+                return axios["delete"]("api/problem/" + _this5.editedItem.id).then(function () {
+                  _this5.snackBar();
+                })["catch"](function (error) {
+                  _this5.snackBar(3500, error, "error");
+                });
+
+              case 3:
+                _this5.loading = false;
+
+              case 4:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5);
+      }))();
+    },
+    putProblem: function putProblem() {
+      var _this6 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
+        var config, formData;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                _this6.loading = true;
                 config = {
                   headers: {
                     "content-type": "multipart/form-data"
                   }
                 };
                 formData = new FormData();
-                formData.append("id", _this5.editedItem.id);
-                formData.append("title", _this5.editedItem.title);
-                formData.append("question", _this5.editedItem.question);
-                formData.append("file", _this5.editedItem.file ? _this5.editedItem.file : "");
-                formData.append("level", _this5.editedItem.level);
-                formData.append("tolerant", _this5.editedItem.tolerant != "" ? _this5.editedItem.tolerant : "$");
-                _context5.next = 11;
+                formData.append("id", _this6.editedItem.id);
+                formData.append("title", _this6.editedItem.title);
+                formData.append("question", _this6.editedItem.question);
+                formData.append("file", _this6.editedItem.file ? _this6.editedItem.file : "");
+                formData.append("level", _this6.editedItem.level);
+                formData.append("tolerant", _this6.editedItem.tolerant != "" ? _this6.editedItem.tolerant : "$");
+                _context6.next = 11;
                 return axios.post("/api/problem/update", formData, config).then(function () {
-                  _this5.snackBar();
+                  _this6.snackBar();
                 })["catch"](function (error) {
-                  _this5.snackBar(3500, error, "error");
+                  _this6.snackBar(3500, error, "error");
                 });
 
               case 11:
-                _this5.loading = false;
+                _this6.loading = false;
 
               case 12:
               case "end":
-                return _context5.stop();
+                return _context6.stop();
             }
           }
-        }, _callee5);
+        }, _callee6);
       }))();
     },
     editItem: function editItem(item) {
@@ -505,21 +535,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.closeDelete();
     },
     close: function close() {
-      var _this6 = this;
+      var _this7 = this;
 
       this.dialog = false;
       this.$nextTick(function () {
-        _this6.editedItem = Object.assign({}, _this6.defaultItem);
-        _this6.editedIndex = -1;
+        _this7.editedItem = Object.assign({}, _this7.defaultItem);
+        _this7.editedIndex = -1;
       });
     },
     closeDelete: function closeDelete() {
-      var _this7 = this;
+      var _this8 = this;
 
       this.dialogDelete = false;
       this.$nextTick(function () {
-        _this7.editedItem = Object.assign({}, _this7.defaultItem);
-        _this7.editedIndex = -1;
+        _this8.editedItem = Object.assign({}, _this8.defaultItem);
+        _this8.editedIndex = -1;
       });
       this.snackbar = false;
     },
@@ -14958,6 +14988,26 @@ var render = function() {
                               : "-"
                           ) +
                           "\n      "
+                      )
+                    ]
+                  }
+                },
+                {
+                  key: "item.testcase",
+                  fn: function(ref) {
+                    var item = ref.item
+                    return [
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { depressed: "", color: "primary" },
+                          on: {
+                            click: function($event) {
+                              return _vm.testcase(item.id)
+                            }
+                          }
+                        },
+                        [_vm._v("\n          Test Case\n        ")]
                       )
                     ]
                   }

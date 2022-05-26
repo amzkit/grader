@@ -503,11 +503,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
 
 
 
@@ -528,26 +523,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       course_room: [],
       expanded: [],
       singleExpand: false,
-      headers: [{
-        text: "#",
-        align: "center",
-        sortable: false,
-        value: "index"
-      }, {
-        text: "Username",
-        value: "username"
-      }, {
-        text: "Name",
-        align: "start",
-        sortable: false,
-        value: "name"
-      }, {
-        text: "Problems",
-        value: "problems"
-      }, {
-        text: "Total Score",
-        value: "totalScore"
-      }],
       loading: false,
       items: [],
       data: [],
@@ -597,6 +572,30 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         color: color,
         timeout: timeout
       });
+    },
+    getHeaders: function getHeaders(headingText) {
+      return [{
+        text: "#",
+        align: "center",
+        sortable: false,
+        value: "index"
+      }, {
+        text: "Username",
+        value: "username"
+      }, {
+        text: "Name",
+        align: "start",
+        sortable: false,
+        value: "name"
+      }, {
+        text: "Problems (".concat(this.data.schedule.length, ")"),
+        value: "problems"
+      }, {
+        text: "Total Score (".concat(this.data.schedule.reduce(function (t, n) {
+          return t + n.score;
+        }, 0), ")"),
+        value: "totalScore"
+      }];
     },
     invalidDate: function invalidDate(item) {
       return item ? dayjs__WEBPACK_IMPORTED_MODULE_2___default()(item).format("MMMM D, YYYY HH:mm") : "-";
@@ -2161,7 +2160,7 @@ var render = function() {
               _c("v-data-table", {
                 staticClass: "elevation-1",
                 attrs: {
-                  headers: _vm.headers,
+                  headers: _vm.getHeaders(_vm.i),
                   items: _vm.data.classroom,
                   "single-expand": true,
                   expanded: _vm.expanded,
@@ -2258,9 +2257,7 @@ var render = function() {
                           _vm._v(
                             "\n          " +
                               _vm._s(
-                                _vm.mapDataMyScore(item.user_id).length +
-                                  "/" +
-                                  _vm.data.schedule.length
+                                "" + _vm.mapDataMyScore(item.user_id).length
                               ) +
                               "\n        "
                           )
@@ -2275,15 +2272,12 @@ var render = function() {
                           _vm._v(
                             "\n          " +
                               _vm._s(
-                                _vm
-                                  .mapDataMyScore(item.user_id)
-                                  .reduce(function(t, n) {
-                                    return t + n.score
-                                  }, 0) +
-                                  "/" +
-                                  _vm.data.schedule.reduce(function(t, n) {
-                                    return t + n.score
-                                  }, 0)
+                                "" +
+                                  _vm
+                                    .mapDataMyScore(item.user_id)
+                                    .reduce(function(t, n) {
+                                      return t + n.score
+                                    }, 0)
                               ) +
                               "\n        "
                           )

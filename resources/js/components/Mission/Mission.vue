@@ -64,89 +64,15 @@
         </v-col>
       </v-row>
 
-      <v-card
-        class="mx-auto mb-4"
-        max-width="100%"
-        v-for="(item, i) in filterCourseRoom"
-        :key="i"
-        :color="item.late && getDateTime >= item.end_date ? '#FFE57F' : 'white'"
-      >
-        <v-list-item two-line>
-          <v-list-item-content>
-            <v-list-item-title class="text-h5">
-              {{ item.title }}
-            </v-list-item-title>
-            <v-list-item-subtitle>
-              <v-rating
-                :value="item.level"
-                dense
-                half-increments
-                readonly
-                size="14"
-              ></v-rating>
-            </v-list-item-subtitle>
-            <v-divider class="mx-4"></v-divider>
-            <v-card-title
-              >Schedule
-              {{
-                item.late && getDateTime >= item.end_date ? `(Past due)` : ""
-              }}
-            </v-card-title>
-            <v-card-text>
-              <v-chip-group
-                active-class="deep-purple accent-4 white--text"
-                column
-              >
-                <v-chip>
-                  {{ invalidDate(item.start_date) || "NOT SET" }}
-                  -
-                  {{ invalidDate(item.end_date) || "NOT SET" }}
-                </v-chip>
-              </v-chip-group>
-            </v-card-text>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-card-actions>
-          <v-btn
-            color="primary"
-            text
-            @click="
-              () => {
-                problem.title = item.title;
-                problem.question = item.question;
-                problem.score = item.score;
-                problem.file = item.file;
-                problem.start_date = item.start_date;
-                problem.end_date = item.end_date;
-                problem.lang = item.lang;
-                problem.problem_id = item.problemsId;
-                problem.type = item.type;
-                dialog = true;
-                problem.send = true;
-              }
-            "
-          >
-            SHOW MORE
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-      <div v-if="viewAll">
-        <v-card
-          class="mx-auto mb-4"
-          max-width="100%"
-          style="background: #ffe57f"
-          v-for="(item, i) in this.schedule_room.filter(
-            (e) => !e.late && e.end_date <= this.getDateTime
-          )"
-          :key="i"
-        >
-          <v-list-item two-line>
-            <v-list-item-content>
-              <v-list-item-title class="text-h5">
-                {{ `${item.title} (Out of time)` }}
-              </v-list-item-title>
-              <v-list-item-subtitle>
+      <v-expansion-panels :readonly="readonly" multiple focusable>
+        <v-expansion-panel v-for="(item, i) in filterCourseRoom" :key="i">
+          <v-expansion-panel-header v-slot="{ open }">
+            <v-row no-gutters>
+              <v-col cols="12">
+                {{ item.title }}
+                {{
+                  item.late && getDateTime >= item.end_date ? "(Late)" : ""
+                }}&nbsp;
                 <v-rating
                   :value="item.level"
                   dense
@@ -154,136 +80,196 @@
                   readonly
                   size="14"
                 ></v-rating>
-              </v-list-item-subtitle>
-              <v-divider class="mx-4"></v-divider>
-              <v-card-title>Schedule </v-card-title>
-              <v-card-text>
-                <v-chip-group
-                  active-class="deep-purple accent-4 white--text"
-                  column
-                >
-                  <v-chip>
-                    {{ invalidDate(item.start_date) || "NOT SET" }}
-                    -
-                    {{ invalidDate(item.end_date) || "NOT SET" }}
-                  </v-chip>
-                </v-chip-group>
-              </v-card-text>
-            </v-list-item-content>
-          </v-list-item>
-          <v-card-actions>
-            <v-btn
-              color="primary"
-              text
-              @click="
-                () => {
-                  problem.title = item.title;
-                  problem.question = item.question;
-                  problem.score = item.score;
-                  problem.file = item.file;
-                  problem.start_date = item.start_date;
-                  problem.end_date = item.end_date;
-                  problem.lang = item.lang;
-                  problem.problem_id = item.problemsId;
-                  problem.type = item.type;
-                  dialog = true;
-                  problem.send = false;
-                }
-              "
-            >
-              SHOW MORE
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </div>
-
-      <v-expansion-panels>
-        <v-expansion-panel v-for="(item, i) in filterSubmissionRoom" :key="i">
-          <v-expansion-panel-header disable-icon-rotate>
-            {{ `${item.title} (Submit ${item.count})` }}
-            <template v-slot:actions>
-              <v-icon color="teal"> mdi-check </v-icon>
-            </template>
-          </v-expansion-panel-header>
-        </v-expansion-panel>
-      </v-expansion-panels>
-    </v-col>
-
-    <v-dialog v-model="dialog" max-width="800">
-      <v-card>
-        <v-card-title class="text-h5"> {{ problem.title }} </v-card-title>
-        <v-card-subtitle>
-          {{ invalidDate(problem.start_date) || "NOT SET" }}
-          -
-          {{ invalidDate(problem.end_date) || "NOT SET" }}
-        </v-card-subtitle>
-        <v-card-text>
-          <v-row>
-            <v-col cols="4"> Question </v-col>
-            <v-col cols="8">
-              <div v-html="problem.question"></div>
-            </v-col>
-          </v-row>
-          <v-row class="mb-3">
-            <v-col cols="4"> Score </v-col>
-            <v-col cols="8">
-              {{ problem.score }}
-            </v-col>
-          </v-row>
-          <v-row v-if="problem.file" class="mb-3">
-            <v-col cols="4"> Download File Question </v-col>
-            <v-col cols="8">
-              <v-btn small color="primary" dark @click="download(problem.file)">
-                Download File
-              </v-btn>
-            </v-col>
-          </v-row>
-
-          <v-row class="mb-3">
-            <v-col cols="4"> Language </v-col>
-            <v-col cols="8">
-              {{ problem.lang }}
-            </v-col>
-          </v-row>
-          <template v-if="problem.send">
-            <v-row>
-              <v-col cols="4"> File Import </v-col>
-              <v-col cols="8">
-                <input
-                  type="file"
-                  class="form-control"
-                  ref="file_upload"
-                  v-on:change="onFileChange"
-                  :accept="problem.type"
-                />
+              </v-col>
+              <v-col cols="12" class="text--secondary">
+                <v-fade-transition leave-absolute>
+                  <span v-if="open">
+                    (Submit
+                    {{
+                      filterSubmissionRoom.find((e) => e.id == item.id).count
+                    }})</span
+                  >
+                  <v-row v-else no-gutters style="width: 100%">
+                    <v-col cols="6">
+                      Start date:
+                      {{ invalidDate(item.start_date) || "Not set" }}
+                    </v-col>
+                    <v-col cols="6">
+                      End date: {{ invalidDate(item.end_date) || "Not set" }}
+                    </v-col>
+                  </v-row>
+                </v-fade-transition>
               </v-col>
             </v-row>
-          </template>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="green darken-1"
-            text
-            @click="
-              () => {
-                if ($refs.file_upload) {
-                  $refs.file_upload.value = null;
-                }
-                dialog = false;
-              }
-            "
+          </v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <v-card-title class="text-h5"> {{ item.title }} </v-card-title>
+            <v-card-subtitle>
+              {{ invalidDate(item.start_date) || "NOT SET" }}
+              -
+              {{ invalidDate(item.end_date) || "NOT SET" }}
+            </v-card-subtitle>
+            <v-card-text>
+              <v-row>
+                <v-col cols="4"> Question </v-col>
+                <v-col cols="8">
+                  <div v-html="item.question"></div>
+                </v-col>
+              </v-row>
+              <v-row class="mb-3">
+                <v-col cols="4"> Score </v-col>
+                <v-col cols="8">
+                  {{ item.score }}
+                </v-col>
+              </v-row>
+              <v-row v-if="item.file" class="mb-3">
+                <v-col cols="4"> Download File Question </v-col>
+                <v-col cols="8">
+                  <v-btn
+                    small
+                    color="primary"
+                    dark
+                    @click="download(item.file)"
+                  >
+                    Download File
+                  </v-btn>
+                </v-col>
+              </v-row>
+
+              <v-row class="mb-3">
+                <v-col cols="4"> Language </v-col>
+                <v-col cols="8">
+                  <template v-if="item.lang">
+                    {{ item.lang }}
+                  </template>
+                  <template v-else>
+                    <v-autocomplete
+                      v-model="selectLang"
+                      :items="languages"
+                      item-text="lang"
+                      item-value="lang"
+                    >
+                    </v-autocomplete>
+                  </template>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="4"> File Import </v-col>
+                <v-col cols="8">
+                  <input
+                    type="file"
+                    class="form-control"
+                    ref="file_upload"
+                    v-on:change="onFileChange"
+                    :accept="item.type"
+                  />
+                </v-col>
+              </v-row>
+            </v-card-text>
+            <template>
+              <v-btn color="green darken-1" text @click="submit(item)">
+                Submit
+              </v-btn>
+            </template>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
+
+      <div v-if="viewAll">
+        <v-expansion-panels focusable>
+          <v-expansion-panel
+            class="mt-3"
+            style="background: #ffe57f"
+            v-for="(item, i) in this.schedule_room.filter(
+              (e) => !e.late && e.end_date <= this.getDateTime
+            )"
+            :key="i"
           >
-            Close
-          </v-btn>
-          <template v-if="problem.send">
-            <v-btn color="green darken-1" text @click="submit()">
-              Submit
-            </v-btn>
-          </template>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+            <v-expansion-panel-header v-slot="{ open }">
+              <v-row no-gutters>
+                <v-col cols="12">
+                  {{ item.title }} (Out of time)
+                  {{
+                    item.late && getDateTime >= item.end_date ? "(Late)" : ""
+                  }}&nbsp;
+                  <v-rating
+                    :value="item.level"
+                    dense
+                    half-increments
+                    readonly
+                    size="14"
+                  ></v-rating>
+                </v-col>
+                <v-col cols="12" class="text--secondary">
+                  <v-fade-transition leave-absolute>
+                    <span v-if="open">
+                      (Submit
+                      {{
+                        filterSubmissionRoom.find((e) => e.id == item.id).count
+                      }})</span
+                    >
+                    <v-row v-else no-gutters style="width: 100%">
+                      <v-col cols="6">
+                        Start date:
+                        {{ invalidDate(item.start_date) || "Not set" }}
+                      </v-col>
+                      <v-col cols="6">
+                        End date: {{ invalidDate(item.end_date) || "Not set" }}
+                      </v-col>
+                    </v-row>
+                  </v-fade-transition>
+                </v-col>
+              </v-row>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-card-title class="text-h5"> {{ item.title }} </v-card-title>
+              <v-card-subtitle>
+                {{ invalidDate(item.start_date) || "NOT SET" }}
+                -
+                {{ invalidDate(item.end_date) || "NOT SET" }}
+              </v-card-subtitle>
+              <v-card-text>
+                <v-row>
+                  <v-col cols="4"> Question </v-col>
+                  <v-col cols="8">
+                    <div v-html="item.question"></div>
+                  </v-col>
+                </v-row>
+                <v-row class="mb-3">
+                  <v-col cols="4"> Score </v-col>
+                  <v-col cols="8">
+                    {{ item.score }}
+                  </v-col>
+                </v-row>
+                <v-row v-if="item.file" class="mb-3">
+                  <v-col cols="4"> Download File Question </v-col>
+                  <v-col cols="8">
+                    <v-btn
+                      small
+                      color="primary"
+                      dark
+                      @click="download(item.file)"
+                    >
+                      Download File
+                    </v-btn>
+                  </v-col>
+                </v-row>
+
+                <v-row class="mb-3">
+                  <v-col cols="4"> Language </v-col>
+                  <v-col cols="8">
+                    <template v-if="item.lang">
+                      {{ item.lang }}
+                    </template>
+                    <template v-else> { All} </template>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </div>
+    </v-col>
   </v-row>
 </template>
 
@@ -315,24 +301,14 @@ export default {
       loading: false,
       course_id: 0,
       missionPass: [],
-      problem: {
-        problem_id: 0,
-        title: "",
-        question: "",
-        score: 0,
-        file: "",
-        sendFile: null,
-        start_date: "",
-        end_date: "",
-        lang: "",
-        type: "",
-        send: false,
-      },
+      selectLang: "",
+      sendFile: null,
       sortby: "Sort",
     };
   },
 
   created() {
+    this.getLanguage();
     this.fetchItemSchedule();
     this.fetchItemScheduleById();
     this.fetchItemSubmission();
@@ -430,19 +406,19 @@ export default {
         timeout: timeout,
       });
     },
-    async submit() {
-      if (!this.problem.sendFile) {
+    async submit(item) {
+      if (!this.sendFile) {
         this.snackBar(3500, "Please your input file.", "warning");
       }
-      this.loading = true;
+      const lang = (this.loading = true);
       this.dialog = false;
       const config = {
         headers: { "content-type": "multipart/form-data" },
       };
       let formData = new FormData();
-      formData.append("sourcefile", this.problem.sendFile);
-      formData.append("Lang", this.problem.lang);
-      formData.append("problem_id", this.problem.problem_id);
+      formData.append("sourcefile", this.sendFile);
+      formData.append("Lang", item.lang == null ? this.selectLang : item.lang);
+      formData.append("problem_id", item.problemsId);
       formData.append("course_id", this.$route.query.course_id);
       await axios
         .post("/api/submission", formData, config)
@@ -482,7 +458,7 @@ export default {
     },
 
     onFileChange(e) {
-      this.problem.sendFile = e.target.files[0];
+      this.sendFile = e.target.files[0];
     },
 
     async fetchItemSchedule() {
@@ -521,6 +497,19 @@ export default {
           if (response.data.success == true) {
             this.schedule_room = response.data.payload;
           }
+        })
+        .catch((error) => {
+          this.snackBar(3500, error, "error");
+        });
+      this.loading = false;
+    },
+
+    async getLanguage() {
+      this.loading = true;
+      await axios
+        .get("/api/language")
+        .then((response) => {
+          this.languages = response.data.payload;
         })
         .catch((error) => {
           this.snackBar(3500, error, "error");

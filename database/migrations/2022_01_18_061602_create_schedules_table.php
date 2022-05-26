@@ -18,7 +18,7 @@ class CreateSchedulesTable extends Migration
             $table->bigInteger('course_id')->unsigned();
             $table->string('start_date')->nullable()->default(null);
             $table->string('end_date')->nullable()->default(null);
-            $table->bigInteger('problem_id')->unsigned();
+            $table->bigInteger('problem_id')->nullable()->unsigned();
             $table->bigInteger('language_id')->unsigned();
             $table->boolean('IsActive')->default(true);
             $table->boolean('IsAnalysis')->default(false);

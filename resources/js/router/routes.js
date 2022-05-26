@@ -66,6 +66,11 @@ const routes = [
         name: "new-test",
         component: () => import("../components/TestMission/NewTest.vue")
     },
+    {
+        path: "/test-case",
+        name: "test-case",
+        component: () => import("../components/TestMission/TestCase.vue")
+    },
     // Classroom
     {
         path: "/manage-classroom",

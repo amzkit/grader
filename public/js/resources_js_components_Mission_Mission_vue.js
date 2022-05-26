@@ -346,20 +346,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -385,23 +371,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       loading: false,
       course_id: 0,
       missionPass: [],
-      problem: {
-        problem_id: 0,
-        title: "",
-        question: "",
-        score: 0,
-        file: "",
-        sendFile: null,
-        start_date: "",
-        end_date: "",
-        lang: "",
-        type: "",
-        send: false
-      },
+      selectLang: "",
+      sendFile: null,
       sortby: "Sort"
     };
   },
   created: function created() {
+    this.getLanguage();
     this.fetchItemSchedule();
     this.fetchItemScheduleById();
     this.fetchItemSubmission();
@@ -495,20 +471,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         timeout: timeout
       });
     },
-    submit: function submit() {
+    submit: function submit(item) {
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var config, formData;
+        var lang, config, formData;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                if (!_this4.problem.sendFile) {
+                if (!_this4.sendFile) {
                   _this4.snackBar(3500, "Please your input file.", "warning");
                 }
 
-                _this4.loading = true;
+                lang = _this4.loading = true;
                 _this4.dialog = false;
                 config = {
                   headers: {
@@ -516,9 +492,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   }
                 };
                 formData = new FormData();
-                formData.append("sourcefile", _this4.problem.sendFile);
-                formData.append("Lang", _this4.problem.lang);
-                formData.append("problem_id", _this4.problem.problem_id);
+                formData.append("sourcefile", _this4.sendFile);
+                formData.append("Lang", item.lang == null ? _this4.selectLang : item.lang);
+                formData.append("problem_id", item.problemsId);
                 formData.append("course_id", _this4.$route.query.course_id);
                 _context.next = 11;
                 return axios.post("/api/submission", formData, config).then(function (response) {
@@ -575,7 +551,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return item ? dayjs__WEBPACK_IMPORTED_MODULE_1___default()(item).format("MMMM D, YYYY HH:mm") : "-";
     },
     onFileChange: function onFileChange(e) {
-      this.problem.sendFile = e.target.files[0];
+      this.sendFile = e.target.files[0];
     },
     fetchItemSchedule: function fetchItemSchedule() {
       var _this6 = this;
@@ -645,7 +621,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }, _callee4);
       }))();
     },
-    fetchItemSubmission: function fetchItemSubmission() {
+    getLanguage: function getLanguage() {
       var _this8 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
@@ -655,14 +631,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               case 0:
                 _this8.loading = true;
                 _context5.next = 3;
-                return axios.get("/api/submission", {
-                  params: {
-                    course_id: _this8.$route.query.course_id
-                  }
-                }).then(function (response) {
-                  if (response.data.success == true) {
-                    _this8.missionPass = response.data.payload;
-                  }
+                return axios.get("/api/language").then(function (response) {
+                  _this8.languages = response.data.payload;
                 })["catch"](function (error) {
                   _this8.snackBar(3500, error, "error");
                 });
@@ -676,6 +646,39 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             }
           }
         }, _callee5);
+      }))();
+    },
+    fetchItemSubmission: function fetchItemSubmission() {
+      var _this9 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                _this9.loading = true;
+                _context6.next = 3;
+                return axios.get("/api/submission", {
+                  params: {
+                    course_id: _this9.$route.query.course_id
+                  }
+                }).then(function (response) {
+                  if (response.data.success == true) {
+                    _this9.missionPass = response.data.payload;
+                  }
+                })["catch"](function (error) {
+                  _this9.snackBar(3500, error, "error");
+                });
+
+              case 3:
+                _this9.loading = false;
+
+              case 4:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6);
       }))();
     }
   })
@@ -1611,226 +1614,634 @@ var render = function() {
             1
           ),
           _vm._v(" "),
-          _vm._l(_vm.filterCourseRoom, function(item, i) {
-            return _c(
-              "v-card",
-              {
-                key: i,
-                staticClass: "mx-auto mb-4",
-                attrs: {
-                  "max-width": "100%",
-                  color:
-                    item.late && _vm.getDateTime >= item.end_date
-                      ? "#FFE57F"
-                      : "white"
-                }
-              },
-              [
-                _c(
-                  "v-list-item",
-                  { attrs: { "two-line": "" } },
-                  [
-                    _c(
-                      "v-list-item-content",
+          _c(
+            "v-expansion-panels",
+            { attrs: { readonly: _vm.readonly, multiple: "", focusable: "" } },
+            _vm._l(_vm.filterCourseRoom, function(item, i) {
+              return _c(
+                "v-expansion-panel",
+                { key: i },
+                [
+                  _c("v-expansion-panel-header", {
+                    scopedSlots: _vm._u(
                       [
-                        _c("v-list-item-title", { staticClass: "text-h5" }, [
-                          _vm._v(
-                            "\n            " +
-                              _vm._s(item.title) +
-                              "\n          "
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "v-list-item-subtitle",
-                          [
-                            _c("v-rating", {
-                              attrs: {
-                                value: item.level,
-                                dense: "",
-                                "half-increments": "",
-                                readonly: "",
-                                size: "14"
-                              }
-                            })
-                          ],
-                          1
-                        ),
-                        _vm._v(" "),
-                        _c("v-divider", { staticClass: "mx-4" }),
-                        _vm._v(" "),
-                        _c("v-card-title", [
-                          _vm._v(
-                            "Schedule\n            " +
-                              _vm._s(
-                                item.late && _vm.getDateTime >= item.end_date
-                                  ? "(Past due)"
-                                  : ""
-                              ) +
-                              "\n          "
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "v-card-text",
-                          [
-                            _c(
-                              "v-chip-group",
-                              {
-                                attrs: {
-                                  "active-class":
-                                    "deep-purple accent-4 white--text",
-                                  column: ""
-                                }
-                              },
-                              [
-                                _c("v-chip", [
-                                  _vm._v(
-                                    "\n                " +
-                                      _vm._s(
-                                        _vm.invalidDate(item.start_date) ||
-                                          "NOT SET"
-                                      ) +
-                                      "\n                -\n                " +
-                                      _vm._s(
-                                        _vm.invalidDate(item.end_date) ||
-                                          "NOT SET"
-                                      ) +
-                                      "\n              "
+                        {
+                          key: "default",
+                          fn: function(ref) {
+                            var open = ref.open
+                            return [
+                              _c(
+                                "v-row",
+                                { attrs: { "no-gutters": "" } },
+                                [
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12" } },
+                                    [
+                                      _vm._v(
+                                        "\n              " +
+                                          _vm._s(item.title) +
+                                          "\n              " +
+                                          _vm._s(
+                                            item.late &&
+                                              _vm.getDateTime >= item.end_date
+                                              ? "(Late)"
+                                              : ""
+                                          ) +
+                                          " \n              "
+                                      ),
+                                      _c("v-rating", {
+                                        attrs: {
+                                          value: item.level,
+                                          dense: "",
+                                          "half-increments": "",
+                                          readonly: "",
+                                          size: "14"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    {
+                                      staticClass: "text--secondary",
+                                      attrs: { cols: "12" }
+                                    },
+                                    [
+                                      _c(
+                                        "v-fade-transition",
+                                        { attrs: { "leave-absolute": "" } },
+                                        [
+                                          open
+                                            ? _c("span", [
+                                                _vm._v(
+                                                  "\n                  (Submit\n                  " +
+                                                    _vm._s(
+                                                      _vm.filterSubmissionRoom.find(
+                                                        function(e) {
+                                                          return e.id == item.id
+                                                        }
+                                                      ).count
+                                                    ) +
+                                                    ")"
+                                                )
+                                              ])
+                                            : _c(
+                                                "v-row",
+                                                {
+                                                  staticStyle: {
+                                                    width: "100%"
+                                                  },
+                                                  attrs: { "no-gutters": "" }
+                                                },
+                                                [
+                                                  _c(
+                                                    "v-col",
+                                                    { attrs: { cols: "6" } },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                    Start date:\n                    " +
+                                                          _vm._s(
+                                                            _vm.invalidDate(
+                                                              item.start_date
+                                                            ) || "Not set"
+                                                          ) +
+                                                          "\n                  "
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "v-col",
+                                                    { attrs: { cols: "6" } },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                    End date: " +
+                                                          _vm._s(
+                                                            _vm.invalidDate(
+                                                              item.end_date
+                                                            ) || "Not set"
+                                                          ) +
+                                                          "\n                  "
+                                                      )
+                                                    ]
+                                                  )
+                                                ],
+                                                1
+                                              )
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
                                   )
-                                ])
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        )
-                      ],
-                      1
-                    )
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "v-card-actions",
-                  [
-                    _c(
-                      "v-btn",
-                      {
-                        attrs: { color: "primary", text: "" },
-                        on: {
-                          click: function() {
-                            _vm.problem.title = item.title
-                            _vm.problem.question = item.question
-                            _vm.problem.score = item.score
-                            _vm.problem.file = item.file
-                            _vm.problem.start_date = item.start_date
-                            _vm.problem.end_date = item.end_date
-                            _vm.problem.lang = item.lang
-                            _vm.problem.problem_id = item.problemsId
-                            _vm.problem.type = item.type
-                            _vm.dialog = true
-                            _vm.problem.send = true
+                                ],
+                                1
+                              )
+                            ]
                           }
                         }
-                      },
-                      [_vm._v("\n          SHOW MORE\n        ")]
+                      ],
+                      null,
+                      true
                     )
-                  ],
-                  1
-                )
-              ],
-              1
-            )
-          }),
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "v-expansion-panel-content",
+                    [
+                      _c("v-card-title", { staticClass: "text-h5" }, [
+                        _vm._v(" " + _vm._s(item.title) + " ")
+                      ]),
+                      _vm._v(" "),
+                      _c("v-card-subtitle", [
+                        _vm._v(
+                          "\n            " +
+                            _vm._s(
+                              _vm.invalidDate(item.start_date) || "NOT SET"
+                            ) +
+                            "\n            -\n            " +
+                            _vm._s(
+                              _vm.invalidDate(item.end_date) || "NOT SET"
+                            ) +
+                            "\n          "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-text",
+                        [
+                          _c(
+                            "v-row",
+                            [
+                              _c("v-col", { attrs: { cols: "4" } }, [
+                                _vm._v(" Question ")
+                              ]),
+                              _vm._v(" "),
+                              _c("v-col", { attrs: { cols: "8" } }, [
+                                _c("div", {
+                                  domProps: { innerHTML: _vm._s(item.question) }
+                                })
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            { staticClass: "mb-3" },
+                            [
+                              _c("v-col", { attrs: { cols: "4" } }, [
+                                _vm._v(" Score ")
+                              ]),
+                              _vm._v(" "),
+                              _c("v-col", { attrs: { cols: "8" } }, [
+                                _vm._v(
+                                  "\n                " +
+                                    _vm._s(item.score) +
+                                    "\n              "
+                                )
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          item.file
+                            ? _c(
+                                "v-row",
+                                { staticClass: "mb-3" },
+                                [
+                                  _c("v-col", { attrs: { cols: "4" } }, [
+                                    _vm._v(" Download File Question ")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "8" } },
+                                    [
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: {
+                                            small: "",
+                                            color: "primary",
+                                            dark: ""
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.download(item.file)
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                  Download File\n                "
+                                          )
+                                        ]
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            { staticClass: "mb-3" },
+                            [
+                              _c("v-col", { attrs: { cols: "4" } }, [
+                                _vm._v(" Language ")
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "8" } },
+                                [
+                                  item.lang
+                                    ? [
+                                        _vm._v(
+                                          "\n                  " +
+                                            _vm._s(item.lang) +
+                                            "\n                "
+                                        )
+                                      ]
+                                    : [
+                                        _c("v-autocomplete", {
+                                          attrs: {
+                                            items: _vm.languages,
+                                            "item-text": "lang",
+                                            "item-value": "lang"
+                                          },
+                                          model: {
+                                            value: _vm.selectLang,
+                                            callback: function($$v) {
+                                              _vm.selectLang = $$v
+                                            },
+                                            expression: "selectLang"
+                                          }
+                                        })
+                                      ]
+                                ],
+                                2
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            [
+                              _c("v-col", { attrs: { cols: "4" } }, [
+                                _vm._v(" File Import ")
+                              ]),
+                              _vm._v(" "),
+                              _c("v-col", { attrs: { cols: "8" } }, [
+                                _c("input", {
+                                  ref: "file_upload",
+                                  refInFor: true,
+                                  staticClass: "form-control",
+                                  attrs: { type: "file", accept: item.type },
+                                  on: { change: _vm.onFileChange }
+                                })
+                              ])
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      [
+                        _c(
+                          "v-btn",
+                          {
+                            attrs: { color: "green darken-1", text: "" },
+                            on: {
+                              click: function($event) {
+                                return _vm.submit(item)
+                              }
+                            }
+                          },
+                          [_vm._v("\n              Submit\n            ")]
+                        )
+                      ]
+                    ],
+                    2
+                  )
+                ],
+                1
+              )
+            }),
+            1
+          ),
           _vm._v(" "),
           _vm.viewAll
             ? _c(
                 "div",
-                _vm._l(
-                  this.schedule_room.filter(function(e) {
-                    return !e.late && e.end_date <= this$1.getDateTime
-                  }),
-                  function(item, i) {
-                    return _c(
-                      "v-card",
-                      {
-                        key: i,
-                        staticClass: "mx-auto mb-4",
-                        staticStyle: { background: "#ffe57f" },
-                        attrs: { "max-width": "100%" }
-                      },
-                      [
-                        _c(
-                          "v-list-item",
-                          { attrs: { "two-line": "" } },
+                [
+                  _c(
+                    "v-expansion-panels",
+                    { attrs: { focusable: "" } },
+                    _vm._l(
+                      this.schedule_room.filter(function(e) {
+                        return !e.late && e.end_date <= this$1.getDateTime
+                      }),
+                      function(item, i) {
+                        return _c(
+                          "v-expansion-panel",
+                          {
+                            key: i,
+                            staticClass: "mt-3",
+                            staticStyle: { background: "#ffe57f" }
+                          },
                           [
+                            _c("v-expansion-panel-header", {
+                              scopedSlots: _vm._u(
+                                [
+                                  {
+                                    key: "default",
+                                    fn: function(ref) {
+                                      var open = ref.open
+                                      return [
+                                        _c(
+                                          "v-row",
+                                          { attrs: { "no-gutters": "" } },
+                                          [
+                                            _c(
+                                              "v-col",
+                                              { attrs: { cols: "12" } },
+                                              [
+                                                _vm._v(
+                                                  "\n                " +
+                                                    _vm._s(item.title) +
+                                                    " (Out of time)\n                " +
+                                                    _vm._s(
+                                                      item.late &&
+                                                        _vm.getDateTime >=
+                                                          item.end_date
+                                                        ? "(Late)"
+                                                        : ""
+                                                    ) +
+                                                    " \n                "
+                                                ),
+                                                _c("v-rating", {
+                                                  attrs: {
+                                                    value: item.level,
+                                                    dense: "",
+                                                    "half-increments": "",
+                                                    readonly: "",
+                                                    size: "14"
+                                                  }
+                                                })
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-col",
+                                              {
+                                                staticClass: "text--secondary",
+                                                attrs: { cols: "12" }
+                                              },
+                                              [
+                                                _c(
+                                                  "v-fade-transition",
+                                                  {
+                                                    attrs: {
+                                                      "leave-absolute": ""
+                                                    }
+                                                  },
+                                                  [
+                                                    open
+                                                      ? _c("span", [
+                                                          _vm._v(
+                                                            "\n                    (Submit\n                    " +
+                                                              _vm._s(
+                                                                _vm.filterSubmissionRoom.find(
+                                                                  function(e) {
+                                                                    return (
+                                                                      e.id ==
+                                                                      item.id
+                                                                    )
+                                                                  }
+                                                                ).count
+                                                              ) +
+                                                              ")"
+                                                          )
+                                                        ])
+                                                      : _c(
+                                                          "v-row",
+                                                          {
+                                                            staticStyle: {
+                                                              width: "100%"
+                                                            },
+                                                            attrs: {
+                                                              "no-gutters": ""
+                                                            }
+                                                          },
+                                                          [
+                                                            _c(
+                                                              "v-col",
+                                                              {
+                                                                attrs: {
+                                                                  cols: "6"
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "\n                      Start date:\n                      " +
+                                                                    _vm._s(
+                                                                      _vm.invalidDate(
+                                                                        item.start_date
+                                                                      ) ||
+                                                                        "Not set"
+                                                                    ) +
+                                                                    "\n                    "
+                                                                )
+                                                              ]
+                                                            ),
+                                                            _vm._v(" "),
+                                                            _c(
+                                                              "v-col",
+                                                              {
+                                                                attrs: {
+                                                                  cols: "6"
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "\n                      End date: " +
+                                                                    _vm._s(
+                                                                      _vm.invalidDate(
+                                                                        item.end_date
+                                                                      ) ||
+                                                                        "Not set"
+                                                                    ) +
+                                                                    "\n                    "
+                                                                )
+                                                              ]
+                                                            )
+                                                          ],
+                                                          1
+                                                        )
+                                                  ],
+                                                  1
+                                                )
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      ]
+                                    }
+                                  }
+                                ],
+                                null,
+                                true
+                              )
+                            }),
+                            _vm._v(" "),
                             _c(
-                              "v-list-item-content",
+                              "v-expansion-panel-content",
                               [
-                                _c(
-                                  "v-list-item-title",
-                                  { staticClass: "text-h5" },
-                                  [
-                                    _vm._v(
-                                      "\n              " +
-                                        _vm._s(item.title + " (Out of time)") +
-                                        "\n            "
-                                    )
-                                  ]
-                                ),
+                                _c("v-card-title", { staticClass: "text-h5" }, [
+                                  _vm._v(" " + _vm._s(item.title) + " ")
+                                ]),
                                 _vm._v(" "),
-                                _c(
-                                  "v-list-item-subtitle",
-                                  [
-                                    _c("v-rating", {
-                                      attrs: {
-                                        value: item.level,
-                                        dense: "",
-                                        "half-increments": "",
-                                        readonly: "",
-                                        size: "14"
-                                      }
-                                    })
-                                  ],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c("v-divider", { staticClass: "mx-4" }),
-                                _vm._v(" "),
-                                _c("v-card-title", [_vm._v("Schedule ")]),
+                                _c("v-card-subtitle", [
+                                  _vm._v(
+                                    "\n              " +
+                                      _vm._s(
+                                        _vm.invalidDate(item.start_date) ||
+                                          "NOT SET"
+                                      ) +
+                                      "\n              -\n              " +
+                                      _vm._s(
+                                        _vm.invalidDate(item.end_date) ||
+                                          "NOT SET"
+                                      ) +
+                                      "\n            "
+                                  )
+                                ]),
                                 _vm._v(" "),
                                 _c(
                                   "v-card-text",
                                   [
                                     _c(
-                                      "v-chip-group",
-                                      {
-                                        attrs: {
-                                          "active-class":
-                                            "deep-purple accent-4 white--text",
-                                          column: ""
-                                        }
-                                      },
+                                      "v-row",
                                       [
-                                        _c("v-chip", [
+                                        _c("v-col", { attrs: { cols: "4" } }, [
+                                          _vm._v(" Question ")
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("v-col", { attrs: { cols: "8" } }, [
+                                          _c("div", {
+                                            domProps: {
+                                              innerHTML: _vm._s(item.question)
+                                            }
+                                          })
+                                        ])
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-row",
+                                      { staticClass: "mb-3" },
+                                      [
+                                        _c("v-col", { attrs: { cols: "4" } }, [
+                                          _vm._v(" Score ")
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("v-col", { attrs: { cols: "8" } }, [
                                           _vm._v(
                                             "\n                  " +
-                                              _vm._s(
-                                                _vm.invalidDate(
-                                                  item.start_date
-                                                ) || "NOT SET"
-                                              ) +
-                                              "\n                  -\n                  " +
-                                              _vm._s(
-                                                _vm.invalidDate(
-                                                  item.end_date
-                                                ) || "NOT SET"
-                                              ) +
+                                              _vm._s(item.score) +
                                               "\n                "
                                           )
                                         ])
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    item.file
+                                      ? _c(
+                                          "v-row",
+                                          { staticClass: "mb-3" },
+                                          [
+                                            _c(
+                                              "v-col",
+                                              { attrs: { cols: "4" } },
+                                              [
+                                                _vm._v(
+                                                  " Download File Question "
+                                                )
+                                              ]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-col",
+                                              { attrs: { cols: "8" } },
+                                              [
+                                                _c(
+                                                  "v-btn",
+                                                  {
+                                                    attrs: {
+                                                      small: "",
+                                                      color: "primary",
+                                                      dark: ""
+                                                    },
+                                                    on: {
+                                                      click: function($event) {
+                                                        return _vm.download(
+                                                          item.file
+                                                        )
+                                                      }
+                                                    }
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                    Download File\n                  "
+                                                    )
+                                                  ]
+                                                )
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-row",
+                                      { staticClass: "mb-3" },
+                                      [
+                                        _c("v-col", { attrs: { cols: "4" } }, [
+                                          _vm._v(" Language ")
+                                        ]),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-col",
+                                          { attrs: { cols: "8" } },
+                                          [
+                                            item.lang
+                                              ? [
+                                                  _vm._v(
+                                                    "\n                    " +
+                                                      _vm._s(item.lang) +
+                                                      "\n                  "
+                                                  )
+                                                ]
+                                              : [_vm._v(" { All} ")]
+                                          ],
+                                          2
+                                        )
                                       ],
                                       1
                                     )
@@ -1842,294 +2253,15 @@ var render = function() {
                             )
                           ],
                           1
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "v-card-actions",
-                          [
-                            _c(
-                              "v-btn",
-                              {
-                                attrs: { color: "primary", text: "" },
-                                on: {
-                                  click: function() {
-                                    _vm.problem.title = item.title
-                                    _vm.problem.question = item.question
-                                    _vm.problem.score = item.score
-                                    _vm.problem.file = item.file
-                                    _vm.problem.start_date = item.start_date
-                                    _vm.problem.end_date = item.end_date
-                                    _vm.problem.lang = item.lang
-                                    _vm.problem.problem_id = item.problemsId
-                                    _vm.problem.type = item.type
-                                    _vm.dialog = true
-                                    _vm.problem.send = false
-                                  }
-                                }
-                              },
-                              [_vm._v("\n            SHOW MORE\n          ")]
-                            )
-                          ],
-                          1
                         )
-                      ],
-                      1
-                    )
-                  }
-                ),
-                1
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          _c(
-            "v-expansion-panels",
-            _vm._l(_vm.filterSubmissionRoom, function(item, i) {
-              return _c(
-                "v-expansion-panel",
-                { key: i },
-                [
-                  _c(
-                    "v-expansion-panel-header",
-                    {
-                      attrs: { "disable-icon-rotate": "" },
-                      scopedSlots: _vm._u(
-                        [
-                          {
-                            key: "actions",
-                            fn: function() {
-                              return [
-                                _c("v-icon", { attrs: { color: "teal" } }, [
-                                  _vm._v(" mdi-check ")
-                                ])
-                              ]
-                            },
-                            proxy: true
-                          }
-                        ],
-                        null,
-                        true
-                      )
-                    },
-                    [
-                      _vm._v(
-                        "\n          " +
-                          _vm._s(item.title + " (Submit " + item.count + ")") +
-                          "\n          "
-                      )
-                    ]
+                      }
+                    ),
+                    1
                   )
                 ],
                 1
               )
-            }),
-            1
-          )
-        ],
-        2
-      ),
-      _vm._v(" "),
-      _c(
-        "v-dialog",
-        {
-          attrs: { "max-width": "800" },
-          model: {
-            value: _vm.dialog,
-            callback: function($$v) {
-              _vm.dialog = $$v
-            },
-            expression: "dialog"
-          }
-        },
-        [
-          _c(
-            "v-card",
-            [
-              _c("v-card-title", { staticClass: "text-h5" }, [
-                _vm._v(" " + _vm._s(_vm.problem.title) + " ")
-              ]),
-              _vm._v(" "),
-              _c("v-card-subtitle", [
-                _vm._v(
-                  "\n        " +
-                    _vm._s(
-                      _vm.invalidDate(_vm.problem.start_date) || "NOT SET"
-                    ) +
-                    "\n        -\n        " +
-                    _vm._s(_vm.invalidDate(_vm.problem.end_date) || "NOT SET") +
-                    "\n      "
-                )
-              ]),
-              _vm._v(" "),
-              _c(
-                "v-card-text",
-                [
-                  _c(
-                    "v-row",
-                    [
-                      _c("v-col", { attrs: { cols: "4" } }, [
-                        _vm._v(" Question ")
-                      ]),
-                      _vm._v(" "),
-                      _c("v-col", { attrs: { cols: "8" } }, [
-                        _c("div", {
-                          domProps: { innerHTML: _vm._s(_vm.problem.question) }
-                        })
-                      ])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-row",
-                    { staticClass: "mb-3" },
-                    [
-                      _c("v-col", { attrs: { cols: "4" } }, [
-                        _vm._v(" Score ")
-                      ]),
-                      _vm._v(" "),
-                      _c("v-col", { attrs: { cols: "8" } }, [
-                        _vm._v(
-                          "\n            " +
-                            _vm._s(_vm.problem.score) +
-                            "\n          "
-                        )
-                      ])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _vm.problem.file
-                    ? _c(
-                        "v-row",
-                        { staticClass: "mb-3" },
-                        [
-                          _c("v-col", { attrs: { cols: "4" } }, [
-                            _vm._v(" Download File Question ")
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "8" } },
-                            [
-                              _c(
-                                "v-btn",
-                                {
-                                  attrs: {
-                                    small: "",
-                                    color: "primary",
-                                    dark: ""
-                                  },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.download(_vm.problem.file)
-                                    }
-                                  }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n              Download File\n            "
-                                  )
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _c(
-                    "v-row",
-                    { staticClass: "mb-3" },
-                    [
-                      _c("v-col", { attrs: { cols: "4" } }, [
-                        _vm._v(" Language ")
-                      ]),
-                      _vm._v(" "),
-                      _c("v-col", { attrs: { cols: "8" } }, [
-                        _vm._v(
-                          "\n            " +
-                            _vm._s(_vm.problem.lang) +
-                            "\n          "
-                        )
-                      ])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _vm.problem.send
-                    ? [
-                        _c(
-                          "v-row",
-                          [
-                            _c("v-col", { attrs: { cols: "4" } }, [
-                              _vm._v(" File Import ")
-                            ]),
-                            _vm._v(" "),
-                            _c("v-col", { attrs: { cols: "8" } }, [
-                              _c("input", {
-                                ref: "file_upload",
-                                staticClass: "form-control",
-                                attrs: {
-                                  type: "file",
-                                  accept: _vm.problem.type
-                                },
-                                on: { change: _vm.onFileChange }
-                              })
-                            ])
-                          ],
-                          1
-                        )
-                      ]
-                    : _vm._e()
-                ],
-                2
-              ),
-              _vm._v(" "),
-              _c(
-                "v-card-actions",
-                [
-                  _c("v-spacer"),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "green darken-1", text: "" },
-                      on: {
-                        click: function() {
-                          if (_vm.$refs.file_upload) {
-                            _vm.$refs.file_upload.value = null
-                          }
-                          _vm.dialog = false
-                        }
-                      }
-                    },
-                    [_vm._v("\n          Close\n        ")]
-                  ),
-                  _vm._v(" "),
-                  _vm.problem.send
-                    ? [
-                        _c(
-                          "v-btn",
-                          {
-                            attrs: { color: "green darken-1", text: "" },
-                            on: {
-                              click: function($event) {
-                                return _vm.submit()
-                              }
-                            }
-                          },
-                          [_vm._v("\n            Submit\n          ")]
-                        )
-                      ]
-                    : _vm._e()
-                ],
-                2
-              )
-            ],
-            1
-          )
+            : _vm._e()
         ],
         1
       )

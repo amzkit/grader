@@ -138,6 +138,11 @@
               : "-"
           }}
         </template>
+        <template v-slot:[`item.testcase`]="{ item }">
+          <v-btn depressed color="primary" @click="testcase(item.id)">
+            Test Case
+          </v-btn>
+        </template>
         <template v-slot:[`item.action`]="{ item }">
           <v-icon small class="mr-2" @click="editItem(item)">
             mdi-pencil
@@ -175,9 +180,8 @@ export default {
           align: "start",
           sortable: true,
           value: "title",
-          width: "150pt"
         },
-        { text: "Question", value: "question" ,width: "400pt"},
+        { text: "Question", value: "question", width: "400pt" },
         { text: "File", value: "file" },
         {
           text: "Level",
@@ -186,6 +190,10 @@ export default {
         {
           text: "Tolerant",
           value: "tolerant",
+        },
+        {
+          text: "Test Case",
+          value: "testcase",
         },
         {
           text: "Action",
@@ -256,6 +264,17 @@ export default {
     },
     onFileChange(e) {
       this.editedItem.file = e.target.files[0];
+    },
+
+    async testcase(id) {
+      this.$router
+        .push({
+          path: "/test-case",
+          query: {
+            test_case_id: id,
+          },
+        })
+        .catch(() => {});
     },
 
     async download(item) {

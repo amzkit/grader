@@ -271,10 +271,6 @@ export default {
           text: "Problem",
           subLinks: [
             {
-              text: "Manage Problem",
-              to: "/manage-problem",
-            },
-            {
               text: "Manage Problem Classroom",
               to: "/manage-problem-classroom",
             },
@@ -287,6 +283,10 @@ export default {
             {
               text: "Manage Classroom",
               to: "/manage-classroom",
+            },
+            {
+              text: "Manage Problem",
+              to: "/manage-problem",
             },
           ],
         },
@@ -305,11 +305,11 @@ export default {
           icon: "mdi-view-dashboard",
           text: "Scoreboard",
         },
-        {
-          to: "/new-test",
-          icon: "mdi-clipboard-edit",
-          text: "New Test",
-        },
+        // {
+        //   to: "/new-test",
+        //   icon: "mdi-clipboard-edit",
+        //   text: "New Test",
+        // },
         {
           icon: "mdi-account",
           text: "User",
@@ -339,26 +339,31 @@ export default {
               text: "Manage Classroom",
               to: "/manage-classroom",
             },
-          ],
-        },
-        {
-          icon: "mdi-calendar-check",
-          text: "Problem",
-          subLinks: [
-            {
-              text: "Problem",
-              to: "/manage-problem",
-            },
             {
               text: "Problem Classroom",
               to: "/manage-problem-classroom",
             },
-            {
-              to: "/new-test",
-              icon: "mdi-view-dashboard",
-              text: "New Test",
-            },
           ],
+        },
+        // {
+        //   icon: "mdi-calendar-check",
+        //   text: "Problem",
+        //   subLinks: [
+        //     {
+        //       text: "Problem",
+        //       to: "/manage-problem",
+        //     },
+        //     {
+        //       to: "/new-test",
+        //       icon: "mdi-view-dashboard",
+        //       text: "New Test",
+        //     },
+        //   ],
+        // },
+        {
+          to: "/manage-problem",
+          icon: "mdi-calendar-check",
+          text: "Manage Problems",
         },
         {
           to: "/analysis",

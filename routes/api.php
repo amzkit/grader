@@ -65,6 +65,10 @@ Route::put('manage/example', 'App\Http\Controllers\ScheduleController@updateMana
 Route::delete('manage/example/{id}', 'App\Http\Controllers\ScheduleController@deleteManageExample');
 
 Route::post('test-case', 'App\Http\Controllers\TestcaseController@insert');
+Route::get('test-case/{id}', 'App\Http\Controllers\TestcaseController@get');
+Route::delete('test-case/{id}', 'App\Http\Controllers\TestcaseController@delete');
+Route::post('test-case/update', 'App\Http\Controllers\TestcaseController@update');
+
 
 Route::post('course', 'App\Http\Controllers\CourseController@insert');
 

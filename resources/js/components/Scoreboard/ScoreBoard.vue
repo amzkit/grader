@@ -36,7 +36,7 @@
     <v-col cols="7">
       <v-row>
         <v-data-table
-          :headers="headers"
+          :headers="getHeaders(i)"
           :items="data.classroom"
           :single-expand="true"
           :expanded.sync="expanded"
@@ -81,16 +81,11 @@
             {{ index + 1 }}
           </template>
           <template v-slot:[`item.problems`]="{ item }">
-            {{
-              `${mapDataMyScore(item.user_id).length}/${data.schedule.length}`
-            }}
+            {{ `${mapDataMyScore(item.user_id).length}` }}
           </template>
           <template v-slot:[`item.totalScore`]="{ item }">
             {{
-              `${mapDataMyScore(item.user_id).reduce(
-                (t, n) => t + n.score,
-                0
-              )}/${data.schedule.reduce((t, n) => t + n.score, 0)}`
+              `${mapDataMyScore(item.user_id).reduce((t, n) => t + n.score, 0)}`
             }}
           </template>
           <template v-slot:expanded-item="{ headers, item }">
@@ -167,23 +162,6 @@ export default {
       course_room: [],
       expanded: [],
       singleExpand: false,
-      headers: [
-        {
-          text: "#",
-          align: "center",
-          sortable: false,
-          value: "index",
-        },
-        { text: "Username", value: "username" },
-        {
-          text: "Name",
-          align: "start",
-          sortable: false,
-          value: "name",
-        },
-        { text: "Problems", value: "problems" },
-        { text: "Total Score", value: "totalScore" },
-      ],
       loading: false,
       items: [],
       data: [],
@@ -215,6 +193,31 @@ export default {
         color: color,
         timeout: timeout,
       });
+    },
+    getHeaders(headingText) {
+      return [
+        {
+          text: "#",
+          align: "center",
+          sortable: false,
+          value: "index",
+        },
+        { text: "Username", value: "username" },
+        {
+          text: "Name",
+          align: "start",
+          sortable: false,
+          value: "name",
+        },
+        { text: `Problems (${this.data.schedule.length})`, value: "problems" },
+        {
+          text: `Total Score (${this.data.schedule.reduce(
+            (t, n) => t + n.score,
+            0
+          )})`,
+          value: "totalScore",
+        },
+      ];
     },
     invalidDate(item) {
       return item ? dayjs(item).format("MMMM D, YYYY HH:mm") : "-";

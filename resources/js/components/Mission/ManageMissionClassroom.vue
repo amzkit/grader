@@ -41,7 +41,11 @@
               <v-card>
                 <v-card-title>
                   <span class="text-h5">
-                    {{ editedIndex === -1 ? "Add Problems" : "Edit Problems" }}
+                    {{
+                      editedIndex === -1
+                        ? `Add Problems (${roomName})`
+                        : `Edit Problems (${roomName})`
+                    }}
                   </span>
                 </v-card-title>
                 <v-card-text>
@@ -282,6 +286,9 @@
         </template>
         <template v-slot:[`item.end_date`]="{ item }">
           {{ invalidDate(item.end_date) }}
+        </template>
+        <template v-slot:[`item.lang`]="{ item }">
+          {{ item.lang != null ? item.lang : "All" }}
         </template>
         <template v-slot:[`item.action`]="{ item }">
           <v-icon small class="mr-2" @click="editItem(item)">
@@ -567,6 +574,7 @@ export default {
           this.snackBar(3500, error, "error");
         });
       this.loading = false;
+      this.languages.push({ id: 0, lang: "All" });
     },
 
     async deleteSchedule() {
@@ -601,6 +609,7 @@ export default {
       this.loading = true;
       if (item) {
         this.roomId = item.courseId;
+        this.roomName = item.course_name;
         await axios
           .get("/api/schedule/" + item.courseId)
           .then((response) => {

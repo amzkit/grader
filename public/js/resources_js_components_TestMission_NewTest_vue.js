@@ -120,15 +120,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -169,7 +160,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 _context.next = 3;
                 return axios.get("/api/problem").then(function (response) {
                   if (response.data.success == true) {
-                    _this.problems = response.data.payload;
+                    _this.problems = response.data.payload.find(function (e) {
+                      return e.id == _this.$route.query.test_case_id;
+                    });
                   }
                 })["catch"](function (error) {
                   _this.snackBar(3500, error, "error");
@@ -196,25 +189,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               case 0:
                 _this2.loading = true;
 
-                if (!(_this2.missionId == 0)) {
-                  _context2.next = 3;
-                  break;
-                }
-
-                return _context2.abrupt("return", _this2.snackBar(3500, "Please selector problem.", "warning"));
-
-              case 3:
                 if (!(_this2.input == "" && _this2.output == "")) {
-                  _context2.next = 5;
+                  _context2.next = 3;
                   break;
                 }
 
                 return _context2.abrupt("return", _this2.snackBar(3500, "Please enter input or output again.", "warning"));
 
-              case 5:
-                _context2.next = 7;
+              case 3:
+                _context2.next = 5;
                 return axios.post("/api/test-case", {
-                  missionId: _this2.missionId,
+                  missionId: _this2.problems.id,
                   input: _this2.input,
                   output: _this2.output
                 }).then(function () {
@@ -225,10 +210,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   _this2.snackBar(3500, error, "error");
                 });
 
-              case 7:
+              case 5:
                 _this2.loading = false;
 
-              case 8:
+              case 6:
               case "end":
                 return _context2.stop();
             }
@@ -504,30 +489,13 @@ var render = function() {
                             1
                           ),
                           _vm._v(" "),
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "6" } },
-                            [
-                              _c("v-autocomplete", {
-                                attrs: {
-                                  label: "Problem Name",
-                                  items: _vm.problems,
-                                  "item-text": "title",
-                                  "item-value": "id",
-                                  "hide-no-data": "",
-                                  "hide-selected": ""
-                                },
-                                model: {
-                                  value: _vm.missionId,
-                                  callback: function($$v) {
-                                    _vm.missionId = $$v
-                                  },
-                                  expression: "missionId"
-                                }
-                              })
-                            ],
-                            1
-                          )
+                          _c("v-col", { attrs: { cols: "6" } }, [
+                            _vm._v(
+                              "\n              " +
+                                _vm._s(_vm.problems.title) +
+                                "\n            "
+                            )
+                          ])
                         ],
                         1
                       ),

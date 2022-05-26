@@ -12,16 +12,7 @@
                 <v-subheader> Problem Name </v-subheader>
               </v-col>
               <v-col cols="6">
-                <v-autocomplete
-                  label="Problem Name"
-                  v-model="missionId"
-                  :items="problems"
-                  item-text="title"
-                  item-value="id"
-                  hide-no-data
-                  hide-selected
-                >
-                </v-autocomplete>
+                {{ problems.title }}
               </v-col>
             </v-row>
 
@@ -88,7 +79,9 @@ export default {
         .get("/api/problem")
         .then((response) => {
           if (response.data.success == true) {
-            this.problems = response.data.payload;
+            this.problems = response.data.payload.find(
+              (e) => e.id == this.$route.query.test_case_id
+            );
           }
         })
         .catch((error) => {
@@ -98,9 +91,6 @@ export default {
     },
     async addTestCase() {
       this.loading = true;
-      if (this.missionId == 0) {
-        return this.snackBar(3500, "Please selector problem.", "warning");
-      }
       if (this.input == "" && this.output == "") {
         return this.snackBar(
           3500,
@@ -110,7 +100,7 @@ export default {
       }
       await axios
         .post("/api/test-case", {
-          missionId: this.missionId,
+          missionId: this.problems.id,
           input: this.input,
           output: this.output,
         })

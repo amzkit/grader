@@ -367,6 +367,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -678,7 +685,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               case 3:
                 _this7.loading = false;
 
-              case 4:
+                _this7.languages.push({
+                  id: 0,
+                  lang: "All"
+                });
+
+              case 5:
               case "end":
                 return _context5.stop();
             }
@@ -753,12 +765,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 _this10.loading = true;
 
                 if (!item) {
-                  _context8.next = 5;
+                  _context8.next = 6;
                   break;
                 }
 
                 _this10.roomId = item.courseId;
-                _context8.next = 5;
+                _this10.roomName = item.course_name;
+                _context8.next = 6;
                 return axios.get("/api/schedule/" + item.courseId).then(function (response) {
                   if (response.data.success == true) {
                     _this10.desserts = response.data.payload;
@@ -767,10 +780,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   _this10.snackBar(3500, error, "error");
                 });
 
-              case 5:
+              case 6:
                 _this10.loading = false;
 
-              case 6:
+              case 7:
               case "end":
                 return _context8.stop();
             }
@@ -1668,8 +1681,12 @@ var render = function() {
                                         "\n                  " +
                                           _vm._s(
                                             _vm.editedIndex === -1
-                                              ? "Add Problems"
-                                              : "Edit Problems"
+                                              ? "Add Problems (" +
+                                                  _vm.roomName +
+                                                  ")"
+                                              : "Edit Problems (" +
+                                                  _vm.roomName +
+                                                  ")"
                                           ) +
                                           "\n                "
                                       )
@@ -2548,6 +2565,19 @@ var render = function() {
                       _vm._v(
                         "\n        " +
                           _vm._s(_vm.invalidDate(item.end_date)) +
+                          "\n      "
+                      )
+                    ]
+                  }
+                },
+                {
+                  key: "item.lang",
+                  fn: function(ref) {
+                    var item = ref.item
+                    return [
+                      _vm._v(
+                        "\n        " +
+                          _vm._s(item.lang != null ? item.lang : "All") +
                           "\n      "
                       )
                     ]

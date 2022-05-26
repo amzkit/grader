@@ -103,6 +103,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -484,6 +490,18 @@ var render = function() {
                     ],
                     1
                   ),
+                  _vm._v(" "),
+                  _c("v-col", [
+                    _c("li", [_vm._v("Y = Correct")]),
+                    _vm._v(" "),
+                    _c("li", [_vm._v("N = Incorrect")]),
+                    _vm._v(" "),
+                    _c("li", [_vm._v("T = Timeout")]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _vm._v("X = No Output( Problems did't run or Crash )")
+                    ])
+                  ]),
                   _vm._v(" "),
                   _c("v-text-field", {
                     staticClass: "mx-3",
