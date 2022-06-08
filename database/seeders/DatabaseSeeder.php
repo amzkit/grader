@@ -33,17 +33,17 @@ class DatabaseSeeder extends Seeder
         $this->call('Database\Seeders\CourseTableSeeder');
         $this->command->info('Course Guest table seeded!');
 
-        $this->call('Database\Seeders\ClassroomTableSeeder');
-        $this->command->info('Classroom table seeded!');
+        // $this->call('Database\Seeders\ClassroomTableSeeder');
+        // $this->command->info('Classroom table seeded!');
 
-        $this->call('Database\Seeders\ProblemTableSeeder');
-        $this->command->info('Problem table seeded!');
+        // $this->call('Database\Seeders\ProblemTableSeeder');
+        // $this->command->info('Problem table seeded!');
 
-        $this->call('Database\Seeders\ScheduleTableSeeder');
-        $this->command->info('Schedule table seeded!');
+        // $this->call('Database\Seeders\ScheduleTableSeeder');
+        // $this->command->info('Schedule table seeded!');
 
-        $this->call('Database\Seeders\TestCaseTableSeeder');
-        $this->command->info('TestCase table seeded!');
+        // $this->call('Database\Seeders\TestCaseTableSeeder');
+        // $this->command->info('TestCase table seeded!');
     }
 }
 class UserTableSeeder extends Seeder
@@ -56,20 +56,20 @@ class UserTableSeeder extends Seeder
         $rows = [
             [
                 'name' => "Admin",
-                'email' => "admin@gmail.com",
+                'email' => "admin.grader@csmju.com",
                 'username' => "admin",
                 'password' => Hash::make('12345678'),
                 'role_admin' => 1,
                 'role' => 'admin',
             ],
-            [
-                'name' => "Teacher",
-                'email' => "teacher@gmail.com",
-                'username' => "teacher",
-                'password' => Hash::make('12345678'),
-                'role_teacher' => 1,
-                'role' => 'teacher',
-            ]
+            // [
+            //     'name' => "Teacher",
+            //     'email' => "teacher@gmail.com",
+            //     'username' => "teacher",
+            //     'password' => Hash::make('12345678'),
+            //     'role_teacher' => 1,
+            //     'role' => 'teacher',
+            // ]
         ];
 
         foreach ($rows as $row) {
@@ -87,7 +87,11 @@ class LanguageTableSeeder extends Seeder
 
         $rows = [
             [
-                'lang' => "PYTHON",
+                'lang' => "PYTHON3",
+                'type' => ".py",
+            ],
+            [
+                'lang' => "PYTHON2",
                 'type' => ".py",
             ],
             [
@@ -97,6 +101,18 @@ class LanguageTableSeeder extends Seeder
             [
                 'lang' => "C++",
                 'type' => ".cpp",
+            ],
+            [
+                'lang' => "C",
+                'type' => ".c",
+            ],
+            [
+                'lang' => "JAVA",
+                'type' => ".java",
+            ],
+            [
+                'lang' => "KOTLIN",
+                'type' => ".kt",
             ],
         ];
 
@@ -117,10 +133,10 @@ class CourseTableSeeder extends Seeder
             [
                 'course_name' => "Guest",
             ],
-            [
-                'course_name' => "TEST",
+            // [
+            //     'course_name' => "TEST",
 
-            ],
+            // ],
         ];
 
         foreach ($rows as $row) {
