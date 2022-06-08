@@ -890,7 +890,7 @@ var render = function() {
                                                           },
                                                           attrs: {
                                                             src:
-                                                              "https://grader.ajkit.com" +
+                                                              "https://programming.csmju.com" +
                                                               "/storage/" +
                                                               _vm.editedItem.picture.replace(
                                                                 "public/",
@@ -1102,7 +1102,7 @@ var render = function() {
                           "max-height": "190",
                           "max-width": "290",
                           src:
-                            "https://grader.ajkit.com" +
+                            "https://programming.csmju.com" +
                             "/storage/" +
                             item.picture.replace("public/", "")
                         }

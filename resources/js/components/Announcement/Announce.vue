@@ -43,7 +43,7 @@
                               width: 100%;
                               object-fit: cover;
                             "
-                            :src="`${'https://grader.ajkit.com'}/storage/${editedItem.picture.replace(
+                            :src="`${'https://programming.csmju.com'}/storage/${editedItem.picture.replace(
                               'public/',
                               ''
                             )}`"
@@ -114,7 +114,7 @@
           <v-img
             max-height="190"
             max-width="290"
-            :src="`${'https://grader.ajkit.com'}/storage/${item.picture.replace(
+            :src="`${'https://programming.csmju.com'}/storage/${item.picture.replace(
               'public/',
               ''
             )}`"

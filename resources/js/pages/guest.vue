@@ -13,7 +13,7 @@
             <v-carousel-item
               v-for="(item, i) in image"
               :key="i"
-              :src="`${'https://grader.ajkit.com'}/storage${item.picture.replace(
+              :src="`${'https://programming.csmju.com'}/storage${item.picture.replace(
                 'public',
                 ''
               )}`"

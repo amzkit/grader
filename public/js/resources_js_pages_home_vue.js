@@ -602,7 +602,7 @@ var render = function() {
                 key: i,
                 attrs: {
                   src:
-                    "https://grader.ajkit.com" +
+                    "https://programming.csmju.com" +
                     "/storage" +
                     item.picture.replace("public", ""),
                   "reverse-transition": "fade-transition",
