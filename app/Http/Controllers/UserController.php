@@ -87,8 +87,8 @@ class UserController extends Controller
                 'ta' => $request->ta,
                 'teacher' => $request->teacher,
                 'student' => $request->student,
-                "start_datetime" =>  $classroomFirst->start_datetime,
-                "end_datetime" =>  $classroomFirst->end_datetime,
+                // "start_datetime" =>  $classroomFirst->start_datetime,
+                // "end_datetime" =>  $classroomFirst->end_datetime,
             ];
 
             Classroom::updateOrCreate($classroomWhere, $classroomData);
